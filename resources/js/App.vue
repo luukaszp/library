@@ -1,11 +1,10 @@
 <template>
   <v-app>
-      <app-header v-if="token != null" :isLogged="isLogged"></app-header>
-      <Header/>
-
-      <v-content>
+      <!--<app-header v-if="token != null" :isLogged="isLogged"></app-header>
+    --><Header/>
+      <v-main>
           <router-view></router-view>
-      </v-content>
+      </v-main>
 
       <Footer/>
 
@@ -18,7 +17,7 @@
     export default {
         name: 'App',
         components: {
-            'app-header': Header,
+            Header,
             Footer
         },
         data() {

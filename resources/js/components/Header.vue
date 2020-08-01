@@ -21,16 +21,6 @@
 
                         <v-menu offset-y>
                             <template v-slot:activator="{ on }">
-                                <v-badge color="#9090ee" :content="messages" :value="messages" dot overlap>
-                                    <v-btn v-on="on" icon>
-                                        <v-icon>mdi-email</v-icon>
-                                    </v-btn>
-                                </v-badge>
-                            </template>
-                        </v-menu>
-
-                        <v-menu offset-y>
-                            <template v-slot:activator="{ on }">
                                 <v-btn icon v-on="on">
                                     <v-icon>mdi-account</v-icon>
                                 </v-btn>
