@@ -28,13 +28,13 @@
                                 v-model="valid"
                                 md="6"
                         >
-                            <h1 class="pt-8">Budget Tracker</h1>
-
+                            <h1 class="pt-8">Biblioteka</h1>
+<!--czy dodac logowanie za pomoca numeru karty i emaila ??? -->
                             <v-text-field
                                     class="pa-5 pb-0"
-                                    v-model="email"
-                                    :rules="emailRules"
-                                    label="E-mail"
+                                    v-model="cardNumber"
+                                    :rules="cardRules"
+                                    label="Numer karty bibliotecznej"
                                     single-line
                                     outlined
                                     required
@@ -58,7 +58,7 @@
 
                                 <v-btn
                                         :disabled="!valid"
-                                        color=#9090ee
+                                        color=brown
                                         class="mr-5 mb-6"
                                         @click="validate"
                                 >
@@ -66,28 +66,13 @@
                                 </v-btn>
 
                                 <v-btn
-                                        color=#3eb4a7
+                                        color=brown
                                         class="mr-5 mb-6"
                                         @click="reset"
                                 >
                                     Wyczyść dane
                                 </v-btn>
                             </v-row>
-
-                            <hr>
-
-                            <v-row class="pt-7 pb-7 justify-center">
-                                <p class="pr-5 pt-2">Nie masz konta?</p>
-
-                                    <v-btn
-                                            outlined
-                                            to="/register"
-                                            color="#3eb4a7"
-                                    >
-                                        Zarejestruj się
-                                    </v-btn>
-                            </v-row>
-
                         </v-form>
                     </v-card>
                 </v-col>
@@ -104,10 +89,11 @@
                 password: "",
                 valid: true,
                 value: true,
-                email: "",
-                emailRules: [
-                    v => !!v || 'E-mail jest wymagany',
-                    v => /.+@.+\..+/.test(v) || 'E-mail musi być prawidłowy',
+                cardNumber: "",
+                cardRules: [
+                    v => !!v || 'Numer karty bibliotecznej jest wymagany',
+                    v => /^\d+$/.test(v) || 'Numer karty bibliotecznej musi być prawidłowy',
+                    v => v.length === 10 || 'Numer karty bibliotecznej powinien zawierać 10 cyfr',
                 ],
                 rules: {
                     required: value => !!value || "Hasło jest wymagane",
@@ -126,7 +112,7 @@
                 if(this.$refs.form.validate())
                 {
                     this.$store.dispatch('getToken', {
-                        email: this.email,
+                        cardNumber: this.cardNumber,
                         password: this.password
                     })
                         .catch(function (error) {

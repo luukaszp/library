@@ -5,15 +5,15 @@
                         tile
                 >
                     <v-app-bar
-                            color="#3eb4a7"
+                            color=brown
                             dark
                     >
 
-                        <v-toolbar-side-icon>
-                            <v-img alt="App logo" src="../assets/app_logo_t.png" width="90px"/> <!--zmienic logo-->
-                        </v-toolbar-side-icon>
+                        <v-app-bar-nav-icon>
+                            <v-img alt="App logo" :src="require('../assets/app_logo_t.png')" width="90px"/> <!--zmienic logo-->
+                        </v-app-bar-nav-icon>
 
-                        <v-toolbar-title>Budget Tracker</v-toolbar-title>
+                        <v-toolbar-title>Biblioteka</v-toolbar-title>
 
                         <v-spacer></v-spacer>
 
