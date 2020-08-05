@@ -2,11 +2,11 @@
   <v-app>
       <!--<app-header v-if="token != null" :isLogged="isLogged"></app-header>
     --><Header/>
-      <v-main>
+      <!--<v-main>
           <router-view></router-view>
       </v-main>
 
-      <Footer/>
+      <Footer/>-->
 
   </v-app>
 </template>

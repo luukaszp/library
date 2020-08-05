@@ -6,6 +6,7 @@ import axios from 'axios'
 import VueAxios from 'vue-axios';
 import store from './store/store'
 import '@mdi/font/css/materialdesignicons.css'
+import 'vuetify/dist/vuetify.min.css'
 
 require('./bootstrap')
 
