@@ -27,7 +27,8 @@ class AuthRequest extends FormRequest
             'name' => ['required', 'string', 'max:255'],
             'surname' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'card_number' => ['required', 'string', 'max:10', 'unique:users'],
+            'card_number' => ['string', 'max:10', 'unique:users'], //usunięcie 'required'
+            'id_number' => ['string', 'max:12', 'unique:users'], //usunięcie 'required'
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ];
     }

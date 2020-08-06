@@ -1,0 +1,5 @@
+register.vue
+- zmienic jakos checkReader() 
+
+auth.js
+- przy rejestracji sprawdzic czy to czytelnik czy pracownik

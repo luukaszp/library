@@ -1,10 +1,6 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
 import axios from 'axios'
 
-Vue.use(Vuex)
-
-export default new Vuex.Store({
+export default {
     state: {
         status: '',
         token: localStorage.getItem('access_token') || '',
@@ -90,4 +86,4 @@ export default new Vuex.Store({
         isLoggedIn: state => !!state.token,
         authStatus: state => state.status
     }
-})
+}

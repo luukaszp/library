@@ -27,3 +27,11 @@ Route::group(['middleware' => 'auth.jwt'], function () {
 Route::group(['middleware' => ['auth.jwt', 'admin']], function () {
 
 });
+
+/*Route::group(['middleware' => ['auth.jwt', 'worker']], function () {
+
+});*/
+
+Route::group(['middleware' => ['auth.jwt', 'admin', 'worker']], function () {
+
+});
