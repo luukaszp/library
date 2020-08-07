@@ -19,6 +19,12 @@
 
                         <About/>
 
+                        <router-link to="/admin-panel">
+                            <v-btn icon>
+                                <v-icon x-large>mdi-view-dashboard</v-icon>
+                            </v-btn>
+                        </router-link>
+                        
                         <v-menu offset-y>
                             <template v-slot:activator="{ on }">
                                 <v-btn icon v-on="on">
@@ -40,10 +46,11 @@
 
 <script>
     import About from "../components/About.vue";
+    import AdminPanel from "../components/AdminPanel.vue";
     export default {
         name: "Main",
         components: {
-            About
+            About, AdminPanel
         },
         methods: {
             logout() {

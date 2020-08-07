@@ -3,3 +3,16 @@ register.vue
 
 auth.js
 - przy rejestracji sprawdzic czy to czytelnik czy pracownik
+
+router.js
+- dodać warunek, iż musi być adminem (AdminPanel)
+
+AdminPanel.vue
+- dodać karty, które będą dostępne tylko dla admina a nie dla pracownika
+- !! czy zrobić dwa panele dla Admina i Pracownika czy jeden !!
+- zdjęcie kobiety zamienić na zdjęcie logo biblioteki
+- usunąć zaokrąglenie panelu bocznego z prawej strony
+- expansion panel np Książki: przegladaj, dodaj czy może wszystkie akcje w tabeli i bez expansion panel
+- odstęp pod footerem jest :/
+- pozbyć się headera i footera?
+- strony route mają otwierać się obok paska panelu nie osobno !!!!!!!
