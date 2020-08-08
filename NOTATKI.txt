@@ -16,3 +16,6 @@ AdminPanel.vue
 - odstęp pod footerem jest :/
 - pozbyć się headera i footera?
 - strony route mają otwierać się obok paska panelu nie osobno !!!!!!!
+
+Readers.vue
+- czy dodać pole z hasłem do przeglądania?
