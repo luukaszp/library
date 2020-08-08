@@ -54,7 +54,7 @@
         </v-card>
         </v-col>
         <v-col>
-            <h1>Test</h1>
+            <router-view></router-view>
         </v-col>
     </v-row>
 </template>
@@ -71,36 +71,36 @@ import Readers from "../components/Readers.vue";
                 title: 'Użytkownicy',
                 items: [
                     { title: 'Czytelnicy', route: '/admin-panel/readers' },
-                    { title: 'Pracownicy' },
+                    { title: 'Pracownicy', route: '/admin-panel/workers' },
                 ],
             },
             {
                 action: 'mdi-account',
                 title: 'Książki',
                 items: [
-                    { title: 'Ogólne zestawienie' },
-                    { title: 'Autorzy' },
-                    { title: 'Kategorie' },
-                    { title: 'Wydawnictwa' },
-                    { title: 'Tytuły' },
+                    { title: 'Ogólne zestawienie', route: '/admin-panel/books' },
+                    { title: 'Autorzy', route: '/admin-panel/authors' },
+                    { title: 'Kategorie', route: '/admin-panel/categories' },
+                    { title: 'Wydawnictwa', route: '/admin-panel/publishers' },
+                    { title: 'Tytuły', route: '/admin-panel/titles' },
                 ],
             },
             {
                 action: 'mdi-account',
                 title: 'Wypożyczenia i oddania',
                 items: [
-                    { title: 'Przeglądaj' },
-                    { title: 'Wypożyczone' },
-                    { title: 'Opóźnienia i kary' },
+                    { title: 'Przeglądaj', route: '/admin-panel/borrows-returns' },
+                    { title: 'Wypożyczone', route: '/admin-panel/borrows' },
+                    { title: 'Opóźnienia i kary', route: '/admin-panel/delays-penalties' },
                 ],
             },
             {
                 action: 'mdi-account',
                 title: 'Akcje',
                 items: [
-                    { title: 'Propozycje czytelników' },
-                    { title: 'Opinie' },
-                    { title: 'Wypełnione ankiety' },
+                    { title: 'Propozycje czytelników', route: '/admin-panel/suggestions' },
+                    { title: 'Opinie', route: '/admin-panel/opinions' },
+                    { title: 'Wypełnione ankiety', route: '/admin-panel/userforms' },
                 ],
             },
         ]
