@@ -17,6 +17,8 @@ use Illuminate\Support\Facades\Route;
 Route::post('login', 'AuthController@login');
 Route::post('register', 'AuthController@register');
 
+Route::get('user/getReaders', 'UserController@getReaders');
+
 Route::group(['middleware' => 'auth.jwt'], function () {
     Route::get('logout', 'AuthController@logout');
     Route::post('logout', 'AuthController@logout');

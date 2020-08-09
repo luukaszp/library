@@ -2,7 +2,7 @@
   <v-data-table
     :headers="headers"
     :items="readers"
-    sort-by="cardNumber"
+    sort-by="card_number"
     class="elevation-1"
   >
     <template v-slot:top>
@@ -14,47 +14,15 @@
           vertical
         ></v-divider>
         <v-spacer></v-spacer>
-        <v-dialog v-model="dialog" max-width="500px">
-          <template v-slot:activator="{ on, attrs }">
+          <template>
             <v-btn
               color="primary"
               dark
               class="mb-2"
-              v-bind="attrs"
-              v-on="on"
+              :to="'/register'"
             >Dodaj czytelnika</v-btn>
           </template>
-          <v-card>
-            <v-card-title>
-              <span class="headline">{{ formTitle }}</span>
-            </v-card-title>
-
-            <v-card-text>
-              <v-container>
-                <v-row>
-                    <v-col cols="12" sm="6" md="4">
-                        <v-text-field v-model="editedItem.cardNumber" label="Numer karty bibliotecznej"></v-text-field>
-                    </v-col>
-                    <v-col cols="12" sm="6" md="4">
-                        <v-text-field v-model="editedItem.name" label="Imię"></v-text-field>
-                    </v-col>
-                    <v-col cols="12" sm="6" md="4">
-                        <v-text-field v-model="editedItem.surname" label="Nazwisko"></v-text-field>
-                    </v-col>
-                    <v-col cols="12" sm="6" md="4">
-                        <v-text-field v-model="editedItem.email" label="E-mail"></v-text-field>
-                    </v-col>
-                </v-row>
-              </v-container>
-            </v-card-text>
-
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn color="blue darken-1" text @click="close">Anuluj</v-btn>
-              <v-btn color="blue darken-1" text @click="save">Zapisz</v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
+          
       </v-toolbar>
     </template>
     <template v-slot:item.actions="{ item }">
@@ -79,6 +47,8 @@
 </template>
 
 <script>
+import Register from "../components/Register.vue";
+
   export default {
     data: () => ({
       dialog: false,
@@ -87,23 +57,22 @@
           text: 'Numer karty bibliotecznej',
           align: 'start',
           sortable: false,
-          value: 'cardNumber',
+          value: 'card_number',
         },
         { text: 'Imię', value: 'name' },
         { text: 'Nazwisko', value: 'surname' },
         { text: 'E-mail', value: 'email' },
         { text: 'Akcje', value: 'actions', sortable: false },
       ],
-      readers: [],
       editedIndex: -1,
       editedItem: {
-        cardNumber: '',
+        card_number: '',
         name: '',
         surname: '',
         email: '',
       },
       defaultItem: {
-        cardNumber: '',
+        card_number: '',
         name: '',
         surname: '',
         email: '',
@@ -114,6 +83,9 @@
       formTitle () {
         return this.editedIndex === -1 ? 'Nowy czytelnik' : 'Edytuj dane czytelnika'
       },
+      readers() {
+        return this.$store.getters.getReaders;
+      }
     },
 
     watch: {

@@ -22,6 +22,24 @@ class UserController extends Controller
     }
 
     /**
+     * Display a listing of readers.
+     *
+     */
+    public function getReaders()
+    {
+        $users = User::where('is_worker', 0);
+
+        if (!$users) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Sorry, currently there are no workers.',
+            ], 400);
+        } else {
+            return $users = User::get(['id', 'card_number', 'name', 'surname', 'email'])->toArray();
+        }
+    }
+
+    /**
      * Display specified user.
      * @param $id
      * @return \Illuminate\Http\JsonResponse

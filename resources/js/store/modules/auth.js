@@ -1,4 +1,5 @@
 import axios from 'axios'
+import router from '../../router'
 
 export default {
     state: {
@@ -22,7 +23,7 @@ export default {
             return new Promise((resolve, reject) => {
                 axios({
                     method: 'POST',
-                    url: 'http://127.0.0.1:8000/login',
+                    url: 'http://127.0.0.1:8000/api/login',
                     data: {
                         email: credentials.email,
                         password: credentials.password,
@@ -59,6 +60,7 @@ export default {
                     if(response.data.success == true)
                     {
                         alert("Zarejestrowano pomyślnie!")
+                        router.push('/admin-panel')
                     }
                     else
                     {

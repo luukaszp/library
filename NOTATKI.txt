@@ -22,3 +22,6 @@ Readers.vue
 
 StoreBook
 - czy min 13 max 13 w isbn będzie ok
+
+readers.j
+- fetch nie działa
