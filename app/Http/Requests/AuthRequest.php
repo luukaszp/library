@@ -27,9 +27,10 @@ class AuthRequest extends FormRequest
             'name' => ['required', 'string', 'max:255'],
             'surname' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'card_number' => ['string', 'max:10', 'unique:users'], //usunięcie 'required'
-            'id_number' => ['string', 'max:12', 'unique:users'], //usunięcie 'required'
+            'card_number' => ['string', 'max:10', 'unique:users', 'nullable'], //usunięcie 'required'
+            'id_number' => ['string', 'max:12', 'unique:users', 'nullable'], //usunięcie 'required'
             'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'password_confirmation' => ['required'],
         ];
     }
 
@@ -44,7 +45,7 @@ class AuthRequest extends FormRequest
             'email.required' => 'Email is required!',
             'name.required' => 'Name is required!',
             'surname.required' => 'Surname is required!',
-            'card_number.required' => 'Library card number is required!',
+            //'card_number.required' => 'Library card number is required!',
             'password.required' => 'Password is required!'
         ];
     }

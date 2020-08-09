@@ -60,7 +60,7 @@
 
                             <v-text-field
                                     class="pa-5 pb-0 pt-0"
-                                    v-model="cardNumber"
+                                    v-model="card_number"
                                     :rules="checkReader ? [] : cardNumberRules"
                                     label="Numer karty bibliotecznej"
                                     :disabled="checkReader"
@@ -70,7 +70,7 @@
 
                             <v-text-field
                                     class="pa-5 pb-0 pt-0"
-                                    v-model="idNumber"
+                                    v-model="id_number"
                                     :rules="checkWorker ? [] : idNumberRules"
                                     label="Numer identyfikacyjny pracownika"
                                     :disabled="checkWorker"
@@ -92,8 +92,8 @@
 
                             <v-text-field
                                     class="pa-5 pt-0"
-                                    :value="passwordConfirmation"
-                                    v-model="passwordConfirmation"
+                                    :value="password_confirmation"
+                                    v-model="password_confirmation"
                                     label="Powtórz hasło"
                                     :type="'password'"
                                     :rules="confirmPasswordRules.concat(passwordConfirmationRule)"
@@ -142,10 +142,10 @@
                 name: "",
                 surname: "",
                 email: "",
-                cardNumber: "",
-                idNumber: "",
+                card_number: "",
+                id_number: "",
                 password: "",
-                passwordConfirmation: "",
+                password_confirmation: "",
                 rules: {
                     required: value => !!value || "Hasło jest wymagane",
                     password: value => {
@@ -188,10 +188,10 @@
                         name: this.name,
                         surname: this.surname,
                         email: this.email,
-                        cardNumber: this.cardNumber,
-                        idNumber: this.idNumber,
+                        card_number: this.card_number,
+                        id_number: this.id_number,
                         password: this.password,
-                        passwordConfirmation: this.passwordConfirmation
+                        password_confirmation: this.password_confirmation
                     })
                         .catch(function (error) {
                             console.log(error);
@@ -203,12 +203,12 @@
             },
             changeValue() {
                 if(this.radios === 'reader') {
-                    this.idNumber = ''
+                    this.id_number = ''
                     this.checkReader = false 
                     this.checkWorker = true
                 }
                 else {
-                    this.cardNumber = ''
+                    this.card_number = ''
                     this.checkReader = true 
                     this.checkWorker = false
                 }
@@ -218,7 +218,7 @@
         computed: {
             passwordConfirmationRule() {
                 return () =>
-                    this.password === this.passwordConfirmation || "Hasło musi być takie same";
+                    this.password === this.password_confirmation || "Hasło musi być takie same";
             }
         },
     }

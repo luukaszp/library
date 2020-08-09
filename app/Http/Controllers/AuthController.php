@@ -57,6 +57,11 @@ class AuthController extends Controller
         $user->id_number = $request->id_number;
         $user->password = bcrypt($request->password);
         $user->activation_token = Str::random(40);
+
+        if($request->id_number != null) {
+            $user->is_worker = 1;
+        }
+
         $user->save();
 
         return response()->json(['success' => true]);

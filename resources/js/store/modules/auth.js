@@ -2,88 +2,85 @@ import axios from 'axios'
 
 export default {
     state: {
-        status: '',
-        token: localStorage.getItem('access_token') || '',
-        user: {}
+        token: localStorage.getItem('access_token') || null,
     },
 
     mutations: {
-        auth_request(state){
-            state.status = 'loading'
-        },
-        auth_success(state, token, user){
-            state.status = 'success'
+        retrieveToken(state, token) {
             state.token = token
-            state.user = user
         },
-        auth_error(state){
-            state.status = 'error'
+        destroyToken(state) {
+            state.token = null
         },
-        logout(state){
-            state.status = ''
-            state.token = ''
+        setNotifications(state, notifications) {
+            state.notifications = notifications
         }
     },
 
     actions: {
-        userLogin({commit}, user) {
+        getToken(context, credentials) {
             return new Promise((resolve, reject) => {
-                commit('auth_request')
                 axios({
                     method: 'POST',
                     url: 'http://127.0.0.1:8000/login',
-                    data: user
+                    data: {
+                        email: credentials.email,
+                        password: credentials.password,
+                    }
                 })
                     .then(response => {
-                        const token = resp.data.token
-                        const user = resp.data.user
-                        localStorage.setItem('token', token)
+                        const token = response.data.payload.accessToken
+                        localStorage.setItem('access_token', token)
                         axios.defaults.headers['Authorization'] = `Bearer ${token}`
-                        commit('auth_success', token, user)
-                        resolve(response)
+                        context.commit('retrieveToken', token)
+                        router.push('/')
                     })
                     .catch(error => {
-                        commit('auth_error')
-                        localStorage.removeItem('token')
-                        reject(error)
+                        console.log(error)
                     })
             })
         },
-        userRegister({commit}, user) {
+        userRegister(context, credentials) {
             return new Promise((resolve, reject) => {
-                commit('auth_request')
                 axios({
                     method: 'POST',
-                    url: 'http://127.0.0.1:8000/register',
-                    data: user
+                    url: 'http://127.0.0.1:8000/api/register',
+                    data: {
+                        name: credentials.name,
+                        surname: credentials.surname,
+                        email: credentials.email,
+                        card_number: credentials.card_number,
+                        id_number: credentials.id_number,
+                        password: credentials.password,
+                        password_confirmation: credentials.password_confirmation
+                    }
                 })
-                    .then(response => {
-                        const token = resp.data.token
-                        const user = resp.data.user
-                        localStorage.setItem('token', token)
-                        axios.defaults.headers['Authorization'] = `Bearer ${token}`
-                        commit('auth_success', token, user)
-                        resolve(response)
-                    })
-                    .catch(error => {
-                        commit('auth_error')
-                        localStorage.removeItem('token')
-                        reject(error)
-                    })
+                .then(response => {
+                    if(response.data.success == true)
+                    {
+                        alert("Zarejestrowano pomyślnie!")
+                    }
+                    else
+                    {
+                        alert("Użytkownik o podanym emailu już istnieje.")
+                    }
+                })
+                .catch(error => {
+                    console.log(error)
+                })
             })
         },
-        logout({commit}) {
-            return new Promise((resolve, reject) => {
-                commit('logout')
-                localStorage.removeItem('token')
-                delete axios.defaults.headers['Authorization']
-                resolve()
-            })
+        destroyToken(context) {
+            if (context.getters.loggedIn) {
+                    context.commit('destroyToken')
+                    localStorage.removeItem('access_token')
+            }
         },
     },
 
     getters : {
-        isLoggedIn: state => !!state.token,
-        authStatus: state => state.status
-    }
+        loggedIn(state) {
+            return state.token !== null
+        }
+    },
 }

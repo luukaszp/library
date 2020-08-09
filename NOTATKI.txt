@@ -19,3 +19,6 @@ AdminPanel.vue
 
 Readers.vue
 - czy dodać pole z hasłem do przeglądania?
+
+StoreBook
+- czy min 13 max 13 w isbn będzie ok
