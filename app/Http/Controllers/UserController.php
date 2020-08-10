@@ -11,12 +11,12 @@ use Illuminate\Support\Facades\Hash;
 class UserController extends Controller
 {
      /**
-     * Display a listing of users.
+     * Display a listing of users with roles.
      *
      */
-    public function index()
+    public function getRoles()
     {
-        $users = User::get(['id', 'name', 'surname', 'email', 'card_number'])->toArray();
+        $users = User::get(['id', 'name', 'surname', 'email', 'is_worker', 'is_admin'])->toArray();
 
         return $users;
     }

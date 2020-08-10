@@ -36,3 +36,5 @@ Czytelnicy/pracownicy
 !!Nie zapomnieć umieścić odpowiednie routy do odpowiednich grup w api.php!! by ograniczyć dostęp
 
 Czy usunąć is_worker z tabeli Users, ponieważ identyfikator świadczy o tym, że jest on pracownikiem
+
+Przy edycji roli pamiętać by dodać usunąć Numer identyfikacyjny pracownika

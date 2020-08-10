@@ -6,6 +6,7 @@ import RegisterWorker from './components/AdminPanel/RegisterWorker.vue'
 import AdminPanel from './components/AdminPanel/AdminPanel.vue'
 import Readers from './components/AdminPanel/Readers.vue'
 import Workers from './components/AdminPanel/Workers.vue'
+import Roles from './components/AdminPanel/Roles.vue'
 import Books from './components/AdminPanel/Books.vue'
 import Authors from './components/AdminPanel/Authors.vue'
 import Categories from './components/AdminPanel/Categories.vue'
@@ -50,6 +51,11 @@ const routes = [
                     path: '/admin-panel/workers',
                     name: 'workers',
                     component: Workers
+                },
+                {
+                    path: '/admin-panel/roles',
+                    name: 'roles',
+                    component: Roles
                 },
                 {
                     path: '/admin-panel/books',

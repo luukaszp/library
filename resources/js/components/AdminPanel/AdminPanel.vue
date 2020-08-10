@@ -70,6 +70,7 @@
                 items: [
                     { title: 'Czytelnicy', route: '/admin-panel/readers' },
                     { title: 'Pracownicy', route: '/admin-panel/workers' },
+                    { title: 'Role użytkowników', route: '/admin-panel/roles' },
                 ],
             },
             {

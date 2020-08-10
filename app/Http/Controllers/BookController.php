@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Book;
 use Illuminate\Http\Request;
+use Intervention\Image\Facades\Image;
 
 class BookController extends Controller
 {
@@ -23,7 +24,7 @@ class BookController extends Controller
 
         if ($request->has('query')) {
             $query = $request->get('query');
-            $books->where('artist', 'like', '%' . $query . '%')
+            $books->where('author', 'like', '%' . $query . '%')
                 ->orWhere('title', 'like', '%' . $query . '%');
         }
 
@@ -33,19 +34,7 @@ class BookController extends Controller
                 $q->where('category_id', $category);
             });
         }
-        return $books->paginate(6, ['id', 'title', 'description', 'publish_year'])->appends($request->input());
-    }
-
-    /**
-     * Display a listing of books that needs to be verified.
-     *
-     * @return Response
-     */
-    public function verify()
-    {
-        $books = Book::where('is_accepted', '0')->get(['title', 'description', 'publish_year'])->toArray();
-
-        return $books;
+        return $books->paginate(6, ['id', 'title', 'description', 'publish_year', 'cover'])->appends($request->input());
     }
 
     /**
@@ -84,6 +73,15 @@ class BookController extends Controller
         $book->title = $request->title;
         $book->description = $request->description;
         $book->publish_year = $request->publish_year;
+
+        if (request('image')) {
+            $book->cover = $imagePath = request('image')->store('books', 'public');
+
+            $cover = Image::make(public_path("storage/{$imagePath}"))->fit(1000, 1000);
+            $cover->save();
+
+            $imageArray = ['image' => $imagePath];
+        }
 
         if (auth()->user()->books()->save($book)) {
             $book->categories()->attach($request->categories);
