@@ -39,7 +39,6 @@
         {
           text: 'ID',
           align: 'start',
-          sortable: false,
           value: 'id',
         },
         { text: 'Imię', value: 'name' },

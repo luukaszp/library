@@ -38,3 +38,6 @@ Czytelnicy/pracownicy
 Czy usunąć is_worker z tabeli Users, ponieważ identyfikator świadczy o tym, że jest on pracownikiem
 
 Przy edycji roli pamiętać by dodać usunąć Numer identyfikacyjny pracownika
+
+Podczas tworzenia czytelnika hasło jest takie samo jak numer karty bibliotecznej, po zalogowaniu się
+czytelnika dostaje on powiadomienie i okno o zmianie hasła.

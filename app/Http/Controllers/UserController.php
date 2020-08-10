@@ -35,7 +35,7 @@ class UserController extends Controller
                 'message' => 'Sorry, currently there are no readers.',
             ], 400);
         } else {
-            return $users = User::where('is_worker', '=', 0)->get(['id', 'id_number', 'name', 'surname', 'email'])->toArray();
+            return $users = User::where('is_worker', '=', 0)->get(['id', 'card_number', 'name', 'surname', 'email'])->toArray();
         }
     }
 
