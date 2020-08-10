@@ -1,7 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Login from './components/Login.vue'
-import Register from './components/Register.vue'
+import RegisterReader from './components/RegisterReader.vue'
+import RegisterWorker from './components/RegisterWorker.vue'
 import AdminPanel from './components/AdminPanel.vue'
 import Readers from './components/Readers.vue'
 import Workers from './components/Workers.vue'
@@ -26,9 +27,14 @@ const routes = [
             component: Login
         },
         {
-            path: '/register',
-            name: 'register',
-            component: Register
+            path: '/register-reader',
+            name: 'register-reader',
+            component: RegisterReader
+        },
+        {
+            path: '/register-worker',
+            name: 'register-worker',
+            component: RegisterWorker
         },
         {
             path: '/admin-panel',

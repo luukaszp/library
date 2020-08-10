@@ -57,13 +57,16 @@ export default {
                     }
                 })
                 .then(response => {
-                    if(response.data.success == true)
-                    {
+                    if(response.data.success == true) {
                         alert("Zarejestrowano pomyślnie!")
-                        router.push('/admin-panel')
+                        if(credentials.id_number == '') {
+                            router.push('/admin-panel/readers')
+                        }
+                        else {
+                            router.push('/admin-panel/workers')
+                        }
                     }
-                    else
-                    {
+                    else {
                         alert("Użytkownik o podanym emailu już istnieje.")
                     }
                 })

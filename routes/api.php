@@ -19,6 +19,8 @@ Route::post('register', 'AuthController@register');
 
 Route::get('user/getReaders', 'UserController@getReaders');
 
+Route::get('user/getWorkers', 'UserController@getWorkers');
+
 Route::group(['middleware' => 'auth.jwt'], function () {
     Route::get('logout', 'AuthController@logout');
     Route::post('logout', 'AuthController@logout');

@@ -19,7 +19,7 @@
               color="primary"
               dark
               class="mb-2"
-              :to="'/register'"
+              :to="'/register-reader'"
             >Dodaj czytelnika</v-btn>
           </template>
           
@@ -47,7 +47,7 @@
 </template>
 
 <script>
-import Register from "../components/Register.vue";
+import RegisterReader from "../components/RegisterReader.vue";
 
   export default {
     data: () => ({

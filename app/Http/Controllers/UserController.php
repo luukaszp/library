@@ -32,10 +32,28 @@ class UserController extends Controller
         if (!$users) {
             return response()->json([
                 'success' => false,
+                'message' => 'Sorry, currently there are no readers.',
+            ], 400);
+        } else {
+            return $users = User::where('is_worker', '=', 0)->get(['id', 'id_number', 'name', 'surname', 'email'])->toArray();
+        }
+    }
+
+    /**
+     * Display a listing of workers.
+     *
+     */
+    public function getWorkers()
+    {
+        $users = User::where('is_worker', 1);
+
+        if (!$users) {
+            return response()->json([
+                'success' => false,
                 'message' => 'Sorry, currently there are no workers.',
             ], 400);
         } else {
-            return $users = User::get(['id', 'card_number', 'name', 'surname', 'email'])->toArray();
+            return $users = User::where('is_worker', '=', 1)->get(['id', 'id_number', 'name', 'surname', 'email'])->toArray();
         }
     }
 
