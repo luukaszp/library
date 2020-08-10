@@ -60,8 +60,6 @@
 </template>
 
 <script>
-import Readers from "../components/Readers.vue";
-
   export default {
     data () {
       return {

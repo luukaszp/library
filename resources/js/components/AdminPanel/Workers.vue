@@ -47,7 +47,7 @@
 </template>
 
 <script>
-import RegisterWorker from "../components/RegisterWorker.vue";
+import RegisterWorker from "./RegisterWorker";
 
   export default {
     data: () => ({

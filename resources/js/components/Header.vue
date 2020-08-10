@@ -46,7 +46,7 @@
 
 <script>
     import About from "../components/About.vue";
-    import AdminPanel from "../components/AdminPanel.vue";
+    import AdminPanel from "../components/AdminPanel/AdminPanel.vue";
     export default {
         name: "Main",
         components: {

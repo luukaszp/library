@@ -47,7 +47,7 @@
 </template>
 
 <script>
-import RegisterReader from "../components/RegisterReader.vue";
+import RegisterReader from "./RegisterReader.vue";
 
   export default {
     data: () => ({
