@@ -56,7 +56,7 @@
                     </v-toolbar>
                 </template>
 
-                    <template v-slot:item.action="{ item }">
+                    <template v-slot:[`item.action`]="{ item }">
                         <v-icon
                             small
                             class="mr-2"
