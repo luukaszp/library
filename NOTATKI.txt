@@ -45,3 +45,5 @@ czytelnika dostaje on powiadomienie i okno o zmianie hasła.
 Wziąć wygląd profilu ze zwiarzagramu
 
 Zmienić nazwę AdminPanel na Panel/Dashboard?
+
+czy do Autora dodawać opis krótki, życiorys?

@@ -28,6 +28,11 @@ Route::put('category/edit/{id}', 'CategoryController@editCategory');
 Route::post('category/add', 'CategoryController@addCategory');
 Route::delete('category/delete/{id}', 'CategoryController@deleteCategory');
 
+Route::get('author/getAuthors', 'AuthorController@getAuthors');
+Route::put('author/edit/{id}', 'AuthorController@editAuthor');
+Route::post('author/add', 'AuthorController@addAuthor');
+Route::delete('author/delete/{id}', 'AuthorController@deleteAuthor');
+
 Route::group(['middleware' => 'auth.jwt'], function () {
     Route::get('logout', 'AuthController@logout');
     Route::post('logout', 'AuthController@logout');

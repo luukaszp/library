@@ -37,7 +37,7 @@
                                     <v-container>
                                         <v-row>
                                             <v-col>
-                                                <v-text-field v-model="editedItem.name" label="Kategoria"></v-text-field>
+                                                <v-text-field v-model="editedItem.category" label="Kategoria"></v-text-field>
                                             </v-col>
                                         </v-row>
                                     </v-container>
@@ -89,16 +89,16 @@
                 {
                     text: 'Kategorie',
                     align: 'start',
-                    value: 'name',
+                    value: 'category',
                 },
                 {text: 'Akcje', value: 'action', sortable: false},
             ],
             editedIndex: -1,
             editedItem: {
-                name: '',
+                category: '',
             },
             defaultItem: {
-                name: '',
+                category: '',
             },
         }),
 
@@ -140,18 +140,17 @@
                 if (this.editedIndex > -1) {
                     Object.assign(this.categories[this.editedIndex], this.editedItem)
                     axios.put('/api/category/edit/'+ this.editedItem.id, {
-                        name: this.editedItem.name
+                        category: this.editedItem.category
                     })
                 } else {
                     this.categories.push(this.editedItem)
                     axios.post('/api/category/add', {
-                        name: this.editedItem.name
+                        category: this.editedItem.category
                     })
                         .catch(error => {
                             console.log(error)
                         })
                 }
-                //this.$store.dispatch("fetchCategories", {})
                 this.close()
             },
 
@@ -161,8 +160,6 @@
                     this.editedItem = Object.assign({}, this.defaultItem)
                     this.editedIndex = -1
                 })
-                //this.$store.dispatch("fetchCategories", {})
-                //this.$emit('clicked', this.categories)
             },
         },
     }
