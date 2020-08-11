@@ -16,7 +16,7 @@
       </v-toolbar>
     </template>
 
-    <template v-slot:item.actions="{ item }">
+    <template v-slot:[`item.actions`]="{ item }">
       <v-icon
         small
         class="mr-2"
@@ -26,7 +26,7 @@
       </v-icon>
     </template>
     <template v-slot:no-data>
-      <h1>Brak użytkowników</h1>
+      <p class="pt-5">Brak użytkowników</p>
     </template>
   </v-data-table>
 </template>

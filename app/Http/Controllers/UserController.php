@@ -159,4 +159,70 @@ class UserController extends Controller
             'message' => 'Your password has been updated successfully.',
         ]);
     }
+
+    /**
+     * Edit specific reader.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    public function editReader(Request $request, $id)
+    {
+        $user = User::find($id);
+
+        if (!$user) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Sorry, reader with id ' . $id . ' cannot be found.'
+            ], 400);
+        }
+
+        $user->card_number = $request->card_number;
+        $user->name = $request->name;
+        $user->surname = $request->surname;
+        $user->email = $request->email;
+        $user->save();
+
+        if ($user->save()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Reader has been updated',
+            ]);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Sorry, reader could not be updated.',
+            ], 500);
+        }
+    }
+
+    /**
+     * Remove the specified reader.
+     *
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function deleteReader($id)
+    {
+        $user = User::find($id);
+
+        if (!$user) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Sorry, reader with id ' . $id . ' cannot be found.'
+            ], 400);
+        }
+
+        if ($user->destroy($id)) {
+            return response()->json([
+                'success' => true
+            ]);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Reader could not be deleted.'
+            ], 500);
+        }
+    }
 }

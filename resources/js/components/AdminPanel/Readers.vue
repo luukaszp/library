@@ -32,10 +32,42 @@
               :to="'/register-reader'"
             >Dodaj czytelnika</v-btn>
           </template>
+          <v-dialog v-model="editReaderDialog" max-width="500px">
+            <v-card>
+              <v-card-title>
+                <span class="headline">{{ formTitle }}</span>
+              </v-card-title>
+
+              <v-card-text>
+                <v-container>
+                  <v-row>
+                    <v-col cols="12" sm="6" md="4">
+                      <v-text-field v-model="editedItem.card_number" label="Numer karty"></v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm="6" md="4">
+                      <v-text-field v-model="editedItem.name" label="Imię"></v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm="6" md="4">
+                      <v-text-field v-model="editedItem.surname" label="Nazwisko"></v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm="6" md="4">
+                      <v-text-field v-model="editedItem.email" label="E-mail"></v-text-field>
+                    </v-col>
+                  </v-row>
+                </v-container>
+              </v-card-text>
+
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="blue darken-1" text @click="close">Anuluj</v-btn>
+                <v-btn color="blue darken-1" text @click="addReader">Zapisz</v-btn>
+                </v-card-actions>
+            </v-card>
+          </v-dialog>
           
       </v-toolbar>
     </template>
-    <template v-slot:item.actions="{ item }">
+    <template v-slot:[`item.actions`]="{ item }">
       <v-icon
         small
         class="mr-2"
@@ -61,7 +93,7 @@ import RegisterReader from "./RegisterReader.vue";
 
   export default {
     data: () => ({
-      dialog: false,
+      editReaderDialog: false,
       search: '',
       headers: [
         {
@@ -92,7 +124,7 @@ import RegisterReader from "./RegisterReader.vue";
 
     computed: {
       formTitle () {
-        return this.editedIndex === -1 ? 'Nowy czytelnik' : 'Edytuj dane czytelnika'
+        return this.editedIndex === -1 ? 'Edytuj dane czytelnika' : 'Edytuj dane czytelnika'
       },
       readers() {
         return this.$store.getters.getReaders;
@@ -113,34 +145,36 @@ import RegisterReader from "./RegisterReader.vue";
       editReader (item) {
         this.editedIndex = this.readers.indexOf(item)
         this.editedItem = Object.assign({}, item)
-        this.dialog = true
+        this.editReaderDialog = true
+      },
+
+      addReader() {
+        if (this.editedIndex > -1) {
+          Object.assign(this.readers[this.editedIndex], this.editedItem)
+          axios.put('/api/reader/edit/'+ this.editedItem.id, {
+            card_number: this.editedItem.card_number,
+            name: this.editedItem.name,
+            surname: this.editedItem.surname,
+            email: this.editedItem.email
+          })
+          } 
+          this.close()
       },
 
       deleteReader (item) {
         const index = this.readers.indexOf(item)
         if (confirm('Czy jesteś pewien, że chcesz usunąć tego czytelnika?')) {
-            axios.delete('/api/Reader/Delete', {
-                data: {readerId: item.id}//dodać to do storej - modules
-            })
+            axios.delete('/api/reader/delete/'+ item.id, {})
         }
         this.readers.splice(index, 1)
       },
 
       close () {
-        this.dialog = false
+        this.editReaderDialog = false
         this.$nextTick(() => {
           this.editedItem = Object.assign({}, this.defaultItem)
           this.editedIndex = -1
         })
-      },
-
-      save () {
-        if (this.editedIndex > -1) {
-          Object.assign(this.readers[this.editedIndex], this.editedItem)
-        } else {
-          this.readers.push(this.editedItem)
-        }
-        this.close()
       },
     },
   }

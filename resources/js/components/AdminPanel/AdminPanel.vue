@@ -81,7 +81,6 @@
                     { title: 'Autorzy', route: '/admin-panel/authors' },
                     { title: 'Kategorie', route: '/admin-panel/categories' },
                     { title: 'Wydawnictwa', route: '/admin-panel/publishers' },
-                    { title: 'Tytuły', route: '/admin-panel/titles' },
                 ],
             },
             {

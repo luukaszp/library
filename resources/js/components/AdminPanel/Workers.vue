@@ -35,7 +35,7 @@
           
       </v-toolbar>
     </template>
-    <template v-slot:item.actions="{ item }">
+    <template v-slot:[`item.actions`]="{ item }">
       <v-icon
         small
         class="mr-2"
@@ -120,7 +120,7 @@ import RegisterWorker from "./RegisterWorker";
         const index = this.workers.indexOf(item)
         if (confirm('Czy jesteś pewien, że chcesz usunąć tego pracownika?')) {
             axios.delete('/api/Worker/Delete', {
-                data: {workerId: item.id}//dodać to do storej - modules
+                data: {workerId: item.id}
             })
         }
         this.workers.splice(index, 1)

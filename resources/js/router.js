@@ -11,7 +11,6 @@ import Books from './components/AdminPanel/Books.vue'
 import Authors from './components/AdminPanel/Authors.vue'
 import Categories from './components/AdminPanel/Categories.vue'
 import Publishers from './components/AdminPanel/Publishers.vue'
-import Titles from './components/AdminPanel/Titles.vue'
 import BorrowsReturns from './components/AdminPanel/BorrowsReturns.vue'
 import Borrows from './components/AdminPanel/Borrows.vue'
 import DelaysPenalties from './components/AdminPanel/DelaysPenalties.vue'
@@ -76,11 +75,6 @@ const routes = [
                     path: '/admin-panel/publishers',
                     name: 'publishers',
                     component: Publishers
-                },
-                {
-                    path: '/admin-panel/titles',
-                    name: 'titles',
-                    component: Titles
                 },
                 {
                     path: '/admin-panel/borrows-returns',

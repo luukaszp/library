@@ -51,3 +51,7 @@ czy do Autora dodawać opis krótki, życiorys?
 przy dodawaniu autora/wydawnictwo/kategorie zrobic rules by sprawdzać dane
 
 dodać ilość egzemplarzy do książek - bo to przecież biblioteka :o
+
+czy robić osobny wgląd w same tytuły książek, czy to będzie w BookController
+
+edycja roli, czytelników i pracowników + usuwanie zrobić

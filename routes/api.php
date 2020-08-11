@@ -18,6 +18,8 @@ Route::post('login', 'AuthController@login');
 Route::post('register', 'AuthController@register');
 
 Route::get('user/getReaders', 'UserController@getReaders');
+Route::put('reader/edit/{id}', 'UserController@editReader');
+Route::delete('reader/delete/{id}', 'UserController@deleteReader');
 
 Route::get('user/getWorkers', 'UserController@getWorkers');
 
