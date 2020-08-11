@@ -39,7 +39,7 @@ class CategoryController extends Controller
      * @return \Illuminate\Http\JsonResponse
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function editCategory($id)
+    public function editCategory(Request $request, $id)
     {
         $category = Category::find($id);
 
@@ -50,7 +50,8 @@ class CategoryController extends Controller
             ], 400);
         }
 
-        $updated = $category->update($request->only(['name']));
+        $updated = $category->name = $request->name;
+        $category->save();
 
         if ($updated) {
             return response()->json([
@@ -82,7 +83,7 @@ class CategoryController extends Controller
             ], 400);
         }
 
-        if ($category->delete()) {
+        if ($category->destroy($id)) {
             return response()->json([
                 'success' => true
             ]);

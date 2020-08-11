@@ -131,9 +131,7 @@
             deleteCategory(item) {
                 const index = this.categories.indexOf(item)
                 if (confirm('Czy jesteś pewien, że chcesz usunąć tę kategorię?')) {
-                    axios.delete('/api/category/delete', {
-                        data: {categoryId: item.id}
-                    })
+                    axios.delete('/api/category/delete/'+ item.id, {})
                         this.categories.splice(index, 1)
                 }
             },
@@ -141,8 +139,7 @@
             addCategory() {
                 if (this.editedIndex > -1) {
                     Object.assign(this.categories[this.editedIndex], this.editedItem)
-                    axios.put('/api/category/edit', {
-                        categoryId: this.editedItem.id,
+                    axios.put('/api/category/edit/'+ this.editedItem.id, {
                         name: this.editedItem.name
                     })
                 } else {
