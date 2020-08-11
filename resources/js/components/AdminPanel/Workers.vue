@@ -1,6 +1,7 @@
 <template>
   <v-data-table
     :headers="headers"
+    :search="search"
     :items="workers"
     sort-by="id_number"
     class="elevation-1"
@@ -13,6 +14,15 @@
           inset
           vertical
         ></v-divider>
+        <v-spacer></v-spacer>
+        <v-text-field
+          v-model="search"
+          append-icon="mdi-magnify"
+          label="Szukaj"
+          single-line
+          hide-details
+          class="mr-3"
+        ></v-text-field>
         <v-spacer></v-spacer>
           <template>
             <v-btn
@@ -41,7 +51,7 @@
       </v-icon>
     </template>
     <template v-slot:no-data>
-      <h1>Brak pracowników</h1>
+      <p class="pt-5">Brak pracowników</p>
     </template>
   </v-data-table>
 </template>
@@ -52,6 +62,7 @@ import RegisterWorker from "./RegisterWorker";
   export default {
     data: () => ({
       dialog: false,
+      search: '',
       headers: [
         {
           text: 'Numer identyfikacyjny',

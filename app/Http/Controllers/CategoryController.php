@@ -15,7 +15,7 @@ class CategoryController extends Controller
      * @return \Illuminate\Http\JsonResponse
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function create(Request $request)
+    public function addCategory(Request $request)
     {
         $this->validate($request, [
             'name' => 'required',
@@ -33,12 +33,45 @@ class CategoryController extends Controller
     }
 
     /**
+     * Edit specific category.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    public function editCategory($id)
+    {
+        $category = Category::find($id);
+
+        if (!$category) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Sorry, category with id ' . $id . ' cannot be found.'
+            ], 400);
+        }
+
+        $updated = $category->update($request->only(['name']));
+
+        if ($updated) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Category has been updated',
+            ]);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Sorry, category could not be updated.',
+            ], 500);
+        }
+    }
+
+    /**
      * Remove the specified category.
      *
      * @param $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy($id)
+    public function deleteCategory($id)
     {
         $category = Category::find($id);
 
@@ -98,7 +131,7 @@ class CategoryController extends Controller
      *
      * @return Response
      */
-    public function index()
+    public function getCategories()
     {
         $category = Category::get(['id', 'name'])->toArray();
         return $category;

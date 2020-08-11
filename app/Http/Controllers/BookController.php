@@ -69,10 +69,12 @@ class BookController extends Controller
     public function store(StoreBook $request) //create StoreBook
     {
         $book = new Book();
-        $book->isbn = $request->isbn;
         $book->title = $request->title;
+        $book->isbn = $request->isbn;
         $book->description = $request->description;
         $book->publish_year = $request->publish_year;
+        $book->categories = $request->categories;
+        $book->authors = $request->authors;
 
         if (request('image')) {
             $book->cover = $imagePath = request('image')->store('books', 'public');

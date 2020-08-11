@@ -41,3 +41,7 @@ Przy edycji roli pamiętać by dodać usunąć Numer identyfikacyjny pracownika
 
 Podczas tworzenia czytelnika hasło jest takie samo jak numer karty bibliotecznej, po zalogowaniu się
 czytelnika dostaje on powiadomienie i okno o zmianie hasła.
+
+Wziąć wygląd profilu ze zwiarzagramu
+
+Zmienić nazwę AdminPanel na Panel/Dashboard?

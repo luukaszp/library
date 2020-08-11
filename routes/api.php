@@ -23,6 +23,11 @@ Route::get('user/getWorkers', 'UserController@getWorkers');
 
 Route::get('user/getRoles', 'UserController@getRoles');
 
+Route::get('category/getCategories', 'CategoryController@getCategories');
+Route::put('category/edit', 'CategoryController@editCategory');
+Route::post('category/add', 'CategoryController@addCategory');
+Route::delete('category/delete', 'CategoryController@deleteCategory');
+
 Route::group(['middleware' => 'auth.jwt'], function () {
     Route::get('logout', 'AuthController@logout');
     Route::post('logout', 'AuthController@logout');
