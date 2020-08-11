@@ -10,6 +10,7 @@ import categories from "./modules/categories"
 import borrows from "./modules/borrows"
 import books from "./modules/books"
 import authors from "./modules/authors"
+import titles from "./modules/titles"
 
 Vue.use(Vuex)
 
@@ -23,6 +24,7 @@ export default new Vuex.Store({
         categories, 
         borrows, 
         books, 
-        authors
+        authors,
+        titles
     }
 })

@@ -37,7 +37,7 @@
                                     <v-container>
                                         <v-row>
                                             <v-col>
-                                                <v-text-field v-model="editedItem.category" label="Kategoria"></v-text-field>
+                                                <v-text-field v-model="editedItem.name" label="Kategoria"></v-text-field>
                                             </v-col>
                                         </v-row>
                                     </v-container>
@@ -81,24 +81,22 @@
         name: "Categories",
         data: () => ({
             addCategoryDialog: false,
-            editCategoryDialog: false,
             search: '',
-            choosedType: '',
             categoryName: '',
             headers: [
                 {
                     text: 'Kategorie',
                     align: 'start',
-                    value: 'category',
+                    value: 'name',
                 },
                 {text: 'Akcje', value: 'action', sortable: false},
             ],
             editedIndex: -1,
             editedItem: {
-                category: '',
+                name: '',
             },
             defaultItem: {
-                category: '',
+                name: '',
             },
         }),
 
@@ -140,12 +138,12 @@
                 if (this.editedIndex > -1) {
                     Object.assign(this.categories[this.editedIndex], this.editedItem)
                     axios.put('/api/category/edit/'+ this.editedItem.id, {
-                        category: this.editedItem.category
+                        name: this.editedItem.name
                     })
                 } else {
                     this.categories.push(this.editedItem)
                     axios.post('/api/category/add', {
-                        category: this.editedItem.category
+                        name: this.editedItem.name
                     })
                         .catch(error => {
                             console.log(error)

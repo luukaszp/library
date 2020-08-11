@@ -47,3 +47,7 @@ Wziąć wygląd profilu ze zwiarzagramu
 Zmienić nazwę AdminPanel na Panel/Dashboard?
 
 czy do Autora dodawać opis krótki, życiorys?
+
+przy dodawaniu autora/wydawnictwo/kategorie zrobic rules by sprawdzać dane
+
+dodać ilość egzemplarzy do książek - bo to przecież biblioteka :o

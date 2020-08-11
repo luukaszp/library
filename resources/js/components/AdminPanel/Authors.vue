@@ -84,9 +84,7 @@
         name: "Authors",
         data: () => ({
             addAuthorDialog: false,
-            editAuthorDialog: false,
             search: '',
-            choosedType: '',
             authorName: '',
             authorSurname: '',
             headers: [

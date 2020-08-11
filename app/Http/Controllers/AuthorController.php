@@ -9,7 +9,7 @@ class AuthorController extends Controller
 {
     //pokazac info autora + ksiazki
     /**
-     * Create a new category.
+     * Create a new author.
      *
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
@@ -70,7 +70,7 @@ class AuthorController extends Controller
     }
 
     /**
-     * Remove the specified category.
+     * Remove the specified author.
      *
      * @param $id
      * @return \Illuminate\Http\JsonResponse
@@ -99,7 +99,7 @@ class AuthorController extends Controller
     }
 
     /**
-     * Display a listing of categories.
+     * Display a listing of authors.
      *
      * @return Response
      */

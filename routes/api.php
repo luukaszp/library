@@ -28,6 +28,11 @@ Route::put('category/edit/{id}', 'CategoryController@editCategory');
 Route::post('category/add', 'CategoryController@addCategory');
 Route::delete('category/delete/{id}', 'CategoryController@deleteCategory');
 
+Route::get('publisher/getPublishers', 'PublisherController@getPublishers');
+Route::put('publisher/edit/{id}', 'PublisherController@editPublisher');
+Route::post('publisher/add', 'PublisherController@addPublisher');
+Route::delete('publisher/delete/{id}', 'PublisherController@deletePublisher');
+
 Route::get('author/getAuthors', 'AuthorController@getAuthors');
 Route::put('author/edit/{id}', 'AuthorController@editAuthor');
 Route::post('author/add', 'AuthorController@addAuthor');
