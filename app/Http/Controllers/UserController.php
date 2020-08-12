@@ -225,4 +225,70 @@ class UserController extends Controller
             ], 500);
         }
     }
+
+    /**
+     * Edit specific worker.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    public function editWorker(Request $request, $id)
+    {
+        $user = User::find($id);
+
+        if (!$user) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Sorry, worker with id ' . $id . ' cannot be found.'
+            ], 400);
+        }
+
+        $user->id_number = $request->id_number;
+        $user->name = $request->name;
+        $user->surname = $request->surname;
+        $user->email = $request->email;
+        $user->save();
+
+        if ($user->save()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Worker has been updated',
+            ]);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Sorry, worker could not be updated.',
+            ], 500);
+        }
+    }
+
+    /**
+     * Remove the specified worker.
+     *
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function deleteWorker($id)
+    {
+        $user = User::find($id);
+
+        if (!$user) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Sorry, worker with id ' . $id . ' cannot be found.'
+            ], 400);
+        }
+
+        if ($user->destroy($id)) {
+            return response()->json([
+                'success' => true
+            ]);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Worker could not be deleted.'
+            ], 500);
+        }
+    }
 }

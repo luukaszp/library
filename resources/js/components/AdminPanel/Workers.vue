@@ -32,8 +32,40 @@
               :to="'/register-worker'"
             >Dodaj pracownika</v-btn>
           </template>
-          
+          <v-dialog v-model="editWorkerDialog" max-width="500px">
+            <v-card>
+              <v-card-title>
+                <span class="headline">{{ formTitle }}</span>
+              </v-card-title>
+
+              <v-card-text>
+                <v-container>
+                  <v-row>
+                    <v-col cols="12" sm="6" md="4">
+                      <v-text-field v-model="editedItem.id_number" label="Numer identyfikacyjny"></v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm="6" md="4">
+                      <v-text-field v-model="editedItem.name" label="Imię"></v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm="6" md="4">
+                      <v-text-field v-model="editedItem.surname" label="Nazwisko"></v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm="6" md="4">
+                      <v-text-field v-model="editedItem.email" label="E-mail"></v-text-field>
+                    </v-col>
+                  </v-row>
+                </v-container>
+              </v-card-text>
+
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="blue darken-1" text @click="close">Anuluj</v-btn>
+                <v-btn color="blue darken-1" text @click="addWorker">Zapisz</v-btn>
+                </v-card-actions>
+            </v-card>
+          </v-dialog>
       </v-toolbar>
+
     </template>
     <template v-slot:[`item.actions`]="{ item }">
       <v-icon
@@ -61,7 +93,7 @@ import RegisterWorker from "./RegisterWorker";
 
   export default {
     data: () => ({
-      dialog: false,
+      editWorkerDialog: false,
       search: '',
       headers: [
         {
@@ -92,7 +124,7 @@ import RegisterWorker from "./RegisterWorker";
 
     computed: {
       formTitle () {
-        return this.editedIndex === -1 ? 'Nowy pracownik' : 'Edytuj dane pracownika'
+        return this.editedIndex === -1 ? 'Edytuj dane pracownika' : 'Edytuj dane pracownika'
       },
       workers() {
         return this.$store.getters.getWorkers;
@@ -113,35 +145,37 @@ import RegisterWorker from "./RegisterWorker";
       editWorker (item) {
         this.editedIndex = this.workers.indexOf(item)
         this.editedItem = Object.assign({}, item)
-        this.dialog = true
+        this.editWorkerDialog = true
+      },
+
+      addWorker() {
+        if (this.editedIndex > -1) {
+          Object.assign(this.workers[this.editedIndex], this.editedItem)
+          axios.put('/api/worker/edit/'+ this.editedItem.id, {
+            id_number: this.editedItem.id_number,
+            name: this.editedItem.name,
+            surname: this.editedItem.surname,
+            email: this.editedItem.email
+          })
+          } 
+          this.close()
       },
 
       deleteWorker (item) {
         const index = this.workers.indexOf(item)
         if (confirm('Czy jesteś pewien, że chcesz usunąć tego pracownika?')) {
-            axios.delete('/api/Worker/Delete', {
-                data: {workerId: item.id}
-            })
+            axios.delete('/api/worker/delete/'+item.id, {})
         }
         this.workers.splice(index, 1)
       },
 
       close () {
-        this.dialog = false
+        this.editWorkerDialog = false
         this.$nextTick(() => {
           this.editedItem = Object.assign({}, this.defaultItem)
           this.editedIndex = -1
         })
-      },
-
-      save () {
-        if (this.editedIndex > -1) {
-          Object.assign(this.workers[this.editedIndex], this.editedItem)
-        } else {
-          this.workers.push(this.editedItem)
-        }
-        this.close()
-      },
+      }
     },
   }
 </script>

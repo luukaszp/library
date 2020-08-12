@@ -64,8 +64,8 @@
                 </v-card-actions>
             </v-card>
           </v-dialog>
-          
       </v-toolbar>
+      
     </template>
     <template v-slot:[`item.actions`]="{ item }">
       <v-icon

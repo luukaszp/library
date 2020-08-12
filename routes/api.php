@@ -22,6 +22,8 @@ Route::put('reader/edit/{id}', 'UserController@editReader');
 Route::delete('reader/delete/{id}', 'UserController@deleteReader');
 
 Route::get('user/getWorkers', 'UserController@getWorkers');
+Route::put('worker/edit/{id}', 'UserController@editWorker');
+Route::delete('worker/delete/{id}', 'UserController@deleteWorker');
 
 Route::get('user/getRoles', 'UserController@getRoles');
 
