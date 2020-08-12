@@ -20,4 +20,19 @@ class Book extends Model
     protected $fillable = [
         'isbn', 'title', 'description', 'publish_year',
     ];
+
+    public function authors()
+    {
+        return $this->belongsTo(Author::class);
+    }
+
+    public function publishers()
+    {
+        return $this->belongsTo(Publisher::class);
+    }
+
+    public function categories()
+    {
+        return $this->belongsTo(Category::class);
+    }
 }

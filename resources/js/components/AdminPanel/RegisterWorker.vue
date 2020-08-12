@@ -26,7 +26,6 @@
                                     v-model="name"
                                     :rules="nameRules"
                                     label="Imię"
-                                    single-line
                                     outlined
                                     required
                             ></v-text-field>
@@ -36,7 +35,6 @@
                                     v-model="surname"
                                     :rules="surnameRules"
                                     label="Nazwisko"
-                                    single-line
                                     outlined
                                     required
                             ></v-text-field>
@@ -46,7 +44,6 @@
                                     v-model="email"
                                     :rules="emailRules"
                                     label="E-mail"
-                                    single-line
                                     outlined
                                     required
                             ></v-text-field>
@@ -56,7 +53,6 @@
                                     v-model="id_number"
                                     :rules="idNumberRules"
                                     label="Numer identyfikacyjny pracownika"
-                                    single-line
                                     outlined
                             ></v-text-field>
 
@@ -67,7 +63,6 @@
                                     :type="'password'"
                                     :rules="[rules.password]"
                                     @input="_=>password=_"
-                                    single-line
                                     outlined
                                     required
                             ></v-text-field>
@@ -79,7 +74,6 @@
                                     label="Powtórz hasło"
                                     :type="'password'"
                                     :rules="confirmPasswordRules.concat(passwordConfirmationRule)"
-                                    single-line
                                     outlined
                                     required
                             ></v-text-field>
@@ -118,7 +112,6 @@
             return {
                 valid: false,
                 value: true,
-                radios: "reader",
                 name: "",
                 surname: "",
                 email: "",

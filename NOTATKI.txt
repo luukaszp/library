@@ -55,3 +55,7 @@ dodać ilość egzemplarzy do książek - bo to przecież biblioteka :o
 czy robić osobny wgląd w same tytuły książek, czy to będzie w BookController
 
 edycja roli, czytelników i pracowników + usuwanie zrobić
+
+kategorie - relacja jeden do wielu czy wiele do wielu
+
+dodać rules do AddBook.vue

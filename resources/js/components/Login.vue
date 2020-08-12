@@ -35,7 +35,6 @@
                                     v-model="cardNumber"
                                     :rules="cardRules"
                                     label="Numer karty bibliotecznej"
-                                    single-line
                                     outlined
                                     required
                             ></v-text-field>
@@ -49,7 +48,6 @@
                                     :type="value ? 'password' : 'text'"
                                     :rules="[rules.password]"
                                     @input="_=>password=_"
-                                    single-line
                                     outlined
                                     required
                             ></v-text-field>

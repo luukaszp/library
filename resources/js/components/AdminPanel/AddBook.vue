@@ -24,9 +24,7 @@
                             <v-text-field
                                     class="pa-5 pb-0"
                                     v-model="title"
-                                    :rules="titleRules"
                                     label="Tytuł"
-                                    single-line
                                     outlined
                                     required
                             ></v-text-field>
@@ -34,19 +32,7 @@
                             <v-text-field
                                     class="pa-5 pb-0 pt-0"
                                     v-model="isbn"
-                                    :rules="isbnRules"
                                     label="ISBN"
-                                    single-line
-                                    outlined
-                                    required
-                            ></v-text-field>
-                            
-                            <v-text-field
-                                    class="pa-5 pb-0 pt-0"
-                                    v-model="description"
-                                    :rules="descriptionRules"
-                                    label="Opis"
-                                    single-line
                                     outlined
                                     required
                             ></v-text-field>
@@ -54,9 +40,7 @@
                             <v-text-field
                                     class="pa-5 pb-0 pt-0"
                                     v-model="description"
-                                    :rules="descriptionRules"
                                     label="Opis"
-                                    single-line
                                     outlined
                                     required
                             ></v-text-field>
@@ -64,29 +48,43 @@
                             <v-text-field
                                     class="pa-5 pb-0 pt-0"
                                     v-model="publish_year"
-                                    :rules="publishyearRules"
                                     label="Rok wydania"
-                                    single-line
                                     outlined
                                     required
                             ></v-text-field>
 
                             <v-text-field
                                     class="pa-5 pb-0 pt-0"
-                                    v-model="categories"
-                                    :rules="categoryRules"
-                                    label="Kategoria"
-                                    single-line
+                                    v-model="cover"
+                                    label="Okładka"
                                     outlined
                                     required
                             ></v-text-field>
 
                             <v-text-field
                                     class="pa-5 pb-0 pt-0"
-                                    v-model="authors"
-                                    :rules="authorRules"
+                                    v-model="author"
                                     label="Autorzy"
-                                    single-line
+                                    outlined
+                                    required
+                            ></v-text-field>
+
+                            <v-select
+                                    class="pa-5 pb-0 pt-0"
+                                    v-model="selectedCategory"
+                                    :options="categories"
+                                    item-text="name"
+                                    item-value="id"
+                                    menu-props="auto"
+                                    label="Kategoria"
+                                    outlined
+                                    required
+                            ></v-select>
+
+                            <v-text-field
+                                    class="pa-5 pb-0 pt-0"
+                                    v-model="publisher"
+                                    label="Wydawnictwo"
                                     outlined
                                     required
                             ></v-text-field>
@@ -99,7 +97,7 @@
                                         class="mr-5 mb-6"
                                         @click="validate"
                                 >
-                                    Zarejestruj czytelnika
+                                    Dodaj książkę
                                 </v-btn>
 
                                 <v-btn
@@ -125,41 +123,14 @@
             return {
                 valid: false,
                 value: true,
-                radios: "reader",
-                name: "",
-                surname: "",
-                email: "",
-                card_number: "",
-                id_number: "",
-                password: "",
-                password_confirmation: "",
-                rules: {
-                    required: value => !!value || "Hasło jest wymagane",
-                    password: value => {
-                        const pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/;
-                        return (
-                            pattern.test(value) ||
-                            "8 znaków, co najmniej jedna wielka litera, cyfra oraz znak specjalny"
-                        );
-                    }
-                },
-                confirmPasswordRules: [
-                    v => !!v || 'Potwierdzenie hasła jest wymagane',
-                ],
-                emailRules: [
-                    v => !!v || 'E-mail jest wymagany',
-                    v => /.+@.+\..+/.test(v) || 'E-mail musi być prawidłowy',
-                ],
-                nameRules: [
-                    v => /^[a-zA-Z]+$/.test(v) || 'Imię powinno zawierać tylko litery',
-                ],
-                surnameRules: [
-                    v => /^[a-zA-Z]+$/.test(v) || 'Nazwisko powinno zawierać tylko litery',
-                ],
-                cardNumberRules: [
-                    v => /^\d+$/.test(v) || 'Numer karty bibliotecznej musi być prawidłowy',
-                    v => v.length === 10 || 'Numer karty bibliotecznej powinien zawierać 10 cyfr',
-                ]
+                title: "",
+                isbn: "",
+                description: "",
+                publish_year: "",
+                cover: "",
+                author: "",
+                selectedCategory: "",
+                publisher: "",
             }
         },
 
@@ -190,6 +161,9 @@
             passwordConfirmationRule() {
                 return () =>
                     this.password === this.password_confirmation || "Hasło musi być takie same";
+            },
+            categories() {
+                return this.$store.getters.getCategories;
             }
         },
     }
