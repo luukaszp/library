@@ -28,8 +28,6 @@ class StoreBook extends FormRequest
             'isbn' => ['required', 'string', 'min:13', 'max:13'],
             'description' => ['required', 'string', 'min:25'],
             'publish_year' => ['required', 'string', 'max:4'],
-            'categories' => ['required', 'array', 'min:1'],
-            'authors' => ['required', 'array', 'min:1'],
             'cover' => ['required', 'string'],
         ];
     }

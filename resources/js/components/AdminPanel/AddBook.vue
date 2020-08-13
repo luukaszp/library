@@ -21,12 +21,25 @@
 
                             <hr>
 
+                        <div class="upload">
+                            <v-file-input
+                                    class="pa-5 pb-0 pt-0"
+                                    accept="image/*"
+                                    v-model="cover"
+                                    required
+                                    :rules="coverRules"
+                                    prepend-icon="mdi-book"
+                                    :hide-input=true
+                            ></v-file-input> <p>Wgraj okładkę książki</p>
+                        </div>
+
                             <v-text-field
                                     class="pa-5 pb-0"
                                     v-model="title"
                                     label="Tytuł"
                                     outlined
                                     required
+                                    :rules="titleRules"
                             ></v-text-field>
 
                             <v-text-field
@@ -35,6 +48,7 @@
                                     label="ISBN"
                                     outlined
                                     required
+                                    :rules="isbnRules"
                             ></v-text-field>
 
                             <v-text-field
@@ -43,6 +57,7 @@
                                     label="Opis"
                                     outlined
                                     required
+                                    :rules="descriptionRules"
                             ></v-text-field>
 
                             <v-text-field
@@ -51,43 +66,55 @@
                                     label="Rok wydania"
                                     outlined
                                     required
-                            ></v-text-field>
-
-                            <v-text-field
-                                    class="pa-5 pb-0 pt-0"
-                                    v-model="cover"
-                                    label="Okładka"
-                                    outlined
-                                    required
-                            ></v-text-field>
-
-                            <v-text-field
-                                    class="pa-5 pb-0 pt-0"
-                                    v-model="author"
-                                    label="Autorzy"
-                                    outlined
-                                    required
+                                    :rules="publishYearRules"
                             ></v-text-field>
 
                             <v-select
                                     class="pa-5 pb-0 pt-0"
+                                    v-model="selectedAuthor"
+                                    :items="authors"
+                                    item-text="name"
+                                    item-value="id"
+                                    menu-props="auto"
+                                    label="Autor"
+                                    outlined
+                                    required
+                                    :rules="authorRules"
+                            >
+                            <template slot="item" slot-scope="data">
+                                {{data.item.name}} {{data.item.surname}}
+                            </template>
+                            <template slot="selection" slot-scope="data">
+                                {{data.item.name}} {{data.item.surname}}
+                            </template>
+                            </v-select>
+
+                            <v-select
+                                    class="pa-5 pb-0 pt-0"
                                     v-model="selectedCategory"
-                                    :options="categories"
+                                    :items="categories"
                                     item-text="name"
                                     item-value="id"
                                     menu-props="auto"
                                     label="Kategoria"
                                     outlined
                                     required
+                                    :rules="categoryRules"
                             ></v-select>
 
-                            <v-text-field
+                            <v-select
+
                                     class="pa-5 pb-0 pt-0"
-                                    v-model="publisher"
+                                    v-model="selectedPublisher"
+                                    :items="publishers"
+                                    item-text="name"
+                                    item-value="id"
+                                    menu-props="auto"
                                     label="Wydawnictwo"
                                     outlined
                                     required
-                            ></v-text-field>
+                                    :rules="publisherRules"
+                            ></v-select>
 
                             <v-row class="pb-5 justify-center">
 
@@ -118,7 +145,7 @@
 
 <script>
     export default {
-        name: "Register",
+        name: "AddBook",
         data() {
             return {
                 valid: false,
@@ -127,10 +154,41 @@
                 isbn: "",
                 description: "",
                 publish_year: "",
-                cover: "",
-                author: "",
+                cover: [],
+                selectedAuthor: "",
                 selectedCategory: "",
-                publisher: "",
+                selectedPublisher: "",
+                titleRules: [
+                    v => !!v || 'Pole jest wymagane!',
+                    v => v.length <= 60 || 'Tytuł jest za długi!',
+                ],
+                isbnRules: [
+                    v => !!v || 'Pole jest wymagane!',
+                    v => /^\d+$/.test(v) || 'Numer ISBN musi być prawidłowy',
+                    v => v.length === 13 || 'Numer ISBN powinien zawierać 13 cyfr',
+                ],
+                descriptionRules: [
+                    v => !!v || 'Pole jest wymagane!',
+                    v => v.length >= 25 || 'Opis jest za krótki!',
+                ],
+                publishYearRules: [
+                    v => !!v || 'Pole jest wymagane!',
+                    v => /^\d+$/.test(v) || 'Rok wydania musi być prawidłowy',
+                    v => v.length === 4 || 'Rok wydania powinien zawierać 4 cyfry',
+                ],
+                coverRules: [
+                    v => !!v || 'Zdjęcie okładki książki jest wymagane!',
+                    v => v.size < 2000000 || 'Zdjęcie okładki powinno być mniejsze niż 2MB!'
+                ],
+                authorRules: [
+                    v => !!v || 'Wymagane jest wybranie autora!',
+                ],
+                categoryRules: [
+                    v => !!v || 'Wymagane jest wybranie kategorii!',
+                ],
+                publisherRules: [
+                    v => !!v || 'Wymagane jest wybranie wydawnictwa!',
+                ]
             }
         },
 
@@ -138,14 +196,15 @@
             validate() {
                 if(this.$refs.form.validate())
                 {
-                    this.$store.dispatch('userRegister', {
-                        name: this.name,
-                        surname: this.surname,
-                        email: this.email,
-                        card_number: this.card_number,
-                        id_number: this.id_number,
-                        password: this.password,
-                        password_confirmation: this.password_confirmation
+                    this.$store.dispatch('storeBook', {
+                        title: this.title,
+                        isbn: this.isbn,
+                        description: this.description,
+                        publish_year: this.publish_year,
+                        cover: this.cover,
+                        author: this.selectedAuthor,
+                        category: this.selectedCategory,
+                        publisher: this.selectedPublisher,
                     })
                         .catch(function (error) {
                             console.log(error);
@@ -164,7 +223,25 @@
             },
             categories() {
                 return this.$store.getters.getCategories;
+            },
+            authors() {
+                return this.$store.getters.getAuthors;
+            },
+            publishers() {
+                return this.$store.getters.getPublishers;
             }
+        },
+
+        watch: {
+            dialog(val) {
+                val || this.close()
+            },
+        },
+
+        created() {
+            this.$store.dispatch("fetchCategories", {});
+            this.$store.dispatch("fetchAuthors", {});
+            this.$store.dispatch("fetchPublishers", {});
         },
     }
 </script>
@@ -175,6 +252,13 @@
     }
 
     h2 {
+        text-align: center;
+    }
+
+    .upload {
+        display: flex;
+        width: 200px;
+        justify-content: center;
         text-align: center;
     }
 </style>

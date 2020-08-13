@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Book;
+use App\Http\Requests\StoreBook;
 use Illuminate\Http\Request;
 use Intervention\Image\Facades\Image;
 
@@ -14,7 +15,7 @@ class BookController extends Controller
      * @param Request $request
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
-    public function index(Request $request)
+    public function getBooks(Request $request)
     {
         $books = Book::query();
 
@@ -73,20 +74,21 @@ class BookController extends Controller
         $book->isbn = $request->isbn;
         $book->description = $request->description;
         $book->publish_year = $request->publish_year;
-        $book->categories = $request->categories;
-        $book->authors = $request->authors;
 
-        if (request('image')) {
-            $book->cover = $imagePath = request('image')->store('books', 'public');
+        if ($request->hasFile('cover')) {
+            $book->cover = $imagePath = $request->file('cover')->store('books', 'public');
 
             $cover = Image::make(public_path("storage/{$imagePath}"))->fit(1000, 1000);
             $cover->save();
 
-            $imageArray = ['image' => $imagePath];
+            $imageArray = ['cover' => $imagePath];
         }
 
-        if (auth()->user()->books()->save($book)) {
+        //if (auth()->user()->books()->save($book)) { Tutaj użytkownik zalogowany
+            if (books()->save($book)) {
             $book->categories()->attach($request->categories);
+            $book->authors()->attach($request->authors);
+            $book->publishers()->attach($request->publishers);
             return response()->json([
                 'success' => true,
                 'book' => $book

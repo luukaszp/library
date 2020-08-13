@@ -137,12 +137,15 @@
                     v => /.+@.+\..+/.test(v) || 'E-mail musi być prawidłowy',
                 ],
                 nameRules: [
+                    v => !!v || 'Imię jest wymagane!',
                     v => /^[a-zA-Z]+$/.test(v) || 'Imię powinno zawierać tylko litery',
                 ],
                 surnameRules: [
+                    v => !!v || 'Nazwisko jest wymagane!',
                     v => /^[a-zA-Z]+$/.test(v) || 'Nazwisko powinno zawierać tylko litery',
                 ],
                 cardNumberRules: [
+                    v => !!v || 'Numer karty bibliotecznej jest wymagany!',
                     v => /^\d+$/.test(v) || 'Numer karty bibliotecznej musi być prawidłowy',
                     v => v.length === 10 || 'Numer karty bibliotecznej powinien zawierać 10 cyfr',
                 ]
