@@ -13,21 +13,23 @@ class CreateBooksTable extends Migration
      */
     public function up()
     {
-        Schema::create('books', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('title');
-            $table->string('isbn');
-            $table->string('description');
-            $table->string('publish_year');
-            $table->string('cover');
-            $table->unsignedInteger('author_id');
-            $table->unsignedInteger('category_id');
-            $table->unsignedInteger('publisher_id');
-            $table->foreign('author_id')->references('id')->on('authors');
-            $table->foreign('category_id')->references('id')->on('categories');
-            $table->foreign('publisher_id')->references('id')->on('publishers');
-            $table->timestamps();
-        });
+        Schema::create(
+            'books', function (Blueprint $table) {
+                $table->increments('id');
+                $table->string('title');
+                $table->string('isbn');
+                $table->string('description');
+                $table->string('publish_year');
+                $table->string('cover');
+                $table->unsignedInteger('author_id');
+                $table->unsignedInteger('category_id');
+                $table->unsignedInteger('publisher_id');
+                $table->foreign('author_id')->references('id')->on('authors');
+                $table->foreign('category_id')->references('id')->on('categories');
+                $table->foreign('publisher_id')->references('id')->on('publishers');
+                $table->timestamps();
+            }
+        );
     }
 
     /**

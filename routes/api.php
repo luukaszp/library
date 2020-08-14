@@ -47,21 +47,27 @@ Route::get('book/getBooks', 'BookController@getBooks');
 Route::put('book/edit/{id}', 'BookController@editBook');
 Route::delete('book/delete/{id}', 'BookController@deleteBook');
 
-Route::group(['middleware' => 'auth.jwt'], function () {
-    Route::get('logout', 'AuthController@logout');
-    Route::post('logout', 'AuthController@logout');
-    Route::post('refresh', 'AuthController@refresh');
-    Route::post('me', 'AuthController@me');
-});
+Route::group(
+    ['middleware' => 'auth.jwt'], function () {
+        Route::get('logout', 'AuthController@logout');
+        Route::post('logout', 'AuthController@logout');
+        Route::post('refresh', 'AuthController@refresh');
+        Route::post('me', 'AuthController@me');
+    }
+);
 
-Route::group(['middleware' => ['auth.jwt', 'admin']], function () {
+Route::group(
+    ['middleware' => ['auth.jwt', 'admin']], function () {
 
-});
+    }
+);
 
 /*Route::group(['middleware' => ['auth.jwt', 'worker']], function () {
 
 });*/
 
-Route::group(['middleware' => ['auth.jwt', 'admin', 'worker']], function () {
+Route::group(
+    ['middleware' => ['auth.jwt', 'admin', 'worker']], function () {
 
-});
+    }
+);

@@ -11,16 +11,18 @@ class AuthorController extends Controller
     /**
      * Create a new author.
      *
-     * @param Request $request
+     * @param  Request $request
      * @return \Illuminate\Http\JsonResponse
      * @throws \Illuminate\Validation\ValidationException
      */
     public function addAuthor(Request $request)
     {
-        $this->validate($request, [
+        $this->validate(
+            $request, [
             'name' => 'required',
             'surname' => 'required',
-        ]);
+            ]
+        );
 
         $author = new Author();
         $author->name = $request->name;
@@ -28,16 +30,18 @@ class AuthorController extends Controller
 
         $author->save();
 
-        return response()->json([
+        return response()->json(
+            [
             'success' => true,
             'author' => $author
-        ], 201);
+            ], 201
+        );
     }
 
     /**
      * Edit specific author.
      *
-     * @param Request $request
+     * @param  Request $request
      * @return \Illuminate\Http\JsonResponse
      * @throws \Illuminate\Validation\ValidationException
      */
@@ -46,10 +50,12 @@ class AuthorController extends Controller
         $author = Author::find($id);
 
         if (!$author) {
-            return response()->json([
+            return response()->json(
+                [
                 'success' => false,
                 'message' => 'Sorry, author with id ' . $id . ' cannot be found.'
-            ], 400);
+                ], 400
+            );
         }
 
         $author->name = $request->name;
@@ -57,22 +63,26 @@ class AuthorController extends Controller
         $author->save();
 
         if ($author->save()) {
-            return response()->json([
+            return response()->json(
+                [
                 'success' => true,
                 'message' => 'Author has been updated',
-            ]);
+                ]
+            );
         } else {
-            return response()->json([
+            return response()->json(
+                [
                 'success' => false,
                 'message' => 'Sorry, author could not be updated.',
-            ], 500);
+                ], 500
+            );
         }
     }
 
     /**
      * Remove the specified author.
      *
-     * @param $id
+     * @param  $id
      * @return \Illuminate\Http\JsonResponse
      */
     public function deleteAuthor($id)
@@ -80,21 +90,27 @@ class AuthorController extends Controller
         $author = Author::find($id);
 
         if (!$author) {
-            return response()->json([
+            return response()->json(
+                [
                 'success' => false,
                 'message' => 'Sorry, author with id ' . $id . ' cannot be found.'
-            ], 400);
+                ], 400
+            );
         }
 
         if ($author->destroy($id)) {
-            return response()->json([
+            return response()->json(
+                [
                 'success' => true
-            ]);
+                ]
+            );
         } else {
-            return response()->json([
+            return response()->json(
+                [
                 'success' => false,
                 'message' => 'Author could not be deleted.'
-            ], 500);
+                ], 500
+            );
         }
     }
 

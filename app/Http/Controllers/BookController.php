@@ -16,55 +16,29 @@ class BookController extends Controller
     /**
      * Display a listing of books.
      *
-     * @param Request $request
-     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
-     */
-  /*public function getBooks(Request $request)
-    {
-        $books = Book::query();
-
-        if ($request->has('sort') && $request->get('sort') === 'date_desc') {
-            $books->orderBy('created_at', 'desc');
-        }
-
-        if ($request->has('query')) {
-            $query = $request->get('query');
-            $books->where('author', 'like', '%' . $query . '%')
-                ->orWhere('title', 'like', '%' . $query . '%');
-        }
-
-        if ($request->has('category')) {
-            $category = $request->get('category');
-            $books->whereHas('categories', function ($q) use ($category) {
-                $q->where('category_id', $category);
-            });
-        }
-        return $books->paginate(6, ['id', 'title', 'description', 'publish_year', 'cover'])->appends($request->input());
-    }*/
-
-    /**
-     * Display a listing of books.
-     *
-     * @param Request $request
+     * @param  Request $request
      * @return 
      */
     public function getBooks(Request $request)
     {
         $data = DB::table('books')
-       ->join('categories', 'categories.id', '=', 'books.category_id')
-       ->join('publishers', 'publishers.id', '=', 'books.publisher_id')
-       ->join('authors', 'authors.id', '=', 'books.author_id')
-       ->select('books.id', 'books.title', 'books.isbn', 'books.description', 'books.publish_year',
-       'categories.name as categoryName', 'authors.name as authorName', 'authors.surname', 
-       'publishers.name as publisherName')
-       ->get()
-       ->toArray();//books.cover ?
-       return $data;
+            ->join('categories', 'categories.id', '=', 'books.category_id')
+            ->join('publishers', 'publishers.id', '=', 'books.publisher_id')
+            ->join('authors', 'authors.id', '=', 'books.author_id')
+            ->select(
+                'books.id', 'books.title', 'books.isbn', 'books.description', 'books.publish_year',
+                'categories.name as categoryName', 'authors.name as authorName', 'authors.surname', 
+                'publishers.name as publisherName'
+            )
+            ->get()
+            ->toArray();//books.cover ?
+        return $data;
     }
 
     /**
      * Display book by id
-     * @param $id
+     *
+     * @param  $id
      * @return \Illuminate\Http\JsonResponse
      */
     public function show($id)
@@ -72,22 +46,26 @@ class BookController extends Controller
         $book = Book::with('author:id,name,surname')->find($id); //dodać wydawnictwo
 
         if (!$book) {
-            return response()->json([
+            return response()->json(
+                [
                 'success' => false,
                 'message' => 'Sorry, book with id ' . $id . ' cannot be found.',
-            ], 400);
+                ], 400
+            );
         }
 
-        return response()->json([
+        return response()->json(
+            [
             'success' => true,
             'book' => $book,
-        ]);
+            ]
+        );
     }
 
     /**
      * Store a newly created book.
      *
-     * @param Request $request
+     * @param  Request $request
      * @return \Illuminate\Http\JsonResponse
      * @throws \Illuminate\Validation\ValidationException
      */
@@ -113,39 +91,27 @@ class BookController extends Controller
         }
 
         //if (auth()->user()->books()->save($book)) { Tutaj użytkownik zalogowany
-            if ($book->save()) {
-            $category = Category::find($request->get('categories'));
-            $author = Author::find($request->get('authors'));
-            $publisher = Publisher::find($request->get('publishers'));
-
-            //$category->books()->save($book);
-            //$author->books()->save($book);
-            //$publisher->books()->save($book);
-
-            //$book->categories()->associate($category)->save();
-            //$book->authors()->associate($author)->save();
-            //$book->publishers()->associate($publisher)->save();
-
-            //$book->categories()->save($category);
-            //$book->authors()->save($author);
-            //$book->publishers()->save($publisher);
-
-            return response()->json([
+        if ($book->save()) {
+            return response()->json(
+                [
                 'success' => true,
                 'book' => $book
-            ], 201);
+                ], 201
+            );
         } else {
-            return response()->json([
+            return response()->json(
+                [
                 'success' => false,
                 'message' => 'Sorry, book could not be added.',
-            ], 500);
+                    ], 500
+            );
         }
     }
 
     /**
      * Edit specific author.
      *
-     * @param Request $request
+     * @param  Request $request
      * @return \Illuminate\Http\JsonResponse
      * @throws \Illuminate\Validation\ValidationException
      */
@@ -154,10 +120,12 @@ class BookController extends Controller
         $book = Book::find($id);
 
         if (!$book) {
-            return response()->json([
+            return response()->json(
+                [
                 'success' => false,
                 'message' => 'Sorry, book with id ' . $id . ' cannot be found.'
-            ], 400);
+                ], 400
+            );
         }
 
         $book->title = $request->title;
@@ -167,22 +135,26 @@ class BookController extends Controller
         $book->save();
 
         if ($book->save()) {
-            return response()->json([
+            return response()->json(
+                [
                 'success' => true,
                 'message' => 'Book has been updated',
-            ]);
+                ]
+            );
         } else {
-            return response()->json([
+            return response()->json(
+                [
                 'success' => false,
                 'message' => 'Sorry, book could not be updated.',
-            ], 500);
+                ], 500
+            );
         }
     }
 
     /**
      * Remove the specified author.
      *
-     * @param $id
+     * @param  $id
      * @return \Illuminate\Http\JsonResponse
      */
     public function deleteBook($id)
@@ -190,59 +162,71 @@ class BookController extends Controller
         $book = Book::find($id);
 
         if (!$book) {
-            return response()->json([
+            return response()->json(
+                [
                 'success' => false,
                 'message' => 'Sorry, book with id ' . $id . ' cannot be found.'
-            ], 400);
+                ], 400
+            );
         }
 
         if ($book->destroy($id)) {
-            return response()->json([
+            return response()->json(
+                [
                 'success' => true
-            ]);
+                ]
+            );
         } else {
-            return response()->json([
+            return response()->json(
+                [
                 'success' => false,
                 'message' => 'Book could not be deleted.'
-            ], 500);
+                ], 500
+            );
         }
     }
 
     /**
      * Update the specified book.
      *
-     * @param Request $request
-     * @param Book $book
+     * @param  Request $request
+     * @param  Book    $book
      * @return \Illuminate\Http\JsonResponse
      */
     public function update(Request $request, Book $book)
     {
         if (!$book) {
-            return response()->json([
+            return response()->json(
+                [
                 'success' => false,
                 'message' => 'Sorry, book cannot be found.',
-            ], 400);
+                ], 400
+            );
         }
 
         $updated = $book->update($request->only(['isbn', 'title', 'description', 'publish_year']));
 
         if ($updated) {
-            return response()->json([
+            return response()->json(
+                [
                 'success' => true,
                 'message' => 'Book has been updated',
-            ]);
+                ]
+            );
         } else {
-            return response()->json([
+            return response()->json(
+                [
                 'success' => false,
                 'message' => 'Sorry, book could not be updated.',
-            ], 500);
+                ], 500
+            );
         }
     }
 
     /**
      * Remove the specified book.
      *
-     * @param $id
+     * @param  $id
      * @return \Illuminate\Http\JsonResponse
      */
     public function destroy($id)
@@ -250,22 +234,28 @@ class BookController extends Controller
         $book = Book::find($id);
 
         if (!$book) {
-            return response()->json([
+            return response()->json(
+                [
                 'success' => false,
                 'message' => 'Sorry, book with id ' . $id . ' cannot be found.',
-            ], 400);
+                ], 400
+            );
         }
 
         if ($book->delete()) {
-            return response()->json([
+            return response()->json(
+                [
                 'success' => true,
                 'message' => 'Book was successfully removed',
-            ]);
+                ]
+            );
         } else {
-            return response()->json([
+            return response()->json(
+                [
                 'success' => false,
                 'message' => 'Book could not be deleted.',
-            ], 500);
+                ], 500
+            );
         }
     }
 }

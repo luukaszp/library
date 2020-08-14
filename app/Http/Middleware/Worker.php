@@ -10,8 +10,8 @@ class Worker
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
+     * @param  \Illuminate\Http\Request $request
+     * @param  \Closure                 $next
      * @return mixed
      */
     public function handle($request, Closure $next)
@@ -20,9 +20,11 @@ class Worker
             return $next($request);
         }
 
-        return response()->json([
+        return response()->json(
+            [
             'success' => false,
             'message' => 'You do not have Worker permissions.'
-        ], 500);
+            ], 500
+        );
     }
 }

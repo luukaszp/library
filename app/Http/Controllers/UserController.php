@@ -11,9 +11,8 @@ use Illuminate\Support\Facades\Hash;
 class UserController extends Controller
 {
      /**
-     * Display a listing of users with roles.
-     *
-     */
+      * Display a listing of users with roles.
+      */
     public function getRoles()
     {
         $users = User::get(['id', 'name', 'surname', 'email', 'is_worker', 'is_admin'])->toArray();
@@ -23,17 +22,18 @@ class UserController extends Controller
 
     /**
      * Display a listing of readers.
-     *
      */
     public function getReaders()
     {
         $users = User::where('is_worker', 0);
 
         if (!$users) {
-            return response()->json([
+            return response()->json(
+                [
                 'success' => false,
                 'message' => 'Sorry, currently there are no readers.',
-            ], 400);
+                ], 400
+            );
         } else {
             return $users = User::where('is_worker', '=', 0)->get(['id', 'card_number', 'name', 'surname', 'email'])->toArray();
         }
@@ -41,17 +41,18 @@ class UserController extends Controller
 
     /**
      * Display a listing of workers.
-     *
      */
     public function getWorkers()
     {
         $users = User::where('is_worker', 1);
 
         if (!$users) {
-            return response()->json([
+            return response()->json(
+                [
                 'success' => false,
                 'message' => 'Sorry, currently there are no workers.',
-            ], 400);
+                ], 400
+            );
         } else {
             return $users = User::where('is_worker', '=', 1)->get(['id', 'id_number', 'name', 'surname', 'email'])->toArray();
         }
@@ -59,7 +60,8 @@ class UserController extends Controller
 
     /**
      * Display specified user.
-     * @param $id
+     *
+     * @param  $id
      * @return \Illuminate\Http\JsonResponse
      */
     public function show($id)
@@ -67,10 +69,12 @@ class UserController extends Controller
         $user = User::find($id);
 
         if (!$user) {
-            return response()->json([
+            return response()->json(
+                [
                 'success' => false,
                 'message' => 'Sorry, user with id ' . $id . ' cannot be found.',
-            ], 400);
+                ], 400
+            );
         }
 
         return $user;
@@ -78,7 +82,8 @@ class UserController extends Controller
 
     /**
      * Delete specified user (admin).
-     * @param $id
+     *
+     * @param  $id
      * @return \Illuminate\Http\JsonResponse
      */
     public function destroy($id)
@@ -86,27 +91,34 @@ class UserController extends Controller
         $user = User::find($id);
 
         if (!$user) {
-            return response()->json([
+            return response()->json(
+                [
                 'success' => false,
                 'message' => 'Sorry, user with id ' . $id . ' cannot be found.',
-            ], 400);
+                ], 400
+            );
         }
 
         if ($user->delete()) {
-            return response()->json([
+            return response()->json(
+                [
                 'success' => true,
-            ]);
+                ]
+            );
         } else {
-            return response()->json([
+            return response()->json(
+                [
                 'success' => false,
                 'message' => 'User could not be deleted.',
-            ], 500);
+                ], 500
+            );
         }
     }
 
     /**
      * Delete profile (user).
-     * @param $name
+     *
+     * @param  $name
      * @return \Illuminate\Http\JsonResponse
      */
     public function delete($name)
@@ -114,27 +126,34 @@ class UserController extends Controller
         $user = Auth::user();
 
         if (Auth::user()->name != $name) {
-            return response()->json([
+            return response()->json(
+                [
                 'success' => false,
                 'message' => 'Sorry, an error occurred.',
-            ], 500);
+                ], 500
+            );
         }
 
         if ($user->delete()) {
-            return response()->json([
+            return response()->json(
+                [
                 'success' => true,
-            ]);
+                ]
+            );
         } else {
-            return response()->json([
+            return response()->json(
+                [
                 'success' => false,
                 'message' => 'User could not be deleted.',
-            ], 500);
+                ], 500
+            );
         }
     }
 
     /**
      * Changing password.
-     * @param ChangePassword $request
+     *
+     * @param  ChangePassword $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function changePassword(ChangePassword $request)
@@ -144,26 +163,30 @@ class UserController extends Controller
         }
 
         if (strcmp($request->get('current_password'), $request->get('new_password')) == 0) {
-            return response()->json(['errors' => [
+            return response()->json(
+                ['errors' => [
                 'current' => [
                     'New password cannot be same as your current password',
                 ],
-            ]], 422);
+                ]], 422
+            );
         }
 
         $user = Auth::user();
         $user->password = Hash::make($request->get('new_password'));
         $user->save();
 
-        return response()->json([
+        return response()->json(
+            [
             'message' => 'Your password has been updated successfully.',
-        ]);
+            ]
+        );
     }
 
     /**
      * Edit specific reader.
      *
-     * @param Request $request
+     * @param  Request $request
      * @return \Illuminate\Http\JsonResponse
      * @throws \Illuminate\Validation\ValidationException
      */
@@ -172,10 +195,12 @@ class UserController extends Controller
         $user = User::find($id);
 
         if (!$user) {
-            return response()->json([
+            return response()->json(
+                [
                 'success' => false,
                 'message' => 'Sorry, reader with id ' . $id . ' cannot be found.'
-            ], 400);
+                ], 400
+            );
         }
 
         $user->card_number = $request->card_number;
@@ -185,22 +210,26 @@ class UserController extends Controller
         $user->save();
 
         if ($user->save()) {
-            return response()->json([
+            return response()->json(
+                [
                 'success' => true,
                 'message' => 'Reader has been updated',
-            ]);
+                ]
+            );
         } else {
-            return response()->json([
+            return response()->json(
+                [
                 'success' => false,
                 'message' => 'Sorry, reader could not be updated.',
-            ], 500);
+                ], 500
+            );
         }
     }
 
     /**
      * Remove the specified reader.
      *
-     * @param $id
+     * @param  $id
      * @return \Illuminate\Http\JsonResponse
      */
     public function deleteReader($id)
@@ -208,28 +237,34 @@ class UserController extends Controller
         $user = User::find($id);
 
         if (!$user) {
-            return response()->json([
+            return response()->json(
+                [
                 'success' => false,
                 'message' => 'Sorry, reader with id ' . $id . ' cannot be found.'
-            ], 400);
+                ], 400
+            );
         }
 
         if ($user->destroy($id)) {
-            return response()->json([
+            return response()->json(
+                [
                 'success' => true
-            ]);
+                ]
+            );
         } else {
-            return response()->json([
+            return response()->json(
+                [
                 'success' => false,
                 'message' => 'Reader could not be deleted.'
-            ], 500);
+                ], 500
+            );
         }
     }
 
     /**
      * Edit specific worker.
      *
-     * @param Request $request
+     * @param  Request $request
      * @return \Illuminate\Http\JsonResponse
      * @throws \Illuminate\Validation\ValidationException
      */
@@ -238,10 +273,12 @@ class UserController extends Controller
         $user = User::find($id);
 
         if (!$user) {
-            return response()->json([
+            return response()->json(
+                [
                 'success' => false,
                 'message' => 'Sorry, worker with id ' . $id . ' cannot be found.'
-            ], 400);
+                ], 400
+            );
         }
 
         $user->id_number = $request->id_number;
@@ -251,22 +288,26 @@ class UserController extends Controller
         $user->save();
 
         if ($user->save()) {
-            return response()->json([
+            return response()->json(
+                [
                 'success' => true,
                 'message' => 'Worker has been updated',
-            ]);
+                ]
+            );
         } else {
-            return response()->json([
+            return response()->json(
+                [
                 'success' => false,
                 'message' => 'Sorry, worker could not be updated.',
-            ], 500);
+                ], 500
+            );
         }
     }
 
     /**
      * Remove the specified worker.
      *
-     * @param $id
+     * @param  $id
      * @return \Illuminate\Http\JsonResponse
      */
     public function deleteWorker($id)
@@ -274,21 +315,27 @@ class UserController extends Controller
         $user = User::find($id);
 
         if (!$user) {
-            return response()->json([
+            return response()->json(
+                [
                 'success' => false,
                 'message' => 'Sorry, worker with id ' . $id . ' cannot be found.'
-            ], 400);
+                ], 400
+            );
         }
 
         if ($user->destroy($id)) {
-            return response()->json([
+            return response()->json(
+                [
                 'success' => true
-            ]);
+                ]
+            );
         } else {
-            return response()->json([
+            return response()->json(
+                [
                 'success' => false,
                 'message' => 'Worker could not be deleted.'
-            ], 500);
+                ], 500
+            );
         }
     }
 }

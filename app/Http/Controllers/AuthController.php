@@ -18,7 +18,7 @@ class AuthController extends Controller
     /**
      * Get a JWT via given credentials.
      *
-     * @param Request $request
+     * @param  Request $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function login(Request $request) //logowanie czytelnika
@@ -42,7 +42,8 @@ class AuthController extends Controller
 
     /**
      * Registration
-     * @param AuthRequest $request
+     *
+     * @param  AuthRequest $request
      * @return \Illuminate\Http\JsonResponse
      * @throws \Illuminate\Validation\ValidationException
      */
@@ -102,16 +103,18 @@ class AuthController extends Controller
     /**
      * Get the token array structure.
      *
-     * @param  string $token
+     * @param string $token
      *
      * @return \Illuminate\Http\JsonResponse
      */
     protected function respondWithToken($token)
     {
-        return response()->json([
+        return response()->json(
+            [
             'access_token' => $token,
             'token_type' => 'bearer',
             'expires_in' => auth()->factory()->getTTL() * 60,
-        ], 201);
+            ], 201
+        );
     }
 }

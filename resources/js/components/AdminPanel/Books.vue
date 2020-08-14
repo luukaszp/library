@@ -6,7 +6,7 @@
     sort-by="card_number"
     class="elevation-1"
   >
-  <template #item.fullName="{ item }"> {{ item.authorName }} {{ item.surname }} </template>
+  <template #[`item.fullName`]="{ item }"> {{ item.authorName }} {{ item.surname }} </template>
     <template v-slot:top>
       <v-toolbar flat color="white">
         <v-toolbar-title>Książki</v-toolbar-title>
