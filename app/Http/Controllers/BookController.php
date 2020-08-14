@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Book;
+use App\Category;
+use App\Author;
+use App\Publisher;
 use App\Http\Requests\StoreBook;
 use Illuminate\Http\Request;
 use Intervention\Image\Facades\Image;
@@ -70,12 +73,17 @@ class BookController extends Controller
     public function store(StoreBook $request) //create StoreBook
     {
         $book = new Book();
-        $book->title = $request->title;
-        $book->isbn = $request->isbn;
-        $book->description = $request->description;
-        $book->publish_year = $request->publish_year;
+        $book->title = $request->get('title');
+        $book->isbn = $request->get('isbn');
+        $book->description = $request->get('description');
+        $book->publish_year = $request->get('publish_year');
 
-        if ($request->hasFile('cover')) {
+        if ($file = $request->hasFile('cover')) {
+            /*$imageUpload = Image::make($file);
+            $originalPath = 'public/books/';
+            $imageUpload->save($originalPath.time().$file->getClientOriginalName()->fit(300, 500));
+
+            $book->cover = time().$file.getClientOriginalName();*/
             $book->cover = $imagePath = $request->file('cover')->store('books', 'public');
 
             $cover = Image::make(public_path("storage/{$imagePath}"))->fit(1000, 1000);
@@ -85,10 +93,15 @@ class BookController extends Controller
         }
 
         //if (auth()->user()->books()->save($book)) { Tutaj użytkownik zalogowany
-            if (books()->save($book)) {
-            $book->categories()->attach($request->categories);
-            $book->authors()->attach($request->authors);
-            $book->publishers()->attach($request->publishers);
+            if ($book->save()) {
+            $category = Category::find($request->get('categories'));
+            $author = Author::find($request->get('authors'));
+            $publisher = Publisher::find($request->get('publishers'));
+
+            $book->categories()->associate($category);
+            $book->authors()->associate($author);
+            $book->publishers()->associate($publisher);
+            
             return response()->json([
                 'success' => true,
                 'book' => $book

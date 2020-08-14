@@ -10,7 +10,6 @@ class Category extends Model
      * @var string
      */
     protected $table = 'categories';
-    protected $hidden = ['pivot'];
 
     /**
      * @var array

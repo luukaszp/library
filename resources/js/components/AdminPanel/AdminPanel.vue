@@ -1,8 +1,7 @@
 <template>
     <v-row style="height: 100%">
-        <v-col md="3" style="padding-top: 0px; padding-bottom: 0px">
+        <v-col md="2" style="padding-top: 0px; padding-bottom: 0px; max-width: 13%">
             <v-card
-            class="mx-auto"
             style="height: 100%; border-radius: 0px"
         >
             <!--mini-variant-width zamieniony na width--><v-navigation-drawer

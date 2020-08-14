@@ -5,7 +5,7 @@ export default {
         books: []
     },
     mutations: {
-        seetBooks(state, books) {
+        setBooks(state, books) {
             state.books = books
         }
     },
@@ -22,23 +22,21 @@ export default {
                     console.log(error)
                 })
         },
-        storeBook(context, credentials) {
+        /*storeBook(context) {
             return new Promise((resolve, reject) => {
+                let config = {
+                    headers: {
+                        'Content-Type' : 'multipart/form-data'
+                    }
+                }
                 axios({
                     method: 'POST',
                     url: 'http://127.0.0.1:8000/api/store',
-                    data: {
-                        title: credentials.title,
-                        isbn: credentials.isbn,
-                        description: credentials.description,
-                        publish_year: credentials.publish_year,
-                        cover: credentials.cover,
-                        author: credentials.author,
-                        category: credentials.category,
-                        publisher: credentials.publisher,
-                    }
+                    formData,
+                    config
                 })
                 .then(response => {
+                    console.log(response.data)
                     if(response.data.success == true) {
                         alert("Pomyślnie dodano książkę do bazy bibliotecznej!")
                         router.push('/admin-panel/books')
@@ -51,7 +49,7 @@ export default {
                     console.log(error)
                 })
             })
-        },
+        },*/
     },
     getters : {
         getBooks(state) {

@@ -144,6 +144,8 @@
 </template>
 
 <script>
+import axios from "axios";
+
     export default {
         name: "AddBook",
         data() {
@@ -196,19 +198,39 @@
             validate() {
                 if(this.$refs.form.validate())
                 {
-                    this.$store.dispatch('storeBook', {
-                        title: this.title,
-                        isbn: this.isbn,
-                        description: this.description,
-                        publish_year: this.publish_year,
-                        cover: this.cover,
-                        author: this.selectedAuthor,
-                        category: this.selectedCategory,
-                        publisher: this.selectedPublisher,
+                    let formData = new FormData();
+                    formData.append("cover", this.cover);
+                    formData.append("title", this.title);
+                    formData.append("isbn", this.isbn);
+                    formData.append("description", this.description);
+                    formData.append("publish_year", this.publish_year);
+                    formData.append("author", this.author);
+                    formData.append("category", this.category);
+                    formData.append("publisher", this.publisher);
+
+                    let config = {
+                        headers: {
+                            'Content-Type' : 'multipart/form-data'
+                        }
+                    }
+
+                    axios.post('http://127.0.0.1:8000/api/store', formData, config)
+                    .then(response => {
+                    if(response.data.success == true) {
+                        alert("Pomyślnie dodano książkę do bazy bibliotecznej!")
+                        this.$router.push('/admin-panel/books')
+                    }
+                    else {
+                        alert("Książka o podanych danych już isnieje.")
+                    }
+                })
+                    .catch(error => {
+                        console.log(error)
                     })
+                    /*this.$store.dispatch('storeBook', {formData})
                         .catch(function (error) {
                             console.log(error);
-                        });
+                        });*/
                 }
             },
             reset() {

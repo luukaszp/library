@@ -59,3 +59,7 @@ edycja roli, czytelników i pracowników + usuwanie zrobić
 kategorie - relacja jeden do wielu czy wiele do wielu
 
 dodać rules do AddBook.vue
+
+!!! JAK DODAĆ ZDJĘCIE OKŁADKI !!!
+
+AdminPanel - boczny pasek szerekosc zmienia sie w zly sposob

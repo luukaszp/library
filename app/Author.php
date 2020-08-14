@@ -10,7 +10,6 @@ class Author extends Model
      * @var string
      */
     protected $table = 'authors';
-    protected $hidden = ['pivot'];
 
     /**
      * @var array

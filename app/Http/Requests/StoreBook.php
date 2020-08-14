@@ -21,14 +21,14 @@ class StoreBook extends FormRequest
      *
      * @return array
      */
-    public function rules() //dodać wydawnictwo i autora
+    public function rules()
     {
         return [
             'title' => ['required', 'string', 'max:60'],
             'isbn' => ['required', 'string', 'min:13', 'max:13'],
             'description' => ['required', 'string', 'min:25'],
             'publish_year' => ['required', 'string', 'max:4'],
-            'cover' => ['required', 'string'],
+            //'cover' => ['required', 'string'],
         ];
     }
 }

@@ -10,7 +10,6 @@ class Publisher extends Model
      * @var string
      */
     protected $table = 'publishers';
-    protected $hidden = ['pivot'];
 
     /**
      * @var array
