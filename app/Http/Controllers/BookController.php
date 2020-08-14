@@ -54,7 +54,7 @@ class BookController extends Controller
        ->join('categories', 'categories.id', '=', 'books.category_id')
        ->join('publishers', 'publishers.id', '=', 'books.publisher_id')
        ->join('authors', 'authors.id', '=', 'books.author_id')
-       ->select('books.title', 'books.isbn', 'books.description', 'books.publish_year',
+       ->select('books.id', 'books.title', 'books.isbn', 'books.description', 'books.publish_year',
        'categories.name as categoryName', 'authors.name as authorName', 'authors.surname', 
        'publishers.name as publisherName')
        ->get()
@@ -138,6 +138,72 @@ class BookController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Sorry, book could not be added.',
+            ], 500);
+        }
+    }
+
+    /**
+     * Edit specific author.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    public function editBook(Request $request, $id)
+    {
+        $book = Book::find($id);
+
+        if (!$book) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Sorry, book with id ' . $id . ' cannot be found.'
+            ], 400);
+        }
+
+        $book->title = $request->title;
+        $book->isbn = $request->isbn;
+        $book->description = $request->description;
+        $book->publish_year = $request->publish_year;
+        $book->save();
+
+        if ($book->save()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Book has been updated',
+            ]);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Sorry, book could not be updated.',
+            ], 500);
+        }
+    }
+
+    /**
+     * Remove the specified author.
+     *
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function deleteBook($id)
+    {
+        $book = Book::find($id);
+
+        if (!$book) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Sorry, book with id ' . $id . ' cannot be found.'
+            ], 400);
+        }
+
+        if ($book->destroy($id)) {
+            return response()->json([
+                'success' => true
+            ]);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Book could not be deleted.'
             ], 500);
         }
     }

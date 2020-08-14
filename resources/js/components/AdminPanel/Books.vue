@@ -33,6 +33,39 @@
               :to="'/add-book'"
             >Dodaj książkę</v-btn>
           </template>
+
+          <v-dialog v-model="editBookDialog" max-width="500px">
+            <v-card>
+              <v-card-title>
+                <span class="headline">{{ formTitle }}</span>
+              </v-card-title>
+
+              <v-card-text>
+                <v-container>
+                  <v-row>
+                    <v-col cols="12" sm="6" md="4">
+                      <v-text-field v-model="editedItem.title" label="Tytuł książki"></v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm="6" md="4">
+                      <v-text-field v-model="editedItem.isbn" label="ISBN"></v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm="6" md="4">
+                      <v-text-field v-model="editedItem.description" label="Opis"></v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm="6" md="4">
+                      <v-text-field v-model="editedItem.publish_year" label="Rok wydania"></v-text-field>
+                    </v-col>
+                  </v-row>
+                </v-container>
+              </v-card-text>
+
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="blue darken-1" text @click="close">Anuluj</v-btn>
+                <v-btn color="blue darken-1" text @click="addBook">Zapisz</v-btn>
+                </v-card-actions>
+            </v-card>
+          </v-dialog>
           
       </v-toolbar>
     </template>
@@ -62,7 +95,7 @@ import AddBook from "./AddBook.vue";
 
   export default {
     data: () => ({
-      dialog: false,
+      editBookDialog: false,
       search: '',
       headers: [
         {
@@ -81,27 +114,21 @@ import AddBook from "./AddBook.vue";
       editedIndex: -1,
       editedItem: {
         title: '',
-        authorName: '',
-        categoryName: '',
         isbn: '',
         description: '',
         publish_year: '',
-        publisherName: '',
       },
       defaultItem: {
         title: '',
-        authorName: '',
-        categoryName: '',
         isbn: '',
         description: '',
         publish_year: '',
-        publisherName: '',
       },
     }),
 
     computed: {
       formTitle () {
-        return this.editedIndex === -1 ? 'Nowa książka' : 'Edytuj dane o książce'
+        return this.editedIndex === -1 ? 'Edytuj dane o książce' : 'Edytuj dane o książce'
       },
       books() {
         return this.$store.getters.getBooks;
@@ -122,34 +149,36 @@ import AddBook from "./AddBook.vue";
       editBook (item) {
         this.editedIndex = this.books.indexOf(item)
         this.editedItem = Object.assign({}, item)
-        this.dialog = true
+        this.editBookDialog = true
+      },
+
+      addBook() {
+        if (this.editedIndex > -1) {
+          Object.assign(this.books[this.editedIndex], this.editedItem)
+          axios.put('/api/book/edit/'+ this.editedItem.id, {
+            title: this.editedItem.title,
+            isbn: this.editedItem.isbn,
+            description: this.editedItem.description,
+            publish_year: this.editedItem.publish_year
+          })
+          } 
+          this.close()
       },
 
       deleteBook (item) {
         const index = this.books.indexOf(item)
         if (confirm('Czy jesteś pewien, że chcesz usunąć tę książkę?')) {
-            axios.delete('/api/book/delete', {
-                data: {bookId: item.id}
-            })
+            axios.delete('/api/book/delete/'+ item.id, {})
         }
         this.books.splice(index, 1)
       },
 
       close () {
-        this.dialog = false
+        this.editBookDialog = false
         this.$nextTick(() => {
           this.editedItem = Object.assign({}, this.defaultItem)
           this.editedIndex = -1
         })
-      },
-
-      save () {
-        if (this.editedIndex > -1) {
-          Object.assign(this.readers[this.editedIndex], this.editedItem)
-        } else {
-          this.readers.push(this.editedItem)
-        }
-        this.close()
       },
     },
   }
