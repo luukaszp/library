@@ -19,7 +19,7 @@ class BookController extends Controller
      * @param Request $request
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
-   /*public function getBooks(Request $request)
+  /*public function getBooks(Request $request)
     {
         $books = Book::query();
 
@@ -51,12 +51,15 @@ class BookController extends Controller
     public function getBooks(Request $request)
     {
         $data = DB::table('books')
-       ->join('categories', 'categories.id', '=', 'books.id')
-       ->join('publishers', 'publishers.id', '=', 'books.id')
-       ->join('authors', 'authors.id', '=', 'books.id')
-       ->select('books.*', 'categories.name', 'authors.name', 'authors.surname', 'publishers.name')
-       ->get();
-        return $data;
+       ->join('categories', 'categories.id', '=', 'books.category_id')
+       ->join('publishers', 'publishers.id', '=', 'books.publisher_id')
+       ->join('authors', 'authors.id', '=', 'books.author_id')
+       ->select('books.title', 'books.isbn', 'books.description', 'books.publish_year',
+       'categories.name as categoryName', 'authors.name as authorName', 'authors.surname', 
+       'publishers.name as publisherName')
+       ->get()
+       ->toArray();//books.cover ?
+       return $data;
     }
 
     /**
@@ -96,6 +99,10 @@ class BookController extends Controller
         $book->description = $request->get('description');
         $book->publish_year = $request->get('publish_year');
 
+        $book->author_id = $request->get('author');
+        $book->category_id = $request->get('category');
+        $book->publisher_id = $request->get('publisher');
+
         if ($file = $request->hasFile('cover')) {
             $book->cover = $imagePath = $request->file('cover')->store('books', 'public');
 
@@ -111,9 +118,17 @@ class BookController extends Controller
             $author = Author::find($request->get('authors'));
             $publisher = Publisher::find($request->get('publishers'));
 
-            $book->categories()->associate($category);
-            $book->authors()->associate($author);
-            $book->publishers()->associate($publisher);
+            //$category->books()->save($book);
+            //$author->books()->save($book);
+            //$publisher->books()->save($book);
+
+            //$book->categories()->associate($category)->save();
+            //$book->authors()->associate($author)->save();
+            //$book->publishers()->associate($publisher)->save();
+
+            //$book->categories()->save($category);
+            //$book->authors()->save($author);
+            //$book->publishers()->save($publisher);
 
             return response()->json([
                 'success' => true,

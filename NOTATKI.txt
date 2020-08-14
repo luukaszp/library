@@ -63,3 +63,11 @@ dodać rules do AddBook.vue
 !!! JAK DODAĆ ZDJĘCIE OKŁADKI !!!
 
 AdminPanel - boczny pasek szerekosc zmienia sie w zly sposob
+
+czy da sie z tabeli wejsc w podglad lunku (zdjecie otworzyc w okienku by sprawdzic)
+
+jak edytowac w panelu admina okladke ksiazki?
+
+dodac osobna zakladke w panelu dla okladek ksiazki
+
+v-data-table - pokazac iles znaków z kropkami a przy kliknieciu pokazuje reszte danych ponizej

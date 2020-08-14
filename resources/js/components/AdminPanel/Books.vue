@@ -6,6 +6,7 @@
     sort-by="card_number"
     class="elevation-1"
   >
+  <template #item.fullName="{ item }"> {{ item.authorName }} {{ item.surname }} </template>
     <template v-slot:top>
       <v-toolbar flat color="white">
         <v-toolbar-title>Książki</v-toolbar-title>
@@ -69,35 +70,32 @@ import AddBook from "./AddBook.vue";
           align: 'start',
           value: 'title',
         },
-        { text: 'Autor', value: 'author' },
-        { text: 'Kategoria', value: 'category' },
+        { text: 'Autor', value: 'fullName' },
+        { text: 'Kategoria', value: 'categoryName' },
         { text: 'ISBN', value: 'isbn' },
         { text: 'Opis', value: 'description' },
         { text: 'Rok wydania', value: 'publish_year' },
-        { text: 'Wydawnictwo', value: 'publisher' },
-        { text: 'Okładka', value: 'cover' },
+        { text: 'Wydawnictwo', value: 'publisherName' },
         { text: 'Akcje', value: 'actions', sortable: false },
       ],
       editedIndex: -1,
       editedItem: {
         title: '',
-        author: '',
-        category: '',
+        authorName: '',
+        categoryName: '',
         isbn: '',
         description: '',
         publish_year: '',
-        publisher: '',
-        cover: '',
+        publisherName: '',
       },
       defaultItem: {
         title: '',
-        author: '',
-        category: '',
+        authorName: '',
+        categoryName: '',
         isbn: '',
         description: '',
         publish_year: '',
-        publisher: '',
-        cover: '',
+        publisherName: '',
       },
     }),
 

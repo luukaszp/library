@@ -204,9 +204,9 @@ import axios from "axios";
                     formData.append("isbn", this.isbn);
                     formData.append("description", this.description);
                     formData.append("publish_year", this.publish_year);
-                    formData.append("author", this.author);
-                    formData.append("category", this.category);
-                    formData.append("publisher", this.publisher);
+                    formData.append("author", this.selectedAuthor);
+                    formData.append("category", this.selectedCategory);
+                    formData.append("publisher", this.selectedPublisher);
 
                     let config = {
                         headers: {
