@@ -9,6 +9,7 @@ use App\Publisher;
 use App\Http\Requests\StoreBook;
 use Illuminate\Http\Request;
 use Intervention\Image\Facades\Image;
+use DB;
 
 class BookController extends Controller
 {
@@ -18,7 +19,7 @@ class BookController extends Controller
      * @param Request $request
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
-    public function getBooks(Request $request)
+   /*public function getBooks(Request $request)
     {
         $books = Book::query();
 
@@ -39,6 +40,23 @@ class BookController extends Controller
             });
         }
         return $books->paginate(6, ['id', 'title', 'description', 'publish_year', 'cover'])->appends($request->input());
+    }*/
+
+    /**
+     * Display a listing of books.
+     *
+     * @param Request $request
+     * @return 
+     */
+    public function getBooks(Request $request)
+    {
+        $data = DB::table('books')
+       ->join('categories', 'categories.id', '=', 'books.id')
+       ->join('publishers', 'publishers.id', '=', 'books.id')
+       ->join('authors', 'authors.id', '=', 'books.id')
+       ->select('books.*', 'categories.name', 'authors.name', 'authors.surname', 'publishers.name')
+       ->get();
+        return $data;
     }
 
     /**
@@ -79,11 +97,6 @@ class BookController extends Controller
         $book->publish_year = $request->get('publish_year');
 
         if ($file = $request->hasFile('cover')) {
-            /*$imageUpload = Image::make($file);
-            $originalPath = 'public/books/';
-            $imageUpload->save($originalPath.time().$file->getClientOriginalName()->fit(300, 500));
-
-            $book->cover = time().$file.getClientOriginalName();*/
             $book->cover = $imagePath = $request->file('cover')->store('books', 'public');
 
             $cover = Image::make(public_path("storage/{$imagePath}"))->fit(1000, 1000);
@@ -101,7 +114,7 @@ class BookController extends Controller
             $book->categories()->associate($category);
             $book->authors()->associate($author);
             $book->publishers()->associate($publisher);
-            
+
             return response()->json([
                 'success' => true,
                 'book' => $book

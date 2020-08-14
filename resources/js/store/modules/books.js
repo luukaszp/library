@@ -22,34 +22,7 @@ export default {
                     console.log(error)
                 })
         },
-        /*storeBook(context) {
-            return new Promise((resolve, reject) => {
-                let config = {
-                    headers: {
-                        'Content-Type' : 'multipart/form-data'
-                    }
-                }
-                axios({
-                    method: 'POST',
-                    url: 'http://127.0.0.1:8000/api/store',
-                    formData,
-                    config
-                })
-                .then(response => {
-                    console.log(response.data)
-                    if(response.data.success == true) {
-                        alert("Pomyślnie dodano książkę do bazy bibliotecznej!")
-                        router.push('/admin-panel/books')
-                    }
-                    else {
-                        alert("Książka o podanych danych już isnieje.")
-                    }
-                })
-                .catch(error => {
-                    console.log(error)
-                })
-            })
-        },*/
+       
     },
     getters : {
         getBooks(state) {
