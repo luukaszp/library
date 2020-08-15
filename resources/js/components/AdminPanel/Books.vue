@@ -7,6 +7,7 @@
     class="elevation-1"
   >
   <template #[`item.fullName`]="{ item }"> {{ item.authorName }} {{ item.surname }} </template>
+
     <template v-slot:top>
       <v-toolbar flat color="white">
         <v-toolbar-title>Książki</v-toolbar-title>
@@ -66,9 +67,58 @@
                 </v-card-actions>
             </v-card>
           </v-dialog>
+
+          <v-dialog v-model="editImageDialog" max-width="700px">
+            <v-card>
+              <v-card-text>
+                <v-container>
+                  <v-row align="center" justify="center">
+                    <v-col cols="6">
+                      <v-card>
+                        <v-img
+                          v-bind:src="('../storage/' + image)"
+                          aspect-ratio="1"
+                        ></v-img>
+                      </v-card>
+                    </v-col>
+                  </v-row>
+                </v-container>
+              </v-card-text>
+
+              <v-card-actions style="justify-content: center; display: block ruby; text-align: center">
+                <v-spacer></v-spacer>
+                <v-btn color="blue darken-1" text @click="closeImage">Anuluj</v-btn>
+                <v-file-input
+                  class="pa-5 pb-0 pt-0"
+                  accept="image/*"
+                  v-model="cover"
+                  prepend-icon="mdi-book"
+                  :hide-input=true
+                  style="max-width: 60px"
+                ></v-file-input>
+                <v-btn 
+                  color=brown
+                  @click="refreshImage"
+                >
+                  Odśwież
+                </v-btn>
+                </v-card-actions>
+            </v-card>
+          </v-dialog>
           
       </v-toolbar>
     </template>
+
+    <template v-slot:[`item.cover`]="{ item }">
+      <v-icon
+        small
+        class="mr-2"
+        @click="showImage(item)"
+      >
+        mdi-image
+      </v-icon>
+    </template>
+
     <template v-slot:[`item.actions`]="{ item }">
       <v-icon
         small
@@ -96,7 +146,11 @@ import AddBook from "./AddBook.vue";
   export default {
     data: () => ({
       editBookDialog: false,
+      editImageDialog: false,
       search: '',
+      cover: [],
+      image: '',
+      show: false,
       headers: [
         {
           text: 'Tytuł książki',
@@ -109,6 +163,7 @@ import AddBook from "./AddBook.vue";
         { text: 'Opis', value: 'description' },
         { text: 'Rok wydania', value: 'publish_year' },
         { text: 'Wydawnictwo', value: 'publisherName' },
+        { text: 'Okładka', value: 'cover' },
         { text: 'Akcje', value: 'actions', sortable: false },
       ],
       editedIndex: -1,
@@ -123,7 +178,7 @@ import AddBook from "./AddBook.vue";
         isbn: '',
         description: '',
         publish_year: '',
-      },
+      }
     }),
 
     computed: {
@@ -180,6 +235,35 @@ import AddBook from "./AddBook.vue";
           this.editedIndex = -1
         })
       },
+
+      closeImage () {
+        this.editImageDialog = false
+        this.$nextTick(() => {
+          this.editedItem = Object.assign({}, this.defaultItem)
+          this.editedIndex = -1
+        })
+      },
+
+      showImage (item) {
+        this.image = item.cover
+        this.editedIndex = this.books.indexOf(item)
+        this.editedItem = Object.assign({}, item)
+        this.editImageDialog = true
+      },
+
+      refreshImage (item) {
+        let formData = new FormData();
+        formData.append("cover", this.cover); //formData nie działa z PUT ale z POST
+
+        let config = {
+          headers: {
+            'Content-Type' : 'multipart/form-data'
+            }
+          }
+
+        axios.post('/api/book/changeImage/' + this.editedItem.id, formData, config)
+        this.$store.dispatch("fetchBooks", {});
+      }
     },
   }
 </script>

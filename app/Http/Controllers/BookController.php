@@ -28,7 +28,7 @@ class BookController extends Controller
             ->select(
                 'books.id', 'books.title', 'books.isbn', 'books.description', 'books.publish_year',
                 'categories.name as categoryName', 'authors.name as authorName', 'authors.surname', 
-                'publishers.name as publisherName'
+                'publishers.name as publisherName', 'books.cover'
             )
             ->get()
             ->toArray();//books.cover ?
@@ -103,13 +103,51 @@ class BookController extends Controller
                 [
                 'success' => false,
                 'message' => 'Sorry, book could not be added.',
-                    ], 500
+                ], 500
             );
         }
     }
 
     /**
-     * Edit specific author.
+     * Edit current book cover
+     *
+     * @param  Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    public function changeImage(Request $request, $id) //create StoreBook
+    {
+        $book = Book::find($id);
+
+        if ($file = $request->hasFile('cover')) {
+            $book->cover = $imagePath = $request->file('cover')->store('books', 'public');
+
+            $cover = Image::make(public_path("storage/{$imagePath}"))->fit(1000, 1000);
+            $cover->save();
+
+            $imageArray = ['cover' => $imagePath];
+        }
+
+        //if (auth()->user()->books()->save($book)) { Tutaj użytkownik zalogowany
+        if ($book->save()) {
+            return response()->json(
+                [
+                'success' => true,
+                'book' => $book
+                ], 201
+            );
+        } else {
+            return response()->json(
+                [
+                'success' => false,
+                'message' => 'Sorry, book could not be added.',
+                ], 500
+            );
+        }
+    }
+
+    /**
+     * Edit specific book.
      *
      * @param  Request $request
      * @return \Illuminate\Http\JsonResponse
@@ -152,7 +190,7 @@ class BookController extends Controller
     }
 
     /**
-     * Remove the specified author.
+     * Remove the specified book.
      *
      * @param  $id
      * @return \Illuminate\Http\JsonResponse
