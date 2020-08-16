@@ -10,14 +10,22 @@ class Borrow extends Model
      * @var string
      */
     protected $table = 'borrows';
-    protected $hidden = ['pivot'];
 
     /**
      * @var array
      */
-    protected $guarded = [];
 
     protected $fillable = [
         'borrows_date', 'returns_date',
     ];
+
+    public function users()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function books()
+    {
+        return $this->belongsTo(Book::class);
+    }
 }

@@ -66,4 +66,9 @@ class User extends Authenticatable implements JWTSubject
             'is_worker' => $this->is_worker,
             ];
     }
+
+    public function borrows()
+    {
+        return $this->hasMany(Borrow::class);
+    }
 }

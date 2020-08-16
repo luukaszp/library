@@ -4,6 +4,7 @@ import Login from './components/Login.vue'
 import RegisterReader from './components/AdminPanel/RegisterReader.vue'
 import RegisterWorker from './components/AdminPanel/RegisterWorker.vue'
 import AddBook from './components/AdminPanel/AddBook.vue'
+import AddBorrow from './components/AdminPanel/AddBorrow.vue'
 import AdminPanel from './components/AdminPanel/AdminPanel.vue'
 import Readers from './components/AdminPanel/Readers.vue'
 import Workers from './components/AdminPanel/Workers.vue'
@@ -41,6 +42,11 @@ const routes = [
             path: '/add-book',
             name: 'add-book',
             component: AddBook
+        },
+        {
+            path: '/add-borrow',
+            name: 'add-borrow',
+            component: AddBorrow
         },
         {
             path: '/admin-panel',

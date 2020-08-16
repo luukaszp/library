@@ -107,7 +107,7 @@
 
 <script>
     export default {
-        name: "Register",
+        name: "RegisterReader",
         data() {
             return {
                 valid: false,

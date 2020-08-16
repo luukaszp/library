@@ -49,6 +49,9 @@ Route::get('book/getBooks', 'BookController@getBooks');
 Route::put('book/edit/{id}', 'BookController@editBook');
 Route::delete('book/delete/{id}', 'BookController@deleteBook');
 
+Route::post('borrow/addBorrow', 'BorrowController@addBorrow');
+Route::get('borrow/getBorrows', 'BorrowController@getBorrows');
+
 Route::group(
     ['middleware' => 'auth.jwt'], function () {
         Route::get('logout', 'AuthController@logout');

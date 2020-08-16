@@ -1,5 +1,5 @@
 <template>
-    <div class="register">
+    <div class="add">
         <v-container>
             <v-row class="justify-center justify-md-center align-center">
                 <v-col
@@ -227,10 +227,6 @@ import axios from "axios";
                     .catch(error => {
                         console.log(error)
                     })
-                    /*this.$store.dispatch('storeBook', {formData})
-                        .catch(function (error) {
-                            console.log(error);
-                        });*/
                 }
             },
             reset() {

@@ -107,7 +107,7 @@
 
 <script>
     export default {
-        name: "Register",
+        name: "RegisterWorker",
         data() {
             return {
                 valid: false,

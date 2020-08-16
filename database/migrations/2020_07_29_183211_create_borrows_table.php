@@ -18,6 +18,10 @@ class CreateBorrowsTable extends Migration
                 $table->increments('id');
                 $table->string('borrows_date');
                 $table->string('returns_date');
+                $table->unsignedInteger('user_id');
+                $table->unsignedInteger('book_id');
+                $table->foreign('user_id')->references('id')->on('users');
+                $table->foreign('book_id')->references('id')->on('books');
                 $table->timestamps();
             }
         );

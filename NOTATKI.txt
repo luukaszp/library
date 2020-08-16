@@ -69,3 +69,9 @@ v-data-table - pokazac iles znaków z kropkami a przy kliknieciu pokazuje reszte
 przy edycji danych czytelnik/ksiazka/pracownik itd dodać rules
 
 podczas zamiany okładki książki dodać automatyczne odświeżenie/zmiana okładki (teraz: trzeba wyjść z v-dialog i wejść z powrotem aby zobaczyć zmiany)
+
+dodać ilość książek dostępnych w bibliotece
+
+skonfigurować email - wypożyczyć można na 30 dni, 7 dni przed terminem wysyłać emaila
+
+max wypożyczć 5 książek

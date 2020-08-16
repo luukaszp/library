@@ -31,7 +31,7 @@ class BookController extends Controller
                 'publishers.name as publisherName', 'books.cover'
             )
             ->get()
-            ->toArray();//books.cover ?
+            ->toArray();
         return $data;
     }
 
