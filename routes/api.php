@@ -14,7 +14,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::post('login', 'AuthController@login');
+Route::post('loginReader', 'AuthController@loginReader');
+Route::post('loginWorker', 'AuthController@loginWorker');
 Route::post('register', 'AuthController@register');
 
 Route::get('user/getReaders', 'UserController@getReaders');

@@ -12,25 +12,23 @@ export default {
         },
         destroyToken(state) {
             state.token = null
-        },
-        setNotifications(state, notifications) {
-            state.notifications = notifications
         }
     },
 
     actions: {
         getToken(context, credentials) {
             return new Promise((resolve, reject) => {
-                axios({
-                    method: 'POST',
-                    url: 'http://127.0.0.1:8000/api/login',
-                    data: {
-                        email: credentials.email,
-                        password: credentials.password,
-                    }
-                })
+                if (credentials.login.length === 10) {
+                    axios({
+                        method: 'POST',
+                        url: 'http://127.0.0.1:8000/api/loginReader',
+                        data: {
+                            card_number: credentials.login,
+                            password: credentials.password,
+                        }
+                    })
                     .then(response => {
-                        const token = response.data.payload.accessToken
+                        const token = response.data.access_token
                         localStorage.setItem('access_token', token)
                         axios.defaults.headers['Authorization'] = `Bearer ${token}`
                         context.commit('retrieveToken', token)
@@ -39,6 +37,26 @@ export default {
                     .catch(error => {
                         console.log(error)
                     })
+                } else {
+                    axios({
+                        method: 'POST',
+                        url: 'http://127.0.0.1:8000/api/loginWorker',
+                        data: {
+                            id_number: credentials.login,
+                            password: credentials.password,
+                        }
+                    })
+                    .then(response => {
+                        const token = response.data.access_token
+                        localStorage.setItem('access_token', token)
+                        axios.defaults.headers['Authorization'] = `Bearer ${token}`
+                        context.commit('retrieveToken', token)
+                        router.push('/')
+                    })
+                    .catch(error => {
+                        console.log(error)
+                    })
+                }
             })
         },
         userRegister(context, credentials) {

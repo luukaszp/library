@@ -4,11 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\AuthRequest;
 use App\Http\Requests\Reactivation;
-use App\Mail\VerifyMail;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Facades\JWTAuth;
@@ -16,25 +14,42 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 class AuthController extends Controller
 {
     /**
-     * Get a JWT via given credentials.
+     * Get a JWT via given credentials for reader
      *
      * @param  Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function login(Request $request) //logowanie czytelnika
+    public function loginReader(Request $request)
     {
         $credentials = $request->only('card_number', 'password');
 
         try {
             if (!$token = JWTAuth::attempt($credentials)) {
-                return response()->json(['error' => 'Invalid card number or password'], 401);
+                return response()->json(['error' => 'Invalid card_number or password'], 401);
             }
         } catch (JWTException $e) {
             return response()->json(['error' => 'Could not create token'], 500);
         }
 
-        if (User::where('email', $request->email)->pluck('is_activated')->first() == 0) {
-            return response()->json(['error' => 'Your account is deactivated'], 401);
+        return $this->respondWithToken($token);
+    }
+
+    /**
+     * Get a JWT via given credentials for worker
+     *
+     * @param  Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function loginWorker(Request $request)
+    {
+        $credentials = $request->only('id_number', 'password');
+
+        try {
+            if (!$token = JWTAuth::attempt($credentials)) {
+                return response()->json(['error' => 'Invalid id_number or password'], 401);
+            }
+        } catch (JWTException $e) {
+            return response()->json(['error' => 'Could not create token'], 500);
         }
 
         return $this->respondWithToken($token);

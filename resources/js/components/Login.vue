@@ -32,8 +32,8 @@
 <!--czy dodac logowanie za pomoca numeru karty i emaila ??? -->
                             <v-text-field
                                     class="pa-5 pb-0"
-                                    v-model="cardNumber"
-                                    :rules="cardRules"
+                                    v-model="login"
+                                    :rules="loginRules"
                                     label="Numer karty bibliotecznej"
                                     outlined
                                     required
@@ -87,11 +87,11 @@
                 password: "",
                 valid: true,
                 value: true,
-                cardNumber: "",
-                cardRules: [
-                    v => !!v || 'Numer karty bibliotecznej jest wymagany',
-                    v => /^\d+$/.test(v) || 'Numer karty bibliotecznej musi być prawidłowy',
-                    v => v.length === 10 || 'Numer karty bibliotecznej powinien zawierać 10 cyfr',
+                login: "",
+                loginRules: [
+                    v => !!v || 'Login jest wymagany',
+                    v => /^\d+$/.test(v) || 'Login musi być prawidłowy',
+                    v => v.length === 10 || v.length === 13 || 'Login powinien zawierać odpowiednią ilość cyfr',
                 ],
                 rules: {
                     required: value => !!value || "Hasło jest wymagane",
@@ -110,7 +110,7 @@
                 if(this.$refs.form.validate())
                 {
                     this.$store.dispatch('getToken', {
-                        cardNumber: this.cardNumber,
+                        login: this.login,
                         password: this.password
                     })
                         .catch(function (error) {
