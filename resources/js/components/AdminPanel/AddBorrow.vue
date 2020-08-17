@@ -121,7 +121,7 @@ import axios from "axios";
                 ],
                 booksRules: [
                     v => !!v || 'Wymagane jest wybranie co najmniej jednej książki!',
-                    v => v.length === 5 || 'Maksymalnie można wybrać 5 książek',
+                    v => v.length <= 5 || 'Maksymalnie można wybrać 5 książek',
                 ]
             }
         },
@@ -131,8 +131,9 @@ import axios from "axios";
                 if(this.$refs.form.validate())
                 {
                      this.$store.dispatch('borrowBooks', {
-                        reader: this.selectedReader,
-                        books: this.selectedBooks,
+                        user_id: this.selectedReader,
+                        book_id: this.selectedBooks,
+                        borrows_date: this.date,
                     })
                         .catch(function (error) {
                             console.log(error);

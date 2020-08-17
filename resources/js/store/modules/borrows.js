@@ -1,4 +1,5 @@
 import axios from 'axios'
+import router from '../../router'
 
 export default {
     state: {
@@ -16,8 +17,9 @@ export default {
                     method: 'POST',
                     url: 'http://127.0.0.1:8000/api/borrow/addBorrow',
                     data: {
-                        reader: credentials.reader,
-                        books: credentials.books,
+                        user_id: credentials.user_id,
+                        book_id: credentials.book_id,
+                        borrows_date: credentials.borrows_date
                     }
                 })
                 .then(response => {

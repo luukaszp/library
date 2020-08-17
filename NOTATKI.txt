@@ -75,3 +75,16 @@ dodać ilość książek dostępnych w bibliotece
 skonfigurować email - wypożyczyć można na 30 dni, 7 dni przed terminem wysyłać emaila
 
 max wypożyczć 5 książek
+
+AddBorrow - nie działa walidacja wybranych książek (do 5 max) + kalendarz na połowie v-card druga strona (prawa) pusta
+
+!!czy zamiast rozwijanych list w formach (wypozyczenia, dodaj ksiazke) dodac normalne pole, gdzie podczas
+wpisywania danych automatycznie wyszukuje i podpowiada dane (jak wyszukiwarka google) albo sortowac alfabetycznie
+istniejące już pole
+
+do wyswietlania Borrows zrobic warunek z datami (tam gdzie oddano ksiazke, nie powinno sie pokazywac na liscie - dodac 
+pole is_returned ?) - dodać checkbox z polem is_returned, jeżeli checkbox zaznaczony to wygląd odświeża się i książka znika
+
+Dodać zakładkę w panelu z historią wypożyczeń
+
+co dać w edycji wypożyczeń - zmiana dat?

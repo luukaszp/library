@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Borrow;
+use DB;
+use Carbon\Carbon;
 
 class BorrowController extends Controller
 {
@@ -15,9 +18,23 @@ class BorrowController extends Controller
      */
     public function addBorrow(Request $request)
     {
-        $borrow = new Borrow();
-        $borrow->reader = $request->reader;
-        $borrow->books = $request->books;
+        $book = $request->book_id;
+
+        for($index = 0; $index < count($book); $index++) {
+            $borrow = new Borrow();
+            $borrow->user_id = $request->user_id;
+            $borrow->borrows_date = $request->borrows_date;
+
+            $idOfBook = $request->book_id[$index];
+            $stringToInt = (int)$idOfBook;
+            $borrow->book_id = $stringToInt;
+
+            $date = Carbon::createFromFormat('Y-m-d', $request->borrows_date);
+            $daysToAdd = 30;
+            $date = $date->addDays($daysToAdd);
+            $borrow->returns_date = $date->toDateString();
+            $borrow->save();
+        }
 
         if ($borrow->save()) {
             return response()->json(
@@ -48,7 +65,7 @@ class BorrowController extends Controller
             ->join('users', 'users.id', '=', 'borrows.user_id')
             ->join('books', 'books.id', '=', 'borrows.book_id')
             ->select(
-                'books.title', 'users.name', 'users.surname', 
+                'books.title', 'users.name', 'users.surname', 'borrows.borrows_date', 'borrows.returns_date' 
             )
             ->get()
             ->toArray();

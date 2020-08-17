@@ -48,7 +48,13 @@
                       <v-text-field v-model="editedItem.title" label="Tytuł książki"></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.reader" label="Czytelnik"></v-text-field>
+                      <v-text-field v-model="editedItem.fullName" label="Czytelnik"></v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm="6" md="4">
+                      <v-text-field v-model="editedItem.borrows_date" label="Data wypożyczenia"></v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm="6" md="4">
+                      <v-text-field v-model="editedItem.returns_date" label="Data zwrotu"></v-text-field>
                     </v-col>
                   </v-row>
                 </v-container>
@@ -93,17 +99,23 @@ import AddBorrow from "./AddBorrow.vue";
           align: 'start',
           value: 'title',
         },
-        { text: 'Czytelnik', value: 'reader' },
+        { text: 'Czytelnik', value: 'fullName' },
+        { text: 'Wypożyczenie', value: 'borrows_date' },
+        { text: 'Zwrot', value: 'returns_date' },
         { text: 'Akcje', value: 'actions', sortable: false },
       ],
       editedIndex: -1,
       editedItem: {
         title: '',
-        reader: '',
+        fullName: '',
+        borrows_date: '',
+        returns_date: '',
       },
       defaultItem: {
         title: '',
-        reader: '',
+        fullName: '',
+        borrows_date: '',
+        returns_date: '',
       }
     }),
 
@@ -138,7 +150,7 @@ import AddBorrow from "./AddBorrow.vue";
           Object.assign(this.borrows[this.editedIndex], this.editedItem)
           axios.put('/api/borrow/edit/'+ this.editedItem.id, {
             title: this.editedItem.title,
-            reader: this.editedItem.reader,
+            fullName: this.editedItem.fullName,
           })
           } 
           this.close()

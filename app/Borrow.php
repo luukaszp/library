@@ -19,6 +19,10 @@ class Borrow extends Model
         'borrows_date', 'returns_date',
     ];
 
+    protected $casts = [
+        'book_id' => 'array'
+    ];
+
     public function users()
     {
         return $this->belongsTo(User::class);
