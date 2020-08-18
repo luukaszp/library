@@ -16,8 +16,8 @@
                                 v-model="valid"
                                 md="6"
                         >
-                            <h1 class="pt-8">Biblioteka</h1>
-                            <h2 class="pt-2">Tworzenie konta pracownika</h2>
+                            <h1 class="pt-8" style="text-align: center">Biblioteka</h1>
+                            <h2 class="pt-2" style="text-align: center">Tworzenie konta pracownika</h2>
 
                             <hr>
 
@@ -184,11 +184,5 @@
 </script>
 
 <style scoped>
-    h1 {
-        text-align: center;
-    }
 
-    h2 {
-        text-align: center;
-    }
 </style>

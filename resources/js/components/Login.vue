@@ -1,7 +1,7 @@
 <template>
     <div id="login" class="login">
         <v-container>
-            <v-row class="logform">
+            <v-row class="logform" style="margin-top: 50px">
                 <v-row class="justify-lg-end justify-sm-center pr-5 d-none d-sm-flex">
                     <v-img
                             alt="App Logo"
@@ -28,7 +28,7 @@
                                 v-model="valid"
                                 md="6"
                         >
-                            <h1 class="pt-8">Biblioteka</h1>
+                            <h1 class="pt-8" style="text-align: center">Biblioteka</h1>
 <!--czy dodac logowanie za pomoca numeru karty i emaila ??? -->
                             <v-text-field
                                     class="pa-5 pb-0"
@@ -126,16 +126,6 @@
 </script>
 
 <style scoped>
-    h1 {
-        text-align: center;
-    }
-    h2 {
-        text-align: center;
-    }
-    .logform
-    {
-        margin-top: 50px;
-    }
     @media only screen and (min-width: 600px) and (max-width: 960px) {
         .form {
             margin-left: 10%;

@@ -16,8 +16,8 @@
                                 v-model="valid"
                                 md="6"
                         >
-                            <h1 class="pt-8">Biblioteka</h1>
-                            <h2 class="pt-2">Wypożyczanie książek</h2>
+                            <h1 class="pt-8" style="text-align: center">Biblioteka</h1>
+                            <h2 class="pt-2" style="text-align: center">Wypożyczanie książek</h2>
 
                             <hr>
 
@@ -61,7 +61,7 @@
                                     :nudge-right="40"
                                     transition="scale-transition"
                                     offset-y
-                                    mid-width="290px"
+                                    min-width="290px"
                             >
                             <template v-slot:activator="{ on, attrs }">
                                 <v-text-field
@@ -114,7 +114,7 @@ import axios from "axios";
                 value: true,
                 selectedReader: "",
                 selectedBooks: [],
-                date: new Date().toISOString().substr(0, 10),
+                date: new Date().toLocaleDateString(),
                 menu: false,
                 readerRules: [
                     v => !!v || 'Wybranie czytelnika jest wymagane!',
@@ -168,11 +168,5 @@ import axios from "axios";
 </script>
 
 <style scoped>
-    h1 {
-        text-align: center;
-    }
 
-    h2 {
-        text-align: center;
-    }
 </style>

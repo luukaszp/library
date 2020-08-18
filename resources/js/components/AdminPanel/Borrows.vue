@@ -45,12 +45,6 @@
                 <v-container>
                   <v-row>
                     <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.title" label="Tytuł książki"></v-text-field>
-                    </v-col>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.fullName" label="Czytelnik"></v-text-field>
-                    </v-col>
-                    <v-col cols="12" sm="6" md="4">
                       <v-text-field v-model="editedItem.borrows_date" label="Data wypożyczenia"></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
@@ -82,6 +76,14 @@
     <template v-slot:no-data>
       <p class="pt-5">Brak wypożyczeń</p>
     </template>
+
+    <template v-slot:[`item.is_returned`]="{ item }">
+      <v-simple-checkbox v-model="item.is_returned"></v-simple-checkbox>
+    </template>
+
+    <template v-slot:[`item.returns_date`]="{ item }">
+      <v-chip :color="getColor(item.returns_date)" dark>{{ item.returns_date }}</v-chip>
+    </template>
   </v-data-table>
 </template>
 
@@ -102,6 +104,7 @@ import AddBorrow from "./AddBorrow.vue";
         { text: 'Czytelnik', value: 'fullName' },
         { text: 'Wypożyczenie', value: 'borrows_date' },
         { text: 'Zwrot', value: 'returns_date' },
+        { text: 'Potwierdź oddanie', value: 'is_returned' },
         { text: 'Akcje', value: 'actions', sortable: false },
       ],
       editedIndex: -1,
@@ -149,8 +152,8 @@ import AddBorrow from "./AddBorrow.vue";
         if (this.editedIndex > -1) {
           Object.assign(this.borrows[this.editedIndex], this.editedItem)
           axios.put('/api/borrow/edit/'+ this.editedItem.id, {
-            title: this.editedItem.title,
-            fullName: this.editedItem.fullName,
+            borrows_date: this.editedItem.borrows_date,
+            returns_date: this.editedItem.returns_date,
           })
           } 
           this.close()
@@ -162,6 +165,21 @@ import AddBorrow from "./AddBorrow.vue";
           this.editedItem = Object.assign({}, this.defaultItem)
           this.editedIndex = -1
         })
+      },
+
+      getColor (returns_date) {
+        const todayDate = new Date().toLocaleDateString()
+        //const differenceInTime = returns_date.getTime() - todayDate.getTime()
+        //const differenceInDays = differenceInTime / (1000 * 3600 * 24)
+        //alert(returns_date.getTime())
+        //alert(todayDate.getTime())
+        alert(returns_date)
+        alert(new Date().toLocaleDateString() - returns_date)
+        //alert(today)
+        //alert(differenceInDays)
+        if (returns_date > 3) return 'red'
+        else if (returns_date > 10) return 'orange'
+        else return 'green'
       }
     },
   }

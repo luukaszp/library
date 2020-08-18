@@ -5,11 +5,8 @@ AdminPanel.vue
 - dodać karty, które będą dostępne tylko dla admina a nie dla pracownika
 - !! czy zrobić dwa panele dla Admina i Pracownika czy jeden !!
 - zdjęcie kobiety zamienić na zdjęcie logo biblioteki
-- usunąć zaokrąglenie panelu bocznego z prawej strony
 - expansion panel np Książki: przegladaj, dodaj czy może wszystkie akcje w tabeli i bez expansion panel
-- odstęp pod footerem jest :/
 - pozbyć się headera i footera?
-- strony route mają otwierać się obok paska panelu nie osobno !!!!!!!
 - zmienić ikonki
 - zmienić kolory przycisków
 
@@ -18,9 +15,6 @@ Readers.vue - admin panel
 
 StoreBook
 - czy min 13 max 13 w isbn będzie ok
-
-readers.j
-- fetch nie działa
 
 ZMIENIĆ LOGO APKI
 
@@ -88,3 +82,9 @@ pole is_returned ?) - dodać checkbox z polem is_returned, jeżeli checkbox zazn
 Dodać zakładkę w panelu z historią wypożyczeń
 
 co dać w edycji wypożyczeń - zmiana dat?
+
+do wszystkich edycji w panelu dodać rules!!!
+
+przedluzenie terminu zwrotu po wplacie?
+
+zmienic format daty na D-m-Y w BorrowController
