@@ -42,16 +42,16 @@
                 <v-container>
                   <v-row>
                     <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.id_number" label="Numer identyfikacyjny"></v-text-field>
+                      <v-text-field v-model="editedItem.id_number" :rules="idNumberRules" label="Numer identyfikacyjny"></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.name" label="Imię"></v-text-field>
+                      <v-text-field v-model="editedItem.name" :rules="nameRules" label="Imię"></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.surname" label="Nazwisko"></v-text-field>
+                      <v-text-field v-model="editedItem.surname" :rules="surnameRules" label="Nazwisko"></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.email" label="E-mail"></v-text-field>
+                      <v-text-field v-model="editedItem.email" :rules="emailRules" label="E-mail"></v-text-field>
                     </v-col>
                   </v-row>
                 </v-container>
@@ -120,6 +120,22 @@ import RegisterWorker from "./RegisterWorker";
         surname: '',
         email: '',
       },
+      emailRules: [
+        v => !!v || 'E-mail jest wymagany',
+        v => /.+@.+\..+/.test(v) || 'E-mail musi być prawidłowy',
+      ],
+      nameRules: [
+        v => !!v || 'Imię jest wymagane!',
+        v => /^[a-zA-Z]+$/.test(v) || 'Imię powinno zawierać tylko litery',
+      ],
+      surnameRules: [
+        v => !!v || 'Nazwisko jest wymagane!',
+        v => /^[a-zA-Z]+$/.test(v) || 'Nazwisko powinno zawierać tylko litery',
+      ],
+      idNumberRules: [v => !!v || 'Identyfikator jest wymagany!',
+        v => /^\d+$/.test(v) || 'Identyfikator musi być prawidłowy',
+        v => v.length === 12 || 'Identyfikator powinien zawierać 12 cyfr',
+      ],
     }),
 
     computed: {

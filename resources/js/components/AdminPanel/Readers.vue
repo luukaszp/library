@@ -42,16 +42,16 @@
                 <v-container>
                   <v-row>
                     <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.card_number" label="Numer karty"></v-text-field>
+                      <v-text-field v-model="editedItem.card_number" :rules="cardNumberRules" label="Numer karty"></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.name" label="Imię"></v-text-field>
+                      <v-text-field v-model="editedItem.name" :rules="nameRules" label="Imię"></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.surname" label="Nazwisko"></v-text-field>
+                      <v-text-field v-model="editedItem.surname" :rules="surnameRules" label="Nazwisko"></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.email" label="E-mail"></v-text-field>
+                      <v-text-field v-model="editedItem.email" :rules="emailRules" label="E-mail"></v-text-field>
                     </v-col>
                   </v-row>
                 </v-container>
@@ -120,6 +120,23 @@ import RegisterReader from "./RegisterReader.vue";
         surname: '',
         email: '',
       },
+      nameRules: [
+        v => !!v || 'Imię jest wymagane!',
+        v => /^[a-zA-Z]+$/.test(v) || 'Imię powinno zawierać tylko litery',
+      ],
+      emailRules: [
+        v => !!v || 'E-mail jest wymagany',
+        v => /.+@.+\..+/.test(v) || 'E-mail musi być prawidłowy',
+      ],
+      surnameRules: [
+        v => !!v || 'Nazwisko jest wymagane!',
+        v => /^[a-zA-Z]+$/.test(v) || 'Nazwisko powinno zawierać tylko litery',
+      ],
+      cardNumberRules: [
+        v => !!v || 'Numer karty bibliotecznej jest wymagany!',
+        v => /^\d+$/.test(v) || 'Numer karty bibliotecznej musi być prawidłowy',
+        v => v.length === 10 || 'Numer karty bibliotecznej powinien zawierać 10 cyfr',
+      ],
     }),
 
     computed: {

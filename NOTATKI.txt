@@ -92,3 +92,7 @@ zmienic format daty na D-m-Y w BorrowController
 do ilości książek dodać kolor chip tak jak w Borrows
 
 W przypadku czerwonego chipa w Borrows (3 dni do terminu oddania książki) - wysłać email z przypomnieniem?
+
+dodac rules do pliku jednego rules.js !!!
+
+dodać rules do edycji dat w Borrows.vue

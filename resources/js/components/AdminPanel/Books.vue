@@ -45,19 +45,19 @@
                 <v-container>
                   <v-row>
                     <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.title" label="Tytuł książki"></v-text-field>
+                      <v-text-field v-model="editedItem.title" :rules="titleRules" label="Tytuł książki"></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.isbn" label="ISBN"></v-text-field>
+                      <v-text-field v-model="editedItem.isbn" :rules="isbnRules" label="ISBN"></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.description" label="Opis"></v-text-field>
+                      <v-text-field v-model="editedItem.description" :rules="descriptionRules" label="Opis"></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.publish_year" label="Rok wydania"></v-text-field>
+                      <v-text-field v-model="editedItem.publish_year" :rules="publisherRules" label="Rok wydania"></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.amount" label="Ilość"></v-text-field>
+                      <v-text-field v-model="editedItem.amount" :rules="amountRules" label="Ilość"></v-text-field>
                     </v-col>
                   </v-row>
                 </v-container>
@@ -140,6 +140,10 @@
     <template v-slot:no-data>
       <p class="pt-5">Brak książek</p>
     </template>
+
+    <template v-slot:[`item.amount`]="{ item }">
+      <v-chip :color="getColor(item.amount)" dark>{{ item.amount }}</v-chip>
+    </template>
   </v-data-table>
 </template>
 
@@ -184,7 +188,30 @@ import AddBook from "./AddBook.vue";
         description: '',
         publish_year: '',
         amount: '',
-      }
+      },
+      titleRules: [
+        v => !!v || 'Pole jest wymagane!',
+        v => v.length <= 60 || 'Tytuł jest za długi!',
+      ],
+      isbnRules: [
+        v => !!v || 'Pole jest wymagane!',
+        v => /^\d+$/.test(v) || 'Numer ISBN musi być prawidłowy',
+        v => v.length === 13 || 'Numer ISBN powinien zawierać 13 cyfr',
+      ],
+      amountRules: [
+        v => !!v || 'Pole jest wymagane!',
+        v => /^\d+$/.test(v) || 'Ilość musi być prawidłowa',
+        v => v > 0 || 'Ilość książek powinna być większa od 0',
+      ],
+      descriptionRules: [
+        v => !!v || 'Pole jest wymagane!',
+        v => v.length >= 25 || 'Opis jest za krótki!',
+      ],
+      publishYearRules: [
+        v => !!v || 'Pole jest wymagane!',
+        v => /^\d+$/.test(v) || 'Rok wydania musi być prawidłowy',
+        v => v.length === 4 || 'Rok wydania powinien zawierać 4 cyfry',
+      ],
     }),
 
     computed: {
@@ -270,6 +297,11 @@ import AddBook from "./AddBook.vue";
 
         axios.post('/api/book/changeImage/' + this.editedItem.id, formData, config)
         this.$store.dispatch("fetchBooks", {});
+      },
+
+      getColor (amount) {
+        if (amount = 0) return 'red'
+        else return 'green'
       }
     },
   }
