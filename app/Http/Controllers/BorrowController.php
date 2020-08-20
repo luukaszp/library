@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Borrow;
+use App\Book;
 use DB;
 use Carbon\Carbon;
 
@@ -20,7 +21,7 @@ class BorrowController extends Controller
     {
         $book = $request->book_id;
 
-        for($index = 0; $index < count($book); $index++) {
+        for($index = 0; $index < sizeof($request->book_id); $index++) {
             $borrow = new Borrow();
             $borrow->user_id = $request->user_id;
             $borrow->borrows_date = $request->borrows_date;
@@ -34,6 +35,10 @@ class BorrowController extends Controller
             $date = $date->addDays($daysToAdd);
             $borrow->returns_date = $date->toDateString();
             $borrow->save();
+
+            $book = Book::find($stringToInt);
+            $book->amount = $book->amount-1;
+            $book->save();
         }
 
         if ($borrow->save()) {

@@ -27,8 +27,31 @@ class BookController extends Controller
             ->join('authors', 'authors.id', '=', 'books.author_id')
             ->select(
                 'books.id', 'books.title', 'books.isbn', 'books.description', 'books.publish_year',
-                'categories.name as categoryName', 'authors.name as authorName', 'authors.surname', 
-                'publishers.name as publisherName', 'books.cover'
+                'books.amount', 'categories.name as categoryName', 'authors.name as authorName',
+                'authors.surname', 'publishers.name as publisherName', 'books.cover'
+            )
+            ->get()
+            ->toArray();
+        return $data;
+    }
+
+    /**
+     * Display a listing of available books.
+     *
+     * @param  Request $request
+     * @return 
+     */
+    public function getAvailableBooks(Request $request)
+    {
+        $data = DB::table('books')
+            ->where('books.amount', '>' , '0')
+            ->join('categories', 'categories.id', '=', 'books.category_id')
+            ->join('publishers', 'publishers.id', '=', 'books.publisher_id')
+            ->join('authors', 'authors.id', '=', 'books.author_id')
+            ->select(
+                'books.id', 'books.title', 'books.isbn', 'books.description', 'books.publish_year',
+                'books.amount', 'categories.name as categoryName', 'authors.name as authorName',
+                'authors.surname', 'publishers.name as publisherName', 'books.cover'
             )
             ->get()
             ->toArray();
@@ -76,6 +99,7 @@ class BookController extends Controller
         $book->isbn = $request->get('isbn');
         $book->description = $request->get('description');
         $book->publish_year = $request->get('publish_year');
+        $book->amount = $request->get('amount');
 
         $book->author_id = $request->get('author');
         $book->category_id = $request->get('category');
@@ -170,6 +194,7 @@ class BookController extends Controller
         $book->isbn = $request->isbn;
         $book->description = $request->description;
         $book->publish_year = $request->publish_year;
+        $book->amount = $request->amount;
         $book->save();
 
         if ($book->save()) {
@@ -242,7 +267,7 @@ class BookController extends Controller
             );
         }
 
-        $updated = $book->update($request->only(['isbn', 'title', 'description', 'publish_year']));
+        $updated = $book->update($request->only(['isbn', 'title', 'description', 'publish_year', 'amount']));
 
         if ($updated) {
             return response()->json(

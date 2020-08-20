@@ -69,6 +69,15 @@
                                     :rules="publishYearRules"
                             ></v-text-field>
 
+                            <v-text-field
+                                    class="pa-5 pb-0 pt-0"
+                                    v-model="amount"
+                                    label="Ilość"
+                                    outlined
+                                    required
+                                    :rules="amountRules"
+                            ></v-text-field>
+
                             <v-select
                                     class="pa-5 pb-0 pt-0"
                                     v-model="selectedAuthor"
@@ -156,6 +165,7 @@ import axios from "axios";
                 isbn: "",
                 description: "",
                 publish_year: "",
+                amount: "",
                 cover: [],
                 selectedAuthor: "",
                 selectedCategory: "",
@@ -168,6 +178,11 @@ import axios from "axios";
                     v => !!v || 'Pole jest wymagane!',
                     v => /^\d+$/.test(v) || 'Numer ISBN musi być prawidłowy',
                     v => v.length === 13 || 'Numer ISBN powinien zawierać 13 cyfr',
+                ],
+                amountRules: [
+                    v => !!v || 'Pole jest wymagane!',
+                    v => /^\d+$/.test(v) || 'Ilość musi być prawidłowa',
+                    v => v > 0 || 'Ilość książek powinna być większa od 0',
                 ],
                 descriptionRules: [
                     v => !!v || 'Pole jest wymagane!',
@@ -204,6 +219,7 @@ import axios from "axios";
                     formData.append("isbn", this.isbn);
                     formData.append("description", this.description);
                     formData.append("publish_year", this.publish_year);
+                    formData.append("amount", this.amount);
                     formData.append("author", this.selectedAuthor);
                     formData.append("category", this.selectedCategory);
                     formData.append("publisher", this.selectedPublisher);

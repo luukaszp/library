@@ -22,6 +22,19 @@ export default {
                     console.log(error)
                 })
         },
+
+        fetchAvailableBooks(context) {   
+            axios({
+                method: 'GET',
+                url: 'http://127.0.0.1:8000/api/book/getAvailableBooks'
+                })
+                .then(response => {
+                    context.commit('setBooks', response.data)
+                })
+                .catch(error => {
+                    console.log(error)
+                })
+        },
        
     },
     getters : {

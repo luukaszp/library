@@ -56,6 +56,9 @@
                     <v-col cols="12" sm="6" md="4">
                       <v-text-field v-model="editedItem.publish_year" label="Rok wydania"></v-text-field>
                     </v-col>
+                    <v-col cols="12" sm="6" md="4">
+                      <v-text-field v-model="editedItem.amount" label="Ilość"></v-text-field>
+                    </v-col>
                   </v-row>
                 </v-container>
               </v-card-text>
@@ -163,6 +166,7 @@ import AddBook from "./AddBook.vue";
         { text: 'Opis', value: 'description' },
         { text: 'Rok wydania', value: 'publish_year' },
         { text: 'Wydawnictwo', value: 'publisherName' },
+        { text: 'Ilość', value: 'amount' },
         { text: 'Okładka', value: 'cover' },
         { text: 'Akcje', value: 'actions', sortable: false },
       ],
@@ -172,12 +176,14 @@ import AddBook from "./AddBook.vue";
         isbn: '',
         description: '',
         publish_year: '',
+        amount: '',
       },
       defaultItem: {
         title: '',
         isbn: '',
         description: '',
         publish_year: '',
+        amount: '',
       }
     }),
 
@@ -214,7 +220,8 @@ import AddBook from "./AddBook.vue";
             title: this.editedItem.title,
             isbn: this.editedItem.isbn,
             description: this.editedItem.description,
-            publish_year: this.editedItem.publish_year
+            publish_year: this.editedItem.publish_year,
+            amount: this.editedItem.amount
           })
           } 
           this.close()

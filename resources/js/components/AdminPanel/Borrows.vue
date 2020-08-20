@@ -173,8 +173,6 @@ import AddBorrow from "./AddBorrow.vue";
         const differenceInTime = dateOfReturn.getTime() - todayDate.getTime()
         const differenceInDays = Math.round(differenceInTime / (1000 * 3600 * 24))
 
-        alert(differenceInDays)
-
         if (differenceInDays < 3) return 'red'
         else if (differenceInDays < 10) return 'orange'
         else return 'green'

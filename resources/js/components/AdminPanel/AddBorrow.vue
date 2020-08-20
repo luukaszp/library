@@ -107,7 +107,7 @@
 import axios from "axios";
 
     export default {
-        name: "AddBook",
+        name: "AddBorrow",
         data() {
             return {
                 valid: false,
@@ -162,7 +162,7 @@ import axios from "axios";
 
         created() {
             this.$store.dispatch("fetchReaders", {});
-            this.$store.dispatch("fetchBooks", {});
+            this.$store.dispatch("fetchAvailableBooks", {});
         },
     }
 </script>

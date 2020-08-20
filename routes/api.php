@@ -46,6 +46,7 @@ Route::delete('author/delete/{id}', 'AuthorController@deleteAuthor');
 Route::post('store', 'BookController@store');
 Route::post('book/changeImage/{id}', 'BookController@changeImage');
 Route::get('book/getBooks', 'BookController@getBooks');
+Route::get('book/getAvailableBooks', 'BookController@getAvailableBooks');
 Route::put('book/edit/{id}', 'BookController@editBook');
 Route::delete('book/delete/{id}', 'BookController@deleteBook');
 
