@@ -114,7 +114,7 @@ import axios from "axios";
                 value: true,
                 selectedReader: "",
                 selectedBooks: [],
-                date: new Date().toLocaleDateString(),
+                date: '',
                 menu: false,
                 readerRules: [
                     v => !!v || 'Wybranie czytelnika jest wymagane!',

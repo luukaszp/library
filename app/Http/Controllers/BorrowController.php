@@ -29,10 +29,10 @@ class BorrowController extends Controller
             $stringToInt = (int)$idOfBook;
             $borrow->book_id = $stringToInt;
 
-            $date = Carbon::createFromFormat('d.m.Y', $request->borrows_date);
+            $date = Carbon::createFromFormat('Y-m-d', $request->borrows_date);
             $daysToAdd = 30;
             $date = $date->addDays($daysToAdd);
-            $borrow->returns_date = $date->format('d.m.Y');
+            $borrow->returns_date = $date->toDateString();
             $borrow->save();
         }
 

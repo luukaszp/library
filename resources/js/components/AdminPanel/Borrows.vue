@@ -168,17 +168,15 @@ import AddBorrow from "./AddBorrow.vue";
       },
 
       getColor (returns_date) {
-        const todayDate = new Date().toLocaleDateString()
-        //const differenceInTime = returns_date.getTime() - todayDate.getTime()
-        //const differenceInDays = differenceInTime / (1000 * 3600 * 24)
-        //alert(returns_date.getTime())
-        //alert(todayDate.getTime())
-        alert(returns_date)
-        alert(new Date().toLocaleDateString() - returns_date)
-        //alert(today)
-        //alert(differenceInDays)
-        if (returns_date > 3) return 'red'
-        else if (returns_date > 10) return 'orange'
+        const todayDate = new Date()
+        const dateOfReturn = new Date(returns_date)
+        const differenceInTime = dateOfReturn.getTime() - todayDate.getTime()
+        const differenceInDays = Math.round(differenceInTime / (1000 * 3600 * 24))
+
+        alert(differenceInDays)
+
+        if (differenceInDays < 3) return 'red'
+        else if (differenceInDays < 10) return 'orange'
         else return 'green'
       }
     },
