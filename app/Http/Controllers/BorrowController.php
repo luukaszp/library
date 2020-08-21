@@ -69,7 +69,8 @@ class BorrowController extends Controller
             ->join('users', 'users.id', '=', 'borrows.user_id')
             ->join('books', 'books.id', '=', 'borrows.book_id')
             ->select(
-                'books.title', 'users.name', 'users.surname', 'borrows.borrows_date', 'borrows.returns_date' 
+                'books.title', 'users.name', 'users.surname', 'borrows.borrows_date', 'borrows.returns_date',
+                'borrows.id'
             )
             ->get()
             ->toArray();
@@ -119,6 +120,39 @@ class BorrowController extends Controller
                 $borrow->save();
             }
         }
+        if ($borrow->save()) {
+            return response()->json(
+                [
+                'success' => true,
+                'book' => $borrow
+                ], 201
+            );
+        } else {
+            return response()->json(
+                [
+                'success' => false,
+                'message' => 'Sorry, borrowing could not be added.',
+                ], 500
+            );
+        }
+    }
+
+    /**
+     * Return specific book to the library.
+     *
+     * @param  Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function returnBook(Request $request, $id)
+    {
+        $borrow = Borrow::find($id);
+        $todayDate = Carbon::now();
+
+        $borrow->is_returned = $request->is_returned;
+        $borrow->when_returned = $todayDate;
+
+        $borrow->save();
+
         if ($borrow->save()) {
             return response()->json(
                 [

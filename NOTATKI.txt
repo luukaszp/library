@@ -98,3 +98,11 @@ dodac rules do pliku jednego rules.js !!!
 dodać rules do edycji dat w Borrows.vue
 
 dodać do pola ISBN wartość unique()
+
+podczas oddawania (is_returned) dodać datę zatwierdzenia dodania !
+
+do Borrows.vue podczas zatwierdzania oddania książki dodać alert z zapytaniem czy TAK czy NIE
+
+dodac zakladke z wgladem do historii oddanych ksiazek (wypozyczone i oddane)
+
+w wygladzie z aktualnie wypozyczonymi wyswietlic tylko te ktore maja is_returned = 0

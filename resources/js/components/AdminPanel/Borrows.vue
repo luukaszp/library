@@ -78,7 +78,7 @@
     </template>
 
     <template v-slot:[`item.is_returned`]="{ item }">
-      <v-simple-checkbox v-model="item.is_returned"></v-simple-checkbox>
+      <v-simple-checkbox v-model="item.is_returned" @click="returnBook(item)"></v-simple-checkbox>
     </template>
 
     <template v-slot:[`item.returns_date`]="{ item }">
@@ -160,7 +160,7 @@ import AddBorrow from "./AddBorrow.vue";
       },
 
       close () {
-        this.editBookDialog = false
+        this.editBorrowDialog = false
         this.$nextTick(() => {
           this.editedItem = Object.assign({}, this.defaultItem)
           this.editedIndex = -1
@@ -176,6 +176,12 @@ import AddBorrow from "./AddBorrow.vue";
         if (differenceInDays < 3) return 'red'
         else if (differenceInDays < 10) return 'orange'
         else return 'green'
+      },
+
+      returnBook(item) {
+        axios.put('/api/borrow/returnBook/' + item.id, {
+          is_returned: item.is_returned,
+        })
       }
     },
   }

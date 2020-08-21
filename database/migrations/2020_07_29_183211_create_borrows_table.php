@@ -19,6 +19,7 @@ class CreateBorrowsTable extends Migration
                 $table->string('borrows_date');
                 $table->string('returns_date');
                 $table->boolean('is_returned')->default(0);
+                $table->string('when_returned')->nullable();
                 $table->integer('delay')->nullable();
                 $table->integer('penalty')->nullable();
                 $table->unsignedInteger('user_id');
