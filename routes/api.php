@@ -52,6 +52,7 @@ Route::delete('book/delete/{id}', 'BookController@deleteBook');
 
 Route::post('borrow/addBorrow', 'BorrowController@addBorrow');
 Route::get('borrow/getBorrows', 'BorrowController@getBorrows');
+Route::get('borrow/getDelayed', 'BorrowController@getDelayedBorrows');
 
 Route::group(
     ['middleware' => 'auth.jwt'], function () {

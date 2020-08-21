@@ -61,10 +61,9 @@ class BorrowController extends Controller
     /**
      * Display a listing of borrowings.
      *
-     * @param  Request $request
-     * @return 
+     * @return Response
      */
-    public function getBorrows(Request $request)
+    public function getBorrows()
     {
         $data = DB::table('borrows')
             ->join('users', 'users.id', '=', 'borrows.user_id')
@@ -75,5 +74,65 @@ class BorrowController extends Controller
             ->get()
             ->toArray();
         return $data;
+    }
+
+    /**
+     * Display a listing of borrowings which are delayed.
+     *
+     * @return Response
+     */
+    public function getDelayedBorrows()
+    {
+        $this->checkDelay();
+        $data = DB::table('borrows')
+            ->where('borrows.delay', '!=', 'null')
+            ->join('users', 'users.id', '=', 'borrows.user_id')
+            ->join('books', 'books.id', '=', 'borrows.book_id')
+            ->select(
+                'books.title', 'users.name', 'users.surname', 'borrows.delay', 'borrows.penalty'  
+            )
+            ->get()
+            ->toArray();
+        return $data;
+    }
+
+    /**
+     * Check is there is any delayed book.
+     *
+     * @return Response
+     */
+    public function checkDelay()
+    {
+        $returnDates = Borrow::pluck('returns_date');
+        $todayDate = Carbon::now();
+
+        for($index = 0; $index < sizeof($returnDates); $index++) {
+            $date = $returnDates[$index];
+            $dateOfReturn = Carbon::createFromFormat('Y-m-d', $date)->toFormattedDateString();
+            $differenceInDays[$index] = $todayDate->diffInDays($dateOfReturn, false);
+            if($differenceInDays[$index] < 0) {
+                $delay = $differenceInDays[$index] * -1;
+                $penalty = $differenceInDays[$index] * -0.5;
+                $borrow = Borrow::where('returns_date', '=', $returnDates[$index])->first();
+                $borrow->delay = $delay;
+                $borrow->penalty = $penalty;
+                $borrow->save();
+            }
+        }
+        if ($borrow->save()) {
+            return response()->json(
+                [
+                'success' => true,
+                'book' => $borrow
+                ], 201
+            );
+        } else {
+            return response()->json(
+                [
+                'success' => false,
+                'message' => 'Sorry, borrowing could not be added.',
+                ], 500
+            );
+        }
     }
 }

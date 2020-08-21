@@ -96,3 +96,5 @@ W przypadku czerwonego chipa w Borrows (3 dni do terminu oddania książki) - wy
 dodac rules do pliku jednego rules.js !!!
 
 dodać rules do edycji dat w Borrows.vue
+
+dodać do pola ISBN wartość unique()

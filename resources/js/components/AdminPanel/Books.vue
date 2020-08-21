@@ -54,7 +54,7 @@
                       <v-text-field v-model="editedItem.description" :rules="descriptionRules" label="Opis"></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.publish_year" :rules="publisherRules" label="Rok wydania"></v-text-field>
+                      <v-text-field v-model="editedItem.publish_year" :rules="publishYearRules" label="Rok wydania"></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
                       <v-text-field v-model="editedItem.amount" :rules="amountRules" label="Ilość"></v-text-field>

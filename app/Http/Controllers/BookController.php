@@ -16,10 +16,9 @@ class BookController extends Controller
     /**
      * Display a listing of books.
      *
-     * @param  Request $request
-     * @return 
+     * @return Response
      */
-    public function getBooks(Request $request)
+    public function getBooks()
     {
         $data = DB::table('books')
             ->join('categories', 'categories.id', '=', 'books.category_id')
@@ -38,10 +37,9 @@ class BookController extends Controller
     /**
      * Display a listing of available books.
      *
-     * @param  Request $request
-     * @return 
+     * @return Response
      */
-    public function getAvailableBooks(Request $request)
+    public function getAvailableBooks()
     {
         $data = DB::table('books')
             ->where('books.amount', '>' , '0')

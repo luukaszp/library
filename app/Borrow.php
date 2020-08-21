@@ -16,7 +16,7 @@ class Borrow extends Model
      */
 
     protected $fillable = [
-        'borrows_date', 'returns_date',
+        'borrows_date', 'returns_date', 'delay', 'penalty'
     ];
 
     protected $casts = [

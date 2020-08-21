@@ -49,6 +49,19 @@ export default {
                     console.log(error)
                 })
         },
+
+        fetchDelays(context) {   
+            axios({
+                method: 'GET',
+                url: 'http://127.0.0.1:8000/api/borrow/getDelayed'
+                })
+                .then(response => {
+                    context.commit('setBorrows', response.data)
+                })
+                .catch(error => {
+                    console.log(error)
+                })
+        },
     },
     getters : {
         getBorrows(state) {

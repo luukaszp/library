@@ -17,7 +17,7 @@ class CreateBooksTable extends Migration
             'books', function (Blueprint $table) {
                 $table->increments('id');
                 $table->string('title');
-                $table->string('isbn');
+                $table->string('isbn')->unique();
                 $table->string('description');
                 $table->string('publish_year');
                 $table->string('cover');
