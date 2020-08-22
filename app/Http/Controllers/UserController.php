@@ -21,6 +21,47 @@ class UserController extends Controller
     }
 
     /**
+     * Edit roles for specific user.
+     *
+     * @param  Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    public function editRoles(Request $request, $id)
+    {
+        $user = User::find($id);
+
+        if (!$user) {
+            return response()->json(
+                [
+                'success' => false,
+                'message' => 'Sorry, user with id ' . $id . ' cannot be found.'
+                ], 400
+            );
+        }
+
+        $user->is_worker = $request->is_worker;
+        $user->is_admin = $request->is_admin;
+        $user->save();
+
+        if ($user->save()) {
+            return response()->json(
+                [
+                'success' => true,
+                'message' => 'User has been updated',
+                ]
+            );
+        } else {
+            return response()->json(
+                [
+                'success' => false,
+                'message' => 'Sorry, user could not be updated.',
+                ], 500
+            );
+        }
+    }
+
+    /**
      * Display a listing of readers.
      */
     public function getReaders()

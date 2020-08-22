@@ -106,3 +106,7 @@ do Borrows.vue podczas zatwierdzania oddania książki dodać alert z zapytaniem
 dodac zakladke z wgladem do historii oddanych ksiazek (wypozyczone i oddane)
 
 w wygladzie z aktualnie wypozyczonymi wyswietlic tylko te ktore maja is_returned = 0
+
+role użytkowników - dodac edycje
+
+dodac do Borrows i Roles - rules podczas edycji

@@ -13,7 +13,34 @@
           inset
           vertical
         ></v-divider>       
-      </v-toolbar>
+
+          <v-dialog v-model="editRolesDialog" max-width="500px">
+            <v-card>
+              <v-card-title>
+                <span class="headline">{{ formTitle }}</span>
+              </v-card-title>
+
+              <v-card-text>
+                <v-container>
+                  <v-row>
+                    <v-col cols="12" sm="6" md="4">
+                      <v-text-field v-model="editedItem.is_worker" label="Pracownik"></v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm="6" md="4">
+                      <v-text-field v-model="editedItem.is_admin" label="Admin"></v-text-field>
+                    </v-col>
+                  </v-row>
+                </v-container>
+              </v-card-text>
+
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="blue darken-1" text @click="close">Anuluj</v-btn>
+                <v-btn color="blue darken-1" text @click="addRole">Zapisz</v-btn>
+                </v-card-actions>
+            </v-card>
+          </v-dialog>
+        </v-toolbar>
     </template>
 
     <template v-slot:[`item.actions`]="{ item }">
@@ -34,7 +61,7 @@
 <script>
   export default {
     data: () => ({
-      dialog: false,
+      editRolesDialog: false,
       headers: [
         {
           text: 'ID',
@@ -90,24 +117,26 @@
       editRole (item) {
         this.editedIndex = this.roles.indexOf(item)
         this.editedItem = Object.assign({}, item)
-        this.dialog = true
+        this.editRolesDialog = true
+      },
+
+      addRole() {
+        if (this.editedIndex > -1) {
+          Object.assign(this.roles[this.editedIndex], this.editedItem)
+          axios.put('/api/roles/edit/'+ this.editedItem.id, {
+            is_worker: this.editedItem.is_worker,
+            is_admin: this.editedItem.is_admin,
+          })
+          } 
+          this.close()
       },
 
       close () {
-        this.dialog = false
+        this.editRolesDialog = false
         this.$nextTick(() => {
           this.editedItem = Object.assign({}, this.defaultItem)
           this.editedIndex = -1
         })
-      },
-
-      save () {
-        if (this.editedIndex > -1) {
-          Object.assign(this.roles[this.editedIndex], this.editedItem)
-        } else {
-          this.roles.push(this.editedItem)
-        }
-        this.close()
       },
     },
   }
