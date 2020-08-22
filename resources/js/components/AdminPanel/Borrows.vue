@@ -103,7 +103,7 @@ import AddBorrow from "./AddBorrow.vue";
         },
         { text: 'Czytelnik', value: 'fullName' },
         { text: 'Wypożyczenie', value: 'borrows_date' },
-        { text: 'Zwrot', value: 'returns_date' },
+        { text: 'Termin zwrotu', value: 'returns_date' },
         { text: 'Potwierdź oddanie', value: 'is_returned' },
         { text: 'Akcje', value: 'actions', sortable: false },
       ],
@@ -182,6 +182,7 @@ import AddBorrow from "./AddBorrow.vue";
         axios.put('/api/borrow/returnBook/' + item.id, {
           is_returned: item.is_returned,
         })
+        this.$store.dispatch("fetchBorrows", {});
       }
     },
   }

@@ -53,6 +53,7 @@ Route::delete('book/delete/{id}', 'BookController@deleteBook');
 Route::post('borrow/addBorrow', 'BorrowController@addBorrow');
 Route::put('borrow/returnBook/{id}', 'BorrowController@returnBook');
 Route::get('borrow/getBorrows', 'BorrowController@getBorrows');
+Route::get('borrow/history', 'BorrowController@getPastBorrows');
 Route::get('borrow/getDelayed', 'BorrowController@getDelayedBorrows');
 
 Route::group(

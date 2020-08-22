@@ -59,18 +59,39 @@ class BorrowController extends Controller
     }
 
     /**
-     * Display a listing of borrowings.
+     * Display a listing of current borrowings.
      *
      * @return Response
      */
     public function getBorrows()
     {
         $data = DB::table('borrows')
+            ->where('borrows.is_returned', '=', '0')
             ->join('users', 'users.id', '=', 'borrows.user_id')
             ->join('books', 'books.id', '=', 'borrows.book_id')
             ->select(
                 'books.title', 'users.name', 'users.surname', 'borrows.borrows_date', 'borrows.returns_date',
                 'borrows.id'
+            )
+            ->get()
+            ->toArray();
+        return $data;
+    }
+
+    /**
+     * Display a history of borrowings.
+     *
+     * @return Response
+     */
+    public function getPastBorrows()
+    {
+        $data = DB::table('borrows')
+            ->where('borrows.is_returned', '=', '1')
+            ->join('users', 'users.id', '=', 'borrows.user_id')
+            ->join('books', 'books.id', '=', 'borrows.book_id')
+            ->select(
+                'books.title', 'users.name', 'users.surname', 'borrows.borrows_date', 'borrows.returns_date',
+                'borrows.id', 'borrows.when_returned', 'borrows.delay', 'borrows.penalty'
             )
             ->get()
             ->toArray();

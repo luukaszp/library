@@ -62,6 +62,19 @@ export default {
                     console.log(error)
                 })
         },
+
+        fetchHistory(context) {   
+            axios({
+                method: 'GET',
+                url: 'http://127.0.0.1:8000/api/borrow/history'
+                })
+                .then(response => {
+                    context.commit('setBorrows', response.data)
+                })
+                .catch(error => {
+                    console.log(error)
+                })
+        },
     },
     getters : {
         getBorrows(state) {
