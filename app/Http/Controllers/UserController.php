@@ -42,6 +42,11 @@ class UserController extends Controller
 
         $user->is_worker = $request->is_worker;
         $user->is_admin = $request->is_admin;
+
+        if ($request->is_worker == 0 && $request->is_admin == 0) {
+            $user->id_number = null;
+        }
+        
         $user->save();
 
         if ($user->save()) {
@@ -76,7 +81,7 @@ class UserController extends Controller
                 ], 400
             );
         } else {
-            return $users = User::where('is_worker', '=', 0)->get(['id', 'card_number', 'name', 'surname', 'email'])->toArray();
+            return $users = User::where('is_worker', '=', 0)->where('is_admin', '=', 0)->get(['id', 'card_number', 'name', 'surname', 'email'])->toArray();
         }
     }
 
@@ -85,7 +90,7 @@ class UserController extends Controller
      */
     public function getWorkers()
     {
-        $users = User::where('is_worker', 1);
+        $users = User::where('card_number', null);
 
         if (!$users) {
             return response()->json(
@@ -95,7 +100,7 @@ class UserController extends Controller
                 ], 400
             );
         } else {
-            return $users = User::where('is_worker', '=', 1)->get(['id', 'id_number', 'name', 'surname', 'email'])->toArray();
+            return $users = User::where('card_number', '=', null)->get(['id', 'id_number', 'name', 'surname', 'email'])->toArray();
         }
     }
 

@@ -27,6 +27,7 @@ Route::put('worker/edit/{id}', 'UserController@editWorker');
 Route::delete('worker/delete/{id}', 'UserController@deleteWorker');
 
 Route::get('user/getRoles', 'UserController@getRoles');
+Route::put('roles/edit/{id}', 'UserController@editRoles');
 
 Route::get('category/getCategories', 'CategoryController@getCategories');
 Route::put('category/edit/{id}', 'CategoryController@editCategory');
@@ -55,8 +56,6 @@ Route::put('borrow/returnBook/{id}', 'BorrowController@returnBook');
 Route::get('borrow/getBorrows', 'BorrowController@getBorrows');
 Route::get('borrow/history', 'BorrowController@getPastBorrows');
 Route::get('borrow/getDelayed', 'BorrowController@getDelayedBorrows');
-
-Route::put('roles/edit/{id}', 'UserController@editRoles');
 
 Route::group(
     ['middleware' => 'auth.jwt'], function () {

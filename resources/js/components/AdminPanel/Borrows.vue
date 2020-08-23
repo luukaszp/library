@@ -181,6 +181,7 @@ import AddBorrow from "./AddBorrow.vue";
       returnBook(item) {
         axios.put('/api/borrow/returnBook/' + item.id, {
           is_returned: item.is_returned,
+          bookID: item.bookID
         })
         this.$store.dispatch("fetchBorrows", {});
       }

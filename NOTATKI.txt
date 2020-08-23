@@ -110,3 +110,5 @@ w wygladzie z aktualnie wypozyczonymi wyswietlic tylko te ktore maja is_returned
 role użytkowników - dodac edycje
 
 dodac do Borrows i Roles - rules podczas edycji
+
+czy przy wpisaniu złych danych można poprawić i się np zarejestrować czy trzeba odświeżyć stronę

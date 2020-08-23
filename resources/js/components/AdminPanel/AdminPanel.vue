@@ -1,6 +1,6 @@
 <template>
     <v-row style="height: 100%">
-        <v-col md="2" style="padding-top: 0px; padding-bottom: 0px; max-width: 13%">
+        <v-col md="2" style="padding-top: 0px; padding-bottom: 0px; max-width: 25%">
             <v-card
             style="height: 100%; border-radius: 0px"
         >

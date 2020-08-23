@@ -71,7 +71,7 @@ class BorrowController extends Controller
             ->join('books', 'books.id', '=', 'borrows.book_id')
             ->select(
                 'books.title', 'users.name', 'users.surname', 'borrows.borrows_date', 'borrows.returns_date',
-                'borrows.id'
+                'borrows.id', 'books.id as bookID'
             )
             ->get()
             ->toArray();
@@ -172,6 +172,10 @@ class BorrowController extends Controller
         $borrow->is_returned = $request->is_returned;
         $borrow->when_returned = $todayDate;
 
+        $book = Book::find($request->bookID);
+        $book->amount = $book->amount+1;
+
+        $book->save();
         $borrow->save();
 
         if ($borrow->save()) {
