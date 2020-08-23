@@ -33,8 +33,8 @@
                             </template>
 
                             <v-list>
-                                <v-list-item @click="logout">
-                                    <v-list-item-title @click="logout">Wyloguj się</v-list-item-title>
+                                <v-list-item>
+                                    <span v-if="isLoggedIn"><a @click="logout">Wyloguj się</a></span>
                                 </v-list-item>
                             </v-list>
                         </v-menu>
@@ -52,9 +52,12 @@
         components: {
             About, AdminPanel
         },
+        computed: {
+            isLoggedIn: function(){ return this.$store.getters.isLoggedIn}
+        },
         methods: {
             logout() {
-                this.$store.dispatch('destroyToken')
+                this.$store.dispatch('logout')
                     .then(() => this.$router.push({name: 'login'}))
             },
         }

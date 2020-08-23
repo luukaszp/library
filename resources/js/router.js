@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import Router from 'vue-router'
+import VueRouter from 'vue-router'
 import Login from './components/Login.vue'
 import RegisterReader from './components/AdminPanel/RegisterReader.vue'
 import RegisterWorker from './components/AdminPanel/RegisterWorker.vue'
@@ -19,8 +19,9 @@ import DelaysPenalties from './components/AdminPanel/DelaysPenalties.vue'
 import Suggestions from './components/AdminPanel/Suggestions.vue'
 import Opinions from './components/AdminPanel/Opinions.vue'
 import UserForms from './components/AdminPanel/UserForms.vue'
+import store from './store/store.js';
 
-Vue.use(Router);
+Vue.use(VueRouter);
 
 const routes = [
         {
@@ -31,27 +32,44 @@ const routes = [
         {
             path: '/register-reader',
             name: 'register-reader',
-            component: RegisterReader
+            component: RegisterReader,
+            meta: {
+                requiresAuth: true
+            }
         },
         {
             path: '/register-worker',
             name: 'register-worker',
-            component: RegisterWorker
+            component: RegisterWorker,
+            meta: {
+                requiresAuth: true,
+                is_admin: true
+            }
         },
         {
             path: '/add-book',
             name: 'add-book',
-            component: AddBook
+            component: AddBook,
+            meta: {
+                requiresAuth: true
+            }
         },
         {
             path: '/add-borrow',
             name: 'add-borrow',
-            component: AddBorrow
+            component: AddBorrow,
+            meta: {
+                requiresAuth: true
+            }
         },
         {
             path: '/admin-panel',
             name: 'admin-panel',
             component: AdminPanel,
+            meta: {
+                requiresAuth: true,
+                is_worker: true
+            },
             children: [
                 {
                     path: '/admin-panel/readers',
@@ -122,11 +140,33 @@ const routes = [
         },
     ];
 
-
-const router = new Router({
+const router = new VueRouter({
     mode: 'history',
     base: process.env.BASE_URL,
     routes
 });
+
+router.beforeEach((to, from, next) => {
+    if(to.meta.requiresAuth) {
+        if (!store.getters.isLoggedIn) {
+            next('/login')
+        }
+        else if (to.meta.is_worker) {
+            if (store.getters.loggedUser.is_worker === true) {
+                next()
+            } else {
+                next('/')
+            }
+        } else if (to.meta.is_admin) {
+            if (store.getters.loggedUser.is_admin === true) {
+                next()
+            } else {
+                next('/')
+            }
+        }
+    } else {
+        next()
+    }
+})
 
 export default router;

@@ -156,7 +156,7 @@
             validate() {
                 if(this.$refs.form.validate())
                 {
-                    this.$store.dispatch('userRegister', {
+                    let data = {
                         name: this.name,
                         surname: this.surname,
                         email: this.email,
@@ -164,7 +164,8 @@
                         id_number: this.id_number,
                         password: this.password,
                         password_confirmation: this.password_confirmation
-                    })
+                    }
+                    this.$store.dispatch('userRegister', data)
                         .catch(function (error) {
                             console.log(error);
                         });

@@ -112,3 +112,7 @@ role użytkowników - dodac edycje
 dodac do Borrows i Roles - rules podczas edycji
 
 czy przy wpisaniu złych danych można poprawić i się np zarejestrować czy trzeba odświeżyć stronę
+
+czy zrobić custom components dla Unauthorized / Error page not found
+
+schowanie v-text-field dla pracownika (AdminPanel - Pracownicy + role) i ikone panelu dla czytelników/gości

@@ -16,7 +16,7 @@ class Worker
      */
     public function handle($request, Closure $next)
     {
-        if (Auth::check() && Auth::user()->isWorker()) {
+        if (Auth::check() && Auth::user()->is_worker === true) {
             return $next($request);
         }
 
@@ -24,7 +24,7 @@ class Worker
             [
             'success' => false,
             'message' => 'You do not have Worker permissions.'
-            ], 500
+            ], 403
         );
     }
 }

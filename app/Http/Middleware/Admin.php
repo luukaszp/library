@@ -16,7 +16,7 @@ class Admin
      */
     public function handle($request, Closure $next)
     {
-        if (Auth::check() && Auth::user()->isAdmin()) {
+        if (Auth::check() && Auth::user()->is_admin === true) {
             return $next($request);
         }
 
@@ -24,7 +24,7 @@ class Admin
             [
             'success' => false,
             'message' => 'You do not have Administrator permissions.'
-            ], 500
+            ], 403
         );
     }
 }
