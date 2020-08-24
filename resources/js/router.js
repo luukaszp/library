@@ -34,8 +34,9 @@ const routes = [
             name: 'register-reader',
             component: RegisterReader,
             meta: {
-                requiresAuth: true
-            }
+                requiresAuth: true,
+                is_worker: true
+            },
         },
         {
             path: '/register-worker',
@@ -51,16 +52,18 @@ const routes = [
             name: 'add-book',
             component: AddBook,
             meta: {
-                requiresAuth: true
-            }
+                requiresAuth: true,
+                is_worker: true
+            },
         },
         {
             path: '/add-borrow',
             name: 'add-borrow',
             component: AddBorrow,
             meta: {
-                requiresAuth: true
-            }
+                requiresAuth: true,
+                is_worker: true
+            },
         },
         {
             path: '/admin-panel',
@@ -79,12 +82,26 @@ const routes = [
                 {
                     path: '/admin-panel/workers',
                     name: 'workers',
-                    component: Workers
+                    component: Workers,
+                    beforeEnter: (to, from, next) => {
+                        if (store.getters.loggedUser.is_admin === true) {
+                            next()
+                        } else {
+                            alert("Unauthorized")
+                        }
+                    }
                 },
                 {
                     path: '/admin-panel/roles',
                     name: 'roles',
-                    component: Roles
+                    component: Roles,
+                    beforeEnter: (to, from, next) => {
+                        if (store.getters.loggedUser.is_admin === true) {
+                            next()
+                        } else {
+                            alert("Unauthorized")
+                        }
+                    }
                 },
                 {
                     path: '/admin-panel/books',
@@ -147,21 +164,21 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-    if(to.meta.requiresAuth) {
+    if(to.matched.some(record => record.meta.requiresAuth)) {
         if (!store.getters.isLoggedIn) {
             next('/login')
         }
-        else if (to.meta.is_worker) {
+        else if (to.matched.some(record => record.meta.is_worker)) {
             if (store.getters.loggedUser.is_worker === true) {
                 next()
             } else {
-                next('/')
+                alert("Unauthorized")
             }
-        } else if (to.meta.is_admin) {
+        } else if (to.matched.some(record => record.meta.is_admin)) {
             if (store.getters.loggedUser.is_admin === true) {
                 next()
             } else {
-                next('/')
+                alert("Unauthorized")
             }
         }
     } else {

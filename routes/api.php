@@ -64,7 +64,7 @@ Route::group(
         Route::post('author/add', 'AuthorController@addAuthor');
         Route::delete('author/delete/{id}', 'AuthorController@deleteAuthor');
 
-        Route::post('store', 'BookController@store');
+        Route::post('book/store', 'BookController@store');
         Route::post('book/changeImage/{id}', 'BookController@changeImage');
         Route::get('book/getBooks', 'BookController@getBooks');
         Route::get('book/getAvailableBooks', 'BookController@getAvailableBooks');

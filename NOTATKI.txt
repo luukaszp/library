@@ -1,29 +1,15 @@
-router.js
-- dodać warunek, iż musi być adminem (AdminPanel)
-
 AdminPanel.vue
-- dodać karty, które będą dostępne tylko dla admina a nie dla pracownika
-- !! czy zrobić dwa panele dla Admina i Pracownika czy jeden !!
+- dodać karty, które będą dostępne tylko dla admina a nie dla pracownika - jest brak dostępu ale lepsza byłaby niewidoczność
+danych zakładek
+
 - zdjęcie kobiety zamienić na zdjęcie logo biblioteki
-- expansion panel np Książki: przegladaj, dodaj czy może wszystkie akcje w tabeli i bez expansion panel
-- pozbyć się headera i footera?
 - zmienić ikonki
 - zmienić kolory przycisków
 
 Readers.vue - admin panel
-- czy dodać pole z hasłem do przeglądania?
-
-StoreBook
-- czy min 13 max 13 w isbn będzie ok
+- czy dodać pole z hasłem do przeglądania? (do ręcznego resetu?)
 
 ZMIENIĆ LOGO APKI
-
-Czytelnicy/pracownicy
-- dodać możliwość dodania czytelnika jako pracownika (zmiana is_worker na 1)
-
-!!Nie zapomnieć umieścić odpowiednie routy do odpowiednich grup w api.php!! by ograniczyć dostęp
-
-Czy usunąć is_worker z tabeli Users, ponieważ identyfikator świadczy o tym, że jest on pracownikiem
 
 Przy edycji roli pamiętać by dodać usunąć Numer identyfikacyjny pracownika
 
@@ -32,41 +18,23 @@ czytelnika dostaje on powiadomienie i okno o zmianie hasła.
 
 Wziąć wygląd profilu ze zwiarzagramu
 
-Zmienić nazwę AdminPanel na Panel/Dashboard?
-
 czy do Autora dodawać opis krótki, życiorys?
 
 przy dodawaniu autora/wydawnictwo/kategorie zrobic rules by sprawdzać dane
 
-dodać ilość egzemplarzy do książek - bo to przecież biblioteka :o
-
-czy robić osobny wgląd w same tytuły książek, czy to będzie w BookController
-
-edycja roli, czytelników i pracowników + usuwanie zrobić
-
-kategorie - relacja jeden do wielu czy wiele do wielu
-
 dodać rules do AddBook.vue
-
-!!! JAK DODAĆ ZDJĘCIE OKŁADKI !!!
 
 AdminPanel - boczny pasek szerekosc zmienia sie w zly sposob
 
-czy da sie z tabeli wejsc w podglad lunku (zdjecie otworzyc w okienku by sprawdzic)
+czy da sie z tabeli wejsc w podglad lunku (zdjecie otworzyc w okienku by sprawdzic) - POPRAWIĆ wygląd tego okna
 
-jak edytowac w panelu admina okladke ksiazki?
-
-dodac osobna zakladke w panelu dla okladek ksiazki
-
-v-data-table - pokazac iles znaków z kropkami a przy kliknieciu pokazuje reszte danych ponizej
+v-data-table - pokazac iles znaków z kropkami a przy kliknieciu pokazuje reszte danych ponizej (zawijanie wierszy?)
 
 przy edycji danych czytelnik/ksiazka/pracownik itd dodać rules
 
 podczas zamiany okładki książki dodać automatyczne odświeżenie/zmiana okładki (teraz: trzeba wyjść z v-dialog i wejść z powrotem aby zobaczyć zmiany)
 
-dodać ilość książek dostępnych w bibliotece
-
-skonfigurować email - wypożyczyć można na 30 dni, 7 dni przed terminem wysyłać emaila
+skonfigurować email - wypożyczyć można na 30 dni, 7 dni przed terminem wysyłać emaila !!!
 
 max wypożyczć 5 książek
 
@@ -116,3 +84,7 @@ czy przy wpisaniu złych danych można poprawić i się np zarejestrować czy tr
 czy zrobić custom components dla Unauthorized / Error page not found
 
 schowanie v-text-field dla pracownika (AdminPanel - Pracownicy + role) i ikone panelu dla czytelników/gości
+
+przy logowaniu nie może być login v.length === 10 i 13, sprawdzić czy można inaczej zrobić
+
+sprawdzić ograniczenia route

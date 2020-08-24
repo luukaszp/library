@@ -32,6 +32,11 @@ export default {
         logout(state) {
             state.status = ''
             state.token = ''
+            state.loggedUser = {
+                id: null,
+                is_worker: null,
+                is_admin: null
+            };
         }
     },
 
@@ -132,7 +137,7 @@ export default {
 },
 
     getters : {
-        isLoggedIn: state => !!state.token,
+        isLoggedIn: state => state.token,
         authStatus: state => state.status,
         loggedUser: state => state.loggedUser,
     },

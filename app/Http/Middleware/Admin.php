@@ -24,7 +24,7 @@ class Admin
             [
             'success' => false,
             'message' => 'You do not have Administrator permissions.'
-            ], 403
+            ], 401
         );
     }
 }

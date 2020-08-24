@@ -24,7 +24,7 @@ class Worker
             [
             'success' => false,
             'message' => 'You do not have Worker permissions.'
-            ], 403
+            ], 401
         );
     }
 }
