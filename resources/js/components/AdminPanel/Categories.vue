@@ -35,18 +35,20 @@
 
                                 <v-card-text>
                                     <v-container>
-                                        <v-row>
-                                            <v-col>
-                                                <v-text-field v-model="editedItem.name" label="Kategoria"></v-text-field>
-                                            </v-col>
-                                        </v-row>
+                                        <v-form v-model="valid" ref="form">
+                                            <v-row>
+                                                <v-col>
+                                                    <v-text-field v-model="editedItem.name" :rules="categoryRules" label="Kategoria"></v-text-field>
+                                                </v-col>
+                                            </v-row>
+                                        </v-form>
                                     </v-container>
                                 </v-card-text>
 
                                 <v-card-actions>
                                     <v-spacer></v-spacer>
                                     <v-btn color="blue darken-1" text @click="close">Anuluj</v-btn>
-                                    <v-btn color="blue darken-1" text @click="addCategory">Zapisz</v-btn>
+                                    <v-btn color="blue darken-1" text @click="addCategory" :disabled="!valid">Zapisz</v-btn>
                                 </v-card-actions>
                             </v-card>
                         </v-dialog>
@@ -81,6 +83,7 @@
         name: "Categories",
         data: () => ({
             addCategoryDialog: false,
+            valid: false,
             search: '',
             categoryName: '',
             headers: [
@@ -98,6 +101,10 @@
             defaultItem: {
                 name: '',
             },
+            categoryRules: [
+                v => !!v || 'Nazwa jest wymagana!',
+                v => /^[a-zA-Z]+$/.test(v) || 'Nazwa kategorii powinna zawierać tylko litery',
+            ],
         }),
 
         computed: {
@@ -135,21 +142,24 @@
             },
 
             addCategory() {
-                if (this.editedIndex > -1) {
-                    Object.assign(this.categories[this.editedIndex], this.editedItem)
-                    axios.put('/api/category/edit/'+ this.editedItem.id, {
-                        name: this.editedItem.name
-                    })
-                } else {
-                    this.categories.push(this.editedItem)
-                    axios.post('/api/category/add', {
-                        name: this.editedItem.name
-                    })
-                        .catch(error => {
-                            console.log(error)
+                if(this.$refs.form.validate())
+                {
+                    if (this.editedIndex > -1) {
+                        Object.assign(this.categories[this.editedIndex], this.editedItem)
+                        axios.put('/api/category/edit/'+ this.editedItem.id, {
+                            name: this.editedItem.name
                         })
+                    } else {
+                        this.categories.push(this.editedItem)
+                        axios.post('/api/category/add', {
+                            name: this.editedItem.name
+                        })
+                            .catch(error => {
+                                console.log(error)
+                            })
+                    }
+                    this.close()
                 }
-                this.close()
             },
 
             close() {

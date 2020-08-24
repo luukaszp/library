@@ -88,3 +88,5 @@ schowanie v-text-field dla pracownika (AdminPanel - Pracownicy + role) i ikone p
 przy logowaniu nie może być login v.length === 10 i 13, sprawdzić czy można inaczej zrobić
 
 sprawdzić ograniczenia route
+
+rules dla daty w Borrows.vue

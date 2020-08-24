@@ -35,21 +35,23 @@
 
                                 <v-card-text>
                                     <v-container>
-                                        <v-row>
-                                            <v-col>
-                                                <v-text-field v-model="editedItem.name" label="Imię"></v-text-field>
-                                            </v-col>
-                                            <v-col>
-                                                <v-text-field v-model="editedItem.surname" label="Nazwisko"></v-text-field>
-                                            </v-col>
-                                        </v-row>
+                                        <v-form v-model="valid" ref="form">
+                                            <v-row>
+                                                <v-col>
+                                                    <v-text-field v-model="editedItem.name" :rules="nameRules" label="Imię"></v-text-field>
+                                                </v-col>
+                                                <v-col>
+                                                    <v-text-field v-model="editedItem.surname" :rules="surnameRules" label="Nazwisko"></v-text-field>
+                                                </v-col>
+                                            </v-row>
+                                        </v-form>
                                     </v-container>
                                 </v-card-text>
 
                                 <v-card-actions>
                                     <v-spacer></v-spacer>
                                     <v-btn color="blue darken-1" text @click="close">Anuluj</v-btn>
-                                    <v-btn color="blue darken-1" text @click="addAuthor">Zapisz</v-btn>
+                                    <v-btn color="blue darken-1" text @click="addAuthor" :disabled="!valid">Zapisz</v-btn>
                                 </v-card-actions>
                             </v-card>
                         </v-dialog>
@@ -84,6 +86,7 @@
         name: "Authors",
         data: () => ({
             addAuthorDialog: false,
+            valid: false,
             search: '',
             authorName: '',
             authorSurname: '',
@@ -105,6 +108,14 @@
                 name: '',
                 surname: '',
             },
+            nameRules: [
+                v => !!v || 'Imię jest wymagane!',
+                v => /^[a-zA-Z]+$/.test(v) || 'Imię powinno zawierać tylko litery',
+            ],
+            surnameRules: [
+                v => !!v || 'Nazwisko jest wymagane!',
+                v => /^[a-zA-Z]+$/.test(v) || 'Nazwisko powinno zawierać tylko litery',
+            ],
         }),
 
         computed: {
@@ -142,23 +153,26 @@
             },
 
             addAuthor() {
-                if (this.editedIndex > -1) {
-                    Object.assign(this.authors[this.editedIndex], this.editedItem)
-                    axios.put('/api/author/edit/'+ this.editedItem.id, {
-                        name: this.editedItem.name,
-                        surname: this.editedItem.surname
-                    })
-                } else {
-                    this.authors.push(this.editedItem)
-                    axios.post('/api/author/add', {
-                        name: this.editedItem.name,
-                        surname: this.editedItem.surname
-                    })
-                        .catch(error => {
-                            console.log(error)
+                if(this.$refs.form.validate())
+                {
+                    if (this.editedIndex > -1) {
+                        Object.assign(this.authors[this.editedIndex], this.editedItem)
+                        axios.put('/api/author/edit/'+ this.editedItem.id, {
+                            name: this.editedItem.name,
+                            surname: this.editedItem.surname
                         })
+                    } else {
+                        this.authors.push(this.editedItem)
+                        axios.post('/api/author/add', {
+                            name: this.editedItem.name,
+                            surname: this.editedItem.surname
+                        })
+                            .catch(error => {
+                                console.log(error)
+                            })
+                    }
+                    this.close()
                 }
-                this.close()
             },
 
             close() {

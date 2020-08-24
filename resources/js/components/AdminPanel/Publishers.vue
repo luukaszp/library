@@ -35,18 +35,20 @@
 
                                 <v-card-text>
                                     <v-container>
-                                        <v-row>
-                                            <v-col>
-                                                <v-text-field v-model="editedItem.name" label="Wydawnictwo"></v-text-field>
-                                            </v-col>
-                                        </v-row>
+                                        <v-form v-model="valid" ref="form">
+                                            <v-row>
+                                                <v-col>
+                                                    <v-text-field v-model="editedItem.name" :rules="publisherRules" label="Wydawnictwo"></v-text-field>
+                                                </v-col>
+                                            </v-row>
+                                        </v-form>
                                     </v-container>
                                 </v-card-text>
 
                                 <v-card-actions>
                                     <v-spacer></v-spacer>
                                     <v-btn color="blue darken-1" text @click="close">Anuluj</v-btn>
-                                    <v-btn color="blue darken-1" text @click="addPublisher">Zapisz</v-btn>
+                                    <v-btn color="blue darken-1" text @click="addPublisher" :disabled="!valid">Zapisz</v-btn>
                                 </v-card-actions>
                             </v-card>
                         </v-dialog>
@@ -81,6 +83,7 @@
         name: "Publishers",
         data: () => ({
             addPublisherDialog: false,
+            valid: false,
             search: '',
             publisherName: '',
             headers: [
@@ -98,6 +101,10 @@
             defaultItem: {
                 name: '',
             },
+            publisherRules: [
+                v => !!v || 'Nazwa jest wymagana!',
+                v => /^[a-zA-Z]+$/.test(v) || 'Nazwa wydawnictwa powinna zawierać tylko litery',
+            ],
         }),
 
         computed: {
@@ -135,21 +142,24 @@
             },
 
             addPublisher() {
-                if (this.editedIndex > -1) {
-                    Object.assign(this.publishers[this.editedIndex], this.editedItem)
-                    axios.put('/api/publisher/edit/'+ this.editedItem.id, {
-                        name: this.editedItem.name
-                    })
-                } else {
-                    this.publishers.push(this.editedItem)
-                    axios.post('/api/publisher/add', {
-                        name: this.editedItem.name
-                    })
-                        .catch(error => {
-                            console.log(error)
+                if(this.$refs.form.validate())
+                {
+                    if (this.editedIndex > -1) {
+                        Object.assign(this.publishers[this.editedIndex], this.editedItem)
+                        axios.put('/api/publisher/edit/'+ this.editedItem.id, {
+                            name: this.editedItem.name
                         })
+                    } else {
+                        this.publishers.push(this.editedItem)
+                        axios.post('/api/publisher/add', {
+                            name: this.editedItem.name
+                        })
+                            .catch(error => {
+                                console.log(error)
+                            })
+                    }
+                    this.close()
                 }
-                this.close()
             },
 
             close() {

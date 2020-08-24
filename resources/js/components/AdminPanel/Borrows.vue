@@ -43,21 +43,23 @@
 
               <v-card-text>
                 <v-container>
-                  <v-row>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.borrows_date" label="Data wypożyczenia"></v-text-field>
-                    </v-col>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.returns_date" label="Data zwrotu"></v-text-field>
-                    </v-col>
-                  </v-row>
+                  <v-form v-model="valid" ref="form">
+                    <v-row>
+                      <v-col cols="12" sm="6" md="4">
+                        <v-text-field v-model="editedItem.borrows_date" :rules="borrowsRules" label="Data wypożyczenia"></v-text-field>
+                      </v-col>
+                      <v-col cols="12" sm="6" md="4">
+                        <v-text-field v-model="editedItem.returns_date" :rules="returnsRules" label="Data zwrotu"></v-text-field>
+                      </v-col>
+                    </v-row>
+                  </v-form>
                 </v-container>
               </v-card-text>
 
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn color="blue darken-1" text @click="close">Anuluj</v-btn>
-                <v-btn color="blue darken-1" text @click="addBorrow">Zapisz</v-btn>
+                <v-btn color="blue darken-1" text @click="addBorrow" :disabled="!valid">Zapisz</v-btn>
                 </v-card-actions>
             </v-card>
           </v-dialog>
@@ -93,6 +95,7 @@ import AddBorrow from "./AddBorrow.vue";
   export default {
     data: () => ({
       editBorrowDialog: false,
+      valid: false,
       search: '',
       show: false,
       headers: [
@@ -119,7 +122,13 @@ import AddBorrow from "./AddBorrow.vue";
         fullName: '',
         borrows_date: '',
         returns_date: '',
-      }
+      },
+      borrowsRules: [
+        v => !!v || 'Data wypożyczenia jest wymagana',
+      ],
+      returnsRules: [
+        v => !!v || 'Data zwrotu jest wymagana',
+      ],
     }),
 
     computed: {
@@ -149,14 +158,17 @@ import AddBorrow from "./AddBorrow.vue";
       },
 
       addBorrow() {
-        if (this.editedIndex > -1) {
-          Object.assign(this.borrows[this.editedIndex], this.editedItem)
-          axios.put('/api/borrow/edit/'+ this.editedItem.id, {
-            borrows_date: this.editedItem.borrows_date,
-            returns_date: this.editedItem.returns_date,
-          })
-          } 
-          this.close()
+        if(this.$refs.form.validate())
+        {
+          if (this.editedIndex > -1) {
+            Object.assign(this.borrows[this.editedIndex], this.editedItem)
+            axios.put('/api/borrow/edit/'+ this.editedItem.id, {
+              borrows_date: this.editedItem.borrows_date,
+              returns_date: this.editedItem.returns_date,
+            })
+            } 
+            this.close()
+        }
       },
 
       close () {

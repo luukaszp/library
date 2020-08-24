@@ -40,27 +40,29 @@
 
               <v-card-text>
                 <v-container>
-                  <v-row>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.id_number" :rules="idNumberRules" label="Numer identyfikacyjny"></v-text-field>
-                    </v-col>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.name" :rules="nameRules" label="Imię"></v-text-field>
-                    </v-col>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.surname" :rules="surnameRules" label="Nazwisko"></v-text-field>
-                    </v-col>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.email" :rules="emailRules" label="E-mail"></v-text-field>
-                    </v-col>
-                  </v-row>
+                  <v-form v-model="valid" ref="form">
+                    <v-row>
+                      <v-col cols="12" sm="6" md="4">
+                        <v-text-field v-model="editedItem.id_number" :rules="idNumberRules" label="Numer identyfikacyjny"></v-text-field>
+                      </v-col>
+                      <v-col cols="12" sm="6" md="4">
+                        <v-text-field v-model="editedItem.name" :rules="nameRules" label="Imię"></v-text-field>
+                      </v-col>
+                      <v-col cols="12" sm="6" md="4">
+                        <v-text-field v-model="editedItem.surname" :rules="surnameRules" label="Nazwisko"></v-text-field>
+                      </v-col>
+                      <v-col cols="12" sm="6" md="4">
+                        <v-text-field v-model="editedItem.email" :rules="emailRules" label="E-mail"></v-text-field>
+                      </v-col>
+                    </v-row>
+                  </v-form>
                 </v-container>
               </v-card-text>
 
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn color="blue darken-1" text @click="close">Anuluj</v-btn>
-                <v-btn color="blue darken-1" text @click="addWorker">Zapisz</v-btn>
+                <v-btn color="blue darken-1" text @click="addWorker" :disabled="!valid">Zapisz</v-btn>
                 </v-card-actions>
             </v-card>
           </v-dialog>
@@ -94,6 +96,7 @@ import RegisterWorker from "./RegisterWorker";
   export default {
     data: () => ({
       editWorkerDialog: false,
+      valid: false,
       search: '',
       headers: [
         {
@@ -165,16 +168,19 @@ import RegisterWorker from "./RegisterWorker";
       },
 
       addWorker() {
-        if (this.editedIndex > -1) {
-          Object.assign(this.workers[this.editedIndex], this.editedItem)
-          axios.put('/api/worker/edit/'+ this.editedItem.id, {
-            id_number: this.editedItem.id_number,
-            name: this.editedItem.name,
-            surname: this.editedItem.surname,
-            email: this.editedItem.email
-          })
-          } 
-          this.close()
+        if(this.$refs.form.validate())
+        {
+          if (this.editedIndex > -1) {
+            Object.assign(this.workers[this.editedIndex], this.editedItem)
+            axios.put('/api/worker/edit/'+ this.editedItem.id, {
+              id_number: this.editedItem.id_number,
+              name: this.editedItem.name,
+              surname: this.editedItem.surname,
+              email: this.editedItem.email
+            })
+            } 
+            this.close()
+        }
       },
 
       deleteWorker (item) {
