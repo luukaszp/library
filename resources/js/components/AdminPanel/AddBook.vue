@@ -22,15 +22,29 @@
                             <hr>
 
                         <div class="upload">
-                            <v-file-input
-                                    class="pa-5 pb-0 pt-0"
-                                    accept="image/*"
-                                    v-model="cover"
-                                    required
-                                    :rules="coverRules"
-                                    prepend-icon="mdi-book"
-                                    :hide-input=true
-                            ></v-file-input> <p>Wgraj okładkę książki</p>
+                            <v-btn
+                                color="primary"
+                                class="text-none pa-5 pb-0 pt-0"
+                                rounded
+                                depressed
+                                :loading="isSelecting"
+                                v-model="cover"
+                                @click="onButtonClick"
+                            >
+                                <v-icon left>
+                                    mdi-book
+                                </v-icon>
+                                {{ buttonText }}
+                            </v-btn>
+                            <input
+                                ref="uploader"
+                                :rules="coverRules"
+                                required
+                                class="d-none"
+                                type="file"
+                                accept="image/*"
+                                @change="onFileChanged"
+                            >
                         </div>
 
                             <v-text-field
@@ -128,7 +142,7 @@
                             <v-row class="pb-5 justify-center">
 
                                 <v-btn
-                                        :disabled="!valid"
+                                        :disabled="this.cover != null && !valid"
                                         color=brown
                                         class="mr-5 mb-6"
                                         @click="validate"
@@ -161,6 +175,8 @@ export default {
   data() {
     return {
       valid: false,
+      defaultButtonText: 'Wgraj zdjęcie okładki',
+      isSelecting: false,
       value: true,
       title: '',
       isbn: '',
@@ -246,6 +262,17 @@ export default {
     },
     reset() {
       this.$refs.form.reset();
+    },
+    onButtonClick() {
+      this.isSelecting = true
+      window.addEventListener('focus', () => {
+        this.isSelecting = false
+      }, { once: true })
+
+      this.$refs.uploader.click()
+    },
+    onFileChanged(e) {
+      this.cover = e.target.files[0]
     }
   },
 
@@ -261,6 +288,9 @@ export default {
     },
     publishers() {
       return this.$store.getters.getPublishers;
+    },
+    buttonText() {
+      return this.selectedFile ? this.selectedFile.name : this.defaultButtonText
     }
   },
 
@@ -280,8 +310,6 @@ export default {
 
 <style scoped>
     .upload {
-        display: flex;
-        width: 200px;
         justify-content: center;
         text-align: center;
     }

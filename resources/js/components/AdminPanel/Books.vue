@@ -92,17 +92,34 @@
               <v-card-actions style="justify-content: center; display: block ruby; text-align: center">
                 <v-spacer></v-spacer>
                 <v-btn color="blue darken-1" text @click="closeImage">Anuluj</v-btn>
-                <v-file-input
-                  class="pa-5 pb-0 pt-0"
-                  accept="image/*"
-                  v-model="cover"
-                  prepend-icon="mdi-book"
-                  :hide-input=true
-                  style="max-width: 60px"
-                ></v-file-input>
+                <v-btn
+                    color="primary"
+                    class="text-none pl-5 pr-5"
+                    style="margin-right: 15px"
+                    rounded
+                    depressed
+                    :loading="isSelecting"
+                    v-model="cover"
+                    @click="onButtonClick"
+                >
+                    <v-icon left>
+                        mdi-book
+                    </v-icon>
+                    {{ buttonText }}
+                </v-btn>
+                <input
+                    ref="uploader"
+                    :rules="coverRules"
+                    required
+                    class="d-none"
+                    type="file"
+                    accept="image/*"
+                    @change="onFileChanged"
+                >
                 <v-btn
                   color=brown
                   @click="refreshImage"
+                  :disabled="this.cover != null"
                 >
                   Odśwież
                 </v-btn>
@@ -156,6 +173,8 @@ export default {
   data: () => ({
     editBookDialog: false,
     editImageDialog: false,
+    defaultButtonText: 'Zmień zdjęcie okładki',
+    isSelecting: false,
     search: '',
     cover: [],
     image: '',
@@ -213,7 +232,11 @@ export default {
       (v) => !!v || 'Pole jest wymagane!',
       (v) => /^\d+$/.test(v) || 'Rok wydania musi być prawidłowy',
       (v) => v.length === 4 || 'Rok wydania powinien zawierać 4 cyfry'
-    ]
+    ],
+    coverRules: [
+        (v) => !!v || 'Zdjęcie okładki książki jest wymagane!',
+        (v) => v.size < 2000000 || 'Zdjęcie okładki powinno być mniejsze niż 2MB!'
+    ],
   }),
 
   computed: {
@@ -222,6 +245,9 @@ export default {
     },
     books() {
       return this.$store.getters.getBooks;
+    },
+    buttonText() {
+      return this.selectedFile ? this.selectedFile.name : this.defaultButtonText
     }
   },
 
@@ -285,6 +311,19 @@ export default {
       this.editedIndex = this.books.indexOf(item);
       this.editedItem = { ...item };
       this.editImageDialog = true;
+    },
+
+    onButtonClick() {
+      this.isSelecting = true
+      window.addEventListener('focus', () => {
+        this.isSelecting = false
+      }, { once: true })
+
+      this.$refs.uploader.click()
+    },
+    
+    onFileChanged(e) {
+      this.cover = e.target.files[0]
     },
 
     refreshImage () {

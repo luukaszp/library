@@ -27,7 +27,7 @@
 
                         <v-menu offset-y>
                             <template v-slot:activator="{ on }">
-                                <v-btn icon v-on="on">
+                                <v-btn icon v-on="on" :disabled="!isLoggedIn">
                                     <v-icon>mdi-account</v-icon>
                                 </v-btn>
                             </template>
