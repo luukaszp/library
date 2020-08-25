@@ -91,7 +91,7 @@
                 loginRules: [
                     v => !!v || 'Login jest wymagany',
                     v => /^\d+$/.test(v) || 'Login musi być prawidłowy',
-                    //v => v.length === 10 || v.length === 13 || 'Login powinien zawierać odpowiednią ilość cyfr',
+                    v => v.length >= 10 && v.length <= 12|| 'Login powinien zawierać odpowiednią ilość cyfr',
                 ],
                 rules: {
                     required: value => !!value || "Hasło jest wymagane",

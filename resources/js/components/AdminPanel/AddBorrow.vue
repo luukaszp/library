@@ -71,6 +71,7 @@
                                 readonly
                                 v-bind="attrs"
                                 v-on="on"
+                                :rules="dateRules"
                                 ></v-text-field>
                             </template>
                             <v-date-picker v-model="date" @input="menu = false"></v-date-picker>
@@ -122,6 +123,9 @@ import axios from "axios";
                 booksRules: [
                     v => !!v || 'Wymagane jest wybranie co najmniej jednej książki!',
                     v => v.length <= 5 || 'Maksymalnie można wybrać 5 książek',
+                ],
+                dateRules: [
+                    v => !!v || 'Wymagane jest wybranie daty!'
                 ]
             }
         },
