@@ -106,7 +106,6 @@ export default {
     },
     publisherRules: [
       (v) => !!v || 'Nazwa jest wymagana!',
-      (v) => /^[a-zA-Z]+$/.test(v) || 'Nazwa wydawnictwa powinna zawierać tylko litery'
     ]
   }),
 

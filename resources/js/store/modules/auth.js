@@ -59,7 +59,7 @@ export default {
               user = response.data;
               localStorage.setItem('access_token', token);
               axios.defaults.headers.Authorization = `Bearer ${token}`;
-              commit('auth_success', token, user);
+              commit('auth_success', token);
               router.push('/');
               resolve(response);
             })
@@ -104,22 +104,16 @@ export default {
         })
           .then((response) => {
             if (response.data.success === true) {
-              const { token } = response.data;
-              user = response.data;
-              localStorage.setItem('access_token', token);
-              axios.defaults.headers.Authorization = `Bearer ${token}`;
-              commit('auth_success', token, user);
-
               alert('Zarejestrowano pomyślnie!');
               if (user.id_number === '') {
                 router.push('/admin-panel/readers');
               } else {
                 router.push('/admin-panel/workers');
               }
-              resolve(response);
             } else {
               alert('Użytkownik o podanym emailu już istnieje.');
             }
+            resolve(response);
           })
           .catch((error) => {
             commit('auth_error');

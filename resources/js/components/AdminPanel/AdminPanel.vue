@@ -1,18 +1,19 @@
 <template>
     <v-row style="height: 100%">
-        <v-col md="2" style="padding-top: 0px; padding-bottom: 0px; max-width: 25%">
+        <v-col md="auto" style="padding-top: 0px; padding-bottom: 0px">
             <v-card
-            style="height: 100%; border-radius: 0px"
+            style="height: 100%; border-radius: 0px; max-width: 280px"
         >
             <!--mini-variant-width zamieniony na width--><v-navigation-drawer
             permanent
-            width="320px"
+            width="280px"
             dark
+            style="padding-top: 20px"
             >
             <template v-slot:prepend>
                 <v-list-item two-line>
                 <v-list-item-avatar>
-                    <img src="https://randomuser.me/api/portraits/women/81.jpg">
+                    <img src="https://randomuser.me/api/portraits/men/81.jpg">
                 </v-list-item-avatar>
 
                 <v-list-item-content>
@@ -52,7 +53,7 @@
             </v-navigation-drawer>
         </v-card>
         </v-col>
-        <v-col>
+        <v-col style="margin-right: 20px">
             <router-view></router-view>
         </v-col>
     </v-row>
@@ -73,7 +74,7 @@ export default {
           ]
         },
         {
-          action: 'mdi-account',
+          action: 'mdi-book-open-page-variant',
           title: 'Książki',
           items: [
             { title: 'Ogólne zestawienie', route: '/admin-panel/books' },
@@ -83,7 +84,7 @@ export default {
           ]
         },
         {
-          action: 'mdi-account',
+          action: 'mdi-clipboard-arrow-down-outline',
           title: 'Wypożyczenia i oddania',
           items: [
             { title: 'Przeglądaj', route: '/admin-panel/borrows-returns' },
@@ -92,7 +93,7 @@ export default {
           ]
         },
         {
-          action: 'mdi-account',
+          action: 'mdi-gesture-tap-button',
           title: 'Akcje',
           items: [
             { title: 'Propozycje czytelników', route: '/admin-panel/suggestions' },

@@ -106,7 +106,7 @@ export default {
     },
     categoryRules: [
       (v) => !!v || 'Nazwa jest wymagana!',
-      (v) => /^[a-zA-Z]+$/.test(v) || 'Nazwa kategorii powinna zawierać tylko litery'
+      (v) => /^[a-zA-ZąęćżźńłóśĄĆĘŁŃÓŚŹŻ\s]+$/.test(v) || 'Nazwa kategorii powinna zawierać tylko litery'
     ]
   }),
 

@@ -2,8 +2,7 @@ AdminPanel.vue
 - dodać karty, które będą dostępne tylko dla admina a nie dla pracownika - jest brak dostępu ale lepsza byłaby niewidoczność
 danych zakładek (jest tylko alert Unauthorized)
 
-- zdjęcie kobiety zamienić na zdjęcie logo biblioteki
-- zmienić ikonki
+- zdjęcie kobiety zamienić na zdjęcie logo biblioteki lub coś innego ale co
 - zmienić kolory przycisków
 
 Readers.vue - admin panel

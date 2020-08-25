@@ -5,6 +5,7 @@
     :items="books"
     sort-by="card_number"
     class="elevation-1"
+    style="word-break: initial"
   >
   <template #[`item.fullName`]="{ item }"> {{ item.authorName }} {{ item.surname }} </template>
 
