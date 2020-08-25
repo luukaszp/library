@@ -153,131 +153,129 @@
 </template>
 
 <script>
-import axios from "axios";
+/* eslint-disable */
+import axios from 'axios';
 
-    export default {
-        name: "AddBook",
-        data() {
-            return {
-                valid: false,
-                value: true,
-                title: "",
-                isbn: "",
-                description: "",
-                publish_year: "",
-                amount: "",
-                cover: [],
-                selectedAuthor: "",
-                selectedCategory: "",
-                selectedPublisher: "",
-                titleRules: [
-                    v => !!v || 'Pole jest wymagane!',
-                    v => v.length <= 60 || 'Tytuł jest za długi!',
-                ],
-                isbnRules: [
-                    v => !!v || 'Pole jest wymagane!',
-                    v => /^\d+$/.test(v) || 'Numer ISBN musi być prawidłowy',
-                    v => v.length === 13 || 'Numer ISBN powinien zawierać 13 cyfr',
-                ],
-                amountRules: [
-                    v => !!v || 'Pole jest wymagane!',
-                    v => /^\d+$/.test(v) || 'Ilość musi być prawidłowa',
-                    v => v > 0 || 'Ilość książek powinna być większa od 0',
-                ],
-                descriptionRules: [
-                    v => !!v || 'Pole jest wymagane!',
-                    v => v.length >= 25 || 'Opis jest za krótki!',
-                ],
-                publishYearRules: [
-                    v => !!v || 'Pole jest wymagane!',
-                    v => /^\d+$/.test(v) || 'Rok wydania musi być prawidłowy',
-                    v => v.length === 4 || 'Rok wydania powinien zawierać 4 cyfry',
-                ],
-                coverRules: [
-                    v => !!v || 'Zdjęcie okładki książki jest wymagane!',
-                    v => v.size < 2000000 || 'Zdjęcie okładki powinno być mniejsze niż 2MB!'
-                ],
-                authorRules: [
-                    v => !!v || 'Wymagane jest wybranie autora!',
-                ],
-                categoryRules: [
-                    v => !!v || 'Wymagane jest wybranie kategorii!',
-                ],
-                publisherRules: [
-                    v => !!v || 'Wymagane jest wybranie wydawnictwa!',
-                ]
+export default {
+  name: 'AddBook',
+  data() {
+    return {
+      valid: false,
+      value: true,
+      title: '',
+      isbn: '',
+      description: '',
+      publish_year: '',
+      amount: '',
+      cover: [],
+      selectedAuthor: '',
+      selectedCategory: '',
+      selectedPublisher: '',
+      titleRules: [
+        (v) => !!v || 'Pole jest wymagane!',
+        (v) => v.length <= 60 || 'Tytuł jest za długi!'
+      ],
+      isbnRules: [
+        (v) => !!v || 'Pole jest wymagane!',
+        (v) => /^\d+$/.test(v) || 'Numer ISBN musi być prawidłowy',
+        (v) => v.length === 13 || 'Numer ISBN powinien zawierać 13 cyfr'
+      ],
+      amountRules: [
+        (v) => !!v || 'Pole jest wymagane!',
+        (v) => /^\d+$/.test(v) || 'Ilość musi być prawidłowa',
+        (v) => v > 0 || 'Ilość książek powinna być większa od 0'
+      ],
+      descriptionRules: [
+        (v) => !!v || 'Pole jest wymagane!',
+        (v) => v.length >= 25 || 'Opis jest za krótki!'
+      ],
+      publishYearRules: [
+        (v) => !!v || 'Pole jest wymagane!',
+        (v) => /^\d+$/.test(v) || 'Rok wydania musi być prawidłowy',
+        (v) => v.length === 4 || 'Rok wydania powinien zawierać 4 cyfry'
+      ],
+      coverRules: [
+        (v) => !!v || 'Zdjęcie okładki książki jest wymagane!',
+        (v) => v.size < 2000000 || 'Zdjęcie okładki powinno być mniejsze niż 2MB!'
+      ],
+      authorRules: [
+        (v) => !!v || 'Wymagane jest wybranie autora!'
+      ],
+      categoryRules: [
+        (v) => !!v || 'Wymagane jest wybranie kategorii!'
+      ],
+      publisherRules: [
+        (v) => !!v || 'Wymagane jest wybranie wydawnictwa!'
+      ]
+    };
+  },
+
+  methods: {
+    validate() {
+      if (this.$refs.form.validate()) {
+        const formData = new FormData();
+        formData.append('cover', this.cover);
+        formData.append('title', this.title);
+        formData.append('isbn', this.isbn);
+        formData.append('description', this.description);
+        formData.append('publish_year', this.publish_year);
+        formData.append('amount', this.amount);
+        formData.append('author', this.selectedAuthor);
+        formData.append('category', this.selectedCategory);
+        formData.append('publisher', this.selectedPublisher);
+
+        const config = {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        };
+
+        axios.post('http://127.0.0.1:8000/api/book/store', formData, config)
+          .then((response) => {
+            if (response.data.success == true) {
+              alert('Pomyślnie dodano książkę do bazy bibliotecznej!');
+              this.$router.push('/admin-panel/books');
+            } else {
+              alert('Książka o podanych danych już isnieje.');
             }
-        },
-
-        methods: {
-            validate() {
-                if(this.$refs.form.validate())
-                {
-                    let formData = new FormData();
-                    formData.append("cover", this.cover);
-                    formData.append("title", this.title);
-                    formData.append("isbn", this.isbn);
-                    formData.append("description", this.description);
-                    formData.append("publish_year", this.publish_year);
-                    formData.append("amount", this.amount);
-                    formData.append("author", this.selectedAuthor);
-                    formData.append("category", this.selectedCategory);
-                    formData.append("publisher", this.selectedPublisher);
-
-                    let config = {
-                        headers: {
-                            'Content-Type' : 'multipart/form-data'
-                        }
-                    }
-
-                    axios.post('http://127.0.0.1:8000/api/book/store', formData, config)
-                    .then(response => {
-                    if(response.data.success == true) {
-                        alert("Pomyślnie dodano książkę do bazy bibliotecznej!")
-                        this.$router.push('/admin-panel/books')
-                    }
-                    else {
-                        alert("Książka o podanych danych już isnieje.")
-                    }
-                })
-                    .catch(error => {
-                        console.log(error)
-                    })
-                }
-            },
-            reset() {
-                this.$refs.form.reset()
-            }
-        },
-
-        computed: {
-            passwordConfirmationRule() {
-                return () =>
-                    this.password === this.password_confirmation || "Hasło musi być takie same";
-            },
-            categories() {
-                return this.$store.getters.getCategories;
-            },
-            authors() {
-                return this.$store.getters.getAuthors;
-            },
-            publishers() {
-                return this.$store.getters.getPublishers;
-            }
-        },
-
-        watch: {
-            dialog(val) {
-                val || this.close()
-            },
-        },
-
-        created() {
-            this.$store.dispatch("fetchCategories", {});
-            this.$store.dispatch("fetchAuthors", {});
-            this.$store.dispatch("fetchPublishers", {});
-        },
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
+    },
+    reset() {
+      this.$refs.form.reset();
     }
+  },
+
+  computed: {
+    passwordConfirmationRule() {
+      return () => this.password === this.password_confirmation || 'Hasło musi być takie same';
+    },
+    categories() {
+      return this.$store.getters.getCategories;
+    },
+    authors() {
+      return this.$store.getters.getAuthors;
+    },
+    publishers() {
+      return this.$store.getters.getPublishers;
+    }
+  },
+
+  watch: {
+    dialog(val) {
+      val || this.close();
+    }
+  },
+
+  created() {
+    this.$store.dispatch('fetchCategories', {});
+    this.$store.dispatch('fetchAuthors', {});
+    this.$store.dispatch('fetchPublishers', {});
+  }
+};
 </script>
 
 <style scoped>

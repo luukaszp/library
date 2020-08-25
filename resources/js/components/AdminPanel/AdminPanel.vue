@@ -59,51 +59,51 @@
 </template>
 
 <script>
-  export default {
-    data () {
-      return {
-        items: [
-            {
-                action: 'mdi-account-group-outline',
-                title: 'Użytkownicy',
-                items: [
-                    { title: 'Czytelnicy', route: '/admin-panel/readers' },
-                    { title: 'Pracownicy', route: '/admin-panel/workers' },
-                    { title: 'Role użytkowników', route: '/admin-panel/roles' },
-                ],
-            },
-            {
-                action: 'mdi-account',
-                title: 'Książki',
-                items: [
-                    { title: 'Ogólne zestawienie', route: '/admin-panel/books' },
-                    { title: 'Autorzy', route: '/admin-panel/authors' },
-                    { title: 'Kategorie', route: '/admin-panel/categories' },
-                    { title: 'Wydawnictwa', route: '/admin-panel/publishers' },
-                ],
-            },
-            {
-                action: 'mdi-account',
-                title: 'Wypożyczenia i oddania',
-                items: [
-                    { title: 'Przeglądaj', route: '/admin-panel/borrows-returns' },
-                    { title: 'Wypożyczone', route: '/admin-panel/borrows' },
-                    { title: 'Opóźnienia i kary', route: '/admin-panel/delays-penalties' },
-                ],
-            },
-            {
-                action: 'mdi-account',
-                title: 'Akcje',
-                items: [
-                    { title: 'Propozycje czytelników', route: '/admin-panel/suggestions' },
-                    { title: 'Opinie', route: '/admin-panel/opinions' },
-                    { title: 'Wypełnione ankiety', route: '/admin-panel/userforms' },
-                ],
-            },
-        ]
-      }
-    },
+export default {
+  data () {
+    return {
+      items: [
+        {
+          action: 'mdi-account-group-outline',
+          title: 'Użytkownicy',
+          items: [
+            { title: 'Czytelnicy', route: '/admin-panel/readers' },
+            { title: 'Pracownicy', route: '/admin-panel/workers' },
+            { title: 'Role użytkowników', route: '/admin-panel/roles' }
+          ]
+        },
+        {
+          action: 'mdi-account',
+          title: 'Książki',
+          items: [
+            { title: 'Ogólne zestawienie', route: '/admin-panel/books' },
+            { title: 'Autorzy', route: '/admin-panel/authors' },
+            { title: 'Kategorie', route: '/admin-panel/categories' },
+            { title: 'Wydawnictwa', route: '/admin-panel/publishers' }
+          ]
+        },
+        {
+          action: 'mdi-account',
+          title: 'Wypożyczenia i oddania',
+          items: [
+            { title: 'Przeglądaj', route: '/admin-panel/borrows-returns' },
+            { title: 'Wypożyczone', route: '/admin-panel/borrows' },
+            { title: 'Opóźnienia i kary', route: '/admin-panel/delays-penalties' }
+          ]
+        },
+        {
+          action: 'mdi-account',
+          title: 'Akcje',
+          items: [
+            { title: 'Propozycje czytelników', route: '/admin-panel/suggestions' },
+            { title: 'Opinie', route: '/admin-panel/opinions' },
+            { title: 'Wypełnione ankiety', route: '/admin-panel/userforms' }
+          ]
+        }
+      ]
+    };
   }
+};
 </script>
 
 <style scoped>

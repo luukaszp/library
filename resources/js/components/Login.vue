@@ -80,50 +80,49 @@
 </template>
 
 <script>
-    export default {
-        name: "Login",
-        data() {
-            return {
-                password: "",
-                valid: true,
-                value: true,
-                login: "",
-                loginRules: [
-                    v => !!v || 'Login jest wymagany',
-                    v => /^\d+$/.test(v) || 'Login musi być prawidłowy',
-                    v => v.length >= 10 && v.length <= 12|| 'Login powinien zawierać odpowiednią ilość cyfr',
-                ],
-                rules: {
-                    required: value => !!value || "Hasło jest wymagane",
-                    password: value => {
-                        const pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/;
-                        return (
-                            pattern.test(value) ||
-                            "8 znaków, co najmniej jedna wielka litera, cyfra oraz znak specjalny"
-                        );
-                    }
-                }
-            }
-        },
-        methods: {
-            validate() {
-                if(this.$refs.form.validate())
-                {
-                    let data = {
-                        login: this.login,
-                        password: this.password
-                    }
-                    this.$store.dispatch('login', data)
-                        .catch(function (error) {
-                            console.log(error);
-                        });
-                }
-            },
-            reset() {
-                this.$refs.form.reset()
-            },
-        },
+/* eslint-disable */
+export default {
+  name: 'Login',
+  data() {
+    return {
+      password: '',
+      valid: true,
+      value: true,
+      login: '',
+      loginRules: [
+        (v) => !!v || 'Login jest wymagany',
+        (v) => /^\d+$/.test(v) || 'Login musi być prawidłowy',
+        (v) => v.length >= 10 && v.length <= 12 || 'Login powinien zawierać odpowiednią ilość cyfr'
+      ],
+      rules: {
+        required: (value) => !!value || 'Hasło jest wymagane',
+        password: (value) => {
+          const pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/;
+          return (
+            pattern.test(value) || '8 znaków, co najmniej jedna wielka litera, cyfra oraz znak specjalny'
+          );
+        }
+      }
+    };
+  },
+  methods: {
+    validate() {
+      if (this.$refs.form.validate()) {
+        const data = {
+          login: this.login,
+          password: this.password
+        };
+        this.$store.dispatch('login', data)
+          .catch((error) => {
+            console.log(error);
+          });
+      }
+    },
+    reset() {
+      this.$refs.form.reset();
     }
+  }
+};
 </script>
 
 <style scoped>

@@ -91,113 +91,113 @@
 </template>
 
 <script>
-import RegisterWorker from "./RegisterWorker";
+/* eslint-disable */
+import axios from 'axios';
 
-  export default {
-    data: () => ({
-      editWorkerDialog: false,
-      valid: false,
-      search: '',
-      headers: [
-        {
-          text: 'Numer identyfikacyjny',
-          align: 'start',
-          sortable: false,
-          value: 'id_number',
-        },
-        { text: 'Imię', value: 'name' },
-        { text: 'Nazwisko', value: 'surname' },
-        { text: 'E-mail', value: 'email' },
-        { text: 'Akcje', value: 'actions', sortable: false },
-      ],
-      editedIndex: -1,
-      editedItem: {
-        id_number: '',
-        name: '',
-        surname: '',
-        email: '',
+export default {
+  data: () => ({
+    editWorkerDialog: false,
+    valid: false,
+    search: '',
+    headers: [
+      {
+        text: 'Numer identyfikacyjny',
+        align: 'start',
+        sortable: false,
+        value: 'id_number'
       },
-      defaultItem: {
-        id_number: '',
-        name: '',
-        surname: '',
-        email: '',
-      },
-      emailRules: [
-        v => !!v || 'E-mail jest wymagany',
-        v => /.+@.+\..+/.test(v) || 'E-mail musi być prawidłowy',
-      ],
-      nameRules: [
-        v => !!v || 'Imię jest wymagane!',
-        v => /^[a-zA-Z]+$/.test(v) || 'Imię powinno zawierać tylko litery',
-      ],
-      surnameRules: [
-        v => !!v || 'Nazwisko jest wymagane!',
-        v => /^[a-zA-Z]+$/.test(v) || 'Nazwisko powinno zawierać tylko litery',
-      ],
-      idNumberRules: [v => !!v || 'Identyfikator jest wymagany!',
-        v => /^\d+$/.test(v) || 'Identyfikator musi być prawidłowy',
-        v => v.length === 12 || 'Identyfikator powinien zawierać 12 cyfr',
-      ],
-    }),
+      { text: 'Imię', value: 'name' },
+      { text: 'Nazwisko', value: 'surname' },
+      { text: 'E-mail', value: 'email' },
+      { text: 'Akcje', value: 'actions', sortable: false }
+    ],
+    editedIndex: -1,
+    editedItem: {
+      id_number: '',
+      name: '',
+      surname: '',
+      email: ''
+    },
+    defaultItem: {
+      id_number: '',
+      name: '',
+      surname: '',
+      email: ''
+    },
+    emailRules: [
+      (v) => !!v || 'E-mail jest wymagany',
+      (v) => /.+@.+\..+/.test(v) || 'E-mail musi być prawidłowy'
+    ],
+    nameRules: [
+      (v) => !!v || 'Imię jest wymagane!',
+      (v) => /^[a-zA-Z]+$/.test(v) || 'Imię powinno zawierać tylko litery'
+    ],
+    surnameRules: [
+      (v) => !!v || 'Nazwisko jest wymagane!',
+      (v) => /^[a-zA-Z]+$/.test(v) || 'Nazwisko powinno zawierać tylko litery'
+    ],
+    idNumberRules: [(v) => !!v || 'Identyfikator jest wymagany!',
+      (v) => /^\d+$/.test(v) || 'Identyfikator musi być prawidłowy',
+      (v) => v.length === 12 || 'Identyfikator powinien zawierać 12 cyfr'
+    ]
+  }),
 
-    computed: {
-      formTitle () {
-        return this.editedIndex === -1 ? 'Edytuj dane pracownika' : 'Edytuj dane pracownika'
-      },
-      workers() {
-        return this.$store.getters.getWorkers;
+  computed: {
+    formTitle () {
+      return this.editedIndex === -1 ? 'Edytuj dane pracownika' : 'Edytuj dane pracownika';
+    },
+    workers() {
+      return this.$store.getters.getWorkers;
+    }
+  },
+
+  watch: {
+    dialog (val) {
+      val || this.close();
+    }
+  },
+
+  created () {
+    this.$store.dispatch('fetchWorkers', {});
+  },
+
+  methods: {
+    editWorker (item) {
+      this.editedIndex = this.workers.indexOf(item);
+      this.editedItem = { ...item };
+      this.editWorkerDialog = true;
+    },
+
+    addWorker() {
+      if (this.$refs.form.validate()) {
+        if (this.editedIndex > -1) {
+          Object.assign(this.workers[this.editedIndex], this.editedItem);
+          axios.put(`/api/worker/edit/${this.editedItem.id}`, {
+            id_number: this.editedItem.id_number,
+            name: this.editedItem.name,
+            surname: this.editedItem.surname,
+            email: this.editedItem.email
+          });
+        }
+        this.close();
       }
     },
 
-    watch: {
-      dialog (val) {
-        val || this.close()
-      },
-    },
-
-    created () {
-        this.$store.dispatch("fetchWorkers", {});
-    },
-
-    methods: {
-      editWorker (item) {
-        this.editedIndex = this.workers.indexOf(item)
-        this.editedItem = Object.assign({}, item)
-        this.editWorkerDialog = true
-      },
-
-      addWorker() {
-        if(this.$refs.form.validate())
-        {
-          if (this.editedIndex > -1) {
-            Object.assign(this.workers[this.editedIndex], this.editedItem)
-            axios.put('/api/worker/edit/'+ this.editedItem.id, {
-              id_number: this.editedItem.id_number,
-              name: this.editedItem.name,
-              surname: this.editedItem.surname,
-              email: this.editedItem.email
-            })
-            } 
-            this.close()
-        }
-      },
-
-      deleteWorker (item) {
-        const index = this.workers.indexOf(item)
-        if (confirm('Czy jesteś pewien, że chcesz usunąć tego pracownika?')) {
-            axios.delete('/api/worker/delete/'+item.id, {})
-        }
-        this.workers.splice(index, 1)
-      },
-
-      close () {
-        this.editWorkerDialog = false
-        this.$nextTick(() => {
-          this.editedItem = Object.assign({}, this.defaultItem)
-          this.editedIndex = -1
-        })
+    deleteWorker (item) {
+      const index = this.workers.indexOf(item);
+      if (confirm('Czy jesteś pewien, że chcesz usunąć tego pracownika?')) {
+        axios.delete(`/api/worker/delete/${item.id}`, {});
       }
+      this.workers.splice(index, 1);
     },
+
+    close () {
+      this.editWorkerDialog = false;
+      this.$nextTick(() => {
+        this.editedItem = { ...this.defaultItem };
+        this.editedIndex = -1;
+      });
+    }
   }
+};
 </script>

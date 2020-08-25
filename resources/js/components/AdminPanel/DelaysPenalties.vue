@@ -37,36 +37,37 @@
 </template>
 
 <script>
-  export default {
-    data: () => ({
-      search: '',
-      show: false,
-      headers: [
-        {
-          text: 'Tytuł książki',
-          align: 'start',
-          value: 'title',
-        },
-        { text: 'Czytelnik', value: 'fullName' },
-        { text: 'Opóźnienie (dni)', value: 'delay' },
-        { text: 'Kara pieniężna (zł)', value: 'penalty' },
-      ],
-    }),
-
-    computed: {
-      borrows() {
-        return this.$store.getters.getBorrows;
-      }
-    },
-
-    watch: {
-      dialog (val) {
-        val || this.close()
+/* eslint-disable */
+export default {
+  data: () => ({
+    search: '',
+    show: false,
+    headers: [
+      {
+        text: 'Tytuł książki',
+        align: 'start',
+        value: 'title'
       },
-    },
+      { text: 'Czytelnik', value: 'fullName' },
+      { text: 'Opóźnienie (dni)', value: 'delay' },
+      { text: 'Kara pieniężna (zł)', value: 'penalty' }
+    ]
+  }),
 
-    created () {
-        this.$store.dispatch("fetchDelays", {});
+  computed: {
+    borrows() {
+      return this.$store.getters.getBorrows;
     }
+  },
+
+  watch: {
+    dialog (val) {
+      val || this.close();
+    }
+  },
+
+  created () {
+    this.$store.dispatch('fetchDelays', {});
   }
+};
 </script>

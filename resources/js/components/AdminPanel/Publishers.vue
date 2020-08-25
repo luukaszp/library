@@ -79,98 +79,100 @@
 </template>
 
 <script>
-    export default {
-        name: "Publishers",
-        data: () => ({
-            addPublisherDialog: false,
-            valid: false,
-            search: '',
-            publisherName: '',
-            headers: [
-                {
-                    text: 'Wydawnictwa',
-                    align: 'start',
-                    value: 'name',
-                },
-                {text: 'Akcje', value: 'action', sortable: false},
-            ],
-            editedIndex: -1,
-            editedItem: {
-                name: '',
-            },
-            defaultItem: {
-                name: '',
-            },
-            publisherRules: [
-                v => !!v || 'Nazwa jest wymagana!',
-                v => /^[a-zA-Z]+$/.test(v) || 'Nazwa wydawnictwa powinna zawierać tylko litery',
-            ],
-        }),
+/* eslint-disable */
+import axios from 'axios';
 
-        computed: {
-            formTitle() {
-                return this.editedIndex === -1 ? 'Nowe wydawnictwo' : 'Edytuj wydawnictwo'
-            },
-            publishers() {
-                return this.$store.getters.getPublishers;
-            }
-        },
+export default {
+  name: 'Publishers',
+  data: () => ({
+    addPublisherDialog: false,
+    valid: false,
+    search: '',
+    publisherName: '',
+    headers: [
+      {
+        text: 'Wydawnictwa',
+        align: 'start',
+        value: 'name'
+      },
+      { text: 'Akcje', value: 'action', sortable: false }
+    ],
+    editedIndex: -1,
+    editedItem: {
+      name: ''
+    },
+    defaultItem: {
+      name: ''
+    },
+    publisherRules: [
+      (v) => !!v || 'Nazwa jest wymagana!',
+      (v) => /^[a-zA-Z]+$/.test(v) || 'Nazwa wydawnictwa powinna zawierać tylko litery'
+    ]
+  }),
 
-        watch: {
-            dialog(val) {
-                val || this.close()
-            },
-        },
-
-        created() {
-            this.$store.dispatch("fetchPublishers", {});
-        },
-
-        methods: {
-            editPublisher(item) {
-                this.editedIndex = this.publishers.indexOf(item)
-                this.editedItem = Object.assign({}, item)
-                this.addPublisherDialog = true
-            },
-
-            deletePublisher(item) {
-                const index = this.publishers.indexOf(item)
-                if (confirm('Czy jesteś pewien, że chcesz usunąć te wydawnictwo?')) {
-                    axios.delete('/api/publisher/delete/'+ item.id, {})
-                        this.publishers.splice(index, 1)
-                }
-            },
-
-            addPublisher() {
-                if(this.$refs.form.validate())
-                {
-                    if (this.editedIndex > -1) {
-                        Object.assign(this.publishers[this.editedIndex], this.editedItem)
-                        axios.put('/api/publisher/edit/'+ this.editedItem.id, {
-                            name: this.editedItem.name
-                        })
-                    } else {
-                        this.publishers.push(this.editedItem)
-                        axios.post('/api/publisher/add', {
-                            name: this.editedItem.name
-                        })
-                            .catch(error => {
-                                console.log(error)
-                            })
-                    }
-                    this.close()
-                }
-            },
-
-            close() {
-                this.addPublisherDialog = false
-                this.$nextTick(() => {
-                    this.editedItem = Object.assign({}, this.defaultItem)
-                    this.editedIndex = -1
-                })
-            },
-        },
+  computed: {
+    formTitle() {
+      return this.editedIndex === -1 ? 'Nowe wydawnictwo' : 'Edytuj wydawnictwo';
+    },
+    publishers() {
+      return this.$store.getters.getPublishers;
     }
+  },
+
+  watch: {
+    dialog(val) {
+      val || this.close();
+    }
+  },
+
+  created() {
+    this.$store.dispatch('fetchPublishers', {});
+  },
+
+  methods: {
+    editPublisher(item) {
+      this.editedIndex = this.publishers.indexOf(item);
+      this.editedItem = { ...item };
+      this.addPublisherDialog = true;
+    },
+
+    deletePublisher(item) {
+      const index = this.publishers.indexOf(item);
+      if (confirm('Czy jesteś pewien, że chcesz usunąć te wydawnictwo?')) {
+        axios.delete(`/api/publisher/delete/${item.id}`, {});
+        this.publishers.splice(index, 1);
+      }
+    },
+
+    addPublisher() {
+      if (this.$refs.form.validate()) {
+        if (this.editedIndex > -1) {
+          Object.assign(this.publishers[this.editedIndex], this.editedItem);
+          axios.put(`/api/publisher/edit/${this.editedItem.id}`, {
+            name: this.editedItem.name
+          });
+        } else {
+          this.publishers.push(this.editedItem);
+          axios.post('/api/publisher/add', {
+            name: this.editedItem.name
+          })
+            .catch((error) => {
+              console.log(error);
+            });
+        }
+        this.close();
+      }
+    },
+
+    close() {
+      this.addPublisherDialog = false;
+      this.$nextTick(() => {
+        this.editedItem = { ...this.defaultItem };
+        this.editedIndex = -1;
+      });
+    }
+  }
+};
 </script>
 
 <style scoped>

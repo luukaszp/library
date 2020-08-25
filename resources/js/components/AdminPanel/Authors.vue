@@ -82,108 +82,110 @@
 </template>
 
 <script>
-    export default {
-        name: "Authors",
-        data: () => ({
-            addAuthorDialog: false,
-            valid: false,
-            search: '',
-            authorName: '',
-            authorSurname: '',
-            headers: [
-                {
-                    text: 'Imię',
-                    align: 'start',
-                    value: 'name',
-                },
-                { text: 'Nazwisko', value: 'surname' },
-                { text: 'Akcje', value: 'action', sortable: false },
-            ],
-            editedIndex: -1,
-            editedItem: {
-                name: '',
-                surname: '',
-            },
-            defaultItem: {
-                name: '',
-                surname: '',
-            },
-            nameRules: [
-                v => !!v || 'Imię jest wymagane!',
-                v => /^[a-zA-Z]+$/.test(v) || 'Imię powinno zawierać tylko litery',
-            ],
-            surnameRules: [
-                v => !!v || 'Nazwisko jest wymagane!',
-                v => /^[a-zA-Z]+$/.test(v) || 'Nazwisko powinno zawierać tylko litery',
-            ],
-        }),
+/* eslint-disable */
+import axios from 'axios';
 
-        computed: {
-            formTitle() {
-                return this.editedIndex === -1 ? 'Nowy autor' : 'Edytuj dane autora'
-            },
-            authors() {
-                return this.$store.getters.getAuthors;
-            }
-        },
+export default {
+  name: 'Authors',
+  data: () => ({
+    addAuthorDialog: false,
+    valid: false,
+    search: '',
+    authorName: '',
+    authorSurname: '',
+    headers: [
+      {
+        text: 'Imię',
+        align: 'start',
+        value: 'name'
+      },
+      { text: 'Nazwisko', value: 'surname' },
+      { text: 'Akcje', value: 'action', sortable: false }
+    ],
+    editedIndex: -1,
+    editedItem: {
+      name: '',
+      surname: ''
+    },
+    defaultItem: {
+      name: '',
+      surname: ''
+    },
+    nameRules: [
+      (v) => !!v || 'Imię jest wymagane!',
+      (v) => /^[a-zA-Z]+$/.test(v) || 'Imię powinno zawierać tylko litery'
+    ],
+    surnameRules: [
+      (v) => !!v || 'Nazwisko jest wymagane!',
+      (v) => /^[a-zA-Z]+$/.test(v) || 'Nazwisko powinno zawierać tylko litery'
+    ]
+  }),
 
-        watch: {
-            dialog(val) {
-                val || this.close()
-            },
-        },
-
-        created() {
-            this.$store.dispatch("fetchAuthors", {});
-        },
-
-        methods: {
-            editAuthor(item) {
-                this.editedIndex = this.authors.indexOf(item)
-                this.editedItem = Object.assign({}, item)
-                this.addAuthorDialog = true
-            },
-
-            deleteAuthor(item) {
-                const index = this.authors.indexOf(item)
-                if (confirm('Czy jesteś pewien, że chcesz usunąć tego autora?')) {
-                    axios.delete('/api/author/delete/'+ item.id, {})
-                        this.authors.splice(index, 1)
-                }
-            },
-
-            addAuthor() {
-                if(this.$refs.form.validate())
-                {
-                    if (this.editedIndex > -1) {
-                        Object.assign(this.authors[this.editedIndex], this.editedItem)
-                        axios.put('/api/author/edit/'+ this.editedItem.id, {
-                            name: this.editedItem.name,
-                            surname: this.editedItem.surname
-                        })
-                    } else {
-                        this.authors.push(this.editedItem)
-                        axios.post('/api/author/add', {
-                            name: this.editedItem.name,
-                            surname: this.editedItem.surname
-                        })
-                            .catch(error => {
-                                console.log(error)
-                            })
-                    }
-                    this.close()
-                }
-            },
-
-            close() {
-                this.addAuthorDialog = false
-                this.$nextTick(() => {
-                    this.editedItem = Object.assign({}, this.defaultItem)
-                    this.editedIndex = -1
-                })
-            },
-        },
+  computed: {
+    formTitle() {
+      return this.editedIndex === -1 ? 'Nowy autor' : 'Edytuj dane autora';
+    },
+    authors() {
+      return this.$store.getters.getAuthors;
     }
+  },
+
+  watch: {
+    dialog(val) {
+      val || this.close();
+    }
+  },
+
+  created() {
+    this.$store.dispatch('fetchAuthors', {});
+  },
+
+  methods: {
+    editAuthor(item) {
+      this.editedIndex = this.authors.indexOf(item);
+      this.editedItem = { ...item };
+      this.addAuthorDialog = true;
+    },
+
+    deleteAuthor(item) {
+      const index = this.authors.indexOf(item);
+      if (confirm('Czy jesteś pewien, że chcesz usunąć tego autora?')) {
+        axios.delete(`/api/author/delete/${item.id}`, {});
+        this.authors.splice(index, 1);
+      }
+    },
+
+    addAuthor() {
+      if (this.$refs.form.validate()) {
+        if (this.editedIndex > -1) {
+          Object.assign(this.authors[this.editedIndex], this.editedItem);
+          axios.put(`/api/author/edit/${this.editedItem.id}`, {
+            name: this.editedItem.name,
+            surname: this.editedItem.surname
+          });
+        } else {
+          this.authors.push(this.editedItem);
+          axios.post('/api/author/add', {
+            name: this.editedItem.name,
+            surname: this.editedItem.surname
+          })
+            .catch((error) => {
+              console.log(error);
+            });
+        }
+        this.close();
+      }
+    },
+
+    close() {
+      this.addAuthorDialog = false;
+      this.$nextTick(() => {
+        this.editedItem = { ...this.defaultItem };
+        this.editedIndex = -1;
+      });
+    }
+  }
+};
 </script>
 
 <style scoped>

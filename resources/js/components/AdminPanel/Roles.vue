@@ -12,7 +12,7 @@
           class="mx-4"
           inset
           vertical
-        ></v-divider>       
+        ></v-divider>
 
           <v-dialog v-model="editRolesDialog" max-width="500px">
             <v-card>
@@ -61,94 +61,96 @@
 </template>
 
 <script>
-  export default {
-    data: () => ({
-      editRolesDialog: false,
-      valid: false,
-      headers: [
-        {
-          text: 'ID',
-          align: 'start',
-          value: 'id',
-        },
-        { text: 'Imię', value: 'name' },
-        { text: 'Nazwisko', value: 'surname' },
-        { text: 'E-mail', value: 'email' },
-        { text: 'Pracownik', value: 'is_worker' },
-        { text: 'Admin', value: 'is_admin' },
-        { text: 'Akcje', value: 'actions', sortable: false },
-      ],
-      editedIndex: -1,
-      editedItem: {
-        id: '',
-        name: '',
-        surname: '',
-        email: '',
-        is_worker: '',
-        is_admin: '',
-      },
-      defaultItem: {
-        id_number: '',
-        name: '',
-        surname: '',
-        email: '',
-        is_worker: '',
-        is_admin: '',
-      },
-      roleRules: [
-        v => !!v || 'Pole jest wymagane!',
-        v => /^\d+$/.test(v) || 'Rola musi zostać poprawnie wprowadzona',
-        v => v >= 0 && v <= 1 || 'Pole typu boolean. Proszę podać 0 lub 1'
-      ],
-    }),
+/* eslint-disable */
+import axios from 'axios';
 
-    computed: {
-      formTitle () {
-        return this.editedIndex === -1 ? 'Nowa rola' : 'Edytuj rolę'
+export default {
+  data: () => ({
+    editRolesDialog: false,
+    valid: false,
+    headers: [
+      {
+        text: 'ID',
+        align: 'start',
+        value: 'id'
       },
-      roles() {
-        return this.$store.getters.getRoles;
+      { text: 'Imię', value: 'name' },
+      { text: 'Nazwisko', value: 'surname' },
+      { text: 'E-mail', value: 'email' },
+      { text: 'Pracownik', value: 'is_worker' },
+      { text: 'Admin', value: 'is_admin' },
+      { text: 'Akcje', value: 'actions', sortable: false }
+    ],
+    editedIndex: -1,
+    editedItem: {
+      id: '',
+      name: '',
+      surname: '',
+      email: '',
+      is_worker: '',
+      is_admin: ''
+    },
+    defaultItem: {
+      id_number: '',
+      name: '',
+      surname: '',
+      email: '',
+      is_worker: '',
+      is_admin: ''
+    },
+    roleRules: [
+      (v) => !!v || 'Pole jest wymagane!',
+      (v) => /^\d+$/.test(v) || 'Rola musi zostać poprawnie wprowadzona',
+      (v) => v >= 0 && v <= 1 || 'Pole typu boolean. Proszę podać 0 lub 1'
+    ]
+  }),
+
+  computed: {
+    formTitle () {
+      return this.editedIndex === -1 ? 'Nowa rola' : 'Edytuj rolę';
+    },
+    roles() {
+      return this.$store.getters.getRoles;
+    }
+  },
+
+  watch: {
+    dialog (val) {
+      val || this.close();
+    }
+  },
+
+  created () {
+    this.$store.dispatch('fetchRoles', {});
+  },
+
+  methods: {
+    editRole (item) {
+      this.editedIndex = this.roles.indexOf(item);
+      this.editedItem = { ...item };
+      this.editRolesDialog = true;
+    },
+
+    addRole() {
+      if (this.$refs.form.validate()) {
+        if (this.editedIndex > -1) {
+          Object.assign(this.roles[this.editedIndex], this.editedItem);
+          axios.put(`/api/roles/edit/${this.editedItem.id}`, {
+            is_worker: this.editedItem.is_worker,
+            is_admin: this.editedItem.is_admin
+          });
+        }
+        this.close();
       }
     },
 
-    watch: {
-      dialog (val) {
-        val || this.close()
-      },
-    },
-
-    created () {
-        this.$store.dispatch("fetchRoles", {});
-    },
-
-    methods: {
-      editRole (item) {
-        this.editedIndex = this.roles.indexOf(item)
-        this.editedItem = Object.assign({}, item)
-        this.editRolesDialog = true
-      },
-
-      addRole() {
-        if(this.$refs.form.validate())
-        {
-          if (this.editedIndex > -1) {
-            Object.assign(this.roles[this.editedIndex], this.editedItem)
-            axios.put('/api/roles/edit/'+ this.editedItem.id, {
-              is_worker: this.editedItem.is_worker,
-              is_admin: this.editedItem.is_admin,
-            })
-            } 
-            this.close()
-        }
-      },
-
-      close () {
-        this.editRolesDialog = false
-        this.$nextTick(() => {
-          this.editedItem = Object.assign({}, this.defaultItem)
-          this.editedIndex = -1
-        })
-      },
-    },
+    close () {
+      this.editRolesDialog = false;
+      this.$nextTick(() => {
+        this.editedItem = { ...this.defaultItem };
+        this.editedIndex = -1;
+      });
+    }
   }
+};
 </script>

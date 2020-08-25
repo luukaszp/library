@@ -67,7 +67,7 @@
             </v-card>
           </v-dialog>
       </v-toolbar>
-      
+
     </template>
     <template v-slot:[`item.actions`]="{ item }">
       <v-icon
@@ -91,114 +91,114 @@
 </template>
 
 <script>
-import RegisterReader from "./RegisterReader.vue";
+/* eslint-disable */
+import axios from 'axios';
 
-  export default {
-    data: () => ({
-      editReaderDialog: false,
-      valid: false,
-      search: '',
-      headers: [
-        {
-          text: 'Numer karty bibliotecznej',
-          align: 'start',
-          sortable: false,
-          value: 'card_number',
-        },
-        { text: 'Imię', value: 'name' },
-        { text: 'Nazwisko', value: 'surname' },
-        { text: 'E-mail', value: 'email' },
-        { text: 'Akcje', value: 'actions', sortable: false },
-      ],
-      editedIndex: -1,
-      editedItem: {
-        card_number: '',
-        name: '',
-        surname: '',
-        email: '',
+export default {
+  data: () => ({
+    editReaderDialog: false,
+    valid: false,
+    search: '',
+    headers: [
+      {
+        text: 'Numer karty bibliotecznej',
+        align: 'start',
+        sortable: false,
+        value: 'card_number'
       },
-      defaultItem: {
-        card_number: '',
-        name: '',
-        surname: '',
-        email: '',
-      },
-      nameRules: [
-        v => !!v || 'Imię jest wymagane!',
-        v => /^[a-zA-Z]+$/.test(v) || 'Imię powinno zawierać tylko litery',
-      ],
-      emailRules: [
-        v => !!v || 'E-mail jest wymagany',
-        v => /.+@.+\..+/.test(v) || 'E-mail musi być prawidłowy',
-      ],
-      surnameRules: [
-        v => !!v || 'Nazwisko jest wymagane!',
-        v => /^[a-zA-Z]+$/.test(v) || 'Nazwisko powinno zawierać tylko litery',
-      ],
-      cardNumberRules: [
-        v => !!v || 'Numer karty bibliotecznej jest wymagany!',
-        v => /^\d+$/.test(v) || 'Numer karty bibliotecznej musi być prawidłowy',
-        v => v.length === 10 || 'Numer karty bibliotecznej powinien zawierać 10 cyfr',
-      ],
-    }),
+      { text: 'Imię', value: 'name' },
+      { text: 'Nazwisko', value: 'surname' },
+      { text: 'E-mail', value: 'email' },
+      { text: 'Akcje', value: 'actions', sortable: false }
+    ],
+    editedIndex: -1,
+    editedItem: {
+      card_number: '',
+      name: '',
+      surname: '',
+      email: ''
+    },
+    defaultItem: {
+      card_number: '',
+      name: '',
+      surname: '',
+      email: ''
+    },
+    nameRules: [
+      (v) => !!v || 'Imię jest wymagane!',
+      (v) => /^[a-zA-Z]+$/.test(v) || 'Imię powinno zawierać tylko litery'
+    ],
+    emailRules: [
+      (v) => !!v || 'E-mail jest wymagany',
+      (v) => /.+@.+\..+/.test(v) || 'E-mail musi być prawidłowy'
+    ],
+    surnameRules: [
+      (v) => !!v || 'Nazwisko jest wymagane!',
+      (v) => /^[a-zA-Z]+$/.test(v) || 'Nazwisko powinno zawierać tylko litery'
+    ],
+    cardNumberRules: [
+      (v) => !!v || 'Numer karty bibliotecznej jest wymagany!',
+      (v) => /^\d+$/.test(v) || 'Numer karty bibliotecznej musi być prawidłowy',
+      (v) => v.length === 10 || 'Numer karty bibliotecznej powinien zawierać 10 cyfr'
+    ]
+  }),
 
-    computed: {
-      formTitle () {
-        return this.editedIndex === -1 ? 'Edytuj dane czytelnika' : 'Edytuj dane czytelnika'
-      },
-      readers() {
-        return this.$store.getters.getReaders;
+  computed: {
+    formTitle () {
+      return this.editedIndex === -1 ? 'Edytuj dane czytelnika' : 'Edytuj dane czytelnika';
+    },
+    readers() {
+      return this.$store.getters.getReaders;
+    }
+  },
+
+  watch: {
+    dialog (val) {
+      val || this.close();
+    }
+  },
+
+  created () {
+    this.$store.dispatch('fetchReaders', {});
+  },
+
+  methods: {
+    editReader (item) {
+      this.editedIndex = this.readers.indexOf(item);
+      this.editedItem = { ...item };
+      this.editReaderDialog = true;
+    },
+
+    addReader() {
+      if (this.$refs.form.validate()) {
+        if (this.editedIndex > -1) {
+          Object.assign(this.readers[this.editedIndex], this.editedItem);
+          axios.put(`/api/reader/edit/${this.editedItem.id}`, {
+            card_number: this.editedItem.card_number,
+            name: this.editedItem.name,
+            surname: this.editedItem.surname,
+            email: this.editedItem.email
+          });
+        }
+        this.close();
       }
     },
 
-    watch: {
-      dialog (val) {
-        val || this.close()
-      },
+    deleteReader (item) {
+      const index = this.readers.indexOf(item);
+      if (confirm('Czy jesteś pewien, że chcesz usunąć tego czytelnika?')) {
+        axios.delete(`/api/reader/delete/${item.id}`, {});
+      }
+      this.readers.splice(index, 1);
     },
 
-    created () {
-        this.$store.dispatch("fetchReaders", {});
-    },
-
-    methods: {
-      editReader (item) {
-        this.editedIndex = this.readers.indexOf(item)
-        this.editedItem = Object.assign({}, item)
-        this.editReaderDialog = true
-      },
-
-      addReader() {
-        if(this.$refs.form.validate())
-        {
-          if (this.editedIndex > -1) {
-            Object.assign(this.readers[this.editedIndex], this.editedItem)
-            axios.put('/api/reader/edit/'+ this.editedItem.id, {
-              card_number: this.editedItem.card_number,
-              name: this.editedItem.name,
-              surname: this.editedItem.surname,
-              email: this.editedItem.email
-            })
-            } 
-            this.close()
-        }
-      },
-
-      deleteReader (item) {
-        const index = this.readers.indexOf(item)
-        if (confirm('Czy jesteś pewien, że chcesz usunąć tego czytelnika?')) {
-            axios.delete('/api/reader/delete/'+ item.id, {})
-        }
-        this.readers.splice(index, 1)
-      },
-
-      close () {
-        this.editReaderDialog = false
-        this.$nextTick(() => {
-          this.editedItem = Object.assign({}, this.defaultItem)
-          this.editedIndex = -1
-        })
-      },
-    },
+    close () {
+      this.editReaderDialog = false;
+      this.$nextTick(() => {
+        this.editedItem = { ...this.defaultItem };
+        this.editedIndex = -1;
+      });
+    }
   }
+};
 </script>

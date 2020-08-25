@@ -90,113 +90,113 @@
 </template>
 
 <script>
-import AddBorrow from "./AddBorrow.vue";
+/* eslint-disable */
+import axios from 'axios';
 
-  export default {
-    data: () => ({
-      editBorrowDialog: false,
-      valid: false,
-      search: '',
-      show: false,
-      headers: [
-        {
-          text: 'Tytuł książki',
-          align: 'start',
-          value: 'title',
-        },
-        { text: 'Czytelnik', value: 'fullName' },
-        { text: 'Wypożyczenie', value: 'borrows_date' },
-        { text: 'Termin zwrotu', value: 'returns_date' },
-        { text: 'Potwierdź oddanie', value: 'is_returned' },
-        { text: 'Akcje', value: 'actions', sortable: false },
-      ],
-      editedIndex: -1,
-      editedItem: {
-        title: '',
-        fullName: '',
-        borrows_date: '',
-        returns_date: '',
+export default {
+  data: () => ({
+    editBorrowDialog: false,
+    valid: false,
+    search: '',
+    show: false,
+    headers: [
+      {
+        text: 'Tytuł książki',
+        align: 'start',
+        value: 'title'
       },
-      defaultItem: {
-        title: '',
-        fullName: '',
-        borrows_date: '',
-        returns_date: '',
-      },
-      borrowsRules: [
-        v => !!v || 'Data wypożyczenia jest wymagana',
-      ],
-      returnsRules: [
-        v => !!v || 'Data zwrotu jest wymagana',
-      ],
-    }),
+      { text: 'Czytelnik', value: 'fullName' },
+      { text: 'Wypożyczenie', value: 'borrows_date' },
+      { text: 'Termin zwrotu', value: 'returns_date' },
+      { text: 'Potwierdź oddanie', value: 'is_returned' },
+      { text: 'Akcje', value: 'actions', sortable: false }
+    ],
+    editedIndex: -1,
+    editedItem: {
+      title: '',
+      fullName: '',
+      borrows_date: '',
+      returns_date: ''
+    },
+    defaultItem: {
+      title: '',
+      fullName: '',
+      borrows_date: '',
+      returns_date: ''
+    },
+    borrowsRules: [
+      (v) => !!v || 'Data wypożyczenia jest wymagana'
+    ],
+    returnsRules: [
+      (v) => !!v || 'Data zwrotu jest wymagana'
+    ]
+  }),
 
-    computed: {
-      formTitle () {
-        return this.editedIndex === -1 ? 'Edytuj dane o wypożyczeniu' : 'Edytuj dane o wypożyczeniu'
-      },
-      borrows() {
-        return this.$store.getters.getBorrows;
-      }
+  computed: {
+    formTitle () {
+      return this.editedIndex === -1 ? 'Edytuj dane o wypożyczeniu' : 'Edytuj dane o wypożyczeniu';
+    },
+    borrows() {
+      return this.$store.getters.getBorrows;
+    }
+  },
+
+  watch: {
+    dialog (val) {
+      val || this.close();
+    }
+  },
+
+  created () {
+    this.$store.dispatch('fetchBorrows', {});
+  },
+
+  methods: {
+    editBorrow (item) {
+      this.editedIndex = this.borrows.indexOf(item);
+      this.editedItem = { ...item };
+      this.editBorrowDialog = true;
     },
 
-    watch: {
-      dialog (val) {
-        val || this.close()
-      },
-    },
-
-    created () {
-        this.$store.dispatch("fetchBorrows", {});
-    },
-
-    methods: {
-      editBorrow (item) {
-        this.editedIndex = this.borrows.indexOf(item)
-        this.editedItem = Object.assign({}, item)
-        this.editBorrowDialog = true
-      },
-
-      addBorrow() {
-        if(this.$refs.form.validate())
-        {
-          if (this.editedIndex > -1) {
-            Object.assign(this.borrows[this.editedIndex], this.editedItem)
-            axios.put('/api/borrow/edit/'+ this.editedItem.id, {
-              borrows_date: this.editedItem.borrows_date,
-              returns_date: this.editedItem.returns_date,
-            })
-            } 
-            this.close()
+    addBorrow() {
+      if (this.$refs.form.validate()) {
+        if (this.editedIndex > -1) {
+          Object.assign(this.borrows[this.editedIndex], this.editedItem);
+          axios.put(`/api/borrow/edit/${this.editedItem.id}`, {
+            borrows_date: this.editedItem.borrows_date,
+            returns_date: this.editedItem.returns_date
+          });
         }
-      },
-
-      close () {
-        this.editBorrowDialog = false
-        this.$nextTick(() => {
-          this.editedItem = Object.assign({}, this.defaultItem)
-          this.editedIndex = -1
-        })
-      },
-
-      getColor (returns_date) {
-        const todayDate = new Date()
-        const dateOfReturn = new Date(returns_date)
-        const differenceInTime = dateOfReturn.getTime() - todayDate.getTime()
-        const differenceInDays = Math.round(differenceInTime / (1000 * 3600 * 24))
-
-        if (differenceInDays < 3) return 'red'
-        else if (differenceInDays < 10) return 'orange'
-        else return 'green'
-      },
-
-      returnBook(item) {
-        axios.put('/api/borrow/returnBook/' + item.id, {
-          is_returned: item.is_returned,
-          bookID: item.bookID
-        })
-        this.$store.dispatch("fetchBorrows", {});
+        this.close();
       }
     },
+
+    close () {
+      this.editBorrowDialog = false;
+      this.$nextTick(() => {
+        this.editedItem = { ...this.defaultItem };
+        this.editedIndex = -1;
+      });
+    },
+
+    getColor (returns_date) {
+      const todayDate = new Date();
+      const dateOfReturn = new Date(returns_date);
+      const differenceInTime = dateOfReturn.getTime() - todayDate.getTime();
+      const differenceInDays = Math.round(differenceInTime / (1000 * 3600 * 24));
+
+      if (differenceInDays < 3) return 'red';
+      if (differenceInDays < 10) return 'orange';
+      return 'green';
+    },
+
+    returnBook(item) {
+      axios.put(`/api/borrow/returnBook/${item.id}`, {
+        is_returned: item.is_returned,
+        bookID: item.bookID
+      });
+      this.$store.dispatch('fetchBorrows', {});
+    }
   }
+};
 </script>

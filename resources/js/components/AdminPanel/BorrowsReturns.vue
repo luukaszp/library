@@ -39,54 +39,53 @@
 </template>
 
 <script>
-import AddBorrow from "./AddBorrow.vue";
-
-  export default {
-    data: () => ({
-      search: '',
-      show: false,
-      headers: [
-        {
-          text: 'Tytuł książki',
-          align: 'start',
-          value: 'title',
-        },
-        { text: 'Czytelnik', value: 'fullName' },
-        { text: 'Wypożyczenie', value: 'borrows_date' },
-        { text: 'Termin zwrotu', value: 'returns_date' },
-        { text: 'Opóźnienie', value: 'delay' },
-        { text: 'Kara', value: 'penalty' },
-        { text: 'Kiedy oddano', value: 'when_returned' },
-      ],
-    }),
-
-    computed: {
-      borrows() {
-        return this.$store.getters.getBorrows;
-      }
-    },
-
-    watch: {
-      dialog (val) {
-        val || this.close()
+/* eslint-disable */
+export default {
+  data: () => ({
+    search: '',
+    show: false,
+    headers: [
+      {
+        text: 'Tytuł książki',
+        align: 'start',
+        value: 'title'
       },
-    },
+      { text: 'Czytelnik', value: 'fullName' },
+      { text: 'Wypożyczenie', value: 'borrows_date' },
+      { text: 'Termin zwrotu', value: 'returns_date' },
+      { text: 'Opóźnienie', value: 'delay' },
+      { text: 'Kara', value: 'penalty' },
+      { text: 'Kiedy oddano', value: 'when_returned' }
+    ]
+  }),
 
-    created () {
-        this.$store.dispatch("fetchHistory", {});
-    },
+  computed: {
+    borrows() {
+      return this.$store.getters.getBorrows;
+    }
+  },
 
-    methods: {
-      getColor (returns_date) {
-        const todayDate = new Date()
-        const dateOfReturn = new Date(returns_date)
-        const differenceInTime = dateOfReturn.getTime() - todayDate.getTime()
-        const differenceInDays = Math.round(differenceInTime / (1000 * 3600 * 24))
+  watch: {
+    dialog (val) {
+      val || this.close();
+    }
+  },
 
-        if (differenceInDays < 3) return 'red'
-        else if (differenceInDays < 10) return 'orange'
-        else return 'green'
-      },
-    },
+  created () {
+    this.$store.dispatch('fetchHistory', {});
+  },
+
+  methods: {
+    getColor (returns_date) {
+      const todayDate = new Date();
+      const dateOfReturn = new Date(returns_date);
+      const differenceInTime = dateOfReturn.getTime() - todayDate.getTime();
+      const differenceInDays = Math.round(differenceInTime / (1000 * 3600 * 24));
+
+      if (differenceInDays < 3) return 'red';
+      if (differenceInDays < 10) return 'orange';
+      return 'green';
+    }
   }
+};
 </script>

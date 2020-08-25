@@ -16,7 +16,7 @@
                 </v-toolbar>
 
                 <v-card-text class="pt-5 text-center">
-                    <strong>Aplikacja ma na celu stworzenie miejsca, w którym użytkownik będzie mógł prowadzić swój własny wyciąg wydatków i przychodów. Dzięki tej aplikacji, pod koniec miesiąca będzie można ustalić, gdzie podziała się cała wypłata oraz czy wydajemy na dany cel tyle, ile faktycznie chcieliśmy wydać. Dodatkowo wyświetlane będzie ogólne podsumowanie oraz statystyki miesięczne.</strong>
+                    <strong>Biblioteka</strong>
                 </v-card-text>
             </v-card>
         </v-dialog>
@@ -24,14 +24,14 @@
 </template>
 
 <script>
-    export default {
-        name: "About",
-        data () {
-            return {
-                dialog: false,
-            }
-        },
-    }
+export default {
+  name: 'About',
+  data () {
+    return {
+      dialog: false
+    };
+  }
+};
 </script>
 
 <style scoped>

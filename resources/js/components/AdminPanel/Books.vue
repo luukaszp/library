@@ -99,7 +99,7 @@
                   :hide-input=true
                   style="max-width: 60px"
                 ></v-file-input>
-                <v-btn 
+                <v-btn
                   color=brown
                   @click="refreshImage"
                 >
@@ -108,7 +108,7 @@
                 </v-card-actions>
             </v-card>
           </v-dialog>
-          
+
       </v-toolbar>
     </template>
 
@@ -148,161 +148,162 @@
 </template>
 
 <script>
-import AddBook from "./AddBook.vue";
+/*eslint-disable*/
+import axios from 'axios';
 
-  export default {
-    data: () => ({
-      editBookDialog: false,
-      editImageDialog: false,
-      search: '',
-      cover: [],
-      image: '',
-      show: false,
-      headers: [
-        {
-          text: 'Tytuł książki',
-          align: 'start',
-          value: 'title',
-        },
-        { text: 'Autor', value: 'fullName' },
-        { text: 'Kategoria', value: 'categoryName' },
-        { text: 'ISBN', value: 'isbn' },
-        { text: 'Opis', value: 'description' },
-        { text: 'Rok wydania', value: 'publish_year' },
-        { text: 'Wydawnictwo', value: 'publisherName' },
-        { text: 'Ilość', value: 'amount' },
-        { text: 'Okładka', value: 'cover' },
-        { text: 'Akcje', value: 'actions', sortable: false },
-      ],
-      editedIndex: -1,
-      editedItem: {
-        title: '',
-        isbn: '',
-        description: '',
-        publish_year: '',
-        amount: '',
+export default {
+  data: () => ({
+    editBookDialog: false,
+    editImageDialog: false,
+    search: '',
+    cover: [],
+    image: '',
+    show: false,
+    headers: [
+      {
+        text: 'Tytuł książki',
+        align: 'start',
+        value: 'title'
       },
-      defaultItem: {
-        title: '',
-        isbn: '',
-        description: '',
-        publish_year: '',
-        amount: '',
-      },
-      titleRules: [
-        v => !!v || 'Pole jest wymagane!',
-        v => v.length <= 60 || 'Tytuł jest za długi!',
-      ],
-      isbnRules: [
-        v => !!v || 'Pole jest wymagane!',
-        v => /^\d+$/.test(v) || 'Numer ISBN musi być prawidłowy',
-        v => v.length === 13 || 'Numer ISBN powinien zawierać 13 cyfr',
-      ],
-      amountRules: [
-        v => !!v || 'Pole jest wymagane!',
-        v => /^\d+$/.test(v) || 'Ilość musi być prawidłowa',
-        v => v > 0 || 'Ilość książek powinna być większa od 0',
-      ],
-      descriptionRules: [
-        v => !!v || 'Pole jest wymagane!',
-        v => v.length >= 25 || 'Opis jest za krótki!',
-      ],
-      publishYearRules: [
-        v => !!v || 'Pole jest wymagane!',
-        v => /^\d+$/.test(v) || 'Rok wydania musi być prawidłowy',
-        v => v.length === 4 || 'Rok wydania powinien zawierać 4 cyfry',
-      ],
-    }),
+      { text: 'Autor', value: 'fullName' },
+      { text: 'Kategoria', value: 'categoryName' },
+      { text: 'ISBN', value: 'isbn' },
+      { text: 'Opis', value: 'description' },
+      { text: 'Rok wydania', value: 'publish_year' },
+      { text: 'Wydawnictwo', value: 'publisherName' },
+      { text: 'Ilość', value: 'amount' },
+      { text: 'Okładka', value: 'cover' },
+      { text: 'Akcje', value: 'actions', sortable: false }
+    ],
+    editedIndex: -1,
+    editedItem: {
+      title: '',
+      isbn: '',
+      description: '',
+      publish_year: '',
+      amount: ''
+    },
+    defaultItem: {
+      title: '',
+      isbn: '',
+      description: '',
+      publish_year: '',
+      amount: ''
+    },
+    titleRules: [
+      (v) => !!v || 'Pole jest wymagane!',
+      (v) => v.length <= 60 || 'Tytuł jest za długi!'
+    ],
+    isbnRules: [
+      (v) => !!v || 'Pole jest wymagane!',
+      (v) => /^\d+$/.test(v) || 'Numer ISBN musi być prawidłowy',
+      (v) => v.length === 13 || 'Numer ISBN powinien zawierać 13 cyfr'
+    ],
+    amountRules: [
+      (v) => !!v || 'Pole jest wymagane!',
+      (v) => /^\d+$/.test(v) || 'Ilość musi być prawidłowa',
+      (v) => v > 0 || 'Ilość książek powinna być większa od 0'
+    ],
+    descriptionRules: [
+      (v) => !!v || 'Pole jest wymagane!',
+      (v) => v.length >= 25 || 'Opis jest za krótki!'
+    ],
+    publishYearRules: [
+      (v) => !!v || 'Pole jest wymagane!',
+      (v) => /^\d+$/.test(v) || 'Rok wydania musi być prawidłowy',
+      (v) => v.length === 4 || 'Rok wydania powinien zawierać 4 cyfry'
+    ]
+  }),
 
-    computed: {
-      formTitle () {
-        return this.editedIndex === -1 ? 'Edytuj dane o książce' : 'Edytuj dane o książce'
-      },
-      books() {
-        return this.$store.getters.getBooks;
+  computed: {
+    formTitle () {
+      return this.editedIndex === -1 ? 'Edytuj dane o książce' : 'Edytuj dane o książce';
+    },
+    books() {
+      return this.$store.getters.getBooks;
+    }
+  },
+
+  watch: {
+    dialog (val) {
+      val || this.close();
+    }
+  },
+
+  created () {
+    this.$store.dispatch('fetchBooks', {});
+  },
+
+  methods: {
+    editBook (item) {
+      this.editedIndex = this.books.indexOf(item);
+      this.editedItem = { ...item };
+      this.editBookDialog = true;
+    },
+
+    addBook() {
+      if (this.editedIndex > -1) {
+        Object.assign(this.books[this.editedIndex], this.editedItem);
+        axios.put(`/api/book/edit/${this.editedItem.id}`, {
+          title: this.editedItem.title,
+          isbn: this.editedItem.isbn,
+          description: this.editedItem.description,
+          publish_year: this.editedItem.publish_year,
+          amount: this.editedItem.amount
+        });
       }
+      this.close();
     },
 
-    watch: {
-      dialog (val) {
-        val || this.close()
-      },
+    deleteBook (item) {
+      const index = this.books.indexOf(item);
+      if (confirm('Czy jesteś pewien, że chcesz usunąć tę książkę?')) {
+        axios.delete(`/api/book/delete/${item.id}`, {});
+      }
+      this.books.splice(index, 1);
     },
 
-    created () {
-        this.$store.dispatch("fetchBooks", {});
+    close () {
+      this.editBookDialog = false;
+      this.$nextTick(() => {
+        this.editedItem = { ...this.defaultItem };
+        this.editedIndex = -1;
+      });
     },
 
-    methods: {
-      editBook (item) {
-        this.editedIndex = this.books.indexOf(item)
-        this.editedItem = Object.assign({}, item)
-        this.editBookDialog = true
-      },
+    closeImage () {
+      this.editImageDialog = false;
+      this.$nextTick(() => {
+        this.editedItem = { ...this.defaultItem };
+        this.editedIndex = -1;
+      });
+    },
 
-      addBook() {
-        if (this.editedIndex > -1) {
-          Object.assign(this.books[this.editedIndex], this.editedItem)
-          axios.put('/api/book/edit/'+ this.editedItem.id, {
-            title: this.editedItem.title,
-            isbn: this.editedItem.isbn,
-            description: this.editedItem.description,
-            publish_year: this.editedItem.publish_year,
-            amount: this.editedItem.amount
-          })
-          } 
-          this.close()
-      },
+    showImage (item) {
+      this.image = item.cover;
+      this.editedIndex = this.books.indexOf(item);
+      this.editedItem = { ...item };
+      this.editImageDialog = true;
+    },
 
-      deleteBook (item) {
-        const index = this.books.indexOf(item)
-        if (confirm('Czy jesteś pewien, że chcesz usunąć tę książkę?')) {
-            axios.delete('/api/book/delete/'+ item.id, {})
+    refreshImage () {
+      const formData = new FormData();
+      formData.append('cover', this.cover); // formData nie działa z PUT ale z POST
+
+      const config = {
+        headers: {
+          'Content-Type': 'multipart/form-data'
         }
-        this.books.splice(index, 1)
-      },
+      };
 
-      close () {
-        this.editBookDialog = false
-        this.$nextTick(() => {
-          this.editedItem = Object.assign({}, this.defaultItem)
-          this.editedIndex = -1
-        })
-      },
-
-      closeImage () {
-        this.editImageDialog = false
-        this.$nextTick(() => {
-          this.editedItem = Object.assign({}, this.defaultItem)
-          this.editedIndex = -1
-        })
-      },
-
-      showImage (item) {
-        this.image = item.cover
-        this.editedIndex = this.books.indexOf(item)
-        this.editedItem = Object.assign({}, item)
-        this.editImageDialog = true
-      },
-
-      refreshImage (item) {
-        let formData = new FormData();
-        formData.append("cover", this.cover); //formData nie działa z PUT ale z POST
-
-        let config = {
-          headers: {
-            'Content-Type' : 'multipart/form-data'
-            }
-          }
-
-        axios.post('/api/book/changeImage/' + this.editedItem.id, formData, config)
-        this.$store.dispatch("fetchBooks", {});
-      },
-
-      getColor (amount) {
-        if (amount = 0) return 'red'
-        else return 'green'
-      }
+      axios.post(`/api/book/changeImage/${this.editedItem.id}`, formData, config);
+      this.$store.dispatch('fetchBooks', {});
     },
+
+    getColor (amount) {
+      if (amount === 0) return 'red';
+      return 'green';
+    }
   }
+};
 </script>

@@ -24,7 +24,7 @@
                                 <v-icon x-large>mdi-view-dashboard</v-icon>
                             </v-btn>
                         </router-link>
-                        
+
                         <v-menu offset-y>
                             <template v-slot:activator="{ on }">
                                 <v-btn icon v-on="on">
@@ -45,23 +45,23 @@
 </template>
 
 <script>
-    import About from "../components/About.vue";
-    import AdminPanel from "../components/AdminPanel/AdminPanel.vue";
-    export default {
-        name: "Main",
-        components: {
-            About, AdminPanel
-        },
-        computed: {
-            isLoggedIn: function(){ return this.$store.getters.isLoggedIn}
-        },
-        methods: {
-            logout() {
-                this.$store.dispatch('logout')
-                    .then(() => this.$router.push({name: 'login'}))
-            },
-        }
+import About from './About.vue';
+
+export default {
+  name: 'Main',
+  components: {
+    About
+  },
+  computed: {
+    isLoggedIn() { return this.$store.getters.isLoggedIn; }
+  },
+  methods: {
+    logout() {
+      this.$store.dispatch('logout')
+        .then(() => this.$router.push({ name: 'login' }));
     }
+  }
+};
 </script>
 
 <style scoped>

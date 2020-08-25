@@ -105,70 +105,68 @@
 </template>
 
 <script>
-import axios from "axios";
+/* eslint-disable */
+export default {
+  name: 'AddBorrow',
+  data() {
+    return {
+      valid: false,
+      value: true,
+      selectedReader: '',
+      selectedBooks: [],
+      date: '',
+      menu: false,
+      readerRules: [
+        (v) => !!v || 'Wybranie czytelnika jest wymagane!'
+      ],
+      booksRules: [
+        (v) => !!v || 'Wymagane jest wybranie co najmniej jednej książki!',
+        (v) => v.length <= 5 || 'Maksymalnie można wybrać 5 książek'
+      ],
+      dateRules: [
+        (v) => !!v || 'Wymagane jest wybranie daty!'
+      ]
+    };
+  },
 
-    export default {
-        name: "AddBorrow",
-        data() {
-            return {
-                valid: false,
-                value: true,
-                selectedReader: "",
-                selectedBooks: [],
-                date: '',
-                menu: false,
-                readerRules: [
-                    v => !!v || 'Wybranie czytelnika jest wymagane!',
-                ],
-                booksRules: [
-                    v => !!v || 'Wymagane jest wybranie co najmniej jednej książki!',
-                    v => v.length <= 5 || 'Maksymalnie można wybrać 5 książek',
-                ],
-                dateRules: [
-                    v => !!v || 'Wymagane jest wybranie daty!'
-                ]
-            }
-        },
-
-        methods: {
-            validate() {
-                if(this.$refs.form.validate())
-                {
-                     this.$store.dispatch('borrowBooks', {
-                        user_id: this.selectedReader,
-                        book_id: this.selectedBooks,
-                        borrows_date: this.date,
-                    })
-                        .catch(function (error) {
-                            console.log(error);
-                        });
-                }
-            },
-            reset() {
-                this.$refs.form.reset()
-            }
-        },
-
-        computed: {
-            readers() {
-                return this.$store.getters.getReaders;
-            },
-            books() {
-                return this.$store.getters.getBooks;
-            }
-        },
-
-        watch: {
-            dialog(val) {
-                val || this.close()
-            },
-        },
-
-        created() {
-            this.$store.dispatch("fetchReaders", {});
-            this.$store.dispatch("fetchAvailableBooks", {});
-        },
+  methods: {
+    validate() {
+      if (this.$refs.form.validate()) {
+        this.$store.dispatch('borrowBooks', {
+          user_id: this.selectedReader,
+          book_id: this.selectedBooks,
+          borrows_date: this.date
+        })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
+    },
+    reset() {
+      this.$refs.form.reset();
     }
+  },
+
+  computed: {
+    readers() {
+      return this.$store.getters.getReaders;
+    },
+    books() {
+      return this.$store.getters.getBooks;
+    }
+  },
+
+  watch: {
+    dialog(val) {
+      val || this.close();
+    }
+  },
+
+  created() {
+    this.$store.dispatch('fetchReaders', {});
+    this.$store.dispatch('fetchAvailableBooks', {});
+  }
+};
 </script>
 
 <style scoped>
