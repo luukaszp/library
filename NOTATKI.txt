@@ -28,8 +28,6 @@ z powrotem aby zobaczyć zmiany)
 
 skonfigurować email - wypożyczyć można na 30 dni, 7 dni przed terminem wysyłać emaila !!!
 
-AddBorrow - walidacja by wybrac date
-
 !!czy zamiast rozwijanych list w formach (wypozyczenia, dodaj ksiazke) dodac normalne pole, gdzie podczas
 wpisywania danych automatycznie wyszukuje i podpowiada dane (jak wyszukiwarka google) albo sortowac alfabetycznie
 istniejące już pole
@@ -40,8 +38,6 @@ W przypadku czerwonego chipa w Borrows (3 dni do terminu oddania książki) - wy
 
 dodac rules do pliku jednego rules.js !!!
 
-dodać rules do edycji dat w Borrows.vue
-
 do Borrows.vue podczas zatwierdzania oddania książki dodać alert z zapytaniem czy TAK czy NIE
 
 czy przy wpisaniu złych danych można poprawić i się np zarejestrować czy trzeba odświeżyć stronę - SPRAWDZIC
@@ -49,10 +45,6 @@ czy przy wpisaniu złych danych można poprawić i się np zarejestrować czy tr
 czy zrobić custom components dla Unauthorized / Error page not found
 
 schowanie v-text-field dla pracownika (AdminPanel - Pracownicy + role) i ikone panelu dla czytelników/gości
-
-przy logowaniu nie może być login v.length === 10 i 13, sprawdzić czy można inaczej zrobić
-
-rules dla daty w Borrows.vue
 
 AdminPanel/Books - szerokosc menu panelu jest zbyt duza, tabela ksiazki posiada duzo danych i ukazuje się pod menu bocznym,
 tworzy przy tym puste miejsce po prawej stronie od panelu
@@ -62,8 +54,6 @@ przeszukać bazę podczas wpisywania w formularz
 
 zmienic alert/confirm na niestandardowe (package)
 
-dodać upload button - package
-
-dodać eslint jak na PC
-
 refresh JWT token / ciagle mozna wejsc tam gdzie nie powinno (admin panel)
+
+podczas usuwania z bazy dodac okno confirm

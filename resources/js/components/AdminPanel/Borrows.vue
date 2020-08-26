@@ -46,10 +46,27 @@
                   <v-form v-model="valid" ref="form">
                     <v-row>
                       <v-col cols="12" sm="6" md="4">
-                        <v-text-field v-model="editedItem.borrows_date" :rules="borrowsRules" label="Data wypożyczenia"></v-text-field>
-                      </v-col>
-                      <v-col cols="12" sm="6" md="4">
-                        <v-text-field v-model="editedItem.returns_date" :rules="returnsRules" label="Data zwrotu"></v-text-field>
+                        <v-menu
+                                    v-model="menu"
+                                    :close-on-content-click="false"
+                                    :nudge-right="40"
+                                    transition="scale-transition"
+                                    offset-y
+                                    min-width="290px"
+                            >
+                            <template v-slot:activator="{ on, attrs }">
+                                <v-text-field
+                                v-model="editedItem.borrows_date"
+                                label="Wybierz datę wypożyczenia"
+                                prepend-icon="mdi-calendar"
+                                readonly
+                                v-bind="attrs"
+                                v-on="on"
+                                :rules="borrowsRules"
+                                ></v-text-field>
+                            </template>
+                            <v-date-picker v-model="editedItem.borrows_date" @input="menu = false"></v-date-picker>
+                            </v-menu>
                       </v-col>
                     </v-row>
                   </v-form>
@@ -99,6 +116,7 @@ export default {
     valid: false,
     search: '',
     show: false,
+    menu: false,
     headers: [
       {
         text: 'Tytuł książki',
@@ -126,9 +144,6 @@ export default {
     },
     borrowsRules: [
       (v) => !!v || 'Data wypożyczenia jest wymagana'
-    ],
-    returnsRules: [
-      (v) => !!v || 'Data zwrotu jest wymagana'
     ]
   }),
 
@@ -163,11 +178,11 @@ export default {
         if (this.editedIndex > -1) {
           Object.assign(this.borrows[this.editedIndex], this.editedItem);
           axios.put(`/api/borrow/edit/${this.editedItem.id}`, {
-            borrows_date: this.editedItem.borrows_date,
-            returns_date: this.editedItem.returns_date
+            borrows_date: this.editedItem.borrows_date
           });
         }
         this.close();
+        this.$store.dispatch('fetchBorrows', {});
       }
     },
 

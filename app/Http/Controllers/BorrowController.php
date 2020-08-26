@@ -194,4 +194,48 @@ class BorrowController extends Controller
             );
         }
     }
+
+    /**
+     * Edit specific borrowing.
+     *
+     * @param  Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    public function editBorrow(Request $request, $id)
+    {
+        $borrow = Borrow::find($id);
+
+        if (!$borrow) {
+            return response()->json(
+                [
+                'success' => false,
+                'message' => 'Sorry, borrowing with id ' . $id . ' cannot be found.'
+                ], 400
+            );
+        }
+
+        $borrow->borrows_date = $request->borrows_date;
+        $date = Carbon::createFromFormat('Y-m-d', $request->borrows_date);
+        $daysToAdd = 30;
+        $date = $date->addDays($daysToAdd);
+        $borrow->returns_date = $date->toDateString();
+        $borrow->save();
+
+        if ($borrow->save()) {
+            return response()->json(
+                [
+                'success' => true,
+                'message' => 'Borrowing has been updated',
+                ]
+            );
+        } else {
+            return response()->json(
+                [
+                'success' => false,
+                'message' => 'Sorry, borrowing could not be updated.',
+                ], 500
+            );
+        }
+    }
 }

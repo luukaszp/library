@@ -72,6 +72,7 @@ export default {
   },
 
   created () {
+    this.$store.dispatch('fetchDelays', {});
     this.$store.dispatch('fetchHistory', {});
   },
 

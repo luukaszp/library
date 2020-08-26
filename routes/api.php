@@ -76,5 +76,6 @@ Route::group(
         Route::get('borrow/getBorrows', 'BorrowController@getBorrows');
         Route::get('borrow/history', 'BorrowController@getPastBorrows');
         Route::get('borrow/getDelayed', 'BorrowController@getDelayedBorrows');
+        Route::put('borrow/edit/{id}', 'BorrowController@editBorrow');
     }
 );
