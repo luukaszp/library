@@ -25,10 +25,10 @@ export default {
         })
           .then((response) => {
             if (response.data.success === true) {
-              this.$swal('Wypożyczono', 'Wypożyczenie książki powiodło się!', 'success');
+              alert('Wypożyczenie książki powiodło się!')
               router.push('/admin-panel/borrows');
             } else {
-              this.$swal('Błąd', 'Coś poszło nie tak!', 'error');
+              alert('Coś poszło nie tak!');
             }
             resolve(response);
           })

@@ -119,7 +119,7 @@
                 <v-btn
                   color=brown
                   @click="refreshImage"
-                  :disabled="this.cover != null"
+                  :disabled="!valid"
                 >
                   Odśwież
                 </v-btn>
@@ -175,6 +175,7 @@ export default {
     editImageDialog: false,
     defaultButtonText: 'Zmień zdjęcie okładki',
     isSelecting: false,
+    valid: false,
     search: '',
     cover: [],
     image: '',
@@ -234,9 +235,9 @@ export default {
       (v) => v.length === 4 || 'Rok wydania powinien zawierać 4 cyfry'
     ],
     coverRules: [
-        (v) => !!v || 'Zdjęcie okładki książki jest wymagane!',
-        (v) => v.size < 2000000 || 'Zdjęcie okładki powinno być mniejsze niż 2MB!'
-    ],
+      (v) => !!v || 'Zdjęcie okładki książki jest wymagane!',
+      (v) => v.size < 2000000 || 'Zdjęcie okładki powinno być mniejsze niż 2MB!'
+    ]
   }),
 
   computed: {
@@ -247,7 +248,7 @@ export default {
       return this.$store.getters.getBooks;
     },
     buttonText() {
-      return this.selectedFile ? this.selectedFile.name : this.defaultButtonText
+      return this.selectedFile ? this.selectedFile.name : this.defaultButtonText;
     }
   },
 
@@ -290,7 +291,7 @@ export default {
         icon: 'question',
         showCancelButton: true,
         confirmButtonText: 'Usuń',
-        cancelButtonText: 'Anuluj',
+        cancelButtonText: 'Anuluj'
       }).then((result) => {
         if (result.value) {
           axios.delete(`/api/book/delete/${item.id}`, {});
@@ -326,16 +327,17 @@ export default {
     },
 
     onButtonClick() {
-      this.isSelecting = true
+      this.isSelecting = true;
       window.addEventListener('focus', () => {
-        this.isSelecting = false
-      }, { once: true })
+        this.isSelecting = false;
+      }, { once: true });
 
-      this.$refs.uploader.click()
+      this.$refs.uploader.click();
     },
-    
+
     onFileChanged(e) {
-      this.cover = e.target.files[0]
+      this.cover = e.target.files[0];
+      this.valid = true;
     },
 
     refreshImage () {

@@ -88,7 +88,7 @@ const routes = [
           if (store.getters.loggedUser.is_admin === true) {
             next();
           } else {
-            alert('Unauthorized');
+            Vue.swal('Nieautoryzowany', 'Odmowa dostępu!', 'error');
           }
         }
       },
@@ -100,7 +100,7 @@ const routes = [
           if (store.getters.loggedUser.is_admin === true) {
             next();
           } else {
-            alert('Unauthorized');
+            Vue.$swal('Nieautoryzowany', 'Odmowa dostępu!', 'error');
           }
         }
       },
@@ -172,13 +172,13 @@ router.beforeEach((to, from, next) => {
       if (store.getters.loggedUser.is_worker === true) {
         next();
       } else {
-        alert('Unauthorized');
+        Vue.$swal('Nieautoryzowany', 'Odmowa dostępu!', 'error');
       }
     } else if (to.matched.some((record) => record.meta.is_admin)) {
       if (store.getters.loggedUser.is_admin === true) {
         next();
       } else {
-        alert('Unauthorized');
+        Vue.$swal('Nieautoryzowany', 'Odmowa dostępu!', 'error');
       }
     }
   } else {

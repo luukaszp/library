@@ -197,7 +197,7 @@ export default {
         if (result.value) {
           axios.delete(`/api/reader/delete/${item.id}`, {});
           this.readers.splice(index, 1);
-          this.$swal('Usunięto', 'Pomyślnie usunięto autora', 'success');
+          this.$swal('Usunięto', 'Pomyślnie usunięto czytelnika', 'success');
         } else {
           this.$swal('Anulowano', 'Akcja została anulowana', 'info');
         }

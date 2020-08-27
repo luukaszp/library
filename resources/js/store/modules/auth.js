@@ -104,14 +104,14 @@ export default {
         })
           .then((response) => {
             if (response.data.success === true) {
-              this.$swal('Zarejestrowano', 'Zarejestrowano pomyślnie!', 'success');
+              alert('Zarejestrowano pomyślnie!');
               if (user.id_number === '') {
                 router.push('/admin-panel/readers');
               } else {
                 router.push('/admin-panel/workers');
               }
             } else {
-              this.$swal('Błąd', 'Użytkownik o podanym loginie już istnieje!', 'error');
+              alert('Użytkownik o podanym loginie już istnieje!');
             }
             resolve(response);
           })
