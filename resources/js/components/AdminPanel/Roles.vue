@@ -140,6 +140,7 @@ export default {
             is_admin: this.editedItem.is_admin
           });
         }
+        this.$store.dispatch('fetchRoles', {})
         this.close();
       }
     },

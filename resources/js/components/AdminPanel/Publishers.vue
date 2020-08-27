@@ -137,10 +137,21 @@ export default {
 
     deletePublisher(item) {
       const index = this.publishers.indexOf(item);
-      if (confirm('Czy jesteś pewien, że chcesz usunąć te wydawnictwo?')) {
-        axios.delete(`/api/publisher/delete/${item.id}`, {});
-        this.publishers.splice(index, 1);
-      }
+      this.$swal({
+        title: 'Czy jesteś pewien, że chcesz usunąć te wydawnictwo?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Usuń',
+        cancelButtonText: 'Anuluj',
+      }).then((result) => {
+        if (result.value) {
+          axios.delete(`/api/publisher/delete/${item.id}`, {});
+          this.publishers.splice(index, 1);
+          this.$swal('Usunięto', 'Pomyślnie usunięto wydawnictwo', 'success');
+        } else {
+          this.$swal('Anulowano', 'Akcja została anulowana', 'info');
+        }
+      });
     },
 
     addPublisher() {
@@ -159,6 +170,7 @@ export default {
               console.log(error);
             });
         }
+        this.$store.dispatch('fetchPublishers', {});
         this.close();
       }
     },

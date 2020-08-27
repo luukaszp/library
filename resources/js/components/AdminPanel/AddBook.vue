@@ -249,10 +249,10 @@ export default {
         axios.post('http://127.0.0.1:8000/api/book/store', formData, config)
           .then((response) => {
             if (response.data.success == true) {
-              alert('Pomyślnie dodano książkę do bazy bibliotecznej!');
+              this.$swal('Dodano', 'Pomyślnie dodano książkę do bazy bibliotecznej!', 'success');
               this.$router.push('/admin-panel/books');
             } else {
-              alert('Książka o podanych danych już isnieje.');
+              this.$swal('Błąd', 'Książka o podanych danych już isnieje', 'error');
             }
           })
           .catch((error) => {

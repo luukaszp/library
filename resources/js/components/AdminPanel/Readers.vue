@@ -180,16 +180,28 @@ export default {
             email: this.editedItem.email
           });
         }
+        this.$store.dispatch('fetchReaders', {});
         this.close();
       }
     },
 
     deleteReader (item) {
       const index = this.readers.indexOf(item);
-      if (confirm('Czy jesteś pewien, że chcesz usunąć tego czytelnika?')) {
-        axios.delete(`/api/reader/delete/${item.id}`, {});
-      }
-      this.readers.splice(index, 1);
+      this.$swal({
+        title: 'Czy jesteś pewien, że chcesz usunąć tego czytelnika?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Usuń',
+        cancelButtonText: 'Anuluj',
+      }).then((result) => {
+        if (result.value) {
+          axios.delete(`/api/reader/delete/${item.id}`, {});
+          this.readers.splice(index, 1);
+          this.$swal('Usunięto', 'Pomyślnie usunięto autora', 'success');
+        } else {
+          this.$swal('Anulowano', 'Akcja została anulowana', 'info');
+        }
+      });
     },
 
     close () {

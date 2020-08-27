@@ -138,10 +138,21 @@ export default {
 
     deleteCategory(item) {
       const index = this.categories.indexOf(item);
-      if (confirm('Czy jesteś pewien, że chcesz usunąć tę kategorię?')) {
-        axios.delete(`/api/category/delete/${item.id}`, {});
-        this.categories.splice(index, 1);
-      }
+      this.$swal({
+        title: 'Czy jesteś pewien, że chcesz usunąć tę kategorię?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Usuń',
+        cancelButtonText: 'Anuluj',
+      }).then((result) => {
+        if (result.value) {
+          axios.delete(`/api/category/delete/${item.id}`, {});
+          this.categories.splice(index, 1);
+          this.$swal('Usunięto', 'Pomyślnie usunięto kategorię', 'success');
+        } else {
+          this.$swal('Anulowano', 'Akcja została anulowana', 'info');
+        }
+      });
     },
 
     addCategory() {
@@ -160,6 +171,7 @@ export default {
               console.log(error);
             });
         }
+        this.$store.dispatch('fetchCategories', {});
         this.close();
       }
     },

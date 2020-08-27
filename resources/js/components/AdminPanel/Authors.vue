@@ -149,10 +149,21 @@ export default {
 
     deleteAuthor(item) {
       const index = this.authors.indexOf(item);
-      if (confirm('Czy jesteś pewien, że chcesz usunąć tego autora?')) {
-        axios.delete(`/api/author/delete/${item.id}`, {});
-        this.authors.splice(index, 1);
-      }
+      this.$swal({
+        title: 'Czy jesteś pewien, że chcesz usunąć tego autora?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Usuń',
+        cancelButtonText: 'Anuluj',
+      }).then((result) => {
+        if (result.value) {
+          axios.delete(`/api/author/delete/${item.id}`, {});
+          this.authors.splice(index, 1);
+          this.$swal('Usunięto', 'Pomyślnie usunięto autora', 'success');
+        } else {
+          this.$swal('Anulowano', 'Akcja została anulowana', 'info');
+        }
+      });
     },
 
     addAuthor() {
@@ -173,6 +184,7 @@ export default {
               console.log(error);
             });
         }
+        this.$store.dispatch('fetchAuthors', {});
         this.close();
       }
     },

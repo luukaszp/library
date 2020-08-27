@@ -64,3 +64,5 @@ refresh tokena i można korzystać dalej. Dodaj alert z opcją tak lub nie o inf
 Sesja wygasła, czy chciałbyś się wylogować:
 TAK - przechodzi na stronę logowania/stronę główną
 NIE - prośba o podanie hasła i wtedy odświeża okno i można dalej korzystać?
+
+!! co się stanie jeżeli usunie się kategorię/autora a wcześniej zostanie dodana książka danej kategorii/autora !!

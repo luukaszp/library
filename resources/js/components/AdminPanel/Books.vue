@@ -279,15 +279,27 @@ export default {
           amount: this.editedItem.amount
         });
       }
+      this.$store.dispatch('fetchBooks', {});
       this.close();
     },
 
     deleteBook (item) {
       const index = this.books.indexOf(item);
-      if (confirm('Czy jesteś pewien, że chcesz usunąć tę książkę?')) {
-        axios.delete(`/api/book/delete/${item.id}`, {});
-      }
-      this.books.splice(index, 1);
+      this.$swal({
+        title: 'Czy jesteś pewien, że chcesz usunąć tę książkę?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Usuń',
+        cancelButtonText: 'Anuluj',
+      }).then((result) => {
+        if (result.value) {
+          axios.delete(`/api/book/delete/${item.id}`, {});
+          this.books.splice(index, 1);
+          this.$swal('Usunięto', 'Pomyślnie usunięto książkę', 'success');
+        } else {
+          this.$swal('Anulowano', 'Akcja została anulowana', 'info');
+        }
+      });
     },
 
     close () {

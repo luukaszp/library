@@ -179,16 +179,28 @@ export default {
             email: this.editedItem.email
           });
         }
+        this.$store.dispatch('fetchWorkers', {});
         this.close();
       }
     },
 
     deleteWorker (item) {
       const index = this.workers.indexOf(item);
-      if (confirm('Czy jesteś pewien, że chcesz usunąć tego pracownika?')) {
-        axios.delete(`/api/worker/delete/${item.id}`, {});
-      }
-      this.workers.splice(index, 1);
+      this.$swal({
+        title: 'Czy jesteś pewien, że chcesz usunąć tego pracownika?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Usuń',
+        cancelButtonText: 'Anuluj',
+      }).then((result) => {
+        if (result.value) {
+          axios.delete(`/api/worker/delete/${item.id}`, {});
+          this.workers.splice(index, 1);
+          this.$swal('Usunięto', 'Pomyślnie usunięto pracownika', 'success');
+        } else {
+          this.$swal('Anulowano', 'Akcja została anulowana', 'info');
+        }
+      });
     },
 
     close () {

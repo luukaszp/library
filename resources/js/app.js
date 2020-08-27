@@ -1,4 +1,3 @@
-import { get } from 'lodash';
 import Vue from 'vue';
 import axios from 'axios';
 import VueAxios from 'vue-axios';
@@ -55,6 +54,7 @@ axios.interceptors.request.use(
   }); tutaj miał być warunek, czy chce się ponownie zalogować czy też nie, ale to .js */
 
 axios.interceptors.response.use((response) => response,
+  // eslint-disable-next-line consistent-return
   (error) => {
     if (error.response.status !== 401) {
       return Promise.reject(error);
@@ -69,6 +69,7 @@ axios.interceptors.response.use((response) => response,
         if (result.value) {
           Vue.swal('Wylogowano', 'Pomyślnie wylogowano!', 'success');
           localStorage.removeItem('access_token');
+          delete axios.defaults.headers.Authorization;
           router.push('/login');
         }
       });
