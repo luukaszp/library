@@ -57,3 +57,10 @@ zmienic alert/confirm na niestandardowe (package)
 refresh JWT token / ciagle mozna wejsc tam gdzie nie powinno (admin panel)
 
 podczas usuwania z bazy dodac okno confirm
+
+!!!! SUPER WAŻNE !!!! :
+Po 60 minutach token expires, wychodzi błąd że jest dostęp nieupoważniony, po odświeżeniu strony następuje
+refresh tokena i można korzystać dalej. Dodaj alert z opcją tak lub nie o info że:
+Sesja wygasła, czy chciałbyś się wylogować:
+TAK - przechodzi na stronę logowania/stronę główną
+NIE - prośba o podanie hasła i wtedy odświeża okno i można dalej korzystać?

@@ -16,12 +16,13 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('loginReader', 'AuthController@loginReader');
 Route::post('loginWorker', 'AuthController@loginWorker');
+Route::post('refresh', 'AuthController@refresh');
 
 Route::group(
     ['middleware' => 'auth.jwt'], function () {
         Route::get('logout', 'AuthController@logout');
         Route::post('logout', 'AuthController@logout');
-        Route::post('refresh', 'AuthController@refresh');
+        //Route::post('refresh', 'AuthController@refresh');
         Route::post('me', 'AuthController@me');
     }
 );
@@ -36,10 +37,6 @@ Route::group(
         Route::put('roles/edit/{id}', 'UserController@editRoles');
     }
 );
-
-/*Route::group(['middleware' => ['auth.jwt', 'worker']], function () {
-
-});*/
 
 Route::group(
     ['middleware' => ['auth.jwt', 'worker']], function () {
