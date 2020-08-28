@@ -10,7 +10,6 @@ class Category extends Model
      * @var string
      */
     protected $table = 'categories';
-    protected $hidden = ['pivot'];
 
     /**
      * @var array
@@ -23,6 +22,6 @@ class Category extends Model
 
     public function books()
     {
-        return $this->belongsToMany(Song::class, 'category_book');
+        return $this->hasMany(Book::class);
     }
 }

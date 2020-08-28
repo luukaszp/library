@@ -3,54 +3,63 @@
 namespace App\Http\Controllers;
 
 use App\Book;
+use App\Category;
+use App\Author;
+use App\Publisher;
+use App\Http\Requests\StoreBook;
 use Illuminate\Http\Request;
+use Intervention\Image\Facades\Image;
+use DB;
 
 class BookController extends Controller
 {
     /**
      * Display a listing of books.
      *
-     * @param Request $request
-     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     * @return Response
      */
-    public function index(Request $request)
+    public function getBooks()
     {
-        $books = Book::query();
-
-        if ($request->has('sort') && $request->get('sort') === 'date_desc') {
-            $books->orderBy('created_at', 'desc');
-        }
-
-        if ($request->has('query')) {
-            $query = $request->get('query');
-            $books->where('artist', 'like', '%' . $query . '%')
-                ->orWhere('title', 'like', '%' . $query . '%');
-        }
-
-        if ($request->has('category')) {
-            $category = $request->get('category');
-            $books->whereHas('categories', function ($q) use ($category) {
-                $q->where('category_id', $category);
-            });
-        }
-        return $books->paginate(6, ['id', 'title', 'description', 'publish_year'])->appends($request->input());
+        $data = DB::table('books')
+            ->join('categories', 'categories.id', '=', 'books.category_id')
+            ->join('publishers', 'publishers.id', '=', 'books.publisher_id')
+            ->join('authors', 'authors.id', '=', 'books.author_id')
+            ->select(
+                'books.id', 'books.title', 'books.isbn', 'books.description', 'books.publish_year',
+                'books.amount', 'categories.name as categoryName', 'authors.name as authorName',
+                'authors.surname', 'publishers.name as publisherName', 'books.cover'
+            )
+            ->get()
+            ->toArray();
+        return $data;
     }
 
     /**
-     * Display a listing of books that needs to be verified.
+     * Display a listing of available books.
      *
      * @return Response
      */
-    public function verify()
+    public function getAvailableBooks()
     {
-        $books = Book::where('is_accepted', '0')->get(['title', 'description', 'publish_year'])->toArray();
-
-        return $books;
+        $data = DB::table('books')
+            ->where('books.amount', '>' , '0')
+            ->join('categories', 'categories.id', '=', 'books.category_id')
+            ->join('publishers', 'publishers.id', '=', 'books.publisher_id')
+            ->join('authors', 'authors.id', '=', 'books.author_id')
+            ->select(
+                'books.id', 'books.title', 'books.isbn', 'books.description', 'books.publish_year',
+                'books.amount', 'categories.name as categoryName', 'authors.name as authorName',
+                'authors.surname', 'publishers.name as publisherName', 'books.cover'
+            )
+            ->get()
+            ->toArray();
+        return $data;
     }
 
     /**
      * Display book by id
-     * @param $id
+     *
+     * @param  $id
      * @return \Illuminate\Http\JsonResponse
      */
     public function show($id)
@@ -58,82 +67,227 @@ class BookController extends Controller
         $book = Book::with('author:id,name,surname')->find($id); //dodać wydawnictwo
 
         if (!$book) {
-            return response()->json([
+            return response()->json(
+                [
                 'success' => false,
                 'message' => 'Sorry, book with id ' . $id . ' cannot be found.',
-            ], 400);
+                ], 400
+            );
         }
 
-        return response()->json([
+        return response()->json(
+            [
             'success' => true,
             'book' => $book,
-        ]);
+            ]
+        );
     }
 
     /**
      * Store a newly created book.
      *
-     * @param Request $request
+     * @param  Request $request
      * @return \Illuminate\Http\JsonResponse
      * @throws \Illuminate\Validation\ValidationException
      */
     public function store(StoreBook $request) //create StoreBook
     {
         $book = new Book();
-        $book->isbn = $request->isbn;
-        $book->title = $request->title;
-        $book->description = $request->description;
-        $book->publish_year = $request->publish_year;
+        $book->title = $request->get('title');
+        $book->isbn = $request->get('isbn');
+        $book->description = $request->get('description');
+        $book->publish_year = $request->get('publish_year');
+        $book->amount = $request->get('amount');
 
-        if (auth()->user()->books()->save($book)) {
-            $book->categories()->attach($request->categories);
-            return response()->json([
+        $book->author_id = $request->get('author');
+        $book->category_id = $request->get('category');
+        $book->publisher_id = $request->get('publisher');
+
+        if ($file = $request->hasFile('cover')) {
+            $book->cover = $imagePath = $request->file('cover')->store('books', 'public');
+
+            $cover = Image::make(public_path("storage/{$imagePath}"))->fit(1000, 1000);
+            $cover->save();
+
+            $imageArray = ['cover' => $imagePath];
+        }
+
+        //if (auth()->user()->books()->save($book)) { Tutaj użytkownik zalogowany
+        if ($book->save()) {
+            return response()->json(
+                [
                 'success' => true,
                 'book' => $book
-            ], 201);
+                ], 201
+            );
         } else {
-            return response()->json([
+            return response()->json(
+                [
                 'success' => false,
                 'message' => 'Sorry, book could not be added.',
-            ], 500);
+                ], 500
+            );
         }
     }
 
     /**
-     * Update the specified book.
+     * Edit current book cover
      *
-     * @param Request $request
-     * @param Book $book
+     * @param  Request $request
      * @return \Illuminate\Http\JsonResponse
+     * @throws \Illuminate\Validation\ValidationException
      */
-    public function update(Request $request, Book $book)
+    public function changeImage(Request $request, $id) //create StoreBook
     {
-        if (!$book) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Sorry, book cannot be found.',
-            ], 400);
+        $book = Book::find($id);
+
+        if ($file = $request->hasFile('cover')) {
+            $book->cover = $imagePath = $request->file('cover')->store('books', 'public');
+
+            $cover = Image::make(public_path("storage/{$imagePath}"))->fit(1000, 1000);
+            $cover->save();
+
+            $imageArray = ['cover' => $imagePath];
         }
 
-        $updated = $book->update($request->only(['isbn', 'title', 'description', 'publish_year']));
+        //if (auth()->user()->books()->save($book)) { Tutaj użytkownik zalogowany
+        if ($book->save()) {
+            return response()->json(
+                [
+                'success' => true,
+                'book' => $book
+                ], 201
+            );
+        } else {
+            return response()->json(
+                [
+                'success' => false,
+                'message' => 'Sorry, book could not be added.',
+                ], 500
+            );
+        }
+    }
 
-        if ($updated) {
-            return response()->json([
+    /**
+     * Edit specific book.
+     *
+     * @param  Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    public function editBook(Request $request, $id)
+    {
+        $book = Book::find($id);
+
+        if (!$book) {
+            return response()->json(
+                [
+                'success' => false,
+                'message' => 'Sorry, book with id ' . $id . ' cannot be found.'
+                ], 400
+            );
+        }
+
+        $book->title = $request->title;
+        $book->isbn = $request->isbn;
+        $book->description = $request->description;
+        $book->publish_year = $request->publish_year;
+        $book->amount = $request->amount;
+        $book->save();
+
+        if ($book->save()) {
+            return response()->json(
+                [
                 'success' => true,
                 'message' => 'Book has been updated',
-            ]);
+                ]
+            );
         } else {
-            return response()->json([
+            return response()->json(
+                [
                 'success' => false,
                 'message' => 'Sorry, book could not be updated.',
-            ], 500);
+                ], 500
+            );
         }
     }
 
     /**
      * Remove the specified book.
      *
-     * @param $id
+     * @param  $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function deleteBook($id)
+    {
+        $book = Book::find($id);
+
+        if (!$book) {
+            return response()->json(
+                [
+                'success' => false,
+                'message' => 'Sorry, book with id ' . $id . ' cannot be found.'
+                ], 400
+            );
+        }
+
+        if ($book->destroy($id)) {
+            return response()->json(
+                [
+                'success' => true
+                ]
+            );
+        } else {
+            return response()->json(
+                [
+                'success' => false,
+                'message' => 'Book could not be deleted.'
+                ], 500
+            );
+        }
+    }
+
+    /**
+     * Update the specified book.
+     *
+     * @param  Request $request
+     * @param  Book    $book
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function update(Request $request, Book $book)
+    {
+        if (!$book) {
+            return response()->json(
+                [
+                'success' => false,
+                'message' => 'Sorry, book cannot be found.',
+                ], 400
+            );
+        }
+
+        $updated = $book->update($request->only(['isbn', 'title', 'description', 'publish_year', 'amount']));
+
+        if ($updated) {
+            return response()->json(
+                [
+                'success' => true,
+                'message' => 'Book has been updated',
+                ]
+            );
+        } else {
+            return response()->json(
+                [
+                'success' => false,
+                'message' => 'Sorry, book could not be updated.',
+                ], 500
+            );
+        }
+    }
+
+    /**
+     * Remove the specified book.
+     *
+     * @param  $id
      * @return \Illuminate\Http\JsonResponse
      */
     public function destroy($id)
@@ -141,22 +295,28 @@ class BookController extends Controller
         $book = Book::find($id);
 
         if (!$book) {
-            return response()->json([
+            return response()->json(
+                [
                 'success' => false,
                 'message' => 'Sorry, book with id ' . $id . ' cannot be found.',
-            ], 400);
+                ], 400
+            );
         }
 
         if ($book->delete()) {
-            return response()->json([
+            return response()->json(
+                [
                 'success' => true,
                 'message' => 'Book was successfully removed',
-            ]);
+                ]
+            );
         } else {
-            return response()->json([
+            return response()->json(
+                [
                 'success' => false,
                 'message' => 'Book could not be deleted.',
-            ], 500);
+                ], 500
+            );
         }
     }
 }

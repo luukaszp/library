@@ -1,31 +1,89 @@
-/**
- * First we will load all of this project's JavaScript dependencies which
- * includes Vue and other libraries. It is a great starting point when
- * building robust, powerful web applications using Vue and Laravel.
- */
+import Vue from 'vue';
+import axios from 'axios';
+import VueAxios from 'vue-axios';
+import VueSweetalert2 from 'vue-sweetalert2';
+import App from './App.vue';
+import vuetify from './plugins/vuetify';
+import router from './router';
+import store from './store/store';
+import '@mdi/font/css/materialdesignicons.css';
+import 'vuetify/dist/vuetify.min.css';
 
+require('./bootstrap');
 
-window.Vue = require('vue');
+axios.defaults.baseURL = 'http://127.0.0.1:8000';
 
-/**
- * The following block of code may be used to automatically register your
- * Vue components. It will recursively scan this directory for the Vue
- * components and automatically register them with their "basename".
- *
- * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
- */
+axios.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('access_token');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    config.headers['Access-Control-Allow-Origin'] = '*';
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
 
-// const files = require.context('./', true, /\.vue$/i)
-// files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
+/* axios.interceptors.response.use((response) => response,
+  (error) => {
+    if (error.response.status !== 401) {
+      return Promise.reject(error);
+    }
+    if (error.response.status === 401) {
+      axios({
+        method: 'POST',
+        url: 'http://127.0.0.1:8000/api/refresh',
+        data: {
+          access_token: localStorage.getItem('access_token')
+        }
+      })
+        .then((response) => {
+          if (response.status === 201) {
+            localStorage.removeItem('access_token');
+            // 1) put token to LocalStorage
+            const token = localStorage.setItem('access_token', response.data.access_token);
 
-Vue.component('example-component', require('./components/ExampleComponent.vue').default);
+            // 2) Change Authorization header
+            axios.defaults.headers.Authorization = `Bearer ${token}`;
+            axios.defaults.headers['Access-Control-Allow-Origin'] = '*';
+            // window.location.reload();
+          }
+        });
+    }
+  }); tutaj miał być warunek, czy chce się ponownie zalogować czy też nie, ale to .js */
 
-/**
- * Next, we will create a fresh Vue application instance and attach it to
- * the page. Then, you may begin adding components to this application
- * or customize the JavaScript scaffolding to fit your unique needs.
- */
+axios.interceptors.response.use((response) => response,
+  // eslint-disable-next-line consistent-return
+  (error) => {
+    if (error.response.status !== 401) {
+      return Promise.reject(error);
+    }
+    if (error.response.status === 401) {
+      Vue.swal({
+        title: 'Sesja wygasła',
+        text: 'Za chwilę zostaniesz wylogowany',
+        icon: 'warning',
+        confirmButtonText: 'Rozumiem'
+      }).then((result) => {
+        if (result.value) {
+          Vue.swal('Wylogowano', 'Pomyślnie wylogowano!', 'success');
+          localStorage.removeItem('access_token');
+          delete axios.defaults.headers.Authorization;
+          router.push('/login');
+        }
+      });
+    }
+  });
 
-const app = new Vue({
-    el: '#app',
-});
+Vue.config.productionTip = false;
+
+Vue.use(VueSweetalert2);
+Vue.use(VueAxios, axios);
+
+new Vue({
+  vuetify,
+  router,
+  store,
+  render: (h) => h(App)
+}).$mount('#app');

@@ -1,6 +1,6 @@
 <template>
     <div id="app">
-            <v-footer color="#3eb4a7" padless>
+            <v-footer color=brown padless>
                 <v-col
                         class="text-center white--text"
                         cols="12"
@@ -12,9 +12,9 @@
 </template>
 
 <script>
-    export default {
-        name: "Footer"
-    }
+export default {
+  name: 'Footer'
+};
 </script>
 
 <style scoped>

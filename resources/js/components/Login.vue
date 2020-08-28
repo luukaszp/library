@@ -1,7 +1,7 @@
 <template>
     <div id="login" class="login">
         <v-container>
-            <v-row class="logform">
+            <v-row class="logform" style="margin-top: 50px">
                 <v-row class="justify-lg-end justify-sm-center pr-5 d-none d-sm-flex">
                     <v-img
                             alt="App Logo"
@@ -28,14 +28,13 @@
                                 v-model="valid"
                                 md="6"
                         >
-                            <h1 class="pt-8">Budget Tracker</h1>
-
+                            <h1 class="pt-8" style="text-align: center">Biblioteka</h1>
+<!--czy dodac logowanie za pomoca numeru karty i emaila ??? -->
                             <v-text-field
                                     class="pa-5 pb-0"
-                                    v-model="email"
-                                    :rules="emailRules"
-                                    label="E-mail"
-                                    single-line
+                                    v-model="login"
+                                    :rules="loginRules"
+                                    label="Numer karty bibliotecznej"
                                     outlined
                                     required
                             ></v-text-field>
@@ -49,7 +48,6 @@
                                     :type="value ? 'password' : 'text'"
                                     :rules="[rules.password]"
                                     @input="_=>password=_"
-                                    single-line
                                     outlined
                                     required
                             ></v-text-field>
@@ -58,7 +56,7 @@
 
                                 <v-btn
                                         :disabled="!valid"
-                                        color=#9090ee
+                                        color=brown
                                         class="mr-5 mb-6"
                                         @click="validate"
                                 >
@@ -66,28 +64,13 @@
                                 </v-btn>
 
                                 <v-btn
-                                        color=#3eb4a7
+                                        color=brown
                                         class="mr-5 mb-6"
                                         @click="reset"
                                 >
                                     Wyczyść dane
                                 </v-btn>
                             </v-row>
-
-                            <hr>
-
-                            <v-row class="pt-7 pb-7 justify-center">
-                                <p class="pr-5 pt-2">Nie masz konta?</p>
-
-                                    <v-btn
-                                            outlined
-                                            to="/register"
-                                            color="#3eb4a7"
-                                    >
-                                        Zarejestruj się
-                                    </v-btn>
-                            </v-row>
-
                         </v-form>
                     </v-card>
                 </v-col>
@@ -97,61 +80,67 @@
 </template>
 
 <script>
-    export default {
-        name: "Login",
-        data() {
-            return {
-                password: "",
-                valid: true,
-                value: true,
-                email: "",
-                emailRules: [
-                    v => !!v || 'E-mail jest wymagany',
-                    v => /.+@.+\..+/.test(v) || 'E-mail musi być prawidłowy',
-                ],
-                rules: {
-                    required: value => !!value || "Hasło jest wymagane",
-                    password: value => {
-                        const pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/;
-                        return (
-                            pattern.test(value) ||
-                            "8 znaków, co najmniej jedna wielka litera, cyfra oraz znak specjalny"
-                        );
-                    }
-                }
-            }
-        },
-        methods: {
-            validate() {
-                if(this.$refs.form.validate())
-                {
-                    this.$store.dispatch('getToken', {
-                        email: this.email,
-                        password: this.password
-                    })
-                        .catch(function (error) {
-                            console.log(error);
-                        });
-                }
-            },
-            reset() {
-                this.$refs.form.reset()
-            },
-        },
+/* eslint-disable */
+export default {
+  name: 'Login',
+  data() {
+    return {
+      password: '',
+      valid: true,
+      value: true,
+      login: '',
+      loginRules: [
+        (v) => !!v || 'Login jest wymagany',
+        (v) => /^\d+$/.test(v) || 'Login musi być prawidłowy',
+        (v) => v.length >= 10 && v.length <= 12 || 'Login powinien zawierać odpowiednią ilość cyfr'
+      ],
+      rules: {
+        required: (value) => !!value || 'Hasło jest wymagane',
+        password: (value) => {
+          const pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/;
+          return (
+            pattern.test(value) || '8 znaków, co najmniej jedna wielka litera, cyfra oraz znak specjalny'
+          );
+        }
+      }
+    };
+  },
+  methods: {
+    validate() {
+      if (this.$refs.form.validate()) {
+        const data = {
+          login: this.login,
+          password: this.password
+        };
+        this.$store.dispatch('login', data)
+          .catch((error) => {
+            console.log(error);
+          });
+        const Toast = this.$swal.mixin({
+          toast: true,
+          position: 'top-end',
+          showConfirmButton: false,
+          timer: 3000,
+          onOpen: (toast) => {
+            toast.addEventListener('mouseenter', this.$swal.stopTimer);
+            toast.addEventListener('mouseleave', this.$swal.resumeTimer);
+          }
+        });
+
+        Toast.fire({
+          icon: 'success',
+          title: 'Zalogowano!'
+        });
+      }
+    },
+    reset() {
+      this.$refs.form.reset();
     }
+  }
+};
 </script>
 
 <style scoped>
-    h1 {
-        text-align: center;
-    }
-    h2 {
-        text-align: center;
-    }
-    .logform
-    {
-        margin-top: 50px;
-    }
     @media only screen and (min-width: 600px) and (max-width: 960px) {
         .form {
             margin-left: 10%;

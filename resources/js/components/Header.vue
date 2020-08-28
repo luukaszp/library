@@ -5,40 +5,36 @@
                         tile
                 >
                     <v-app-bar
-                            color="#3eb4a7"
+                            color=brown
                             dark
                     >
 
-                        <v-toolbar-side-icon>
-                            <v-img alt="App logo" src="../assets/app_logo_t.png" width="90px"/> <!--zmienic logo-->
-                        </v-toolbar-side-icon>
+                        <v-app-bar-nav-icon>
+                            <v-img alt="App logo" :src="require('../assets/app_logo_t.png')" width="90px"/> <!--zmienic logo-->
+                        </v-app-bar-nav-icon>
 
-                        <v-toolbar-title>Budget Tracker</v-toolbar-title>
+                        <v-toolbar-title>Biblioteka</v-toolbar-title>
 
                         <v-spacer></v-spacer>
 
                         <About/>
 
-                        <v-menu offset-y>
-                            <template v-slot:activator="{ on }">
-                                <v-badge color="#9090ee" :content="messages" :value="messages" dot overlap>
-                                    <v-btn v-on="on" icon>
-                                        <v-icon>mdi-email</v-icon>
-                                    </v-btn>
-                                </v-badge>
-                            </template>
-                        </v-menu>
+                        <router-link to="/admin-panel" v-if="loggedUser.is_worker">
+                            <v-btn icon>
+                                <v-icon x-large>mdi-view-dashboard</v-icon>
+                            </v-btn>
+                        </router-link>
 
                         <v-menu offset-y>
                             <template v-slot:activator="{ on }">
-                                <v-btn icon v-on="on">
+                                <v-btn icon v-on="on" :disabled="!isLoggedIn">
                                     <v-icon>mdi-account</v-icon>
                                 </v-btn>
                             </template>
 
                             <v-list>
-                                <v-list-item @click="logout">
-                                    <v-list-item-title @click="logout">Wyloguj się</v-list-item-title>
+                                <v-list-item>
+                                    <span v-if="isLoggedIn"><a @click="logout">Wyloguj się</a></span>
                                 </v-list-item>
                             </v-list>
                         </v-menu>
@@ -49,19 +45,39 @@
 </template>
 
 <script>
-    import About from "../components/About.vue";
-    export default {
-        name: "Main",
-        components: {
-            About
-        },
-        methods: {
-            logout() {
-                this.$store.dispatch('destroyToken')
-                    .then(() => this.$router.push({name: 'login'}))
-            },
+import About from './About.vue';
+
+export default {
+  name: 'Main',
+  components: {
+    About
+  },
+  computed: {
+    isLoggedIn() { return this.$store.getters.isLoggedIn; },
+    loggedUser() { return this.$store.getters.loggedUser; }
+  },
+  methods: {
+    logout() {
+      this.$store.dispatch('logout')
+        .then(() => this.$router.push({ name: 'login' }));
+      const Toast = this.$swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000,
+        onOpen: (toast) => {
+          toast.addEventListener('mouseenter', this.$swal.stopTimer);
+          toast.addEventListener('mouseleave', this.$swal.resumeTimer);
         }
+      });
+
+      Toast.fire({
+        icon: 'success',
+        title: 'Wylogowano!'
+      });
     }
+  }
+};
 </script>
 
 <style scoped>

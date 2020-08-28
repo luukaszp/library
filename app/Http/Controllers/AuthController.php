@@ -4,39 +4,53 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\AuthRequest;
 use App\Http\Requests\Reactivation;
-use App\Mail\VerifyMail;
-use App\Services\SocialAccountsService;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
-use Laravel\Socialite\Facades\Socialite;
 use Tymon\JWTAuth\Exceptions\JWTException;
-use Tymon\JWTAuth\Facades\JWTAuth;
+use JWTAuth;
+use JWTFactory;
 
 class AuthController extends Controller
 {
     /**
-     * Get a JWT via given credentials.
+     * Get a JWT via given credentials for reader
      *
-     * @param Request $request
+     * @param  Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function login(Request $request)
+    public function loginReader(Request $request)
     {
         $credentials = $request->only('card_number', 'password');
 
         try {
             if (!$token = JWTAuth::attempt($credentials)) {
-                return response()->json(['error' => 'Invalid email or password'], 401);
+                return response()->json(['error' => 'Invalid card_number or password'], 401);
             }
         } catch (JWTException $e) {
             return response()->json(['error' => 'Could not create token'], 500);
         }
 
-        if (User::where('email', $request->email)->pluck('is_activated')->first() == 0) {
-            return response()->json(['error' => 'Your account is deactivated'], 401);
+        return $this->respondWithToken($token);
+    }
+
+    /**
+     * Get a JWT via given credentials for worker
+     *
+     * @param  Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function loginWorker(Request $request)
+    {
+        $credentials = $request->only('id_number', 'password');
+
+        try {
+            if (!$token = JWTAuth::attempt($credentials)) {
+                return response()->json(['error' => 'Invalid id_number or password'], 401);
+            }
+        } catch (JWTException $e) {
+            return response()->json(['error' => 'Could not create token'], 500);
         }
 
         return $this->respondWithToken($token);
@@ -44,7 +58,8 @@ class AuthController extends Controller
 
     /**
      * Registration
-     * @param AuthRequest $request
+     *
+     * @param  AuthRequest $request
      * @return \Illuminate\Http\JsonResponse
      * @throws \Illuminate\Validation\ValidationException
      */
@@ -56,8 +71,13 @@ class AuthController extends Controller
         $user->surname = $request->surname;
         $user->email = $request->email;
         $user->card_number = $request->card_number;
+        $user->id_number = $request->id_number;
         $user->password = bcrypt($request->password);
         $user->activation_token = Str::random(40);
+
+        if($request->id_number != null) {
+            $user->is_worker = 1;
+        }
 
         $user->save();
 
@@ -99,16 +119,18 @@ class AuthController extends Controller
     /**
      * Get the token array structure.
      *
-     * @param  string $token
+     * @param string $token
      *
      * @return \Illuminate\Http\JsonResponse
      */
     protected function respondWithToken($token)
     {
-        return response()->json([
+        return response()->json(
+            [
             'access_token' => $token,
             'token_type' => 'bearer',
-            'expires_in' => auth()->factory()->getTTL() * 60,
-        ], 201);
+            'expires_in' => JWTFactory::getTTL() * 60,
+            ], 201
+        );
     }
 }

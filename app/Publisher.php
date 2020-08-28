@@ -10,7 +10,6 @@ class Publisher extends Model
      * @var string
      */
     protected $table = 'publishers';
-    protected $hidden = ['pivot'];
 
     /**
      * @var array
@@ -20,4 +19,9 @@ class Publisher extends Model
     protected $fillable = [
         'name',
     ];
+
+    public function books()
+    {
+        return $this->hasMany(Book::class);
+    }
 }

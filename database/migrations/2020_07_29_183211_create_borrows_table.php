@@ -13,12 +13,22 @@ class CreateBorrowsTable extends Migration
      */
     public function up()
     {
-        Schema::create('borrows', function (Blueprint $table) {
-            $table->inrements('id');
-            $table->string('borrows_date');
-            $table->string('returns_date');
-            $table->timestamps();
-        });
+        Schema::create(
+            'borrows', function (Blueprint $table) {
+                $table->increments('id');
+                $table->string('borrows_date');
+                $table->string('returns_date');
+                $table->boolean('is_returned')->default(0);
+                $table->string('when_returned')->nullable();
+                $table->integer('delay')->nullable();
+                $table->integer('penalty')->nullable();
+                $table->unsignedInteger('user_id');
+                $table->unsignedInteger('book_id');
+                $table->foreign('user_id')->references('id')->on('users');
+                $table->foreign('book_id')->references('id')->on('books');
+                $table->timestamps();
+            }
+        );
     }
 
     /**
