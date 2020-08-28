@@ -19,7 +19,7 @@
 
                         <About/>
 
-                        <router-link to="/admin-panel">
+                        <router-link to="/admin-panel" v-if="loggedUser.is_worker">
                             <v-btn icon>
                                 <v-icon x-large>mdi-view-dashboard</v-icon>
                             </v-btn>
@@ -53,7 +53,8 @@ export default {
     About
   },
   computed: {
-    isLoggedIn() { return this.$store.getters.isLoggedIn; }
+    isLoggedIn() { return this.$store.getters.isLoggedIn; },
+    loggedUser() { return this.$store.getters.loggedUser; }
   },
   methods: {
     logout() {
