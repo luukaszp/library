@@ -61,6 +61,7 @@
 
 <script>
 export default {
+  name: 'AdminPanel',
   data () {
     return {
       items: [

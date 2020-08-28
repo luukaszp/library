@@ -1,6 +1,6 @@
 <template>
     <div id="app">
-            <v-footer color=brown padless>
+            <v-footer color=#654321 padless>
                 <v-col
                         class="text-center white--text"
                         cols="12"

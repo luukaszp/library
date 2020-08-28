@@ -2,6 +2,7 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Login from './components/Login.vue';
+import Main from './components/Main.vue';
 import RegisterReader from './components/AdminPanel/RegisterReader.vue';
 import RegisterWorker from './components/AdminPanel/RegisterWorker.vue';
 import AddBook from './components/AdminPanel/AddBook.vue';
@@ -47,6 +48,11 @@ const routes = [
       requiresAuth: true,
       is_admin: true
     }
+  },
+  {
+    path: '/',
+    name: 'main',
+    component: Main
   },
   {
     path: '/add-book',
