@@ -101,7 +101,7 @@ export default {
       {
         text: 'WYDARZENIA',
         items: [
-          { title: 'Kalendarz imprez', route: '' },
+          { title: 'Kalendarz wydarzeń', route: '' },
           { title: 'Zapowiedzi', route: '' },
           { title: 'Archiwum wydarzeń', route: '' }
         ]
