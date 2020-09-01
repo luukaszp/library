@@ -94,6 +94,14 @@ export default {
           ]
         },
         {
+          action: 'mdi-calendar',
+          title: 'Kalendarz',
+          items: [
+            { title: 'Wydarzenia', route: '/admin-panel/calendar/events' },
+            { title: 'Typy wydarzeń', route: '/admin-panel/calendar/types' }
+          ]
+        },
+        {
           action: 'mdi-gesture-tap-button',
           title: 'Akcje',
           items: [

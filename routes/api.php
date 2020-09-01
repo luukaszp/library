@@ -75,5 +75,10 @@ Route::group(
         Route::get('borrow/history', 'BorrowController@getPastBorrows');
         Route::get('borrow/getDelayed', 'BorrowController@getDelayedBorrows');
         Route::put('borrow/edit/{id}', 'BorrowController@editBorrow');
+
+        Route::get('calendar/type/getTypes', 'TypeController@getTypes');
+        Route::put('calendar/type/edit/{id}', 'TypeController@editType');
+        Route::post('calendar/type/add', 'TypeController@addType');
+        Route::delete('calendar/type/delete/{id}', 'TypeController@deleteType');
     }
 );
