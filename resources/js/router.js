@@ -21,6 +21,7 @@ import DelaysPenalties from './components/AdminPanel/DelaysPenalties.vue';
 import Suggestions from './components/AdminPanel/Suggestions.vue';
 import Opinions from './components/AdminPanel/Opinions.vue';
 import UserForms from './components/AdminPanel/UserForms.vue';
+import NotFound from './components/NotFound.vue';
 import store from './store/store.js';
 
 Vue.use(VueRouter);
@@ -161,6 +162,11 @@ const routes = [
         component: UserForms
       }
     ]
+  },
+  {
+    path: '*',
+    name: 'notfound',
+    component: NotFound
   }
 ];
 
