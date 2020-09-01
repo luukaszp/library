@@ -4,10 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Author;
+use Intervention\Image\Facades\Image;
 
 class AuthorController extends Controller
 {
-    //pokazac info autora + ksiazki
     /**
      * Create a new author.
      *
@@ -17,16 +17,19 @@ class AuthorController extends Controller
      */
     public function addAuthor(Request $request)
     {
-        $this->validate(
-            $request, [
-            'name' => 'required',
-            'surname' => 'required',
-            ]
-        );
-
         $author = new Author();
-        $author->name = $request->name;
-        $author->surname = $request->surname;
+        $author->name = $request->get('name');
+        $author->surname = $request->get('surname');
+        $author->description = $request->get('description');
+
+        if ($file = $request->hasFile('photo')) {
+            $author->photo = $imagePath = $request->file('photo')->store('authors', 'public');
+
+            $photo = Image::make(public_path("storage/{$imagePath}"))->fit(1000, 1000);
+            $photo->save();
+
+            $imageArray = ['photo' => $imagePath];
+        }
 
         $author->save();
 
@@ -60,6 +63,7 @@ class AuthorController extends Controller
 
         $author->name = $request->name;
         $author->surname = $request->surname;
+        $author->description = $request->description;
         $author->save();
 
         if ($author->save()) {
@@ -121,7 +125,44 @@ class AuthorController extends Controller
      */
     public function getAuthors()
     {
-        $author = Author::get(['id', 'name', 'surname'])->toArray();
+        $author = Author::get(['id', 'name', 'surname', 'description', 'photo'])->toArray();
         return $author;
+    }
+
+    /**
+     * Edit current author photo
+     *
+     * @param  Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    public function changePhoto(Request $request, $id) //create StoreBook
+    {
+        $author = Author::find($id);
+
+        if ($file = $request->hasFile('photo')) {
+            $author->photo = $imagePath = $request->file('photo')->store('authors', 'public');
+
+            $photo = Image::make(public_path("storage/{$imagePath}"))->fit(1000, 1000);
+            $photo->save();
+
+            $imageArray = ['photo' => $imagePath];
+        }
+
+        if ($author->save()) {
+            return response()->json(
+                [
+                'success' => true,
+                'author' => $author
+                ], 201
+            );
+        } else {
+            return response()->json(
+                [
+                'success' => false,
+                'message' => 'Sorry, author could not be added.',
+                ], 500
+            );
+        }
     }
 }

@@ -60,6 +60,7 @@ Route::group(
         Route::put('author/edit/{id}', 'AuthorController@editAuthor');
         Route::post('author/add', 'AuthorController@addAuthor');
         Route::delete('author/delete/{id}', 'AuthorController@deleteAuthor');
+        Route::post('author/changePhoto/{id}', 'AuthorController@changePhoto');
 
         Route::post('book/store', 'BookController@store');
         Route::post('book/changeImage/{id}', 'BookController@changeImage');
