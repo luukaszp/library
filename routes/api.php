@@ -80,5 +80,10 @@ Route::group(
         Route::put('calendar/type/edit/{id}', 'TypeController@editType');
         Route::post('calendar/type/add', 'TypeController@addType');
         Route::delete('calendar/type/delete/{id}', 'TypeController@deleteType');
+
+        Route::get('calendar/event/getEvents', 'EventController@getEvents');
+        Route::put('calendar/event/edit/{id}', 'EventController@editEvent');
+        Route::post('calendar/event/add', 'EventController@addEvent');
+        Route::delete('calendar/event/delete/{id}', 'EventController@deleteEvent');
     }
 );
