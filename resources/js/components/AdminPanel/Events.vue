@@ -87,6 +87,20 @@
                                                 <v-time-picker v-model="editedItem.time" @input="menu2 = false" format="24hr"></v-time-picker>
                                                 </v-menu>
                                             </v-row>
+                                            <v-row>
+                                                <v-select
+                                                    v-model="selectedType"
+                                                    :items="types"
+                                                    item-text="name"
+                                                    item-value="id"
+                                                    menu-props="auto"
+                                                    label="Typ"
+                                                    outlined
+                                                    required
+                                                    :rules="typeRules"
+                                                >
+                                                </v-select>
+                                            </v-row>
                                         </v-form>
                                     </v-container>
                                 </v-card-text>
@@ -135,6 +149,7 @@ export default {
     valid: false,
     menu1: false,
     menu2: false,
+    selectedType: '',
     search: '',
     eventName: '',
     headers: [
@@ -145,6 +160,7 @@ export default {
       },
       { text: 'Data', value: 'date' },
       { text: 'Czas', value: 'time' },
+      { text: 'Typ', value: 'typeName' },
       { text: 'Akcje', value: 'action', sortable: false }
     ],
     editedIndex: -1,
@@ -166,7 +182,10 @@ export default {
     ],
     timeRules: [
       (v) => !!v || 'Czas wydarzenia jest wymagany'
-    ]
+    ],
+    typeRules: [
+      (v) => !!v || 'Typ wydarzenia jest wymagany!',
+    ],
   }),
 
   computed: {
@@ -175,6 +194,9 @@ export default {
     },
     events() {
       return this.$store.getters.getEvents;
+    },
+    types() {
+      return this.$store.getters.getTypes;
     }
   },
 
@@ -221,14 +243,16 @@ export default {
           axios.put(`/api/calendar/event/edit/${this.editedItem.id}`, {
             name: this.editedItem.name,
             date: this.editedItem.date,
-            time: this.editedItem.time
+            time: this.editedItem.time,
+            type_id: this.selectedType
           });
         } else {
           this.events.push(this.editedItem);
           axios.post('/api/calendar/event/add', {
             name: this.editedItem.name,
             date: this.editedItem.date,
-            time: this.editedItem.time
+            time: this.editedItem.time,
+            type_id: this.selectedType
           })
             .catch((error) => {
               console.log(error);

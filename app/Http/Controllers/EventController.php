@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Event;
+use DB;
 
 class EventController extends Controller
 {
@@ -20,7 +21,8 @@ class EventController extends Controller
             $request, [
             'name' => 'required',
             'date' => 'required',
-            'time' => 'required'
+            'time' => 'required',
+            'type_id' => 'required'
             ]
         );
 
@@ -28,6 +30,7 @@ class EventController extends Controller
         $event->name = $request->name;
         $event->date = $request->date;
         $event->time = $request->time;
+        $event->type_id = $request->type_id;
 
         $event->save();
 
@@ -62,6 +65,7 @@ class EventController extends Controller
         $event->name = $request->name;
         $event->date = $request->date;
         $event->time = $request->time;
+        $event->type_id = $request->type_id;
 
         $event->save();
 
@@ -124,7 +128,13 @@ class EventController extends Controller
      */
     public function getEvents()
     {
-        $event = Event::get(['id', 'name', 'date', 'time'])->toArray();
-        return $event;
+        $data = DB::table('events')
+            ->join('types', 'types.id', '=', 'events.type_id')
+            ->select(
+                'events.id', 'events.name', 'events.date', 'events.time', 'types.name as typeName'
+            )
+            ->get()
+            ->toArray();
+        return $data;
     }
 }

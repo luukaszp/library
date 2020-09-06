@@ -34,7 +34,7 @@
                         v-model="focus"
                         :weekdays="weekday"
                         type="month"
-                        color="blue"
+                        color="purple"
                         :events="getEvents"
                         :event-color="getEventColor"
                         :interval-count = 0
@@ -42,13 +42,59 @@
                         @click:more="viewDay"
                         @click:date="viewDay"
                 ></v-calendar>
+                <v-toolbar>
+                    <h1 class="headline mr-10">Legenda</h1>
+                    <v-chip class="mr-6" v-for="value in legendInfo()" v-bind:key="value.id" :color="value.color" style="font-weight: bold" @click="showEvent(value)">{{value.type}}</v-chip>
+                    <v-chip class="mr-6" color="#B5651D" style="font-weight: bold" @click="allEvents()">Wszystkie</v-chip>
+                </v-toolbar>
             </v-sheet>
         </v-col>
 
-        <v-dialog v-model="dailyModal" scrollable max-width="450">
-            <v-card class="daily">
-
-            </v-card>
+        <v-dialog v-model="dailyModal" max-width="500">
+            <v-sheet
+                class="mx-auto"
+                elevation="8"
+                max-width="500"
+                style="text-align: center"
+            >
+                <v-carousel
+                cycle
+                class="pa-8"
+                hide-delimiter-background
+                show-arrows
+                height="300"
+                >
+                <v-carousel-item
+                    v-for="value in eventInfo()"
+                    :key="value.id"
+                >
+                    <v-card
+                    :color="value.color"
+                    class="ma-4"
+                    width="405"
+                    >
+                    <v-row
+                        align="center"
+                        justify="center"
+                    >
+                        <p style="padding-top: 5px;">{{value.type}}</p>
+                    </v-row>
+                    <v-row
+                        align="center"
+                        justify="center"
+                    >
+                        <h3 style="font-weight: bold; line-height: 4.8">{{value.name}}</h3>
+                    </v-row>
+                    <v-row
+                        align="center"
+                        justify="center"
+                    >
+                        <span>Serdecznie zapraszamy na godzinę {{value.time}}!</span>
+                    </v-row>
+                    </v-card>
+                </v-carousel-item>
+                </v-carousel>
+            </v-sheet>
         </v-dialog>
     </v-row>
 </template>
@@ -59,14 +105,16 @@ export default {
   data: () => ({
     type: 'month',
     focus: '',
-    calendarDialog: false,
     dailyModal: false,
     selectedElement: null,
     selectedOpen: false,
     start: null,
     merged: '',
+    eventColor: '',
     weekday: [1, 2, 3, 4, 5, 6, 0],
-    events: []
+    libraryEvent: [],
+    librarySelected: [],
+    colors: ['blue', 'green', 'orange', 'grey darken-1', 'red', 'yellow', 'pink']
   }),
   computed: {
     title () {
@@ -82,25 +130,35 @@ export default {
       return this.$refs.calendar.getFormatter({
         timeZone: 'UTC', month: 'long'
       });
+    },
+    events() {
+      return this.$store.getters.getEvents;
+    },
+    types() {
+      return this.$store.getters.getTypes;
+    },
+    getEvents() { // change computed with method
+      // eslint-disable-next-line vue/no-side-effects-in-computed-properties
+      this.libraryEvent = [];
+      for (let i = 0; i < this.events.length; i++) {
+        for (let j = 0; j < this.types.length; j++) {
+          if (this.events[i].typeName === this.types[j].name) {
+            // eslint-disable-next-line vue/no-side-effects-in-computed-properties
+            this.eventColor = this.colors[j];
+          }
+        }
+        // eslint-disable-next-line vue/no-side-effects-in-computed-properties
+        this.libraryEvent.push({
+          name: `${this.events[i].time} - ${this.events[i].name}`,
+          start: this.events[i].date,
+          color: this.eventColor
+        });
+      }
+      if (this.librarySelected.length > 0) {
+        return this.librarySelected;
+      }
+      return this.libraryEvent;
     }
-    /* getEvents() {
-      const events = [];
-      for (let i = 0; i < this.incomes.length; i++) {
-        events.push({
-          name: `${this.incomes[i].categoryName} - ${this.incomes[i].amount}(${this.incomes[i].currency.shortName})`,
-          start: this.incomes[i].timeStamp.slice(0, 10),
-          color: '#9090ee'
-        });
-      }
-      for (let i = 0; i < this.expenses.length; i++) {
-        events.push({
-          name: `${this.expenses[i].categoryName} - ${this.expenses[i].amount}(${this.expenses[i].currency.shortName})`,
-          start: this.expenses[i].timeStamp.slice(0, 10),
-          color: '#3eb4a7'
-        });
-      }
-      return events;
-    } */
   },
   methods: {
     getEventColor (events) {
@@ -116,16 +174,76 @@ export default {
     viewDay ({ date }) {
       this.focus = date;
       this.dailyModal = true;
+    },
+    eventInfo () {
+      const daily = [];
+      for (let i = 0; i < this.events.length; i++) {
+        if (this.events[i].date === this.focus) {
+          daily.push({
+            name: this.events[i].name,
+            type: this.events[i].typeName,
+            time: this.events[i].time,
+            color: this.libraryEvent[i].color
+          });
+        }
+      }
+      return daily;
+    },
+    legendInfo () {
+      const legend = [];
+      let color = [];
+      let type = [];
+      for (let i = 0; i < this.events.length; i++) {
+        color[i] = this.libraryEvent[i].color;
+        type[i] = this.events[i].typeName;
+      }
+
+      color = Array.from(new Set(color));
+      type = Array.from(new Set(type));
+
+      for (let i = 0; i < color.length; i++) {
+        legend.push({
+          type: type[i],
+          color: color[i]
+        });
+      }
+      return legend;
+    },
+    showEvent (value) {
+      this.librarySelected = [];
+      for (let i = 0; i < this.libraryEvent.length; i++) {
+        if (this.libraryEvent[i].color === value.color) {
+          this.librarySelected.push({
+            name: `${this.events[i].time} - ${this.events[i].name}`,
+            start: this.events[i].date,
+            color: this.libraryEvent[i].color
+          });
+        }
+      }
+      return this.librarySelected;
+    },
+    allEvents() {
+      this.librarySelected = [];
+      for (let i = 0; i < this.events.length; i++) {
+        for (let j = 0; j < this.types.length; j++) {
+          if (this.events[i].typeName === this.types[j].name) {
+            // eslint-disable-next-line vue/no-side-effects-in-computed-properties
+            this.eventColor = this.colors[j];
+          }
+        }
+        // eslint-disable-next-line vue/no-side-effects-in-computed-properties
+        this.librarySelected.push({
+          name: `${this.events[i].time} - ${this.events[i].name}`,
+          start: this.events[i].date,
+          color: this.eventColor
+        });
+      }
+      return this.librarySelected;
     }
   }
 };
 </script>
 
 <style scoped>
-    .daily {
-    text-align: center;
-    padding-top: 10px;
-    font-weight: bold;
-    height: 500px;
-    }
+
 </style>
