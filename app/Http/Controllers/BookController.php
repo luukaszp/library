@@ -42,7 +42,7 @@ class BookController extends Controller
     public function getAvailableBooks()
     {
         $data = DB::table('books')
-            ->where('books.amount', '>' , '0')
+            ->where('books.amount', '>', '0')
             ->join('categories', 'categories.id', '=', 'books.category_id')
             ->join('publishers', 'publishers.id', '=', 'books.publisher_id')
             ->join('authors', 'authors.id', '=', 'books.author_id')
