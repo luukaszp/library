@@ -137,7 +137,7 @@ export default {
     types() {
       return this.$store.getters.getTypes;
     },
-    getEvents() { // change computed with method
+    getEvents() {
       // eslint-disable-next-line vue/no-side-effects-in-computed-properties
       this.libraryEvent = [];
       for (let i = 0; i < this.events.length; i++) {
@@ -227,11 +227,9 @@ export default {
       for (let i = 0; i < this.events.length; i++) {
         for (let j = 0; j < this.types.length; j++) {
           if (this.events[i].typeName === this.types[j].name) {
-            // eslint-disable-next-line vue/no-side-effects-in-computed-properties
             this.eventColor = this.colors[j];
           }
         }
-        // eslint-disable-next-line vue/no-side-effects-in-computed-properties
         this.librarySelected.push({
           name: `${this.events[i].time} - ${this.events[i].name}`,
           start: this.events[i].date,

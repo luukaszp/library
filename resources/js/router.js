@@ -24,6 +24,7 @@ import Suggestions from './components/AdminPanel/Suggestions.vue';
 import Opinions from './components/AdminPanel/Opinions.vue';
 import UserForms from './components/AdminPanel/UserForms.vue';
 import Calendar from './components/Calendar.vue';
+import Search from './components/Search.vue';
 import NotFound from './components/NotFound.vue';
 import store from './store/store.js';
 
@@ -180,6 +181,11 @@ const routes = [
     path: '/calendar',
     name: 'calendar',
     component: Calendar
+  },
+  {
+    path: '/search',
+    name: 'search',
+    component: Search
   },
   {
     path: '*',

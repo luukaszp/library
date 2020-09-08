@@ -8,12 +8,13 @@
                             color=#654321
                             dark
                     >
+                        <router-link to="/">
+                            <v-app-bar-nav-icon>
+                                <v-img alt="App logo" :src="require('../assets/app_logo_t.png')" width="90px"/> <!--zmienic logo-->
+                            </v-app-bar-nav-icon>
+                        </router-link>
 
-                        <v-app-bar-nav-icon>
-                            <v-img alt="App logo" :src="require('../assets/app_logo_t.png')" width="90px"/> <!--zmienic logo-->
-                        </v-app-bar-nav-icon>
-
-                        <v-toolbar-title>Biblioteka</v-toolbar-title>
+                        <v-toolbar-title style="padding-left: 15px;">Biblioteka</v-toolbar-title>
 
                         <v-spacer></v-spacer>
 
