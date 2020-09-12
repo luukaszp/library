@@ -18,6 +18,15 @@ Route::post('loginReader', 'AuthController@loginReader');
 Route::post('loginWorker', 'AuthController@loginWorker');
 Route::post('refresh', 'AuthController@refresh');
 
+Route::get('book/getBooks', 'BookController@getBooks');
+Route::get('book/{id}', 'BookController@showBook');
+
+Route::get('category/getCategories', 'CategoryController@getCategories');
+
+Route::get('publisher/getPublishers', 'PublisherController@getPublishers');
+
+Route::get('author/getAuthors', 'AuthorController@getAuthors');
+
 Route::group(
     ['middleware' => 'auth.jwt'], function () {
         Route::get('logout', 'AuthController@logout');
@@ -46,17 +55,14 @@ Route::group(
         Route::put('reader/edit/{id}', 'UserController@editReader');
         Route::delete('reader/delete/{id}', 'UserController@deleteReader');
 
-        Route::get('category/getCategories', 'CategoryController@getCategories');
         Route::put('category/edit/{id}', 'CategoryController@editCategory');
         Route::post('category/add', 'CategoryController@addCategory');
         Route::delete('category/delete/{id}', 'CategoryController@deleteCategory');
 
-        Route::get('publisher/getPublishers', 'PublisherController@getPublishers');
         Route::put('publisher/edit/{id}', 'PublisherController@editPublisher');
         Route::post('publisher/add', 'PublisherController@addPublisher');
         Route::delete('publisher/delete/{id}', 'PublisherController@deletePublisher');
 
-        Route::get('author/getAuthors', 'AuthorController@getAuthors');
         Route::put('author/edit/{id}', 'AuthorController@editAuthor');
         Route::post('author/add', 'AuthorController@addAuthor');
         Route::delete('author/delete/{id}', 'AuthorController@deleteAuthor');
@@ -64,7 +70,6 @@ Route::group(
 
         Route::post('book/store', 'BookController@store');
         Route::post('book/changeImage/{id}', 'BookController@changeImage');
-        Route::get('book/getBooks', 'BookController@getBooks');
         Route::get('book/getAvailableBooks', 'BookController@getAvailableBooks');
         Route::put('book/edit/{id}', 'BookController@editBook');
         Route::delete('book/delete/{id}', 'BookController@deleteBook');

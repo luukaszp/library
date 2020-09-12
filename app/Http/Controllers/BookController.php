@@ -62,9 +62,20 @@ class BookController extends Controller
      * @param  $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function show($id)
+    public function showBook($id)
     {
-        $book = Book::with('author:id,name,surname')->find($id); //dodać wydawnictwo
+        $book = DB::table('books')
+            ->where('books.id', '=', $id)
+            ->join('categories', 'categories.id', '=', 'books.category_id')
+            ->join('publishers', 'publishers.id', '=', 'books.publisher_id')
+            ->join('authors', 'authors.id', '=', 'books.author_id')
+            ->select(
+                'books.id', 'books.title', 'books.isbn', 'books.description', 'books.publish_year',
+                'books.amount', 'categories.name as categoryName', 'authors.name as authorName',
+                'authors.surname', 'publishers.name as publisherName', 'books.cover'
+            )
+            ->get()
+            ->toArray();
 
         if (!$book) {
             return response()->json(
@@ -75,12 +86,7 @@ class BookController extends Controller
             );
         }
 
-        return response()->json(
-            [
-            'success' => true,
-            'book' => $book,
-            ]
-        );
+        return $book;
     }
 
     /**

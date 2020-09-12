@@ -33,7 +33,7 @@
         "@types/jwt-decode": "^2.2.1",
         "eslint": "^7.8.1",
         "jwt-decode": "^2.2.0",
-        "vee-validate": "^3.3.9",
+        "vee-validate": "^3.3.11",
         "vue-axios": "^2.1.5",
         "vue-router": "^3.4.3",
         "vue-sweetalert2": "^3.0.8",

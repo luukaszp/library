@@ -89,11 +89,10 @@
 
                 <v-card-text style="justify-content: center">
                     <p>Autor: <span v-text="item.authorName + ' ' + item.surname" class="mr-2"></span></p>
-                    <p>Wydawnictwo: <span v-text="item.publisherName" class="mr-2"></span></p>
                     <p>Kategoria: <span v-text="item.categoryName" class="mr-2"></span></p>
-                    <p>Opis: <span v-text="item.description" class="mr-2"></span></p>
                     <p>Dostępna ilość książek: <v-chip v-text="item.amount" :color="getColor(item.amount)" dark></v-chip></p>
-                    <v-btn outlined style="border: 0px; text-decoration: none" :to="'/'"><v-card-title style="color: blue; font-weight: bold">Zobacz więcej</v-card-title></v-btn>
+                    <v-divider></v-divider>
+                    <router-link :to="{ name: 'bookview', params: { book_id: item.id } }"><v-btn outlined style="border: 0px; text-decoration: none"><v-card-title style="color: blue; font-weight: bold">Zobacz więcej</v-card-title></v-btn></router-link>
                 </v-card-text>
             </v-card>
             </v-col>
@@ -204,7 +203,7 @@ export default {
 
   computed: {
     books() {
-      return this.$store.getters.getBooks;
+        return this.$store.getters.getBooks;
     },
     numberOfPages () {
         return Math.ceil(this.items.length / this.itemsPerPage)
