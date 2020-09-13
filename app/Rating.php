@@ -6,10 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class Rating extends Model
 {
+    /**
+     * @var string
+     */
     protected $table = 'ratings';
 
-    protected $guarded = [];
-
+    /**
+     * @var array
+     */
     protected $fillable = [
         'book_id', 'user_id', 'rate'
     ];

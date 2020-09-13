@@ -13,13 +13,15 @@ class CreateRatingsTable extends Migration
      */
     public function up()
     {
-        Schema::create('ratings', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->integer('book_id');
-            $table->integer('user_id');
-            $table->integer('rate');
-            $table->timestamps();
-        });
+        Schema::create(
+            'ratings', function (Blueprint $table) {
+                $table->bigIncrements('id');
+                $table->integer('book_id');
+                $table->integer('user_id');
+                $table->integer('rate');
+                $table->timestamps();
+            }
+        );
     }
 
     /**

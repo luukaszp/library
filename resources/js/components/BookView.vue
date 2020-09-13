@@ -82,7 +82,7 @@ export default {
     status: '',
     rating: '',
     components: {
-        SongRating
+        BookRating
     },
     data: () => ({
 
