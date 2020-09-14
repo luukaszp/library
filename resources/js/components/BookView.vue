@@ -21,7 +21,7 @@
              style="text-align: left;"
           >
             <v-col>
-              <h1 v-text="item.title" style="font-weight: bold" class="mr-2"> </h1>
+              <h1 v-text="item.title" style="font-weight: bold; text-align: center" class="mr-2"> </h1>
             </v-col>
 
             <v-col>
@@ -33,20 +33,16 @@
             </v-col>
 
             <v-col>
-              <span>ISBN: </span><span style="font-weight: bold" v-text="item.isbn" class="mr-2"></span>
-            </v-col>
-
-            <v-col>
                 <div class="text-center">
               <span>Ocena czytelników: </span>
                     <v-rating
-                        v-model="rating"
+                        v-model="averages.avg"
                         background-color="orange lighten-3"
                         color="orange"
                         medium
                         readonly
                     ></v-rating>
-                   średnia oceny do 5 <span> | </span> <span>Opinie: ilość</span>
+                   {{averages.avg}}/5 <span> | </span> <span>Opinie: {{averages.count}}</span>
                 </div>
             </v-col>
           </v-row>
@@ -66,49 +62,52 @@
 
         <v-divider></v-divider>
 
-        <BookRating/>
+        <BookRating v-bind:book_id="book_id"/>
+
   </v-card>
 </v-container>
 </template>
 
 <script>
 /*eslint-disable*/
-import axios from 'axios';
-import BookRating from './BookRating.vue'
+import BookRating from './BookRating.vue';
 
 export default {
-    name: 'BookView',
-    props: ['book_id'],
+  name: 'BookView',
+  props: ['book_id'],
+  components: {
+    BookRating
+  },
+  data: () => ({
     status: '',
-    rating: '',
-    components: {
-        BookRating
-    },
-    data: () => ({
-
-    }),
+    rating: 0
+  }),
 
   computed: {
     books() {
       return this.$store.getters.getBooks;
+    },
+    averages() {
+      return this.$store.getters.getAverages;
     }
   },
 
   created () {
-    this.$store.dispatch('fetchOneBook', this.book_id); //lub this.$route.params.book_id
+    this.$store.dispatch('fetchOneBook', this.book_id); // lub this.$route.params.book_id
+    this.$store.dispatch('fetchAverage', this.book_id);
   },
 
   methods: {
-      getColor (amount) {
+    getColor (amount) {
       if (amount === 0) {
-          this.status = 'Brak pozycji!'
-          return 'red';
+        this.status = 'Brak pozycji';
+        return 'red';
       }
       if (amount <= 5) {
-          this.status = 'Ostatnie sztuki!'
-          return 'orange';
+        this.status = 'Ostatnie sztuki!';
+        return 'orange';
       }
-      this.status = 'Dostępne!'
+      this.status = 'Dostępne';
       return 'green';
     }
   }

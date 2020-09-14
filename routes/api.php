@@ -27,6 +27,11 @@ Route::get('publisher/getPublishers', 'PublisherController@getPublishers');
 
 Route::get('author/getAuthors', 'AuthorController@getAuthors');
 
+Route::get('rating/{id}', 'RatingController@showRating');
+Route::get('rating/all/{id}', 'RatingController@getRatings');
+
+Route::get('opinion/all/{id}', 'OpinionController@getOpinions');
+
 Route::group(
     ['middleware' => 'auth.jwt'], function () {
         Route::get('logout', 'AuthController@logout');
@@ -90,5 +95,9 @@ Route::group(
         Route::put('calendar/event/edit/{id}', 'EventController@editEvent');
         Route::post('calendar/event/add', 'EventController@addEvent');
         Route::delete('calendar/event/delete/{id}', 'EventController@deleteEvent');
+
+        Route::post('opinion/add', 'OpinionController@addOpinion');
+
+        Route::post('rating/add', 'RatingController@addRating');
     }
 );

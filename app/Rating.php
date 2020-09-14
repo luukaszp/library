@@ -18,6 +18,13 @@ class Rating extends Model
         'book_id', 'user_id', 'rate'
     ];
 
+    /**
+     * @var array
+     */
+    protected $casts = [
+        'rate' => 'integer'
+    ];
+
     public function books()
     {
         return $this->belongsTo(Book::class);

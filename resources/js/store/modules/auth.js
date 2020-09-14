@@ -135,6 +135,7 @@ export default {
   getters: {
     isLoggedIn: (state) => state.token,
     authStatus: (state) => state.status,
-    loggedUser: (state) => state.loggedUser
+    loggedUser: (state) => state.loggedUser,
+    authId: (state) =>state.loggedUser.id
   }
 };

@@ -16,9 +16,13 @@ class CreateOpinionsTable extends Migration
         Schema::create(
             'opinions', function (Blueprint $table) {
                 $table->bigIncrements('id');
-                $table->integer('book_id');
-                $table->integer('user_id');
-                $table->string('opinion');
+                $table->unsignedInteger('book_id');
+                $table->unsignedInteger('user_id');
+                $table->unsignedInteger('rating_id');
+                $table->foreign('rating_id')->references('id')->on('ratings');
+                $table->foreign('book_id')->references('id')->on('books');
+                $table->foreign('user_id')->references('id')->on('users');
+                $table->string('opinion')->nullable();
                 $table->timestamps();
             }
         );

@@ -118,8 +118,12 @@ export default {
     ]
   }),
   computed: {
-    isLoggedIn() { return this.$store.getters.isLoggedIn; },
-    loggedUser() { return this.$store.getters.loggedUser; }
+    isLoggedIn() {
+      return this.$store.getters.isLoggedIn;
+    },
+    loggedUser() {
+      return this.$store.getters.loggedUser;
+    }
   },
   methods: {
     logout() {

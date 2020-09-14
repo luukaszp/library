@@ -5,31 +5,61 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Rating;
 use App\Book;
+use DB;
 
 class RatingController extends Controller
 {
     /**
-     * Display specified rating
+     * Display ratings for specified book
      *
      * @param  $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function show($id)
+    public function showRating($id)
     {
-        $user = auth()->user();
         $rates = Rating::where('book_id', $id);
+        $average = (float) $rates->avg('rate');
+        $round = round($average, 1);
         $data = [
-            'avg' => (float) $rates->avg('rate'),
-            'count' => $rates->count('rate'),
-            'voted' => false,
+            'avg' => $round,
+            'count' => $rates->count('rate')
         ];
-        if ($user) {
-            $data['voted'] = $rates->where('user_id', $user->id)->count() > 0;
-        }
-        return response()->json([
+
+        return response()->json(
+            [
             'success' => true,
             'ratings' => $data,
-        ]);
+            ]
+        );
+    }
+
+    /**
+     * Display all ratings for specified book
+     *
+     * @param  $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getRatings($id)
+    {
+        $rating = DB::table('ratings')
+            ->where('ratings.book_id', '=', $id)
+            ->join('users', 'users.id', '=', 'ratings.user_id')
+            ->select(
+                'ratings.rate', 'ratings.created_at', 'users.name', 'users.surname'
+            )
+            ->get()
+            ->toArray();
+
+        /*if (!$rating) {
+            return response()->json(
+                [
+                'success' => false,
+                'message' => 'Sorry, rating with id ' . $id . ' cannot be found.',
+                ], 400
+            );
+        }*/
+
+        return $rating;
     }
 
     /**
@@ -39,29 +69,35 @@ class RatingController extends Controller
      * @return \Illuminate\Http\JsonResponse
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function store(Request $request)
+    public function addRating(Request $request)
     {
-        $this->validate($request, [
+        $this->validate(
+            $request, [
             'rate' => 'required',
-        ]);
+            ]
+        );
 
         $book = Book::find($request->id);
 
         $rating = new Rating();
         $rating->rate = $request->rate;
         $rating->user_id = auth()->user()->id;
-        $rating->book_id = $book->id;
+        $rating->book_id = $request->book_id;
 
-        if ($book->ratings()->save($rating)) {
-            return response()->json([
+        if ($rating->save()) {
+            return response()->json(
+                [
                 'success' => true,
                 'rating' => $rating,
-            ]);
+                ]
+            );
         } else {
-            return response()->json([
+            return response()->json(
+                [
                 'success' => false,
                 'message' => 'Sorry, this book could not be rated.',
-            ], 500);
+                ], 500
+            );
         }
     }
 }
