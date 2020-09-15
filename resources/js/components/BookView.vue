@@ -52,7 +52,7 @@
 
         <v-col>
             <v-col>
-                <span>Opis: </span><span style="font-weight: bold" v-text="item.description" class="mr-2"></span>
+                <span style="font-weight: bold">Opis: </span><span v-text="item.description" class="mr-2"></span>
             </v-col>
             <v-col>
                 <h3>Status: <v-chip :color="getColor(item.amount)" dark>{{ status }}</v-chip></h3>

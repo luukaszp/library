@@ -1,8 +1,7 @@
 <template>
     <v-container>
-        <v-row v-if="authStatus" style="justify-content: center; margin-left: 10px; margin-right: 10px">
+        <v-row v-if="authStatus && check === false" style="justify-content: center; margin-left: 10px; margin-right: 10px">
             <h2 style="width: 100%; text-align: center">Oceń książkę: </h2>
-
         <v-form v-model="valid" ref="form" style="width: 100%; text-align: center">
             <v-rating
                 v-model="rating"
@@ -29,6 +28,15 @@
             </div>
         </v-row>
 
+        <v-row v-if="authStatus && check === true" style="justify-content: center; margin: 25px 10px">
+            <h2 style="width: 100%; text-align: center">Serdecznie dziękujemy za wystawienie opinii!</h2>
+            <v-icon x-large>mdi-emoticon-excited</v-icon>
+        </v-row>
+
+        <v-row v-if="!authStatus" style="justify-content: center; margin: 25px 10px">
+            <h2 style="width: 100%; text-align: center">Aby wystawić opinię należy się zalogować!</h2>
+        </v-row>
+
         <v-divider></v-divider>
 
         <v-row style="justify-content: center; margin-left: 10px; margin-right: 10px">
@@ -36,15 +44,15 @@
                 <v-list two-line style="width: 100%">
                     <v-list-item-group>
                         <template v-for="(item,index) in ratings">
-                        <v-list-item :key="item.id">
+                        <v-list-item :key="item.id +- item.rate">
                             <v-list-item-content>
                                 <v-col
-                                    :cols=5
+                                    :cols=6
                                     style="display: inline-flex"
                                 >
                                 <v-list-item-title v-text="item.name + ' ' + item.surname"></v-list-item-title>
                                 <v-rating
-                                    v-model.number="item.rate"
+                                    :value="parseInt(item.rate)"
                                     background-color="orange lighten-3"
                                     color="orange"
                                     medium
@@ -56,6 +64,21 @@
 
                             <v-list-item-action>
                                 <v-list-item-action-text v-text="item.created_at"></v-list-item-action-text>
+                                <div class="action" v-if="check === true">
+                                  <v-icon
+                                      small
+                                      class="mr-2"
+                                      @click="editOpinion(opinions[index])"
+                                  >
+                                  mdi-pencil
+                                  </v-icon>
+                                  <v-icon
+                                      small
+                                      @click="deleteOpinion(item)"
+                                  >
+                                  mdi-delete
+                                  </v-icon>
+                                </div>
                             </v-list-item-action>
                         </v-list-item>
 
@@ -65,6 +88,40 @@
                     </v-list-item-group>
                 </v-list>
         </v-row>
+
+        <v-dialog v-model="editOpinionDialog" max-width="400px">
+          <v-card  style="text-align: center">
+            <v-card-title  style="justify-content: center">
+              <span class="headline">Edytuj swoją opinię</span>
+            </v-card-title>
+
+            <v-card-text>
+              <v-container>
+                <v-form v-model="valid" ref="form">
+                  <v-row style="display: inline-block">
+                    <v-col>
+                      <v-textarea
+                        :value="editedItem.opinion"
+                        label="Napisz opinię"
+                        auto-grow
+                        outlined
+                        rows="3"
+                        row-height="25"
+                        style="width: 300px"
+                      ></v-textarea>
+                    </v-col>
+                  </v-row>
+                </v-form>
+              </v-container>
+            </v-card-text>
+
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="blue darken-1" text @click="close">Anuluj</v-btn>
+              <v-btn color="blue darken-1" text @click="addOpinion" :disabled="!valid">Zapisz</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
     </v-container>
 </template>
 
@@ -80,6 +137,14 @@ export default {
     items: [],
     rating: 0,
     valid: false,
+    editOpinionDialog: false,
+    editedIndex: -1,
+    editedItem: {
+      opinion: ''
+    },
+    defaultItem: {
+      opinion: ''
+    },
     ratingRules: [
       (v) => !!v || 'Ocena jest wymagana!'
     ],
@@ -97,6 +162,19 @@ export default {
     },
     opinions() {
       return this.$store.getters.getOpinions;
+    },
+    authId() {
+      return this.$store.getters.authId;
+    },
+    check() {
+      if(this.ratings.length != 0) {
+        for (let i=0; i <= this.ratings.length; i++) {
+          if(this.ratings[i].id === this.authId.toString()) {
+            return true
+          }
+        }
+      }
+      return false
     }
   },
 
@@ -108,6 +186,13 @@ export default {
   methods: {
     addOpinion() {
       if (this.$refs.form.validate()) {
+        if (this.editedIndex > -1) {
+          Object.assign(this.opinions[this.editedIndex], this.editedItem);
+          axios.put(`/api/opinion/edit/${this.ratings.id}`, {
+            opinion: this.editedItem.opinion,
+            book_id: parseInt(this.book_id)
+          });
+        } else {
         axios.post('/api/rating/add', {
           rate: this.rating,
           book_id: parseInt(this.book_id)
@@ -122,9 +207,45 @@ export default {
             .catch((error) => {
               console.log(error);
             });
+        }
       }
+      this.$store.dispatch('fetchAverage', this.book_id);
       this.$store.dispatch('fetchRatings', this.book_id);
       this.$store.dispatch('fetchOpinions', this.book_id);
+      this.close();
+    },
+
+    editOpinion(item) {
+      this.editedIndex = this.opinions.indexOf(item);
+      this.editedItem = { ...item };
+      this.editOpinionDialog = true;
+    },
+
+    deleteOpinion(item) {
+      const index = this.ratings.indexOf(item);
+      this.$swal({
+        title: 'Czy jesteś pewien, że chcesz usunąć tę opinię?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Usuń',
+        cancelButtonText: 'Anuluj',
+      }).then((result) => {
+        if (result.value) {
+          axios.delete(`/api/rating/delete/${item.id}`, {});
+          this.ratings.splice(index, 1);
+          this.$swal('Usunięto', 'Pomyślnie usunięto opinię', 'success');
+        } else {
+          this.$swal('Anulowano', 'Akcja została anulowana', 'info');
+        }
+      });
+    },
+
+    close() {
+      this.editOpinionDialog = false;
+      this.$nextTick(() => {
+        this.editedItem = { ...this.defaultItem };
+        this.editedIndex = -1;
+      });
     }
   }
 };

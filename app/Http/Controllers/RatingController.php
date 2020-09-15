@@ -45,19 +45,10 @@ class RatingController extends Controller
             ->where('ratings.book_id', '=', $id)
             ->join('users', 'users.id', '=', 'ratings.user_id')
             ->select(
-                'ratings.rate', 'ratings.created_at', 'users.name', 'users.surname'
+                'ratings.rate', 'ratings.created_at', 'users.name', 'users.surname', 'users.id'
             )
             ->get()
             ->toArray();
-
-        /*if (!$rating) {
-            return response()->json(
-                [
-                'success' => false,
-                'message' => 'Sorry, rating with id ' . $id . ' cannot be found.',
-                ], 400
-            );
-        }*/
 
         return $rating;
     }
@@ -96,6 +87,41 @@ class RatingController extends Controller
                 [
                 'success' => false,
                 'message' => 'Sorry, this book could not be rated.',
+                ], 500
+            );
+        }
+    }
+
+    /**
+     * Remove the specified rating.
+     *
+     * @param  $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function deleteRating($id)
+    {
+        $rating = Rating::find($id);
+
+        if (!$rating) {
+            return response()->json(
+                [
+                'success' => false,
+                'message' => 'Sorry, rating with id ' . $id . ' cannot be found.'
+                ], 400
+            );
+        }
+
+        if ($rating->destroy($id)) {
+            return response()->json(
+                [
+                'success' => true
+                ]
+            );
+        } else {
+            return response()->json(
+                [
+                'success' => false,
+                'message' => 'Rating could not be deleted.'
                 ], 500
             );
         }

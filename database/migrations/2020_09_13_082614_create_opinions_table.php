@@ -19,7 +19,8 @@ class CreateOpinionsTable extends Migration
                 $table->unsignedInteger('book_id');
                 $table->unsignedInteger('user_id');
                 $table->unsignedInteger('rating_id');
-                $table->foreign('rating_id')->references('id')->on('ratings');
+                $table->foreign('rating_id')->references('id')->on('ratings')
+                    ->onDelete('cascade');
                 $table->foreign('book_id')->references('id')->on('books');
                 $table->foreign('user_id')->references('id')->on('users');
                 $table->string('opinion')->nullable();

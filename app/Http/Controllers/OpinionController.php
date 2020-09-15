@@ -71,4 +71,47 @@ class OpinionController extends Controller
             );
         }
     }
+
+    
+    /**
+     * Edit specific opinion.
+     *
+     * @param  Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    public function editOpinion(Request $request, $id)
+    {
+        $opinion = Opinion::find($id);
+
+        if (!$opinion) {
+            return response()->json(
+                [
+                'success' => false,
+                'message' => 'Sorry, opinion with id ' . $id . ' cannot be found.'
+                ], 400
+            );
+        }
+
+        $opinion->opinion = $request->opinion;
+        $opinion->user_id = auth()->user()->id;
+        $opinion->book_id = $request->book_id;
+        $opinion->rating_id = Rating::latest()->first()->id;
+
+        if ($opinion->save()) {
+            return response()->json(
+                [
+                'success' => true,
+                'message' => 'Opinion has been updated',
+                ]
+            );
+        } else {
+            return response()->json(
+                [
+                'success' => false,
+                'message' => 'Sorry, opinion could not be updated.',
+                ], 500
+            );
+        }
+    }
 }

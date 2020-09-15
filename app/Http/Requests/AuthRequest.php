@@ -45,7 +45,6 @@ class AuthRequest extends FormRequest
             'email.required' => 'Email is required!',
             'name.required' => 'Name is required!',
             'surname.required' => 'Surname is required!',
-            //'card_number.required' => 'Library card number is required!',
             'password.required' => 'Password is required!'
         ];
     }

@@ -97,7 +97,9 @@ Route::group(
         Route::delete('calendar/event/delete/{id}', 'EventController@deleteEvent');
 
         Route::post('opinion/add', 'OpinionController@addOpinion');
+        Route::put('opinion/edit/{id}', 'OpinionController@editOpinion');
 
         Route::post('rating/add', 'RatingController@addRating');
+        Route::delete('rating/delete/{id}', 'RatingController@deleteRating');
     }
 );
