@@ -26,6 +26,7 @@ import UserForms from './components/AdminPanel/UserForms.vue';
 import Calendar from './components/Calendar.vue';
 import Search from './components/Search.vue';
 import BookView from './components/BookView.vue';
+import Profile from './components/Profile/Profile.vue';
 import NotFound from './components/NotFound.vue';
 import store from './store/store.js';
 
@@ -192,6 +193,12 @@ const routes = [
     path: '/book/:book_id',
     name: 'bookview',
     component: BookView,
+    props: true
+  },
+  {
+    path: '/profile/:user_id',
+    name: 'profile',
+    component: Profile,
     props: true
   },
   {
