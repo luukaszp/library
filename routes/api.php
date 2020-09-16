@@ -38,6 +38,12 @@ Route::group(
         Route::post('logout', 'AuthController@logout');
         //Route::post('refresh', 'AuthController@refresh');
         Route::post('me', 'AuthController@me');
+
+        Route::post('opinion/add', 'OpinionController@addOpinion');
+        Route::put('opinion/edit/{id}', 'OpinionController@editOpinion');
+
+        Route::post('rating/add', 'RatingController@addRating');
+        Route::delete('rating/delete/{id}', 'RatingController@deleteRating');
     }
 );
 
@@ -95,11 +101,5 @@ Route::group(
         Route::put('calendar/event/edit/{id}', 'EventController@editEvent');
         Route::post('calendar/event/add', 'EventController@addEvent');
         Route::delete('calendar/event/delete/{id}', 'EventController@deleteEvent');
-
-        Route::post('opinion/add', 'OpinionController@addOpinion');
-        Route::put('opinion/edit/{id}', 'OpinionController@editOpinion');
-
-        Route::post('rating/add', 'RatingController@addRating');
-        Route::delete('rating/delete/{id}', 'RatingController@deleteRating');
     }
 );

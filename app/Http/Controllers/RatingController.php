@@ -45,7 +45,7 @@ class RatingController extends Controller
             ->where('ratings.book_id', '=', $id)
             ->join('users', 'users.id', '=', 'ratings.user_id')
             ->select(
-                'ratings.rate', 'ratings.created_at', 'users.name', 'users.surname', 'users.id'
+                'ratings.id', 'ratings.rate', 'ratings.created_at', 'users.name', 'users.surname', 'users.id as user_id'
             )
             ->get()
             ->toArray();

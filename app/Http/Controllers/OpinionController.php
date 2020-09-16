@@ -21,7 +21,7 @@ class OpinionController extends Controller
         $opinion = DB::table('opinions')
             ->where('opinions.book_id', '=', $id)
             ->select(
-                'opinions.opinion'
+                'opinions.opinion', 'opinions.id'
             )
             ->get()
             ->toArray();
@@ -96,7 +96,9 @@ class OpinionController extends Controller
         $opinion->opinion = $request->opinion;
         $opinion->user_id = auth()->user()->id;
         $opinion->book_id = $request->book_id;
-        $opinion->rating_id = Rating::latest()->first()->id;
+        //$opinion->rating_id = Rating::latest()->first()->id;
+
+        $opinion->save();
 
         if ($opinion->save()) {
             return response()->json(

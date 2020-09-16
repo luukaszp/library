@@ -64,7 +64,7 @@
 
                             <v-list-item-action>
                                 <v-list-item-action-text v-text="item.created_at"></v-list-item-action-text>
-                                <div class="action" v-if="check === true">
+                                <div class="action" v-if="parseInt(item.user_id) === authId">
                                   <v-icon
                                       small
                                       class="mr-2"
@@ -101,7 +101,7 @@
                   <v-row style="display: inline-block">
                     <v-col>
                       <v-textarea
-                        :value="editedItem.opinion"
+                        v-model="editedItem.opinion"
                         label="Napisz opinię"
                         auto-grow
                         outlined
@@ -168,8 +168,8 @@ export default {
     },
     check() {
       if(this.ratings.length != 0) {
-        for (let i=0; i <= this.ratings.length; i++) {
-          if(this.ratings[i].id === this.authId.toString()) {
+        for (let i = 0; i < this.ratings.length; i++) {
+          if(this.ratings[i].user_id === this.authId.toString()) {
             return true
           }
         }
@@ -188,7 +188,7 @@ export default {
       if (this.$refs.form.validate()) {
         if (this.editedIndex > -1) {
           Object.assign(this.opinions[this.editedIndex], this.editedItem);
-          axios.put(`/api/opinion/edit/${this.ratings.id}`, {
+          axios.put(`/api/opinion/edit/${this.editedItem.id}`, {
             opinion: this.editedItem.opinion,
             book_id: parseInt(this.book_id)
           });
