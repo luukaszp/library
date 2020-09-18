@@ -44,6 +44,9 @@ Route::group(
 
         Route::post('rating/add', 'RatingController@addRating');
         Route::delete('rating/delete/{id}', 'RatingController@deleteRating');
+
+        Route::get('user/profile/{id}', 'UserController@showReader');
+        Route::post('user/profile/upload', 'UserController@changeAvatar');
     }
 );
 

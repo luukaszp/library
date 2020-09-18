@@ -7,6 +7,7 @@ use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Intervention\Image\Facades\Image;
 
 class UserController extends Controller
 {
@@ -110,7 +111,7 @@ class UserController extends Controller
      * @param  $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function show($id)
+    public function showReader($id)
     {
         $user = User::find($id);
 
@@ -380,6 +381,43 @@ class UserController extends Controller
                 [
                 'success' => false,
                 'message' => 'Worker could not be deleted.'
+                ], 500
+            );
+        }
+    }
+
+    /**
+     * Store an avatar.
+     *
+     * @param  Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    public function changeAvatar(Request $request)
+    {
+        $user = User::find($request->get('user_id'));
+        
+        if ($file = $request->hasFile('avatar')) {
+            $user->avatar = $imagePath = $request->file('avatar')->store('avatars', 'public');
+
+            $avatar = Image::make(public_path("storage/{$imagePath}"))->fit(1000, 1000);
+            $avatar->save();
+
+            $imageArray = ['avatar' => $imagePath];
+        }
+
+        if ($user->save()) {
+            return response()->json(
+                [
+                'success' => true,
+                'user' => $user
+                ], 201
+            );
+        } else {
+            return response()->json(
+                [
+                'success' => false,
+                'message' => 'Sorry, avatar could not be added.',
                 ], 500
             );
         }
