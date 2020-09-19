@@ -28,6 +28,7 @@ import Search from './components/Search.vue';
 import BookView from './components/BookView.vue';
 import Profile from './components/Profile/Profile.vue';
 import UserBorrows from './components/Profile/UserBorrows.vue';
+import UserDelays from './components/Profile/UserDelays.vue';
 import NotFound from './components/NotFound.vue';
 import store from './store/store.js';
 
@@ -208,6 +209,12 @@ const routes = [
           component: UserBorrows,
           props: true
         },
+        {
+            path: '/profile/:user_id/delays',
+            name: 'userdelays',
+            component: UserDelays,
+            props: true
+          },
     ]
   },
   {

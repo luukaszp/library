@@ -34,7 +34,7 @@
 <script>
 /*eslint-disable*/
 export default {
-  name: 'Profile',
+  name: 'ProfileTabs',
   props: ['user_id'],
   
   data() {
@@ -46,7 +46,7 @@ export default {
         },
         {
             title: 'KARY I OPŁATY',
-            route: ''
+            route: `/profile/${this.user_id}/delays`
         },
         {
             title: 'STATYSTYKI',

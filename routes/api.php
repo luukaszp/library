@@ -49,6 +49,7 @@ Route::group(
         Route::post('user/profile/upload', 'UserController@changeAvatar');
 
         Route::get('borrow/showBorrow/{id}', 'BorrowController@showBorrow');
+        Route::get('borrow/showDelay/{id}', 'BorrowController@showDelay');
     }
 );
 

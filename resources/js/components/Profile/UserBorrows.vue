@@ -39,7 +39,7 @@
 <script>
 /*eslint-disable*/
 export default {
-  name: 'Profile',
+  name: 'UserBorrows',
   props: ['user_id'],
 
   data: () => ({
@@ -50,7 +50,7 @@ export default {
         align: 'start',
         value: 'title'
       },
-      { text: 'Czytelnik', value: 'fullName' },
+      { text: 'Autor', value: 'fullName' },
       { text: 'Wypożyczenie', value: 'borrows_date' },
       { text: 'Termin zwrotu', value: 'returns_date' },
       { text: 'Data oddania', value: 'when_returned' },

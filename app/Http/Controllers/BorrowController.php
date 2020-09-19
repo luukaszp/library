@@ -253,8 +253,40 @@ class BorrowController extends Controller
             ->join('books', 'books.id', '=', 'borrows.book_id')
             ->join('authors', 'authors.id', '=', 'books.author_id')
             ->select(
-                'books.title', 'authors.name', 'authors.surname', 'borrows.borrows_date', 'borrows.returns_date',
-                'borrows.is_returned', 'borrows.when_returned', 'borrows.delay', 'borrows.penalty'
+                'books.title', 'authors.name', 'authors.surname', 'borrows.borrows_date', 
+                'borrows.when_returned', 'borrows.returns_date'
+            )
+            ->get()
+            ->toArray();
+
+        if (!$borrow) {
+            return response()->json(
+                [
+                'success' => false,
+                'message' => 'Sorry, borrowing with id ' . $id . ' cannot be found.'
+                ], 400
+            );
+        } else {
+            return $borrow;
+        } 
+    }
+
+    /**
+     * Show borrowings for a specific user.
+     *
+     * @param  Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    public function showDelay($id)
+    {
+        $borrow = DB::table('borrows')
+            ->where('borrows.user_id', '=', $id)
+            ->where('borrows.delay', '!=', null)
+            ->join('books', 'books.id', '=', 'borrows.book_id')
+            ->join('authors', 'authors.id', '=', 'books.author_id')
+            ->select(
+                'books.title', 'authors.name', 'authors.surname', 'borrows.delay', 'borrows.penalty'
             )
             ->get()
             ->toArray();
