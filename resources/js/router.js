@@ -27,6 +27,7 @@ import Calendar from './components/Calendar.vue';
 import Search from './components/Search.vue';
 import BookView from './components/BookView.vue';
 import Profile from './components/Profile/Profile.vue';
+import UserBorrows from './components/Profile/UserBorrows.vue';
 import NotFound from './components/NotFound.vue';
 import store from './store/store.js';
 
@@ -199,7 +200,15 @@ const routes = [
     path: '/profile/:user_id',
     name: 'profile',
     component: Profile,
-    props: true
+    props: true,
+    children: [
+        {
+          path: '/profile/:user_id/borrows',
+          name: 'userborrows',
+          component: UserBorrows,
+          props: true
+        },
+    ]
   },
   {
     path: '*',

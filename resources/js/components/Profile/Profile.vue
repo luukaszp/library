@@ -48,77 +48,28 @@
         <v-divider></v-divider>
 
         <v-row style="margin-left: 10px; margin-right: 10px; justify-content: center;">
-            <div class="d-flex justify-center align-center">
-                <v-menu
-                v-for="item in items"
-                :key="item.title"
-                offset-y
-                >
-                    <template v-slot:activator="{ attrs, on }">
-                        <v-btn
-                        color="indigo"
-                        outlined
-                        class="white--text ma-1"
-                        v-bind="attrs"
-                        v-on="on"
-                        :to="item.route"
-                        >
-                        {{ item.title }}
-                        </v-btn>
-                    </template>
-                </v-menu>
-            </div>
+            <ProfileTabs v-bind:user_id="user_id"/>
         </v-row>
 
-        <v-divider></v-divider>
-
-        <v-row style="margin-left: 10px; margin-right: 10px">
-            <router-view></router-view>
-        </v-row>
     </v-container>
 </template>
 
 <script>
 /*eslint-disable*/
+import ProfileTabs from './ProfileTabs.vue';
+
 export default {
   name: 'Profile',
   props: ['user_id'],
+  components: {
+    ProfileTabs
+  },
   
   data: () => ({
     isSelecting: false,
     defaultButtonText: 'Wgraj awatar',
     avatar: [],
     valid: false,
-    items: [
-      {
-        title: 'WYPOŻYCZENIA',
-        route: ''
-      },
-      {
-        title: 'KARY I OPŁATY',
-        route: ''
-      },
-      {
-        title: 'STATYSTYKI',
-        route: ''
-      },
-      {
-        title: 'UTWORZONE LISTY',
-        route: ''
-      },
-      {
-        title: 'ZAPROPONUJ',
-        route: ''
-      },
-      {
-        title: 'ANKIETY',
-        route: ''
-      },
-      {
-        title: 'PRZEDŁUŻ TERMIN',
-        route: ''
-      }
-    ]
   }),
 
   computed: {

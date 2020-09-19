@@ -238,4 +238,36 @@ class BorrowController extends Controller
             );
         }
     }
+
+    /**
+     * Show borrowings for a specific user.
+     *
+     * @param  Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    public function showBorrow($id)
+    {
+        $borrow = DB::table('borrows')
+            ->where('borrows.user_id', '=', $id)
+            ->join('books', 'books.id', '=', 'borrows.book_id')
+            ->join('authors', 'authors.id', '=', 'books.author_id')
+            ->select(
+                'books.title', 'authors.name', 'authors.surname', 'borrows.borrows_date', 'borrows.returns_date',
+                'borrows.is_returned', 'borrows.when_returned', 'borrows.delay', 'borrows.penalty'
+            )
+            ->get()
+            ->toArray();
+
+        if (!$borrow) {
+            return response()->json(
+                [
+                'success' => false,
+                'message' => 'Sorry, borrowing with id ' . $id . ' cannot be found.'
+                ], 400
+            );
+        } else {
+            return $borrow;
+        } 
+    }
 }
