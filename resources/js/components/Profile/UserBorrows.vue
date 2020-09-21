@@ -30,6 +30,16 @@
       </v-toolbar>
     </template>
 
+    <template v-slot:[`item.actions`]="{ item }">
+      <v-btn
+        class="mr-2"
+        color="success"
+        @click="extendDate(item)"
+      >
+        Przedłuż termin
+      </v-btn>
+    </template>
+
     <template v-slot:no-data>
       <p class="pt-5">Brak wypożyczeń</p>
     </template>
@@ -53,7 +63,7 @@ export default {
       { text: 'Autor', value: 'fullName' },
       { text: 'Wypożyczenie', value: 'borrows_date' },
       { text: 'Termin zwrotu', value: 'returns_date' },
-      { text: 'Data oddania', value: 'when_returned' },
+      { text: 'Akcje', value: 'actions', sortable: false }
     ]
   }),
 
@@ -72,7 +82,24 @@ export default {
   },
 
   methods: {
-
+    extendDate(item) {
+      this.$swal({
+        title: 'Czy jesteś pewien, że chcesz przedłużyć termin tej książki?',
+        text: "Przedłużyć można jedną książkę o 7 dni.",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Przedłuż',
+        confirmButtonColor: '#5cb85c',
+        cancelButtonColor: '#d9534f',
+        cancelButtonText: 'Anuluj',
+      }).then((result) => {
+        if (result.value) {
+          axios.put(`/api/borrow/extend/${item.id}`, {});
+          this.$swal('Przedłużono', 'Termin oddania książki został pomyślnie przedłużony!', 'success');
+          this.$store.dispatch('fetchSpecificBorrow', this.user_id);
+        }
+      });
+    }
   }
 };
 </script>

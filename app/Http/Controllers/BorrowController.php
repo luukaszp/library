@@ -250,11 +250,12 @@ class BorrowController extends Controller
     {
         $borrow = DB::table('borrows')
             ->where('borrows.user_id', '=', $id)
+            ->where('borrows.when_returned', '=', null)
             ->join('books', 'books.id', '=', 'borrows.book_id')
             ->join('authors', 'authors.id', '=', 'books.author_id')
             ->select(
-                'books.title', 'authors.name', 'authors.surname', 'borrows.borrows_date', 
-                'borrows.when_returned', 'borrows.returns_date'
+                'books.id', 'books.title', 'authors.name', 'authors.surname', 'borrows.borrows_date', 
+                'borrows.returns_date'
             )
             ->get()
             ->toArray();
@@ -272,7 +273,7 @@ class BorrowController extends Controller
     }
 
     /**
-     * Show borrowings for a specific user.
+     * Show delays for a specific user.
      *
      * @param  Request $request
      * @return \Illuminate\Http\JsonResponse
@@ -301,5 +302,48 @@ class BorrowController extends Controller
         } else {
             return $borrow;
         } 
+    }
+
+    /**
+     * Extend returns book deadline.
+     *
+     * @param  Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    public function extendDate(Request $request, $id)
+    {
+        $borrow = Borrow::find($id);
+
+        if (!$borrow) {
+            return response()->json(
+                [
+                'success' => false,
+                'message' => 'Sorry, borrowing with id ' . $id . ' cannot be found.'
+                ], 400
+            );
+        }
+
+        $date = Carbon::createFromFormat('Y-m-d', $borrow->returns_date);
+        $daysToAdd = 7;
+        $date = $date->addDays($daysToAdd);
+        $borrow->returns_date = $date->toDateString();
+        $borrow->save();
+
+        if ($borrow->save()) {
+            return response()->json(
+                [
+                'success' => true,
+                'message' => 'Borrowing has been updated',
+                ]
+            );
+        } else {
+            return response()->json(
+                [
+                'success' => false,
+                'message' => 'Sorry, borrowing could not be updated.',
+                ], 500
+            );
+        }
     }
 }

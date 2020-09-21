@@ -29,6 +29,10 @@ import BookView from './components/BookView.vue';
 import Profile from './components/Profile/Profile.vue';
 import UserBorrows from './components/Profile/UserBorrows.vue';
 import UserDelays from './components/Profile/UserDelays.vue';
+import Statistics from './components/Profile/Statistics.vue';
+import Lists from './components/Profile/Lists.vue';
+import UserSuggestions from './components/Profile/UserSuggestions.vue';
+import Questionnaires from './components/Profile/Questionnaires.vue';
 import NotFound from './components/NotFound.vue';
 import store from './store/store.js';
 
@@ -214,7 +218,31 @@ const routes = [
             name: 'userdelays',
             component: UserDelays,
             props: true
-          },
+        },
+        {
+            path: '/profile/:user_id/statistics',
+            name: 'statistics',
+            component: Statistics,
+            props: true
+        },
+        {
+            path: '/profile/:user_id/lists',
+            name: 'lists',
+            component: Lists,
+            props: true
+        },
+        {
+            path: '/profile/:user_id/suggestions',
+            name: 'usersuggestions',
+            component: UserSuggestions,
+            props: true
+        },
+        {
+            path: '/profile/:user_id/questionnaires',
+            name: 'questionnaires',
+            component: Questionnaires,
+            props: true
+        },
     ]
   },
   {

@@ -50,23 +50,19 @@ export default {
         },
         {
             title: 'STATYSTYKI',
-            route: ''
+            route: `/profile/${this.user_id}/statistics`
         },
         {
             title: 'UTWORZONE LISTY',
-            route: ''
+            route: `/profile/${this.user_id}/lists`
         },
         {
             title: 'ZAPROPONUJ',
-            route: ''
+            route: `/profile/${this.user_id}/suggestions`
         },
         {
             title: 'ANKIETY',
-            route: ''
-        },
-        {
-            title: 'PRZEDŁUŻ TERMIN',
-            route: ''
+            route: `/profile/${this.user_id}/questionnaires`
         }
         ]
   }},
