@@ -2,6 +2,7 @@ import Vue from 'vue';
 import axios from 'axios';
 import VueAxios from 'vue-axios';
 import VueSweetalert2 from 'vue-sweetalert2';
+import VueApexCharts from 'vue-apexcharts';
 import App from './App.vue';
 import vuetify from './plugins/vuetify';
 import router from './router';
@@ -78,8 +79,9 @@ axios.interceptors.response.use((response) => response,
 
 Vue.config.productionTip = false;
 
-Vue.use(VueSweetalert2);
+Vue.use(VueSweetalert2, VueApexCharts);
 Vue.use(VueAxios, axios);
+Vue.component('apexchart', VueApexCharts);
 
 new Vue({
   vuetify,

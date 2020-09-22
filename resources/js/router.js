@@ -30,6 +30,10 @@ import Profile from './components/Profile/Profile.vue';
 import UserBorrows from './components/Profile/UserBorrows.vue';
 import UserDelays from './components/Profile/UserDelays.vue';
 import Statistics from './components/Profile/Statistics.vue';
+import BorrowsAmount from './components/Profile/Charts/BorrowsAmount.vue';
+import FavoriteAuthor from './components/Profile/Charts/FavoriteAuthor.vue';
+import FavoriteCategory from './components/Profile/Charts/FavoriteCategory.vue';
+import RatingsAmount from './components/Profile/Charts/RatingsAmount.vue';
 import Lists from './components/Profile/Lists.vue';
 import UserSuggestions from './components/Profile/UserSuggestions.vue';
 import Questionnaires from './components/Profile/Questionnaires.vue';
@@ -223,7 +227,33 @@ const routes = [
             path: '/profile/:user_id/statistics',
             name: 'statistics',
             component: Statistics,
-            props: true
+            props: true,
+            children: [
+                {
+                  path: '/profile/:user_id/statistics/borrows',
+                  name: 'borrowsamount',
+                  component: BorrowsAmount,
+                  props: true
+                },
+                {
+                    path: '/profile/:user_id/statistics/authors',
+                    name: 'favoriteauthors',
+                    component: FavoriteAuthor,
+                    props: true
+                },
+                {
+                    path: '/profile/:user_id/statistics/categories',
+                    name: 'favoritecategories',
+                    component: FavoriteCategory,
+                    props: true
+                },
+                {
+                    path: '/profile/:user_id/statistics/ratings',
+                    name: 'ratingsamount',
+                    component: RatingsAmount,
+                    props: true
+                }
+                ]
         },
         {
             path: '/profile/:user_id/lists',

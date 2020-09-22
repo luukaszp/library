@@ -346,4 +346,49 @@ class BorrowController extends Controller
             );
         }
     }
+
+    /**
+     * Get amount of borrowings for all months.
+     *
+     * @param  Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    public function getAmount($id)
+    {
+        $borrow = Borrow::where('user_id', '=', $id)
+            ->select('borrows_date')
+            ->get()
+            ->groupBy(
+                function ($date) {
+                    return Carbon::parse($date->borrows_date)->format('m'); // grouping by months
+                }
+            );
+
+        if (!$borrow) {
+            return response()->json(
+                [
+                'success' => false,
+                'message' => 'Sorry, user has no borrowings.'
+                ], 400
+            );
+        }
+
+        $borrowsCount = [];
+        $amount = [];
+        
+        foreach ($borrow as $key => $value) {
+            $borrowsCount[(int)$key] = count($value);
+        }
+        
+        for($i = 1; $i <= 12; $i++){
+            if(!empty($borrowsCount[$i])) {
+                $amount[$i] = $borrowsCount[$i];    
+            }else{
+                $amount[$i] = 0;    
+            }
+        }
+
+        return $amount;
+    }
 }

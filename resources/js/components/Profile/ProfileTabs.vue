@@ -25,7 +25,7 @@
 
         <v-divider></v-divider>
 
-        <v-row>
+        <v-row style="justify-content: center">
             <router-view></router-view>
         </v-row>
     </v-container>

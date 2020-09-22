@@ -51,6 +51,7 @@ Route::group(
         Route::get('borrow/showBorrow/{id}', 'BorrowController@showBorrow');
         Route::get('borrow/showDelay/{id}', 'BorrowController@showDelay');
         Route::put('borrow/extend/{id}', 'BorrowController@extendDate');
+        Route::get('borrow/getAmount/{id}', 'BorrowController@getAmount');
     }
 );
 
