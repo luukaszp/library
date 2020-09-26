@@ -391,4 +391,33 @@ class BorrowController extends Controller
 
         return $amount;
     }
+
+    /**
+     * Get favorite authors.
+     *
+     * @param  Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    public function getAuthors($id)
+    {
+        $borrow = Borrow::where('user_id', '=', $id)
+            ->join('books', 'books.id', '=', 'borrows.book_id')
+            ->join('authors', 'authors.id', '=', 'books.author_id')
+            ->select('authors.name', 'authors.surname', DB::raw('COUNT(authors.name + authors.surname) as count'))
+            ->groupBy('authors.surname')
+            ->orderBy('count')
+            ->get();
+
+        if (!$borrow) {
+            return response()->json(
+                [
+                'success' => false,
+                'message' => 'Sorry, user has no borrowings.'
+                ], 400
+            );
+        }
+
+        return $borrow;
+    }
 }

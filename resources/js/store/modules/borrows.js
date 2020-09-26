@@ -105,22 +105,7 @@ export default {
           .catch((error) => {
             console.log(error);
           });
-      },
-
-      // eslint-disable-next-line camelcase
-    fetchBorrowAmount(context, user_id) {
-        axios({
-          method: 'GET',
-          // eslint-disable-next-line camelcase
-          url: `http://127.0.0.1:8000/api/borrow/getAmount/${user_id}`
-        })
-          .then((response) => {
-            context.commit('setBorrows', response.data);
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      },
+      }
   },
   getters: {
     getBorrows(state) {
