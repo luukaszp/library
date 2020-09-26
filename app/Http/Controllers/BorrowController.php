@@ -364,7 +364,7 @@ class BorrowController extends Controller
                     return Carbon::parse($date->borrows_date)->format('m'); // grouping by months
                 }
             );
-
+            
         if (!$borrow) {
             return response()->json(
                 [
@@ -407,6 +407,37 @@ class BorrowController extends Controller
             ->select('authors.name', 'authors.surname', DB::raw('COUNT(authors.name + authors.surname) as count'))
             ->groupBy('authors.surname')
             ->orderBy('count')
+            ->take(5)
+            ->get();
+
+        if (!$borrow) {
+            return response()->json(
+                [
+                'success' => false,
+                'message' => 'Sorry, user has no borrowings.'
+                ], 400
+            );
+        }
+
+        return $borrow;
+    }
+
+    /**
+     * Get preferable category.
+     *
+     * @param  Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    public function getCategory($id)
+    {
+        $borrow = Borrow::where('user_id', '=', $id)
+            ->join('books', 'books.id', '=', 'borrows.book_id')
+            ->join('categories', 'categories.id', '=', 'books.category_id')
+            ->select('categories.name', DB::raw('COUNT(categories.name) as count'))
+            ->groupBy('categories.name')
+            ->orderBy('count')
+            ->take(5)
             ->get();
 
         if (!$borrow) {

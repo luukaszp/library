@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Rating;
 use App\Book;
 use DB;
+use Carbon\Carbon;
 
 class RatingController extends Controller
 {
@@ -125,5 +126,50 @@ class RatingController extends Controller
                 ], 500
             );
         }
+    }
+
+    /**
+     * Get amount of ratings for all months.
+     *
+     * @param  Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    public function ratingsAmount($id)
+    {
+        $rating = Rating::where('user_id', '=', $id)
+            ->select('rate', 'updated_at')
+            ->get()
+            ->groupBy(
+                function ($date) {
+                    return Carbon::parse($date->updated_at)->format('m'); // grouping by months
+                }
+            );
+            
+        if (!$rating) {
+            return response()->json(
+                [
+                'success' => false,
+                'message' => 'Sorry, user has no ratings.'
+                ], 400
+            );
+        }
+
+        $ratingsCount = [];
+        $amount = [];
+        
+        foreach ($rating as $key => $value) {
+            $ratingsCount[(int)$key] = count($value);
+        }
+        
+        for($i = 1; $i <= 12; $i++){
+            if(!empty($ratingsCount[$i])) {
+                $amount[$i] = $ratingsCount[$i];    
+            }else{
+                $amount[$i] = 0;    
+            }
+        }
+
+        return $amount;
     }
 }

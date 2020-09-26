@@ -15,13 +15,9 @@ export default {
       borrows: [],
       options: {
         title: {
-          text: 'Zestawienie autorów',
+          text: 'Ulubiony autor',
           align: 'right',
           floating: true
-        },
-        subtitle: {
-          text: 'Najczęściej wypożyczane książki danego autora',
-          align: 'right'
         },
         legend: {
           position: 'right',
