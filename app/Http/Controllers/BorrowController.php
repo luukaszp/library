@@ -264,7 +264,7 @@ class BorrowController extends Controller
             return response()->json(
                 [
                 'success' => false,
-                'message' => 'Sorry, borrowing with id ' . $id . ' cannot be found.'
+                'message' => 'Sorry, borrowing cannot be found.'
                 ], 400
             );
         } else {
@@ -296,7 +296,7 @@ class BorrowController extends Controller
             return response()->json(
                 [
                 'success' => false,
-                'message' => 'Sorry, borrowing with id ' . $id . ' cannot be found.'
+                'message' => 'Sorry, borrowing cannot be found.'
                 ], 400
             );
         } else {

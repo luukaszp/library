@@ -79,7 +79,8 @@ axios.interceptors.response.use((response) => response,
 
 Vue.config.productionTip = false;
 
-Vue.use(VueSweetalert2, VueApexCharts);
+Vue.use(VueSweetalert2);
+Vue.use(VueApexCharts);
 Vue.use(VueAxios, axios);
 Vue.component('apexchart', VueApexCharts);
 
