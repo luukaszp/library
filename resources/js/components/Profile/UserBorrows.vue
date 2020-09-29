@@ -53,6 +53,7 @@ export default {
   props: ['user_id'],
 
   data: () => ({
+    borrows: [],
     search: '',
     headers: [
       {
@@ -68,20 +69,29 @@ export default {
   }),
 
   computed: {
-    readers() {
+    /*readers() {
       return this.$store.getters.getReaders;
     },
     borrows() {
       return this.$store.getters.getBorrows;
-    }
+    }*/
   },
 
-  created () {
-    this.$store.dispatch('fetchOneReader', this.user_id);
-    this.$store.dispatch('fetchSpecificBorrow', this.user_id);
+  async created () {
+    /*this.$store.dispatch('fetchOneReader', this.user_id);
+    this.$store.dispatch('fetchSpecificDelay', this.user_id);*/
+   await this.getBorrows();
   },
 
   methods: {
+    async getBorrows() {
+		await axios
+        .get(`api/borrow/showBorrow/${this.user_id}`)
+        .then((response) => {
+            this.borrows = response.data;
+        });
+    },
+
     extendDate(item) {
       this.$swal({
         title: 'Czy jesteś pewien, że chcesz przedłużyć termin tej książki?',

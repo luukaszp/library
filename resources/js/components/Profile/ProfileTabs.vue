@@ -1,25 +1,23 @@
 <template>
     <v-container>
-        <v-row style="margin-left: 10px; margin-right: 10px; justify-content: center;">
+        <v-row style="margin-left: 10px; margin-right: 10px; justify-content: center; padding-bottom: 10px">
             <div class="d-flex justify-center align-center">
-                <v-menu
-                v-for="item in items"
-                :key="item.title"
-                offset-y
+                <v-tabs
+                    color="deep-purple accent-4"
+                    icons-and-text
+                    centered
                 >
-                    <template v-slot:activator="{ attrs, on }">
-                        <v-btn
+                        <v-tab
                         color="indigo"
-                        outlined
-                        class="white--text ma-1"
-                        v-bind="attrs"
-                        v-on="on"
+                        v-for="item in items"
+                        :key="item.title"
                         :to="item.route"
+                        style="text-decoration: none"
                         >
                         {{ item.title }}
-                        </v-btn>
-                    </template>
-                </v-menu>
+                        <v-icon>{{ item.icon }}</v-icon>
+                        </v-tab>
+                </v-tabs>
             </div>
         </v-row>
 
@@ -42,27 +40,33 @@ export default {
         items: [
         {
             title: 'WYPOŻYCZENIA',
-            route: `/profile/${this.user_id}/borrows`
+            route: `/profile/${this.user_id}/borrows`,
+            icon: 'mdi-book-multiple'
         },
         {
             title: 'KARY I OPŁATY',
-            route: `/profile/${this.user_id}/delays`
+            route: `/profile/${this.user_id}/delays`,
+            icon: 'mdi-cash-minus'
         },
         {
             title: 'STATYSTYKI',
-            route: `/profile/${this.user_id}/statistics`
+            route: `/profile/${this.user_id}/statistics`,
+            icon: 'mdi-chart-bar'
         },
         {
-            title: 'UTWORZONE LISTY',
-            route: `/profile/${this.user_id}/lists`
+            title: 'ULUBIONE',
+            route: `/profile/${this.user_id}/favourites`,
+            icon: 'mdi-heart'
         },
         {
             title: 'ZAPROPONUJ',
-            route: `/profile/${this.user_id}/suggestions`
+            route: `/profile/${this.user_id}/suggestions`,
+            icon: 'mdi-lightbulb-on'
         },
         {
             title: 'ANKIETY',
-            route: `/profile/${this.user_id}/questionnaires`
+            route: `/profile/${this.user_id}/questionnaires`,
+            icon: 'mdi-comment-question-outline'
         }
         ]
   }},

@@ -2,7 +2,7 @@
   <v-data-table
     :headers="headers"
     :search="search"
-    :items="borrows"
+    :items="delays"
     sort-by="title"
     class="elevation-1"
     style="width: 100%"
@@ -44,6 +44,7 @@ export default {
   props: ['user_id'],
 
   data: () => ({
+    delays: [],
     search: '',
     headers: [
       {
@@ -58,21 +59,28 @@ export default {
   }),
 
   computed: {
-    readers() {
+    /*readers() {
       return this.$store.getters.getReaders;
     },
     borrows() {
       return this.$store.getters.getBorrows;
-    }
+    }*/
   },
 
-  created () {
-    this.$store.dispatch('fetchOneReader', this.user_id);
-    this.$store.dispatch('fetchSpecificDelay', this.user_id);
+  async created () {
+    /*this.$store.dispatch('fetchOneReader', this.user_id);
+    this.$store.dispatch('fetchSpecificDelay', this.user_id);*/
+   await this.getDelays();
   },
 
   methods: {
-
+   async getDelays() {
+		await axios
+        .get(`api/borrow/showDelay/${this.user_id}`)
+        .then((response) => {
+            this.delays = response.data;
+        });
+    }
   }
 };
 </script>
