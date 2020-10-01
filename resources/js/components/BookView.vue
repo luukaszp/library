@@ -57,6 +57,16 @@
             <v-col>
                 <h3>Status: <v-chip :color="getColor(item.amount)" dark>{{ status }}</v-chip></h3>
             </v-col>
+            <v-col>
+                <v-btn
+                outlined
+                color="indigo"
+                @click="addFavourite()"
+                >
+                    DODAJ DO ULUBIONYCH
+                    <v-icon style="padding-left: 10px" color="#FFD700">mdi-star</v-icon>
+                </v-btn>
+            </v-col>
         </v-col>
       </v-row>
 
@@ -70,6 +80,7 @@
 
 <script>
 /*eslint-disable*/
+import axios from 'axios';
 import BookRating from './BookRating.vue';
 
 export default {
@@ -89,6 +100,9 @@ export default {
     },
     averages() {
       return this.$store.getters.getAverages;
+    },
+    authId() {
+      return this.$store.getters.authId;
     }
   },
 
@@ -109,6 +123,16 @@ export default {
       }
       this.status = 'Dostępne';
       return 'green';
+    },
+
+    addFavourite() {
+      axios.post('/api/favourite/addBook', {
+        user_id: this.authId,
+        book_id: parseInt(this.book_id)
+      })
+        .catch((error) => {
+          console.log(error);
+        });
     }
   }
 };

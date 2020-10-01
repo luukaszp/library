@@ -56,6 +56,8 @@ Route::group(
         Route::get('borrow/getCategory/{id}', 'BorrowController@getCategory');
 
         Route::get('rating/ratingsAmount/{id}', 'RatingController@ratingsAmount');
+
+        Route::post('favourite/addBook', 'FavouritesController@addBook');
     }
 );
 

@@ -17,6 +17,7 @@ import events from './modules/events';
 import ratings from './modules/ratings';
 import opinions from './modules/opinions';
 import averages from './modules/averages';
+import favourites from './modules/favourites';
 
 Vue.use(Vuex);
 
@@ -35,7 +36,8 @@ export default new Vuex.Store({
     events,
     ratings,
     opinions,
-    averages
+    averages,
+    favourites
   },
   plugins: [createPersistedState()]
 });
