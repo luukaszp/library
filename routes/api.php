@@ -26,6 +26,7 @@ Route::get('category/getCategories', 'CategoryController@getCategories');
 Route::get('publisher/getPublishers', 'PublisherController@getPublishers');
 
 Route::get('author/getAuthors', 'AuthorController@getAuthors');
+Route::get('author/{id}', 'AuthorController@showAuthor');
 
 Route::get('rating/{id}', 'RatingController@showRating');
 Route::get('rating/all/{id}', 'RatingController@getRatings');
@@ -58,6 +59,8 @@ Route::group(
         Route::get('rating/ratingsAmount/{id}', 'RatingController@ratingsAmount');
 
         Route::post('favourite/addBook', 'FavouritesController@addBook');
+        Route::get('favourite/getFavouriteBooks/{id}', 'FavouritesController@getFavouriteBooks');
+        Route::delete('favourite/delete/{id}', 'FavouritesController@removeBook');
     }
 );
 

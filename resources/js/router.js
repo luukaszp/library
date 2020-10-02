@@ -25,6 +25,9 @@ import Opinions from './components/AdminPanel/Opinions.vue';
 import UserForms from './components/AdminPanel/UserForms.vue';
 import Calendar from './components/Calendar.vue';
 import Search from './components/Search.vue';
+import NewPositions from './components/NewPositions.vue';
+import Catalog from './components/Catalog.vue';
+import AuthorView from './components/AuthorView.vue';
 import BookView from './components/BookView.vue';
 import Profile from './components/Profile/Profile.vue';
 import UserBorrows from './components/Profile/UserBorrows.vue';
@@ -200,9 +203,25 @@ const routes = [
     component: Search
   },
   {
+    path: '/new',
+    name: 'new',
+    component: NewPositions
+  },
+  {
+    path: '/catalog',
+    name: 'catalog',
+    component: Catalog
+  },
+  {
     path: '/book/:book_id',
     name: 'bookview',
     component: BookView,
+    props: true
+  },
+  {
+    path: '/author/:author_id',
+    name: 'authorview',
+    component: AuthorView,
     props: true
   },
   {

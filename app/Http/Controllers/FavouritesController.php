@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\FavouriteBooks;
 use App\FavouriteAuthors;
+use App\Book;
+use App\Author;
+use DB;
+use Auth;
 
 class FavouritesController extends Controller
 {
@@ -82,6 +86,15 @@ class FavouritesController extends Controller
      */
     public function addBook(Request $request)
     {
+        if (FavouriteBooks::where('user_id', '=', $request->user_id)->where('book_id', '=', $request->book_id)->count() > 0) {
+            return response()->json(
+                [
+                'success' => false,
+                'message' => 'Record already exists.'
+                ], 409
+            );
+        }
+        
         $favBook = new FavouriteBooks();
         $favBook->user_id = $request->user_id;
         $favBook->book_id = $request->book_id;
@@ -99,30 +112,31 @@ class FavouritesController extends Controller
     /**
      * Remove the specified book from the list.
      *
-     * @param  FavouriteBooks $favBook
-     * @param  Book           $id
+     * @param  Request $request
      * @return \Illuminate\Http\JsonResponse
      * @throws \Exception
      */
-    public function removeBook(FavouriteBooks $favBook, $id)
+    public function removeBook($id)
     {
-        $book = Book::find($id);
+        $favBook = FavouriteBooks::where('user_id', '=', Auth::user()->id)->get()->toArray();
 
-        if ($favBook->books()->detach($book)) {
-            return response()->json(
-                [
-                'success' => true,
-                'message' => 'Book from given list was successfully removed.'
-                ]
-            );
-        } else {
+        if (!$favBook) {
             return response()->json(
                 [
                 'success' => false,
-                'message' => 'Book from given list could not be deleted.'
+                'message' => 'User does not have their favourite books list.'
                 ], 500
             );
         }
+
+        $favBook = FavouriteBooks::where('book_id', '=', $id)->delete();
+
+        return response()->json(
+            [
+            'success' => true,
+            'message' => 'Book from list has beed removed.'
+            ]
+        );
     }
 
     /**
@@ -130,9 +144,27 @@ class FavouritesController extends Controller
      *
      * @return Response
      */
-    public function getFavouriteBooks($user_id)
+    public function getFavouriteBooks($id)
     {
-        $favBook = FavouriteBooks::where('user_id', '=', $id)->get(['id'])->toArray();
+         $favBook = DB::table('favourite_books')
+             ->where('user_id', '=', $id)
+             ->join('books', 'books.id', '=', 'favourite_books.book_id')
+             ->join('authors', 'authors.id', '=', 'books.author_id')
+            ->select(
+                'books.title', 'authors.name', 'authors.surname', 'books.id'
+            )
+             ->get()
+             ->toArray();
+
+        if (!$favBook) {
+            return response()->json(
+                [
+                'success' => false,
+                'message' => 'Sorry, there is no favourite book list made by that user.',
+                ], 400
+            );
+        }
+
         return $favBook;
     }
 }

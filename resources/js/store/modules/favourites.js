@@ -10,10 +10,12 @@ export default {
     }
   },
   actions: {
-    fetchFavouriteBooks(context) {
+    // eslint-disable-next-line camelcase
+    fetchFavouriteBooks(context, user_id) {
       axios({
         method: 'GET',
-        url: 'http://127.0.0.1:8000/api/favourite/getFavouriteBooks'
+        // eslint-disable-next-line camelcase
+        url: `http://127.0.0.1:8000/api/favourite/getFavouriteBooks/${user_id}`
       })
         .then((response) => {
           context.commit('setFavourites', response.data);

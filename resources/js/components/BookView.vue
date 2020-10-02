@@ -25,7 +25,7 @@
             </v-col>
 
             <v-col>
-              <span>Autor: </span><span style="font-weight: bold" v-text="item.authorName + ' ' + item.surname" class="mr-2"></span>
+              <span>Autor: </span><router-link :to="{ name: 'authorview', params: { author_id: item.authorID } }" style="text-decoration: none; color: grey"><span style="font-weight: bold" v-text="item.authorName + ' ' + item.surname" class="mr-2"></span></router-link>
             </v-col>
 
             <v-col>
@@ -130,8 +130,39 @@ export default {
         user_id: this.authId,
         book_id: parseInt(this.book_id)
       })
+        .then((response) => {
+          const Toast = this.$swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000,
+            didOpen: (toast) => {
+              toast.addEventListener('mouseenter', this.$swal.stopTimer);
+              toast.addEventListener('mouseleave', this.$swal.resumeTimer);
+            }
+          });
+
+          Toast.fire({
+            icon: 'success',
+            title: 'Książkę dodano do listy ulubionych!'
+          });
+        })
         .catch((error) => {
-          console.log(error);
+          const Toast = this.$swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000,
+            didOpen: (toast) => {
+              toast.addEventListener('mouseenter', this.$swal.stopTimer);
+              toast.addEventListener('mouseleave', this.$swal.resumeTimer);
+            }
+          });
+
+          Toast.fire({
+            icon: 'error',
+            title: 'Książka już istnieje na liście ulubionych!'
+          });
         });
     }
   }

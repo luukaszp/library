@@ -72,7 +72,7 @@ class BookController extends Controller
             ->select(
                 'books.id', 'books.title', 'books.isbn', 'books.description', 'books.publish_year',
                 'books.amount', 'categories.name as categoryName', 'authors.name as authorName',
-                'authors.surname', 'publishers.name as publisherName', 'books.cover'
+                'authors.surname', 'authors.id as authorID', 'publishers.name as publisherName', 'books.cover'
             )
             ->get()
             ->toArray();
