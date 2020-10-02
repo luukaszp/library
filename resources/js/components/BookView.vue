@@ -144,7 +144,7 @@ export default {
 
           Toast.fire({
             icon: 'success',
-            title: 'Książkę dodano do listy ulubionych!'
+            title: 'Książka została dodana do listy ulubionych!'
           });
         })
         .catch((error) => {

@@ -11,6 +11,15 @@
                 <h2>{{authors.name + ' ' + authors.surname}}</h2>
                 <v-divider></v-divider>
                 <p>{{authors.description}}</p>
+
+                <v-btn
+                    outlined
+                    color="indigo"
+                    @click="addFavourite()"
+                >
+                    DODAJ DO ULUBIONYCH
+                    <v-icon style="padding-left: 10px" color="#FFD700">mdi-star</v-icon>
+                </v-btn>
             </v-col>
         </v-row>
 
@@ -41,6 +50,9 @@ export default {
   computed: {
     authors() {
       return this.$store.getters.getAuthors;
+    },
+    authId() {
+      return this.$store.getters.authId;
     }
   },
 
@@ -49,7 +61,46 @@ export default {
   },
 
   methods: {
+      addFavourite() {
+      axios.post('/api/favourite/addAuthor', {
+        user_id: this.authId,
+        author_id: parseInt(this.author_id)
+      })
+        .then((response) => {
+          const Toast = this.$swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000,
+            didOpen: (toast) => {
+              toast.addEventListener('mouseenter', this.$swal.stopTimer);
+              toast.addEventListener('mouseleave', this.$swal.resumeTimer);
+            }
+          });
 
+          Toast.fire({
+            icon: 'success',
+            title: 'Autor został dodany do listy ulubionych!'
+          });
+        })
+        .catch((error) => {
+          const Toast = this.$swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000,
+            didOpen: (toast) => {
+              toast.addEventListener('mouseenter', this.$swal.stopTimer);
+              toast.addEventListener('mouseleave', this.$swal.resumeTimer);
+            }
+          });
+
+          Toast.fire({
+            icon: 'error',
+            title: 'Autor już istnieje na liście ulubionych!'
+          });
+        });
+    }
   }
 };
 </script>
