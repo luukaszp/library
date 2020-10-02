@@ -137,7 +137,7 @@ class AuthorController extends Controller
      */
     public function showAuthor($id)
     {
-        $author = Author::where('id', '=', $id)->get(['id', 'name', 'surname', 'description', 'photo'])->toArray();
+        $author = Author::find($id);
 
         if (!$author) {
             return response()->json(

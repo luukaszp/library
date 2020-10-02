@@ -90,6 +90,37 @@ class BookController extends Controller
     }
 
     /**
+     * Display book for a specific author.
+     *
+     * @param  $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function authorBooks($id)
+    {
+        $book = DB::table('books')
+            ->where('books.author_id', '=', $id)
+            ->join('categories', 'categories.id', '=', 'books.category_id')
+            ->join('publishers', 'publishers.id', '=', 'books.publisher_id')
+            ->select(
+                'books.id', 'books.title', 'books.isbn', 'books.description', 'books.publish_year',
+                'categories.name as categoryName', 'publishers.name as publisherName', 'books.cover'
+            )
+            ->get()
+            ->toArray();
+
+        if (!$book) {
+            return response()->json(
+                [
+                'success' => false,
+                'message' => 'Sorry, author does not have any books.',
+                ], 400
+            );
+        }
+
+        return $book;
+    }
+
+    /**
      * Store a newly created book.
      *
      * @param  Request $request

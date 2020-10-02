@@ -28,6 +28,7 @@ import Search from './components/Search.vue';
 import NewPositions from './components/NewPositions.vue';
 import Catalog from './components/Catalog.vue';
 import AuthorView from './components/AuthorView.vue';
+import AuthorBooks from './components/AuthorBooks.vue';
 import BookView from './components/BookView.vue';
 import Profile from './components/Profile/Profile.vue';
 import UserBorrows from './components/Profile/UserBorrows.vue';

@@ -20,6 +20,7 @@ Route::post('refresh', 'AuthController@refresh');
 
 Route::get('book/getBooks', 'BookController@getBooks');
 Route::get('book/{id}', 'BookController@showBook');
+Route::get('author/{id}/books', 'BookController@authorBooks');
 
 Route::get('category/getCategories', 'CategoryController@getCategories');
 
