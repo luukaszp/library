@@ -36,6 +36,19 @@ export default {
         });
     },
 
+    fetchNewBooks(context) {
+      axios({
+        method: 'GET',
+        url: 'http://127.0.0.1:8000/api/book/getNewBooks'
+      })
+        .then((response) => {
+          context.commit('setBooks', response.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+
     // eslint-disable-next-line camelcase
     fetchOneBook(context, book_id) {
       axios({

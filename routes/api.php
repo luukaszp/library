@@ -19,6 +19,7 @@ Route::post('loginWorker', 'AuthController@loginWorker');
 Route::post('refresh', 'AuthController@refresh');
 
 Route::get('book/getBooks', 'BookController@getBooks');
+Route::get('book/getNewBooks', 'BookController@getNewBooks');
 Route::get('book/{id}', 'BookController@showBook');
 Route::get('author/{id}/books', 'BookController@authorBooks');
 

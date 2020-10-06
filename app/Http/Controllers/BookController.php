@@ -10,6 +10,7 @@ use App\Http\Requests\StoreBook;
 use Illuminate\Http\Request;
 use Intervention\Image\Facades\Image;
 use DB;
+use Carbon\Carbon;
 
 class BookController extends Controller
 {
@@ -33,7 +34,7 @@ class BookController extends Controller
             ->toArray();
         return $data;
     }
-
+    
     /**
      * Display a listing of available books.
      *
@@ -118,6 +119,30 @@ class BookController extends Controller
         }
 
         return $book;
+    }
+
+    /**
+     * Display a listing of books from the last 10 days.
+     *
+     * @return Response
+     */
+    public function getNewBooks()
+    {
+        $date = Carbon::today()->subDays(7);
+
+        $data = DB::table('books')
+            ->where('books.created_at', '>=', $date)
+            ->join('categories', 'categories.id', '=', 'books.category_id')
+            ->join('publishers', 'publishers.id', '=', 'books.publisher_id')
+            ->join('authors', 'authors.id', '=', 'books.author_id')
+            ->select(
+                'books.id', 'books.title', 'books.isbn', 'books.description', 'books.publish_year',
+                'books.amount', 'categories.name as categoryName', 'authors.name as authorName',
+                'authors.surname', 'publishers.name as publisherName', 'books.cover'
+            )
+            ->get()
+            ->toArray();
+        return $data;
     }
 
     /**
