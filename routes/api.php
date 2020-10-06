@@ -67,6 +67,9 @@ Route::group(
         Route::post('favourite/addAuthor', 'FavouritesController@addAuthor');
         Route::get('favourite/getFavouriteAuthors/{id}', 'FavouritesController@getFavouriteAuthors');
         Route::delete('favourite/delete/{id}/author', 'FavouritesController@removeAuthor');
+
+        Route::post('suggestions/add', 'SuggestionController@addSuggestion');
+        Route::get('suggestions/getSuggestions', 'SuggestionController@getSuggestions');
     }
 );
 

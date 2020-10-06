@@ -18,6 +18,7 @@ import ratings from './modules/ratings';
 import opinions from './modules/opinions';
 import averages from './modules/averages';
 import favourites from './modules/favourites';
+import suggestions from './modules/suggestions';
 
 Vue.use(Vuex);
 
@@ -37,7 +38,8 @@ export default new Vuex.Store({
     ratings,
     opinions,
     averages,
-    favourites
+    favourites,
+    suggestions
   },
   plugins: [createPersistedState()]
 });

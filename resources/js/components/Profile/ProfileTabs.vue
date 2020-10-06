@@ -59,7 +59,7 @@ export default {
             icon: 'mdi-heart'
         },
         {
-            title: 'ZAPROPONUJ',
+            title: 'ZASUGERUJ',
             route: `/profile/${this.user_id}/suggestions`,
             icon: 'mdi-lightbulb-on'
         },
