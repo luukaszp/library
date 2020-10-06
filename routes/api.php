@@ -69,7 +69,6 @@ Route::group(
         Route::delete('favourite/delete/{id}/author', 'FavouritesController@removeAuthor');
 
         Route::post('suggestions/add', 'SuggestionController@addSuggestion');
-        Route::get('suggestions/getSuggestions', 'SuggestionController@getSuggestions');
     }
 );
 
@@ -127,5 +126,8 @@ Route::group(
         Route::put('calendar/event/edit/{id}', 'EventController@editEvent');
         Route::post('calendar/event/add', 'EventController@addEvent');
         Route::delete('calendar/event/delete/{id}', 'EventController@deleteEvent');
+
+        Route::get('suggestions/getSuggestions', 'SuggestionController@getSuggestions');
+        Route::delete('suggestions/delete/{id}', 'SuggestionController@deleteSuggestion');
     }
 );

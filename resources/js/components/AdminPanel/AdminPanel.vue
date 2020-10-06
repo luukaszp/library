@@ -105,7 +105,7 @@ export default {
           action: 'mdi-gesture-tap-button',
           title: 'Akcje',
           items: [
-            { title: 'Propozycje czytelników', route: '/admin-panel/suggestions' },
+            { title: 'Sugestie czytelników', route: '/admin-panel/suggestions' },
             { title: 'Opinie', route: '/admin-panel/opinions' },
             { title: 'Wypełnione ankiety', route: '/admin-panel/userforms' }
           ]

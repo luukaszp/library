@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Suggestion;
+use DB;
 
 class SuggestionController extends Controller
 {
@@ -76,7 +77,7 @@ class SuggestionController extends Controller
         $suggestion = DB::table('suggestions')
             ->join('users', 'users.id', '=', 'suggestions.user_id')
             ->select(
-                'suggestions.type', 'suggestions.description', 'users.name', 'users.surname'
+                'suggestions.id', 'suggestions.type', 'suggestions.description', 'users.name', 'users.surname'
             )
             ->get()
             ->toArray();
