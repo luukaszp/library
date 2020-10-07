@@ -24,7 +24,7 @@
                                 class="mr-3"
                         ></v-text-field>
                         <v-spacer></v-spacer>
-                        <v-dialog v-model="addAuthorDialog" max-width="300px">
+                        <v-dialog v-model="addAuthorDialog" max-width="500px">
                             <template v-slot:activator="{ on }">
                                 <v-btn color="#3eb4a7" dark class="mb-2" v-on="on">Nowy autor</v-btn>
                             </template>
@@ -35,7 +35,7 @@
 
                                 <v-card-text>
                                     <v-container>
-                                        <v-form v-model="valid" ref="form">
+                                        <v-form ref="form">
                                             <v-row>
                                                 <v-col>
                                                     <v-text-field v-model="editedItem.name" :rules="nameRules" label="Imię"></v-text-field>
@@ -43,6 +43,36 @@
                                                 <v-col>
                                                     <v-text-field v-model="editedItem.surname" :rules="surnameRules" label="Nazwisko"></v-text-field>
                                                 </v-col>
+                                            </v-row>
+                                            <v-row>
+                                                <v-col>
+                                                    <v-text-field v-model="editedItem.description" :rules="descriptionRules" label="Życiorys"></v-text-field>
+                                                </v-col>
+                                            </v-row>
+                                            <v-row style="justify-content: center; text-align: center">
+                                                <v-btn
+                                                    color="primary"
+                                                    class="text-none pa-5 pb-0 pt-0"
+                                                    rounded
+                                                    depressed
+                                                    :loading="isSelecting"
+                                                    v-model="photo"
+                                                    @click="onButtonClick"
+                                                >
+                                                    <v-icon left>
+                                                        mdi-book
+                                                    </v-icon>
+                                                    {{ buttonText }}
+                                                </v-btn>
+                                                <input
+                                                    ref="uploader"
+                                                    :rules="photoRules"
+                                                    required
+                                                    class="d-none"
+                                                    type="file"
+                                                    accept="image/*"
+                                                    @change="onFileChanged"
+                                                >
                                             </v-row>
                                         </v-form>
                                     </v-container>
@@ -55,8 +85,73 @@
                                 </v-card-actions>
                             </v-card>
                         </v-dialog>
+
+                        <v-dialog v-model="editPhotoDialog" max-width="700px">
+                            <v-card>
+                            <v-card-text>
+                                <v-container>
+                                <v-row align="center" justify="center">
+                                    <v-col cols="6">
+                                    <v-card>
+                                        <v-img
+                                        v-bind:src="('../storage/' + image)"
+                                        aspect-ratio="1"
+                                        ></v-img>
+                                    </v-card>
+                                    </v-col>
+                                </v-row>
+                                </v-container>
+                            </v-card-text>
+
+                            <v-card-actions style="justify-content: center; display: block ruby; text-align: center">
+                                <v-spacer></v-spacer>
+                                <v-btn color="blue darken-1" text @click="closePhoto">Anuluj</v-btn>
+                                <v-btn
+                                    color="primary"
+                                    class="text-none pl-5 pr-5"
+                                    style="margin-right: 15px"
+                                    rounded
+                                    depressed
+                                    :loading="isSelecting"
+                                    v-model="photo"
+                                    @click="onButtonClick"
+                                >
+                                    <v-icon left>
+                                        mdi-book
+                                    </v-icon>
+                                    {{ buttonText }}
+                                </v-btn>
+                                <input
+                                    ref="uploader"
+                                    :rules="photoRules"
+                                    required
+                                    class="d-none"
+                                    type="file"
+                                    accept="image/*"
+                                    @change="onFileChanged"
+                                >
+                                <v-btn
+                                color=brown
+                                @click="refreshPhoto"
+                                :disabled="!valid"
+                                >
+                                Odśwież
+                                </v-btn>
+                                </v-card-actions>
+                            </v-card>
+                        </v-dialog>
                     </v-toolbar>
                 </template>
+
+                    <template v-slot:[`item.photo`]="{ item }">
+                    <v-icon
+                        small
+                        class="mr-2"
+                        @click="showPhoto(item)"
+                    >
+                        mdi-image
+                    </v-icon>
+                    </template>
 
                     <template v-slot:[`item.action`]="{ item }">
                         <v-icon
@@ -89,10 +184,13 @@ export default {
   name: 'Authors',
   data: () => ({
     addAuthorDialog: false,
+    editPhotoDialog: false,
+    defaultButtonText: 'Wgraj zdjęcie autora',
+    isSelecting: false,
     valid: false,
     search: '',
-    authorName: '',
-    authorSurname: '',
+    image: '',
+    photo: [],
     headers: [
       {
         text: 'Imię',
@@ -100,16 +198,20 @@ export default {
         value: 'name'
       },
       { text: 'Nazwisko', value: 'surname' },
+      { text: 'Życiorys', value: 'description' },
+      { text: 'Zdjęcie', value: 'photo' },
       { text: 'Akcje', value: 'action', sortable: false }
     ],
     editedIndex: -1,
     editedItem: {
       name: '',
-      surname: ''
+      surname: '',
+      description: ''
     },
     defaultItem: {
       name: '',
-      surname: ''
+      surname: '',
+      description: ''
     },
     nameRules: [
       (v) => !!v || 'Imię jest wymagane!',
@@ -118,6 +220,14 @@ export default {
     surnameRules: [
       (v) => !!v || 'Nazwisko jest wymagane!',
       (v) => /^[a-zA-ZąęćżźńłóśĄĆĘŁŃÓŚŹŻ\s]+$/.test(v) || 'Nazwisko powinno zawierać tylko litery'
+    ],
+    descriptionRules: [
+      (v) => !!v || 'Życiorys jest wymagany!',
+      (v) => v.length >= 25 || 'Życiorys jest za krótki!'
+    ],
+    photoRules: [
+      (v) => !!v || 'Zdjęcie autora jest wymagane!',
+      (v) => v.size < 2000000 || 'Zdjęcie autora powinno być mniejsze niż 2MB!'
     ]
   }),
 
@@ -127,6 +237,9 @@ export default {
     },
     authors() {
       return this.$store.getters.getAuthors;
+    },
+    buttonText() {
+      return this.selectedFile ? this.selectedFile.name : this.defaultButtonText;
     }
   },
 
@@ -154,7 +267,7 @@ export default {
         icon: 'question',
         showCancelButton: true,
         confirmButtonText: 'Usuń',
-        cancelButtonText: 'Anuluj',
+        cancelButtonText: 'Anuluj'
       }).then((result) => {
         if (result.value) {
           axios.delete(`/api/author/delete/${item.id}`, {});
@@ -172,14 +285,23 @@ export default {
           Object.assign(this.authors[this.editedIndex], this.editedItem);
           axios.put(`/api/author/edit/${this.editedItem.id}`, {
             name: this.editedItem.name,
-            surname: this.editedItem.surname
+            surname: this.editedItem.surname,
+            description: this.editedItem.description
           });
         } else {
-          this.authors.push(this.editedItem);
-          axios.post('/api/author/add', {
-            name: this.editedItem.name,
-            surname: this.editedItem.surname
-          })
+          const formData = new FormData();
+          formData.append('photo', this.photo);
+          formData.append('name', this.editedItem.name);
+          formData.append('surname', this.editedItem.surname);
+          formData.append('description', this.editedItem.description);
+          
+          const config = {
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            }
+          };
+
+          axios.post('http://127.0.0.1:8000/api/author/add', formData, config)
             .catch((error) => {
               console.log(error);
             });
@@ -195,7 +317,49 @@ export default {
         this.editedItem = { ...this.defaultItem };
         this.editedIndex = -1;
       });
-    }
+    },
+
+    onButtonClick() {
+      this.isSelecting = true;
+      window.addEventListener('focus', () => {
+        this.isSelecting = false;
+      }, { once: true });
+
+      this.$refs.uploader.click();
+    },
+    onFileChanged(e) {
+      this.photo = e.target.files[0];
+      this.valid = true;
+    },
+
+    closePhoto () {
+      this.editPhotoDialog = false;
+      this.$nextTick(() => {
+        this.editedItem = { ...this.defaultItem };
+        this.editedIndex = -1;
+      });
+    },
+
+    showPhoto (item) {
+      this.image = item.photo;
+      this.editedIndex = this.authors.indexOf(item);
+      this.editedItem = { ...item };
+      this.editPhotoDialog = true;
+    },
+
+    refreshPhoto () {
+      const formData = new FormData();
+      formData.append('photo', this.photo);
+
+      const config = {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      };
+
+      axios.post(`/api/author/changePhoto/${this.editedItem.id}`, formData, config);
+      this.$store.dispatch('fetchAuthors', {});
+    },
   }
 };
 </script>

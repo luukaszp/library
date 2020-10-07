@@ -12,6 +12,11 @@ import categories from './modules/categories';
 import borrows from './modules/borrows';
 import books from './modules/books';
 import authors from './modules/authors';
+import types from './modules/types';
+import events from './modules/events';
+import ratings from './modules/ratings';
+import opinions from './modules/opinions';
+import averages from './modules/averages';
 
 Vue.use(Vuex);
 
@@ -25,7 +30,12 @@ export default new Vuex.Store({
     categories,
     borrows,
     books,
-    authors
+    authors,
+    types,
+    events,
+    ratings,
+    opinions,
+    averages
   },
   plugins: [createPersistedState()]
 });

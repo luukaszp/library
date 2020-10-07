@@ -5,15 +5,47 @@
                         tile
                 >
                     <v-app-bar
-                            color=brown
+                            color=#654321
                             dark
                     >
+                        <router-link to="/">
+                            <v-app-bar-nav-icon>
+                                <v-img alt="App logo" :src="require('../assets/app_logo_t.png')" width="90px"/> <!--zmienic logo-->
+                            </v-app-bar-nav-icon>
+                        </router-link>
 
-                        <v-app-bar-nav-icon>
-                            <v-img alt="App logo" :src="require('../assets/app_logo_t.png')" width="90px"/> <!--zmienic logo-->
-                        </v-app-bar-nav-icon>
+                        <v-toolbar-title style="padding-left: 15px;">Biblioteka</v-toolbar-title>
 
-                        <v-toolbar-title>Biblioteka</v-toolbar-title>
+                        <v-spacer></v-spacer>
+
+                        <div class="d-flex justify-center align-center">
+                            <v-menu
+                            v-for="item in items"
+                            :key="item.text"
+                            offset-y
+                            >
+                            <template v-slot:activator="{ attrs, on }">
+                                <v-btn
+                                color="#204264"
+                                class="white--text ma-8"
+                                v-bind="attrs"
+                                v-on="on"
+                                >
+                                {{ item.text }}
+                                </v-btn>
+                            </template>
+
+                            <v-list>
+                                <v-list-item
+                                v-for="subItem in item.items"
+                                :key="subItem.title"
+                                :to="subItem.route"
+                                >
+                                <v-list-item-title v-text="subItem.title"></v-list-item-title>
+                                </v-list-item>
+                            </v-list>
+                            </v-menu>
+                        </div>
 
                         <v-spacer></v-spacer>
 
@@ -34,6 +66,9 @@
 
                             <v-list>
                                 <v-list-item>
+                                    <span><a>Profil</a></span>
+                                </v-list-item>
+                                <v-list-item>
                                     <span v-if="isLoggedIn"><a @click="logout">Wyloguj się</a></span>
                                 </v-list-item>
                             </v-list>
@@ -52,9 +87,43 @@ export default {
   components: {
     About
   },
+  data: () => ({
+    items: [
+      {
+        text: 'ZBIORY',
+        items: [
+          { title: 'Nowości na półce', route: '' },
+          { title: 'Ostatnio polecane', route: '' },
+          { title: 'Wyszukaj w katalogu', route: '' },
+          { title: 'Zaproponuj nową książkę', route: '' },
+          { title: 'Przedłuż termin zwrotu', route: '' }
+        ]
+      },
+      {
+        text: 'WYDARZENIA',
+        items: [
+          { title: 'Kalendarz wydarzeń', route: '' },
+          { title: 'Zapowiedzi', route: '' },
+          { title: 'Archiwum wydarzeń', route: '' }
+        ]
+      },
+      {
+        text: 'INFORMACJE',
+        items: [
+          { title: 'Kontakt', route: '' },
+          { title: 'Godziny otwarcia', route: '' },
+          { title: 'Regulamin', route: '' }
+        ]
+      }
+    ]
+  }),
   computed: {
-    isLoggedIn() { return this.$store.getters.isLoggedIn; },
-    loggedUser() { return this.$store.getters.loggedUser; }
+    isLoggedIn() {
+      return this.$store.getters.isLoggedIn;
+    },
+    loggedUser() {
+      return this.$store.getters.loggedUser;
+    }
   },
   methods: {
     logout() {
@@ -81,4 +150,7 @@ export default {
 </script>
 
 <style scoped>
+    a {
+        text-decoration: none;
+    }
 </style>

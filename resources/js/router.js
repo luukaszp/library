@@ -2,6 +2,7 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Login from './components/Login.vue';
+import Main from './components/Main.vue';
 import RegisterReader from './components/AdminPanel/RegisterReader.vue';
 import RegisterWorker from './components/AdminPanel/RegisterWorker.vue';
 import AddBook from './components/AdminPanel/AddBook.vue';
@@ -17,9 +18,15 @@ import Publishers from './components/AdminPanel/Publishers.vue';
 import BorrowsReturns from './components/AdminPanel/BorrowsReturns.vue';
 import Borrows from './components/AdminPanel/Borrows.vue';
 import DelaysPenalties from './components/AdminPanel/DelaysPenalties.vue';
+import Events from './components/AdminPanel/Events.vue';
+import Types from './components/AdminPanel/Types.vue';
 import Suggestions from './components/AdminPanel/Suggestions.vue';
 import Opinions from './components/AdminPanel/Opinions.vue';
 import UserForms from './components/AdminPanel/UserForms.vue';
+import Calendar from './components/Calendar.vue';
+import Search from './components/Search.vue';
+import BookView from './components/BookView.vue';
+import NotFound from './components/NotFound.vue';
 import store from './store/store.js';
 
 Vue.use(VueRouter);
@@ -47,6 +54,11 @@ const routes = [
       requiresAuth: true,
       is_admin: true
     }
+  },
+  {
+    path: '/',
+    name: 'main',
+    component: Main
   },
   {
     path: '/add-book',
@@ -140,6 +152,16 @@ const routes = [
         component: DelaysPenalties
       },
       {
+        path: '/admin-panel/calendar/events',
+        name: 'events',
+        component: Events
+      },
+      {
+        path: '/admin-panel/calendar/types',
+        name: 'types',
+        component: Types
+      },
+      {
         path: '/admin-panel/suggestions',
         name: 'suggestions',
         component: Suggestions
@@ -155,6 +177,27 @@ const routes = [
         component: UserForms
       }
     ]
+  },
+  {
+    path: '/calendar',
+    name: 'calendar',
+    component: Calendar
+  },
+  {
+    path: '/search',
+    name: 'search',
+    component: Search
+  },
+  {
+    path: '/book/:book_id',
+    name: 'bookview',
+    component: BookView,
+    props: true
+  },
+  {
+    path: '*',
+    name: 'notfound',
+    component: NotFound
   }
 ];
 

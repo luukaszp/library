@@ -59,7 +59,7 @@ axios.interceptors.response.use((response) => response,
     if (error.response.status !== 401) {
       return Promise.reject(error);
     }
-    if (error.response.status === 401) {
+    if (error.response.data.message === 'Token has expired') {
       Vue.swal({
         title: 'Sesja wygasła',
         text: 'Za chwilę zostaniesz wylogowany',

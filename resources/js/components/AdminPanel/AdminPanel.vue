@@ -61,6 +61,7 @@
 
 <script>
 export default {
+  name: 'AdminPanel',
   data () {
     return {
       items: [
@@ -90,6 +91,14 @@ export default {
             { title: 'Przeglądaj', route: '/admin-panel/borrows-returns' },
             { title: 'Wypożyczone', route: '/admin-panel/borrows' },
             { title: 'Opóźnienia i kary', route: '/admin-panel/delays-penalties' }
+          ]
+        },
+        {
+          action: 'mdi-calendar',
+          title: 'Kalendarz',
+          items: [
+            { title: 'Wydarzenia', route: '/admin-panel/calendar/events' },
+            { title: 'Typy wydarzeń', route: '/admin-panel/calendar/types' }
           ]
         },
         {

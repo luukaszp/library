@@ -45,7 +45,7 @@ class BorrowController extends Controller
             return response()->json(
                 [
                 'success' => true,
-                'book' => $borrow
+                'borrow' => $borrow
                 ], 201
             );
         } else {

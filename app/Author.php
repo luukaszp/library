@@ -17,7 +17,7 @@ class Author extends Model
     protected $guarded = [];
 
     protected $fillable = [
-        'name', 'surname',
+        'name', 'surname', 'description', 'photo'
     ];
 
     public function books()
