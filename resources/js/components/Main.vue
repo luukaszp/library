@@ -26,12 +26,10 @@
 export default {
   data: () => ({
     cards: [
-      { title: 'Kalendarz wydarzeń', src: require('../assets/main/calendar.jpg'), route: '/calendar', flex: 4 },
-      { title: 'Przeglądaj książki', src: require('../assets/main/books.jpg'), route: '/search', flex: 4 },
-      { title: 'Nowe pozycje', src: require('../assets/main/books_new.jpg'), route: '/new', flex: 4 },
-      { title: 'Wyszukaj w katalogu', src: 'https://cdn.vuetifyjs.com/images/cards/house.jpg', route: '/catalog', flex: 4 },
-      { title: 'Favorite road trips', src: 'https://cdn.vuetifyjs.com/images/cards/road.jpg', flex: 4 },
-      { title: 'Best airlines', src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg', flex: 4 }
+      { title: 'Kalendarz wydarzeń', src: require('../assets/main/calendar.jpg'), route: '/calendar', flex: 6 },
+      { title: 'Przeglądaj książki', src: require('../assets/main/books.jpg'), route: '/search', flex: 6 },
+      { title: 'Nowe pozycje', src: require('../assets/main/books_new.jpg'), route: '/new', flex: 6 },
+      { title: 'Wyszukaj w katalogu', src: require('../assets/main/search_book.jpg'), route: '/catalog', flex: 6 }
     ]
   })
 };
