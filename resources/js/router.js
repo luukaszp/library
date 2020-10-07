@@ -25,7 +25,22 @@ import Opinions from './components/AdminPanel/Opinions.vue';
 import UserForms from './components/AdminPanel/UserForms.vue';
 import Calendar from './components/Calendar.vue';
 import Search from './components/Search.vue';
+import NewPositions from './components/NewPositions.vue';
+import Catalog from './components/Catalog.vue';
+import AuthorView from './components/AuthorView.vue';
+import AuthorBooks from './components/AuthorBooks.vue';
 import BookView from './components/BookView.vue';
+import Profile from './components/Profile/Profile.vue';
+import UserBorrows from './components/Profile/UserBorrows.vue';
+import UserDelays from './components/Profile/UserDelays.vue';
+import Statistics from './components/Profile/Statistics.vue';
+import BorrowsAmount from './components/Profile/Charts/BorrowsAmount.vue';
+import FavoriteAuthor from './components/Profile/Charts/FavoriteAuthor.vue';
+import FavoriteCategory from './components/Profile/Charts/FavoriteCategory.vue';
+import RatingsAmount from './components/Profile/Charts/RatingsAmount.vue';
+import Favourites from './components/Profile/Favourites.vue';
+import UserSuggestions from './components/Profile/UserSuggestions.vue';
+import Questionnaires from './components/Profile/Questionnaires.vue';
 import NotFound from './components/NotFound.vue';
 import store from './store/store.js';
 
@@ -189,10 +204,96 @@ const routes = [
     component: Search
   },
   {
+    path: '/new',
+    name: 'new',
+    component: NewPositions
+  },
+  {
+    path: '/catalog',
+    name: 'catalog',
+    component: Catalog
+  },
+  {
     path: '/book/:book_id',
     name: 'bookview',
     component: BookView,
     props: true
+  },
+  {
+    path: '/author/:author_id',
+    name: 'authorview',
+    component: AuthorView,
+    props: true
+  },
+  {
+    path: '/profile/:user_id',
+    name: 'profile',
+    component: Profile,
+    props: true,
+    children: [
+        {
+          path: '/profile/:user_id/borrows',
+          name: 'userborrows',
+          component: UserBorrows,
+          props: true
+        },
+        {
+            path: '/profile/:user_id/delays',
+            name: 'userdelays',
+            component: UserDelays,
+            props: true
+        },
+        {
+            path: '/profile/:user_id/statistics',
+            name: 'statistics',
+            component: Statistics,
+            props: true,
+            children: [
+                {
+                  path: '/profile/:user_id/statistics/borrows',
+                  name: 'borrowsamount',
+                  component: BorrowsAmount,
+                  props: true
+                },
+                {
+                    path: '/profile/:user_id/statistics/authors',
+                    name: 'favoriteauthors',
+                    component: FavoriteAuthor,
+                    props: true
+                },
+                {
+                    path: '/profile/:user_id/statistics/categories',
+                    name: 'favoritecategories',
+                    component: FavoriteCategory,
+                    props: true
+                },
+                {
+                    path: '/profile/:user_id/statistics/ratings',
+                    name: 'ratingsamount',
+                    component: RatingsAmount,
+                    props: true
+                }
+                ]
+        },
+        {
+            path: '/profile/:user_id/favourites',
+            name: 'favourites',
+            component: Favourites,
+            props: true
+        },
+        {
+            path: '/profile/:user_id/suggestions',
+            name: 'usersuggestions',
+            component: UserSuggestions,
+            props: true
+        },
+        {
+            path: '/profile/:user_id/questionnaires',
+            name: 'questionnaires',
+            component: Questionnaires,
+            props: true
+        },
+    ]
   },
   {
     path: '*',

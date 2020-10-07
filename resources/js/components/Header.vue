@@ -57,6 +57,12 @@
                             </v-btn>
                         </router-link>
 
+                        <router-link to="/login" v-if="!isLoggedIn">
+                            <v-btn icon>
+                                <v-icon x-large>mdi-login</v-icon>
+                            </v-btn>
+                        </router-link>
+
                         <v-menu offset-y>
                             <template v-slot:activator="{ on }">
                                 <v-btn icon v-on="on" :disabled="!isLoggedIn">
@@ -65,8 +71,8 @@
                             </template>
 
                             <v-list>
-                                <v-list-item>
-                                    <span><a>Profil</a></span>
+                                <v-list-item :to="{ name: 'profile', params: { user_id: authId } }">
+                                    Profil
                                 </v-list-item>
                                 <v-list-item>
                                     <span v-if="isLoggedIn"><a @click="logout">Wyloguj się</a></span>
@@ -123,6 +129,9 @@ export default {
     },
     loggedUser() {
       return this.$store.getters.loggedUser;
+    },
+    authId() {
+      return this.$store.getters.authId;
     }
   },
   methods: {
@@ -134,7 +143,7 @@ export default {
         position: 'top-end',
         showConfirmButton: false,
         timer: 3000,
-        onOpen: (toast) => {
+        didOpen: (toast) => {
           toast.addEventListener('mouseenter', this.$swal.stopTimer);
           toast.addEventListener('mouseleave', this.$swal.resumeTimer);
         }

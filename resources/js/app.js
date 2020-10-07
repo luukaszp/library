@@ -2,6 +2,7 @@ import Vue from 'vue';
 import axios from 'axios';
 import VueAxios from 'vue-axios';
 import VueSweetalert2 from 'vue-sweetalert2';
+import VueApexCharts from 'vue-apexcharts';
 import App from './App.vue';
 import vuetify from './plugins/vuetify';
 import router from './router';
@@ -59,7 +60,8 @@ axios.interceptors.response.use((response) => response,
     if (error.response.status !== 401) {
       return Promise.reject(error);
     }
-    if (error.response.data.message === 'Token has expired') {
+    if (error.response.data.message === 'Token has expired' && localStorage.access_token != null) {
+      localStorage.removeItem('access_token');
       Vue.swal({
         title: 'Sesja wygasła',
         text: 'Za chwilę zostaniesz wylogowany',
@@ -68,7 +70,6 @@ axios.interceptors.response.use((response) => response,
       }).then((result) => {
         if (result.value) {
           Vue.swal('Wylogowano', 'Pomyślnie wylogowano!', 'success');
-          localStorage.removeItem('access_token');
           delete axios.defaults.headers.Authorization;
           router.push('/login');
         }
@@ -79,7 +80,9 @@ axios.interceptors.response.use((response) => response,
 Vue.config.productionTip = false;
 
 Vue.use(VueSweetalert2);
+Vue.use(VueApexCharts);
 Vue.use(VueAxios, axios);
+Vue.component('apexchart', VueApexCharts);
 
 new Vue({
   vuetify,

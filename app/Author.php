@@ -24,4 +24,9 @@ class Author extends Model
     {
         return $this->hasMany(Book::class);
     }
+
+    public function favouriteAuthors()
+    {
+        return $this->belongsTo(favouriteAuthors::class);
+    }
 }

@@ -238,4 +238,217 @@ class BorrowController extends Controller
             );
         }
     }
+
+    /**
+     * Show borrowings for a specific user.
+     *
+     * @param  Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    public function showBorrow($id)
+    {
+        $borrow = DB::table('borrows')
+            ->where('borrows.user_id', '=', $id)
+            ->where('borrows.when_returned', '=', null)
+            ->join('books', 'books.id', '=', 'borrows.book_id')
+            ->join('authors', 'authors.id', '=', 'books.author_id')
+            ->select(
+                'books.id', 'books.title', 'authors.name', 'authors.surname', 'borrows.borrows_date', 
+                'borrows.returns_date'
+            )
+            ->get()
+            ->toArray();
+
+        if (!$borrow) {
+            return response()->json(
+                [
+                'success' => false,
+                'message' => 'Sorry, borrowing cannot be found.'
+                ], 400
+            );
+        } else {
+            return $borrow;
+        } 
+    }
+
+    /**
+     * Show delays for a specific user.
+     *
+     * @param  Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    public function showDelay($id)
+    {
+        $borrow = DB::table('borrows')
+            ->where('borrows.user_id', '=', $id)
+            ->where('borrows.delay', '!=', null)
+            ->join('books', 'books.id', '=', 'borrows.book_id')
+            ->join('authors', 'authors.id', '=', 'books.author_id')
+            ->select(
+                'books.title', 'authors.name', 'authors.surname', 'borrows.delay', 'borrows.penalty'
+            )
+            ->get()
+            ->toArray();
+
+        if (!$borrow) {
+            return response()->json(
+                [
+                'success' => false,
+                'message' => 'Sorry, borrowing cannot be found.'
+                ], 400
+            );
+        } else {
+            return $borrow;
+        } 
+    }
+
+    /**
+     * Extend returns book deadline.
+     *
+     * @param  Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    public function extendDate(Request $request, $id)
+    {
+        $borrow = Borrow::find($id);
+
+        if (!$borrow) {
+            return response()->json(
+                [
+                'success' => false,
+                'message' => 'Sorry, borrowing with id ' . $id . ' cannot be found.'
+                ], 400
+            );
+        }
+
+        $date = Carbon::createFromFormat('Y-m-d', $borrow->returns_date);
+        $daysToAdd = 7;
+        $date = $date->addDays($daysToAdd);
+        $borrow->returns_date = $date->toDateString();
+        $borrow->save();
+
+        if ($borrow->save()) {
+            return response()->json(
+                [
+                'success' => true,
+                'message' => 'Borrowing has been updated',
+                ]
+            );
+        } else {
+            return response()->json(
+                [
+                'success' => false,
+                'message' => 'Sorry, borrowing could not be updated.',
+                ], 500
+            );
+        }
+    }
+
+    /**
+     * Get amount of borrowings for all months.
+     *
+     * @param  Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    public function getAmount($id)
+    {
+        $borrow = Borrow::where('user_id', '=', $id)
+            ->select('borrows_date')
+            ->get()
+            ->groupBy(
+                function ($date) {
+                    return Carbon::parse($date->borrows_date)->format('m'); // grouping by months
+                }
+            );
+            
+        if (!$borrow) {
+            return response()->json(
+                [
+                'success' => false,
+                'message' => 'Sorry, user has no borrowings.'
+                ], 400
+            );
+        }
+
+        $borrowsCount = [];
+        $amount = [];
+        
+        foreach ($borrow as $key => $value) {
+            $borrowsCount[(int)$key] = count($value);
+        }
+        
+        for($i = 1; $i <= 12; $i++){
+            if(!empty($borrowsCount[$i])) {
+                $amount[$i] = $borrowsCount[$i];    
+            }else{
+                $amount[$i] = 0;    
+            }
+        }
+
+        return $amount;
+    }
+
+    /**
+     * Get favorite authors.
+     *
+     * @param  Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    public function getAuthors($id)
+    {
+        $borrow = Borrow::where('user_id', '=', $id)
+            ->join('books', 'books.id', '=', 'borrows.book_id')
+            ->join('authors', 'authors.id', '=', 'books.author_id')
+            ->select('authors.name', 'authors.surname', DB::raw('COUNT(authors.name + authors.surname) as count'))
+            ->groupBy('authors.surname')
+            ->orderBy('count')
+            ->take(5)
+            ->get();
+
+        if (!$borrow) {
+            return response()->json(
+                [
+                'success' => false,
+                'message' => 'Sorry, user has no borrowings.'
+                ], 400
+            );
+        }
+
+        return $borrow;
+    }
+
+    /**
+     * Get preferable category.
+     *
+     * @param  Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    public function getCategory($id)
+    {
+        $borrow = Borrow::where('user_id', '=', $id)
+            ->join('books', 'books.id', '=', 'borrows.book_id')
+            ->join('categories', 'categories.id', '=', 'books.category_id')
+            ->select('categories.name', DB::raw('COUNT(categories.name) as count'))
+            ->groupBy('categories.name')
+            ->orderBy('count')
+            ->take(5)
+            ->get();
+
+        if (!$borrow) {
+            return response()->json(
+                [
+                'success' => false,
+                'message' => 'Sorry, user has no borrowings.'
+                ], 400
+            );
+        }
+
+        return $borrow;
+    }
 }

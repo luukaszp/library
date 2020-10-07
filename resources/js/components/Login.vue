@@ -119,7 +119,7 @@ export default {
               position: 'top-end',
               showConfirmButton: false,
               timer: 3000,
-              onOpen: (toast) => {
+              didOpen: (toast) => {
                 toast.addEventListener('mouseenter', this.$swal.stopTimer);
                 toast.addEventListener('mouseleave', this.$swal.resumeTimer);
               }

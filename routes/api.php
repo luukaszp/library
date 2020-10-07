@@ -19,13 +19,16 @@ Route::post('loginWorker', 'AuthController@loginWorker');
 Route::post('refresh', 'AuthController@refresh');
 
 Route::get('book/getBooks', 'BookController@getBooks');
+Route::get('book/getNewBooks', 'BookController@getNewBooks');
 Route::get('book/{id}', 'BookController@showBook');
+Route::get('author/{id}/books', 'BookController@authorBooks');
 
 Route::get('category/getCategories', 'CategoryController@getCategories');
 
 Route::get('publisher/getPublishers', 'PublisherController@getPublishers');
 
 Route::get('author/getAuthors', 'AuthorController@getAuthors');
+Route::get('author/{id}', 'AuthorController@showAuthor');
 
 Route::get('rating/{id}', 'RatingController@showRating');
 Route::get('rating/all/{id}', 'RatingController@getRatings');
@@ -44,6 +47,28 @@ Route::group(
 
         Route::post('rating/add', 'RatingController@addRating');
         Route::delete('rating/delete/{id}', 'RatingController@deleteRating');
+
+        Route::get('user/profile/{id}', 'UserController@showReader');
+        Route::post('user/profile/upload', 'UserController@changeAvatar');
+
+        Route::get('borrow/showBorrow/{id}', 'BorrowController@showBorrow');
+        Route::get('borrow/showDelay/{id}', 'BorrowController@showDelay');
+        Route::put('borrow/extend/{id}', 'BorrowController@extendDate');
+        Route::get('borrow/getAmount/{id}', 'BorrowController@getAmount');
+        Route::get('borrow/getAuthors/{id}', 'BorrowController@getAuthors');
+        Route::get('borrow/getCategory/{id}', 'BorrowController@getCategory');
+
+        Route::get('rating/ratingsAmount/{id}', 'RatingController@ratingsAmount');
+
+        Route::post('favourite/addBook', 'FavouritesController@addBook');
+        Route::get('favourite/getFavouriteBooks/{id}', 'FavouritesController@getFavouriteBooks');
+        Route::delete('favourite/delete/{id}/book', 'FavouritesController@removeBook');
+
+        Route::post('favourite/addAuthor', 'FavouritesController@addAuthor');
+        Route::get('favourite/getFavouriteAuthors/{id}', 'FavouritesController@getFavouriteAuthors');
+        Route::delete('favourite/delete/{id}/author', 'FavouritesController@removeAuthor');
+
+        Route::post('suggestions/add', 'SuggestionController@addSuggestion');
     }
 );
 
@@ -101,5 +126,8 @@ Route::group(
         Route::put('calendar/event/edit/{id}', 'EventController@editEvent');
         Route::post('calendar/event/add', 'EventController@addEvent');
         Route::delete('calendar/event/delete/{id}', 'EventController@deleteEvent');
+
+        Route::get('suggestions/getSuggestions', 'SuggestionController@getSuggestions');
+        Route::delete('suggestions/delete/{id}', 'SuggestionController@deleteSuggestion');
     }
 );

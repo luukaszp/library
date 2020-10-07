@@ -130,6 +130,28 @@ class AuthorController extends Controller
     }
 
     /**
+     * Display book by id
+     *
+     * @param  $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function showAuthor($id)
+    {
+        $author = Author::find($id);
+
+        if (!$author) {
+            return response()->json(
+                [
+                'success' => false,
+                'message' => 'Sorry, author with id ' . $id . ' cannot be found.',
+                ], 400
+            );
+        }
+
+        return $author;
+    }
+
+    /**
      * Edit current author photo
      *
      * @param  Request $request
