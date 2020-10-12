@@ -8,14 +8,14 @@
                             contain
                             class="shrink"
                             :src="require('../assets/app_logo.png')"
-                    /> <!-- zmienic logo -->
+                    />
                 </v-row>
                 <v-divider
                         vertical
                 ></v-divider>
                 <v-col
                         cols="12"
-                        md="7"
+                        md="6"
                         class="form"
                 >
 
@@ -29,7 +29,7 @@
                                 md="6"
                         >
                             <h1 class="pt-8" style="text-align: center">Biblioteka</h1>
-<!--czy dodac logowanie za pomoca numeru karty i emaila ??? -->
+
                             <v-text-field
                                     class="pa-5 pb-0"
                                     v-model="login"

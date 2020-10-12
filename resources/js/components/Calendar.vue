@@ -34,7 +34,7 @@
                         v-model="focus"
                         :weekdays="weekday"
                         type="month"
-                        color="purple"
+                        color="#A5F78F"
                         :events="getEvents"
                         :event-color="getEventColor"
                         :interval-count = 0
@@ -54,15 +54,13 @@
             <v-sheet
                 class="mx-auto"
                 elevation="8"
-                max-width="500"
                 style="text-align: center"
             >
                 <v-carousel
                 cycle
-                class="pa-8"
-                hide-delimiter-background
+                hide-delimiters
                 show-arrows
-                height="300"
+                style="height: 225px"
                 >
                 <v-carousel-item
                     v-for="value in eventInfo()"
@@ -71,7 +69,6 @@
                     <v-card
                     :color="value.color"
                     class="ma-4"
-                    width="405"
                     >
                     <v-row
                         align="center"
@@ -173,7 +170,9 @@ export default {
     },
     viewDay ({ date }) {
       this.focus = date;
-      this.dailyModal = true;
+      if (this.eventInfo().length > 0) {
+        this.dailyModal = true;
+      }
     },
     eventInfo () {
       const daily = [];

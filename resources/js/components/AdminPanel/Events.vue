@@ -53,7 +53,7 @@
                                                 <template v-slot:activator="{ on, attrs }">
                                                     <v-text-field
                                                     v-model="editedItem.date"
-                                                    label="Wybierz datę wypożyczenia"
+                                                    label="Wybierz datę wydarzenia"
                                                     prepend-icon="mdi-calendar"
                                                     readonly
                                                     v-bind="attrs"
@@ -76,7 +76,7 @@
                                                 <template v-slot:activator="{ on, attrs }">
                                                     <v-text-field
                                                     v-model="editedItem.time"
-                                                    label="Wybierz czas wypożyczenia"
+                                                    label="Wybierz czas wydarzenia"
                                                     prepend-icon="mdi-calendar"
                                                     readonly
                                                     v-bind="attrs"

@@ -35,6 +35,8 @@ Route::get('rating/all/{id}', 'RatingController@getRatings');
 
 Route::get('opinion/all/{id}', 'OpinionController@getOpinions');
 
+Route::get('first-login/{id}', 'AuthController@firstLogin')->name('first-login');
+
 Route::group(
     ['middleware' => 'auth.jwt'], function () {
         Route::get('logout', 'AuthController@logout');

@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Http\Requests\AuthRequest;
 use App\Http\Requests\Reactivation;
 use App\User;
+use App\Mail\NewUserMail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use JWTAuth;
@@ -94,7 +96,27 @@ class AuthController extends Controller
 
         $user->save();
 
+        Mail::to($user->email)->send(new NewUserMail($user));
+
         return response()->json(['success' => true]);
+    }
+
+    /**
+     * Password change (first login)
+     * @param User $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
+
+    public function firstLogin($id)
+    {
+        $user = User::where('id', $id)->first();
+
+        if (empty($user)) {
+            return redirect()->to('/login')
+                ->with(['error' => 'Coś poszło nie tak...']);
+        }
+
+        return redirect()->to('first-login/' . $id . '');
     }
 
     /**
