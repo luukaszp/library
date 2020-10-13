@@ -8,7 +8,7 @@
                 >
 
                     <h1 class="pt-5" style="text-align: center">Witamy na stronie biblioteki!</h1>
-                    <p class="pt-5 pb-2" style="text-align: center">W związku z Twoim pierwszym logowaniem, prosimy o zmianę hasła</p>
+                    <p class="pt-5 pb-2" style="text-align: center">W związku z Twoim pierwszym logowaniem, prosimy o zmianę hasła.</p>
 
                     <v-divider class="pt-5"></v-divider>
 
@@ -87,19 +87,32 @@ export default {
   computed: {
     passwordConfirmationRule() {
       return () => this.password === this.passwordConfirmation || 'Hasło musi być takie same';
+    },
+    authId() {
+      return this.$store.getters.authId;
+    },
+    readers() {
+      return this.$store.getters.getReaders;
     }
   },
 
   created () {
-
+    if (this.$route.params.user_id !== this.authId.toString()) {
+      this.$swal('Nieautoryzowany', 'Odmowa dostępu!', 'error');
+      this.firstLoginDialog = false;
+      this.$router.push('/');
+    }
   },
+
   methods: {
     validate() {
       if (this.$refs.form.validate()) {
-        this.$store.dispatch('userRegister', {
+        const data = {
+          user_id: this.authId,
           password: this.password,
           passwordConfirmation: this.passwordConfirmation
-        })
+        };
+        this.$store.dispatch('passwordChange', data)
           .catch((error) => {
             console.log(error);
           });

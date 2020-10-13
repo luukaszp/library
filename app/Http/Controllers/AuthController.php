@@ -13,6 +13,7 @@ use Illuminate\Support\Str;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use JWTAuth;
 use JWTFactory;
+use Carbon\Carbon;
 
 class AuthController extends Controller
 {
@@ -96,7 +97,27 @@ class AuthController extends Controller
 
         $user->save();
 
-        Mail::to($user->email)->send(new NewUserMail($user));
+        if($request->id_number === null) {
+            Mail::to($user->email)->send(new NewUserMail($user));
+        }
+
+        return response()->json(['success' => true]);
+    }
+
+    /**
+     * Password change
+     *
+     * @param  Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Illuminate\Validation\ValidationException
+     */
+
+    public function passwordChange(Request $request)
+    {
+        $user = User::find($request->user_id);
+        $user->password = bcrypt($request->password);
+        $user->email_verified_at = Carbon::now()->toDateTimeString();
+        $user->save();
 
         return response()->json(['success' => true]);
     }
@@ -114,6 +135,10 @@ class AuthController extends Controller
         if (empty($user)) {
             return redirect()->to('/login')
                 ->with(['error' => 'Coś poszło nie tak...']);
+        }
+
+        if($user->email_verified_at !== null) {
+            return redirect()->to('/');
         }
 
         return redirect()->to('first-login/' . $id . '');
