@@ -104,7 +104,6 @@ export default {
         })
           .then((response) => {
             if (response.data.success === true) {
-              alert('Zarejestrowano pomyślnie!');
               if (user.id_number === '') {
                 router.push('/admin-panel/readers');
               } else {

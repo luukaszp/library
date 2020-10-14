@@ -132,10 +132,10 @@
                                 >
                                 <v-btn
                                 color=brown
-                                @click="refreshPhoto"
+                                @click="sendPhoto"
                                 :disabled="!valid"
                                 >
-                                Odśwież
+                                Wgraj
                                 </v-btn>
                                 </v-card-actions>
                             </v-card>
@@ -185,7 +185,7 @@ export default {
   data: () => ({
     addAuthorDialog: false,
     editPhotoDialog: false,
-    defaultButtonText: 'Wgraj zdjęcie autora',
+    defaultButtonText: 'Zmień zdjęcie autora',
     isSelecting: false,
     valid: false,
     search: '',
@@ -294,7 +294,7 @@ export default {
           formData.append('name', this.editedItem.name);
           formData.append('surname', this.editedItem.surname);
           formData.append('description', this.editedItem.description);
-          
+
           const config = {
             headers: {
               'Content-Type': 'multipart/form-data'
@@ -302,11 +302,29 @@ export default {
           };
 
           axios.post('http://127.0.0.1:8000/api/author/add', formData, config)
+          .then(() => {
+            const Toast = this.$swal.mixin({
+              toast: true,
+              position: 'top-end',
+              showConfirmButton: false,
+              timer: 2000,
+              didOpen: (toast) => {
+                toast.addEventListener('mouseenter', this.$swal.stopTimer);
+                toast.addEventListener('mouseleave', this.$swal.resumeTimer);
+              }
+            });
+
+            Toast.fire({
+              icon: 'success',
+              title: 'Dodano autora!'
+            });
+          })
             .catch((error) => {
               console.log(error);
             });
         }
         this.$store.dispatch('fetchAuthors', {});
+        this.$refs.form.resetValidation();
         this.close();
       }
     },
@@ -347,7 +365,7 @@ export default {
       this.editPhotoDialog = true;
     },
 
-    refreshPhoto () {
+    sendPhoto () {
       const formData = new FormData();
       formData.append('photo', this.photo);
 
@@ -356,10 +374,17 @@ export default {
           'Content-Type': 'multipart/form-data'
         }
       };
-
-      axios.post(`/api/author/changePhoto/${this.editedItem.id}`, formData, config);
+      axios.post(`/api/author/changePhoto/${this.editedItem.id}`, formData, config)
+        .then((response) => {
+          if (response.data.success === true) {
+            this.$swal('Dodano', 'Pomyślnie zmieniono awatar autora!', 'success');
+            this.editPhotoDialog = false;
+          } else {
+            this.$swal('Błąd', 'Awatar autora nie mógł zostać zmieniony!', 'error');
+          }
+        });
       this.$store.dispatch('fetchAuthors', {});
-    },
+    }
   }
 };
 </script>

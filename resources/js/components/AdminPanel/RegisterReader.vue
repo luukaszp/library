@@ -164,6 +164,23 @@ export default {
           password_confirmation: this.password_confirmation
         };
         this.$store.dispatch('userRegister', data)
+          .then(() => {
+            const Toast = this.$swal.mixin({
+              toast: true,
+              position: 'top-end',
+              showConfirmButton: false,
+              timer: 2000,
+              didOpen: (toast) => {
+                toast.addEventListener('mouseenter', this.$swal.stopTimer);
+                toast.addEventListener('mouseleave', this.$swal.resumeTimer);
+              }
+            });
+
+            Toast.fire({
+              icon: 'success',
+              title: 'Dodano nowego czytelnika!'
+            });
+          })
           .catch((error) => {
             console.log(error);
           });

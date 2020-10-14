@@ -118,10 +118,10 @@
                 >
                 <v-btn
                   color=brown
-                  @click="refreshImage"
+                  @click="sendImage"
                   :disabled="!valid"
                 >
-                  Odśwież
+                  Wgraj
                 </v-btn>
                 </v-card-actions>
             </v-card>
@@ -340,7 +340,7 @@ export default {
       this.valid = true;
     },
 
-    refreshImage () {
+    sendImage () {
       const formData = new FormData();
       formData.append('cover', this.cover); // formData nie działa z PUT ale z POST
 
@@ -349,8 +349,15 @@ export default {
           'Content-Type': 'multipart/form-data'
         }
       };
-
-      axios.post(`/api/book/changeImage/${this.editedItem.id}`, formData, config);
+      axios.post(`/api/book/changeImage/${this.editedItem.id}`, formData, config)
+        .then((response) => {
+          if (response.data.success === true) {
+            this.$swal('Dodano', 'Pomyślnie zmieniono okładkę książki!', 'success');
+            this.editImageDialog = false;
+          } else {
+            this.$swal('Błąd', 'Okładka książki nie mogła zostać zmieniona!', 'error');
+          }
+        });
       this.$store.dispatch('fetchBooks', {});
     },
 
