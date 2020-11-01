@@ -259,6 +259,7 @@ export default {
             });
         }
         this.$store.dispatch('fetchEvents', {});
+        this.$refs.form.resetValidation();
         this.close();
       }
     },

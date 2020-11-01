@@ -11,6 +11,7 @@
                     <swiper-slide
                         v-for="book in books"
                         :key="book.name"
+                        style="margin-left: 30px; margin-right: 30px"
                     >
                         <v-card class="card" style="border: 1px solid black; width: 460px">
                             <v-card-title style="justify-content: center">

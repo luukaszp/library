@@ -106,6 +106,7 @@ class BorrowController extends Controller
     public function getDelayedBorrows()
     {
         $this->checkDelay();
+
         $data = DB::table('borrows')
             ->where('borrows.delay', '!=', 'null')
             ->join('users', 'users.id', '=', 'borrows.user_id')
@@ -140,21 +141,6 @@ class BorrowController extends Controller
                 $borrow->penalty = $penalty;
                 $borrow->save();
             }
-        }
-        if ($borrow->save()) {
-            return response()->json(
-                [
-                'success' => true,
-                'book' => $borrow
-                ], 201
-            );
-        } else {
-            return response()->json(
-                [
-                'success' => false,
-                'message' => 'Sorry, borrowing could not be added.',
-                ], 500
-            );
         }
     }
 

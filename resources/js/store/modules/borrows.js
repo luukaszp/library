@@ -25,7 +25,6 @@ export default {
         })
           .then((response) => {
             if (response.data.success === true) {
-              alert('Wypożyczenie książki powiodło się!')
               router.push('/admin-panel/borrows');
             } else {
               alert('Coś poszło nie tak!');

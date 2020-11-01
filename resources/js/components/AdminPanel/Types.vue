@@ -172,6 +172,7 @@ export default {
             });
         }
         this.$store.dispatch('fetchTypes', {});
+        this.$refs.form.resetValidation();
         this.close();
       }
     },

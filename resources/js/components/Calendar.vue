@@ -1,6 +1,6 @@
 <template>
-    <v-row class="fill-height" style="margin-left: 10px; margin-right: 10px">
-        <v-col>
+    <v-row class="fill-height" style="margin-left: 10px; margin-right: 10px; justify-content: center">
+        <v-col md="8">
             <v-sheet
                     tile
                     height="64"

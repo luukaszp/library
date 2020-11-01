@@ -70,7 +70,7 @@
             cols="12"
             sm="6"
             md="4"
-            lg="3"
+            lg="2"
             class="py-2"
             >
             <v-card class="card fill-height">
@@ -87,7 +87,7 @@
 
                 <v-divider></v-divider>
 
-                <v-card-text style="justify-content: center">
+                <v-card-text style="justify-content: center; text-align: center">
                     <p>Autor: <span v-text="item.authorName + ' ' + item.surname" class="mr-2"></span></p>
                     <p>Kategoria: <span v-text="item.categoryName" class="mr-2"></span></p>
                     <p>Dostępna ilość książek: <v-chip v-text="item.amount" :color="getColor(item.amount)" dark></v-chip></p>

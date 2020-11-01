@@ -4,7 +4,7 @@
             <v-row class="justify-center justify-md-center align-center">
                 <v-col
                         cols="12"
-                        md="6"
+                        md="4"
                 >
 
                     <v-card
