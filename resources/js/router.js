@@ -41,6 +41,8 @@ import Favourites from './components/Profile/Favourites.vue';
 import UserSuggestions from './components/Profile/UserSuggestions.vue';
 import Questionnaires from './components/Profile/Questionnaires.vue';
 import FirstLogin from './components/FirstLogin.vue';
+import PasswordReset from './components/PasswordReset.vue';
+import NewPassword from './components/NewPassword.vue';
 import NotFound from './components/NotFound.vue';
 import store from './store/store.js';
 
@@ -300,6 +302,16 @@ const routes = [
     name: 'first-login',
     component: FirstLogin,
     props: true
+  },
+  {
+    path: '/reset-password',
+    name: 'reset-password',
+    component: PasswordReset
+  },
+  {
+    path: '/new-password/:user_id',
+    name: 'new-password',
+    component: NewPassword
   },
   {
     path: '*',

@@ -96,23 +96,15 @@ export default {
     }
   },
 
-  created () {
-    if (this.$route.params.user_id !== this.authId.toString()) {
-      this.$swal('Nieautoryzowany', 'Odmowa dostępu!', 'error');
-      this.firstLoginDialog = false;
-      this.$router.push('/');
-    }
-  },
-
   methods: {
     validate() {
       if (this.$refs.form.validate()) {
         const data = {
-          user_id: this.authId,
+          user_id: this.$route.params.user_id,
           password: this.password,
           passwordConfirmation: this.passwordConfirmation
         };
-        this.$store.dispatch('passwordChange', data)
+        this.$store.dispatch('firstLogin', data)
           .catch((error) => {
             console.log(error);
           });

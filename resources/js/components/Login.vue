@@ -53,7 +53,6 @@
                             ></v-text-field>
 
                             <v-row class="pb-5 justify-center">
-
                                 <v-btn
                                         :disabled="!valid"
                                         color=brown
@@ -70,6 +69,9 @@
                                 >
                                     Wyczyść dane
                                 </v-btn>
+                            </v-row>
+                            <v-row class="pb-5 justify-center">
+                                <a style="color: #0080ff; font-weight: bold" href="/reset-password">Nie pamiętam hasła</a>
                             </v-row>
                         </v-form>
                     </v-card>

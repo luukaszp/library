@@ -35,8 +35,9 @@ Route::get('rating/all/{id}', 'RatingController@getRatings');
 
 Route::get('opinion/all/{id}', 'OpinionController@getOpinions');
 
-Route::get('first-login/{id}', 'AuthController@firstLogin')->name('first-login');
-Route::post('passwordChange', 'AuthController@passwordChange');
+Route::post('password-reset', 'AuthController@passwordReset');
+Route::post('password-change', 'AuthController@passwordChange');
+Route::post('first-login-password', 'AuthController@firstLoginPassword');
 
 Route::group(
     ['middleware' => 'auth.jwt'], function () {

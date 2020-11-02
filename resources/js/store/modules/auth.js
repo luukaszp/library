@@ -129,18 +129,18 @@ export default {
         resolve();
       });
     },
-    passwordChange({ commit }, user) {
+    firstLogin({ commit }, user) {
         return new Promise((resolve, reject) => {
           commit('auth_request');
           axios({
             method: 'POST',
-            url: 'http://127.0.0.1:8000/api/passwordChange',
+            url: 'http://127.0.0.1:8000/api/first-login-password',
             data: user
           })
             .then((response) => {
               if (response.data.success === true) {
                 alert('Pomyślnie zmieniono hasło!');
-                  router.push('/');
+                  router.push('/login');
               } else {
                 alert('Coś poszło nie tak!');
               }
@@ -148,7 +148,6 @@ export default {
             })
             .catch((error) => {
               commit('auth_error');
-              localStorage.removeItem('access_token');
               reject(error);
             });
         });

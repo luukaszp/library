@@ -6,6 +6,7 @@ use App\Http\Requests\AuthRequest;
 use App\Http\Requests\Reactivation;
 use App\User;
 use App\Mail\NewUserMail;
+use App\Mail\ResetPasswordMail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -120,7 +121,44 @@ class AuthController extends Controller
 
     public function passwordChange(Request $request)
     {
+        $user = User::where('id', '=', $request->user_id)->first();
+
+        if (!$user) {
+            return response()->json(
+                [
+                'success' => false,
+                'message' => 'Sorry, something went wrong.'
+                ], 400
+            );
+        }
+
+        $user->password = bcrypt($request->password);
+        $user->save();
+
+        return response()->json(['success' => true]);
+    }
+
+    /**
+     * Password change during first login
+     *
+     * @param  Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Illuminate\Validation\ValidationException
+     */
+
+    public function firstLoginPassword(Request $request)
+    {
         $user = User::find($request->user_id);
+
+        if ($user->email_verified_at !== null) {
+            return response()->json(
+                [
+                'success' => false,
+                'message' => 'Sorry, your email is already verified.'
+                ], 400
+            );
+        }
+
         $user->password = bcrypt($request->password);
         $user->email_verified_at = Carbon::now()->toDateTimeString();
         $user->save();
@@ -129,26 +167,44 @@ class AuthController extends Controller
     }
 
     /**
-     * Password change (first login)
+     * Password reset
      *
-     * @param  User $id
-     * @return \Illuminate\Http\RedirectResponse
+     * @param  Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Illuminate\Validation\ValidationException
      */
 
-    public function firstLogin($id)
+    public function passwordReset(Request $request)
     {
-        $user = User::where('id', $id)->first();
+        $user = User::where('email', '=', $request->email)->first();
 
-        if (empty($user)) {
-            return redirect()->to('/login')
-                ->with(['error' => 'Coś poszło nie tak...']);
+        if (!$user) {
+            return response()->json(
+                [
+                'success' => false,
+                'message' => 'Sorry, user with provided email cannot be found.'
+                ], 400
+            );
         }
 
-        if($user->email_verified_at !== null) {
-            return redirect()->to('/');
+        if ($user->email_verified_at === null) {
+            return response()->json(
+                [
+                'success' => false,
+                'message' => 'Sorry, you need to verify your email first.'
+                ], 400
+            );
         }
 
-        return redirect()->to('first-login/' . $id . '');
+        $details = [
+            'title' => 'Resetowanie hasła',
+            'url' => "http://127.0.0.1:8000/new-password/$user->id",
+            'name' => $user->name
+        ];
+
+        Mail::to($user->email)->send(new ResetPasswordMail($details));
+
+        return response()->json(['success' => true]);
     }
 
     /**
