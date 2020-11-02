@@ -10,7 +10,7 @@
                     ref="form"
                     v-model="valid"
                 >
-                <div class="upload" style="padding-top: 15px" v-if="this.$route.params.user_id === this.authId.toString()">
+                <div class="upload" style="padding-top: 15px" v-if="this.$route.params.user_id.toString() === this.authId.toString()">
                     <v-btn
                         color="primary"
                         class="text-none pa-5 pb-0 pt-0"
@@ -47,7 +47,7 @@
 
         <v-divider></v-divider>
 
-        <v-row style="margin-left: 10px; margin-right: 10px; justify-content: center;" v-if="this.$route.params.user_id === this.authId.toString()">
+        <v-row style="margin-left: 10px; margin-right: 10px; justify-content: center;" v-if="this.$route.params.user_id.toString() === this.authId.toString()">
             <ProfileTabs v-bind:user_id="user_id"/>
         </v-row>
 
@@ -80,11 +80,13 @@ export default {
       return this.selectedFile ? this.selectedFile.name : this.defaultButtonText
     },
     authId() {
+        console.log('2')
       return this.$store.getters.authId;
     }
   },
 
   created () {
+      console.log('1')
     this.$store.dispatch('fetchOneReader', this.user_id);
   },
 

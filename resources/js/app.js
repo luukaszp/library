@@ -38,6 +38,7 @@ axios.interceptors.response.use((response) => response,
         title: 'Sesja wygasła',
         text: 'Za chwilę zostaniesz wylogowany',
         icon: 'warning',
+        closeOnClickOutside: false,
         confirmButtonText: 'Rozumiem'
       }).then((result) => {
         if (result.value) {

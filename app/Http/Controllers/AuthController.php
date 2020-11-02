@@ -97,8 +97,14 @@ class AuthController extends Controller
 
         $user->save();
 
+        $details = [
+            'title' => 'Zmiana hasła',
+            'url' => "http://127.0.0.1:8000/first-login/$user->id",
+            'name' => $user->name
+        ];
+
         if($request->id_number === null) {
-            Mail::to($user->email)->send(new NewUserMail($user));
+            Mail::to($user->email)->send(new NewUserMail($details));
         }
 
         return response()->json(['success' => true]);
@@ -124,7 +130,8 @@ class AuthController extends Controller
 
     /**
      * Password change (first login)
-     * @param User $id
+     *
+     * @param  User $id
      * @return \Illuminate\Http\RedirectResponse
      */
 

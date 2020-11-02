@@ -23,7 +23,7 @@
             solo-inverted
             hide-details
             prepend-inner-icon="mdi-magnify"
-            label="Search"
+            label="Wyszukaj"
           ></v-text-field>
           <template v-if="$vuetify.breakpoint.mdAndUp">
             <v-spacer></v-spacer>
@@ -34,7 +34,7 @@
               hide-details
               :items="keys"
               prepend-inner-icon="mdi-sort"
-              label="Sort by"
+              label="Sortuj według"
             ></v-select>
             <v-spacer></v-spacer>
             <v-btn-toggle
@@ -178,12 +178,7 @@ export default {
           'authorName',
           'surname',
           'categoryName',
-          'ISBN',
-          'description',
-          'publish_year ',
-          'publisherName',
           'amount',
-          'cover',
         ],
     items: [
       {

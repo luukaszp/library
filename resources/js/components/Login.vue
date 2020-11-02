@@ -131,7 +131,7 @@ export default {
             });
           })
           .catch((error) => {
-            console.log(error);
+            this.$swal('Błąd', 'Nieprawidłowy login lub hasło!', 'error');
           });
       }
     },
