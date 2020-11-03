@@ -100,7 +100,7 @@ class AuthController extends Controller
 
         $details = [
             'title' => 'Zmiana hasła',
-            'url' => "http://127.0.0.1:8000/first-login/$user->id",
+            'url' => "http://127.0.0.1:8000/first-login",
             'name' => $user->name
         ];
 
@@ -148,7 +148,25 @@ class AuthController extends Controller
 
     public function firstLoginPassword(Request $request)
     {
-        $user = User::find($request->user_id);
+        $user = User::where('card_number', '=', $request->card_number)->first();
+
+        if (!$user) {
+            return response()->json(
+                [
+                'success' => false,
+                'message' => 'Wrong card number given.'
+                ], 401
+            );
+        }
+
+        if ($user->id !== $request->user_id) {
+            return response()->json(
+                [
+                'success' => false,
+                'message' => 'Something went wrong.'
+                ], 400
+            );
+        }
 
         if ($user->email_verified_at !== null) {
             return response()->json(

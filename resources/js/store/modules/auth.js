@@ -139,8 +139,10 @@ export default {
           })
             .then((response) => {
               if (response.data.success === true) {
-                alert('Pomyślnie zmieniono hasło!');
-                  router.push('/login');
+                alert('Pomyślnie zmieniono hasło! Zaloguj się ponownie!');
+                localStorage.removeItem('access_token');
+                delete axios.defaults.headers.Authorization;
+                router.push('/login');
               } else {
                 alert('Coś poszło nie tak!');
               }

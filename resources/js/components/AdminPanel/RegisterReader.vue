@@ -54,26 +54,13 @@
                                     :rules="cardNumberRules"
                                     label="Numer karty bibliotecznej"
                                     outlined
-                            ></v-text-field>
-
-                            <v-text-field
-                                    class="pa-5 pb-0 pt-0"
-                                    :value="password"
-                                    label="Hasło"
-                                    :type="'password'"
-                                    :rules="[rules.password]"
-                                    @input="_=>password=_"
-                                    outlined
                                     required
                             ></v-text-field>
 
                             <v-text-field
-                                    class="pa-5 pt-0"
-                                    :value="password_confirmation"
-                                    v-model="password_confirmation"
-                                    label="Powtórz hasło"
-                                    :type="'password'"
-                                    :rules="confirmPasswordRules.concat(passwordConfirmationRule)"
+                                    class="pa-5 pb-0 pt-0"
+                                    v-model="card_number"
+                                    label="Hasło"
                                     outlined
                                     required
                             ></v-text-field>
@@ -119,18 +106,6 @@ export default {
       id_number: '',
       password: '',
       password_confirmation: '',
-      rules: {
-        required: (value) => !!value || 'Hasło jest wymagane',
-        password: (value) => {
-          const pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/;
-          return (
-            pattern.test(value) || '8 znaków, co najmniej jedna wielka litera, cyfra oraz znak specjalny'
-          );
-        }
-      },
-      confirmPasswordRules: [
-        (v) => !!v || 'Potwierdzenie hasła jest wymagane'
-      ],
       emailRules: [
         (v) => !!v || 'E-mail jest wymagany',
         (v) => /.+@.+\..+/.test(v) || 'E-mail musi być prawidłowy'
@@ -160,8 +135,8 @@ export default {
           email: this.email,
           card_number: this.card_number,
           id_number: this.id_number,
-          password: this.password,
-          password_confirmation: this.password_confirmation
+          password: this.card_number,
+          password_confirmation: this.card_number
         };
         this.$store.dispatch('userRegister', data)
           .then(() => {
@@ -188,12 +163,6 @@ export default {
     },
     reset() {
       this.$refs.form.reset();
-    }
-  },
-
-  computed: {
-    passwordConfirmationRule() {
-      return () => this.password === this.password_confirmation || 'Hasło musi być takie same';
     }
   }
 };

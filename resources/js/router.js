@@ -298,10 +298,9 @@ const routes = [
     ]
   },
   {
-    path: '/first-login/:user_id',
+    path: '/first-login',
     name: 'first-login',
-    component: FirstLogin,
-    props: true
+    component: FirstLogin
   },
   {
     path: '/reset-password',

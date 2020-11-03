@@ -80,13 +80,11 @@ export default {
       return this.selectedFile ? this.selectedFile.name : this.defaultButtonText
     },
     authId() {
-        console.log('2')
       return this.$store.getters.authId;
     }
   },
 
   created () {
-      console.log('1')
     this.$store.dispatch('fetchOneReader', this.user_id);
   },
 

@@ -14,6 +14,15 @@
 
                     <v-text-field
                         class="pa-5 pb-0 pt-0"
+                        v-model="card_number"
+                        :rules="cardNumberRules"
+                        label="Numer karty bibliotecznej"
+                        outlined
+                        required
+                    ></v-text-field>
+
+                    <v-text-field
+                        class="pa-5 pb-0 pt-0"
                         :value="password"
                         label="Hasło"
                         :type="'password'"
@@ -66,6 +75,7 @@ export default {
     return {
       firstLoginDialog: true,
       password: '',
+      card_number: '',
       valid: true,
       value: true,
       passwordConfirmation: '',
@@ -80,6 +90,11 @@ export default {
       },
       confirmPasswordRules: [
         (v) => !!v || 'Potwierdzenie hasła jest wymagane'
+      ],
+      cardNumberRules: [
+        (v) => !!v || 'Numer karty bibliotecznej jest wymagany!',
+        (v) => /^\d+$/.test(v) || 'Numer karty bibliotecznej musi być prawidłowy',
+        (v) => v.length === 10 || 'Numer karty bibliotecznej powinien zawierać 10 cyfr'
       ]
     };
   },
@@ -100,12 +115,14 @@ export default {
     validate() {
       if (this.$refs.form.validate()) {
         const data = {
-          user_id: this.$route.params.user_id,
+          card_number: this.card_number,
           password: this.password,
-          passwordConfirmation: this.passwordConfirmation
+          passwordConfirmation: this.passwordConfirmation,
+          user_id: this.authId
         };
         this.$store.dispatch('firstLogin', data)
           .catch((error) => {
+            this.$swal('Błąd', 'Hasło zostało wcześniej zmienione lub podano zły numer karty.', 'error');
             console.log(error);
           });
       }

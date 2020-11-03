@@ -37,7 +37,6 @@ Route::get('opinion/all/{id}', 'OpinionController@getOpinions');
 
 Route::post('password-reset', 'AuthController@passwordReset');
 Route::post('password-change', 'AuthController@passwordChange');
-Route::post('first-login-password', 'AuthController@firstLoginPassword');
 
 Route::group(
     ['middleware' => 'auth.jwt'], function () {
@@ -73,6 +72,8 @@ Route::group(
         Route::delete('favourite/delete/{id}/author', 'FavouritesController@removeAuthor');
 
         Route::post('suggestions/add', 'SuggestionController@addSuggestion');
+
+        Route::post('first-login-password', 'AuthController@firstLoginPassword');
     }
 );
 

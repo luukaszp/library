@@ -115,7 +115,6 @@ export default {
       name: '',
       surname: '',
       email: '',
-      card_number: '',
       id_number: '',
       password: '',
       password_confirmation: '',
@@ -157,7 +156,6 @@ export default {
           name: this.name,
           surname: this.surname,
           email: this.email,
-          card_number: this.card_number,
           id_number: this.id_number,
           password: this.password,
           password_confirmation: this.password_confirmation
