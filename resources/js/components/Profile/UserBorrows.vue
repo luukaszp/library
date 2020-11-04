@@ -43,17 +43,22 @@
     <template v-slot:no-data>
       <p class="pt-5">Brak wypożyczeń</p>
     </template>
+
+    <template v-slot:[`item.returns_date`]="{ item }">
+      <v-chip :color="getColor(item.returns_date)" dark>{{ item.returns_date }}</v-chip>
+    </template>
   </v-data-table>
 </template>
 
 <script>
 /*eslint-disable*/
+import axios from 'axios';
+
 export default {
   name: 'UserBorrows',
   props: ['user_id'],
 
   data: () => ({
-    borrows: [],
     search: '',
     headers: [
       {
@@ -69,46 +74,53 @@ export default {
   }),
 
   computed: {
-    /*readers() {
+    readers() {
       return this.$store.getters.getReaders;
     },
     borrows() {
       return this.$store.getters.getBorrows;
-    }*/
+    }
   },
 
-  async created () {
-    /*this.$store.dispatch('fetchOneReader', this.user_id);
-    this.$store.dispatch('fetchSpecificDelay', this.user_id);*/
-   await this.getBorrows();
+  created () {
+    this.$store.dispatch('fetchOneReader', this.user_id);
+    this.$store.dispatch('fetchSpecificBorrow', this.user_id);
   },
 
   methods: {
-    async getBorrows() {
-		await axios
-        .get(`api/borrow/showBorrow/${this.user_id}`)
-        .then((response) => {
-            this.borrows = response.data;
-        });
-    },
-
     extendDate(item) {
       this.$swal({
         title: 'Czy jesteś pewien, że chcesz przedłużyć termin tej książki?',
-        text: "Przedłużyć można jedną książkę o 7 dni.",
+        text: 'Przedłużyć można jedną książkę o 7 dni przez okres 30 dni.',
         icon: 'warning',
         showCancelButton: true,
         confirmButtonText: 'Przedłuż',
         confirmButtonColor: '#5cb85c',
         cancelButtonColor: '#d9534f',
-        cancelButtonText: 'Anuluj',
-      }).then((result) => {
-        if (result.value) {
-          axios.put(`/api/borrow/extend/${item.id}`, {});
-          this.$swal('Przedłużono', 'Termin oddania książki został pomyślnie przedłużony!', 'success');
-          this.$store.dispatch('fetchSpecificBorrow', this.user_id);
-        }
-      });
+        cancelButtonText: 'Anuluj'
+      })
+        .then((result) => {
+          if (result.value) {
+            axios.put(`/api/borrow/extend/${item.id}`, {})
+              .then((response) => {
+                this.$swal('Przedłużono', 'Termin oddania książki został pomyślnie przedłużony!', 'success');
+              })
+              .catch((error) => {
+                this.$swal('Błąd', 'Możliwość przedłużenia została już użyta! Oddaj tę książkę by móc skorzystać z przedłużenia!', 'error');
+              });
+            this.$store.dispatch('fetchSpecificBorrow', this.user_id);
+          }
+        })
+    },
+
+    getColor (returns_date) {
+      const todayDate = new Date();
+      const dateOfReturn = new Date(returns_date);
+      const differenceInTime = dateOfReturn.getTime() - todayDate.getTime();
+      const differenceInDays = Math.round(differenceInTime / (1000 * 3600 * 24));
+
+      if (differenceInDays > 30) return 'blue';
+      return 'green';
     }
   }
 };

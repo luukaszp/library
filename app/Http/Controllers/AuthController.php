@@ -159,11 +159,11 @@ class AuthController extends Controller
             );
         }
 
-        if ($user->id !== $request->user_id) {
+        if ($user->email !== $request->email) {
             return response()->json(
                 [
                 'success' => false,
-                'message' => 'Something went wrong.'
+                'message' => 'Wrong email.'
                 ], 400
             );
         }

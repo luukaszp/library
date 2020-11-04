@@ -54,6 +54,7 @@ class BookController extends Controller
             )
             ->get()
             ->toArray();
+            
         return $data;
     }
 

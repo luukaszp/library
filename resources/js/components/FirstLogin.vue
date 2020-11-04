@@ -14,6 +14,15 @@
 
                     <v-text-field
                         class="pa-5 pb-0 pt-0"
+                        v-model="email"
+                        :rules="emailRules"
+                        label="E-mail"
+                        outlined
+                        required
+                    ></v-text-field>
+
+                    <v-text-field
+                        class="pa-5 pb-0 pt-0"
                         v-model="card_number"
                         :rules="cardNumberRules"
                         label="Numer karty bibliotecznej"
@@ -70,7 +79,6 @@
 <script>
 export default {
   name: 'FirstLogin',
-  props: ['user_id'],
   data() {
     return {
       firstLoginDialog: true,
@@ -79,6 +87,7 @@ export default {
       valid: true,
       value: true,
       passwordConfirmation: '',
+      email: '',
       rules: {
         required: (value) => !!value || 'Hasło jest wymagane',
         password: (value) => {
@@ -95,6 +104,10 @@ export default {
         (v) => !!v || 'Numer karty bibliotecznej jest wymagany!',
         (v) => /^\d+$/.test(v) || 'Numer karty bibliotecznej musi być prawidłowy',
         (v) => v.length === 10 || 'Numer karty bibliotecznej powinien zawierać 10 cyfr'
+      ],
+      emailRules: [
+        (v) => !!v || 'E-mail jest wymagany',
+        (v) => /.+@.+\..+/.test(v) || 'E-mail musi być prawidłowy'
       ]
     };
   },
@@ -102,12 +115,6 @@ export default {
   computed: {
     passwordConfirmationRule() {
       return () => this.password === this.passwordConfirmation || 'Hasło musi być takie same';
-    },
-    authId() {
-      return this.$store.getters.authId;
-    },
-    readers() {
-      return this.$store.getters.getReaders;
     }
   },
 
@@ -118,11 +125,11 @@ export default {
           card_number: this.card_number,
           password: this.password,
           passwordConfirmation: this.passwordConfirmation,
-          user_id: this.authId
+          email: this.email
         };
         this.$store.dispatch('firstLogin', data)
           .catch((error) => {
-            this.$swal('Błąd', 'Hasło zostało wcześniej zmienione lub podano zły numer karty.', 'error');
+            this.$swal('Błąd', 'Podano błędne dane.', 'error');
             console.log(error);
           });
       }

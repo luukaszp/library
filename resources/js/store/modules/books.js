@@ -26,7 +26,7 @@ export default {
     fetchAvailableBooks(context) {
       axios({
         method: 'GET',
-        url: 'http://127.0.0.1:8000/api/book/getAvailableBooks'
+        url: 'http://127.0.0.1:8000/api/book/get/availableBooks'
       })
         .then((response) => {
           context.commit('setBooks', response.data);

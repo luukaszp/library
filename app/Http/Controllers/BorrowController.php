@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Borrow;
 use App\Book;
+use App\User;
 use DB;
 use Carbon\Carbon;
 
@@ -161,6 +162,10 @@ class BorrowController extends Controller
         $book = Book::find($request->bookID);
         $book->amount = $book->amount+1;
 
+        $user = User::find($borrow->user_id);
+        $user->can_extend = 1;
+
+        $user->save();
         $book->save();
         $borrow->save();
 
@@ -240,7 +245,7 @@ class BorrowController extends Controller
             ->join('books', 'books.id', '=', 'borrows.book_id')
             ->join('authors', 'authors.id', '=', 'books.author_id')
             ->select(
-                'books.id', 'books.title', 'authors.name', 'authors.surname', 'borrows.borrows_date', 
+                'borrows.id', 'books.title', 'authors.name', 'authors.surname', 'borrows.borrows_date', 
                 'borrows.returns_date'
             )
             ->get()
@@ -267,7 +272,7 @@ class BorrowController extends Controller
      */
     public function showDelay($id)
     {
-        $borrow = DB::table('borrows')
+        $delay = DB::table('borrows')
             ->where('borrows.user_id', '=', $id)
             ->where('borrows.delay', '!=', null)
             ->join('books', 'books.id', '=', 'borrows.book_id')
@@ -278,16 +283,7 @@ class BorrowController extends Controller
             ->get()
             ->toArray();
 
-        if (!$borrow) {
-            return response()->json(
-                [
-                'success' => false,
-                'message' => 'Sorry, borrowing cannot be found.'
-                ], 400
-            );
-        } else {
-            return $borrow;
-        } 
+        return $delay; 
     }
 
     /**
@@ -300,6 +296,17 @@ class BorrowController extends Controller
     public function extendDate(Request $request, $id)
     {
         $borrow = Borrow::find($id);
+
+        $user = User::find($borrow->user_id);
+
+        if ($user->can_extend === '0') {
+            return response()->json(
+                [
+                'success' => false,
+                'message' => 'Sorry, user cannot extend the date any further.'
+                ], 400
+            );
+        }
 
         if (!$borrow) {
             return response()->json(
@@ -314,7 +321,9 @@ class BorrowController extends Controller
         $daysToAdd = 7;
         $date = $date->addDays($daysToAdd);
         $borrow->returns_date = $date->toDateString();
-        $borrow->save();
+
+        $user->can_extend = 0;
+        $user->save();
 
         if ($borrow->save()) {
             return response()->json(

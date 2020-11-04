@@ -232,6 +232,9 @@ const routes = [
     name: 'profile',
     component: Profile,
     props: true,
+    meta: {
+        requiresAuth: true
+    },
     children: [
       {
         path: '/profile/:user_id/borrows',
@@ -341,6 +344,9 @@ router.beforeEach((to, from, next) => {
       } else {
         Vue.swal('Nieautoryzowany', 'Odmowa dostępu!', 'error');
       }
+    }
+    else {
+        next();
     }
   } else {
     next();

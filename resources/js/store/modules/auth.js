@@ -149,7 +149,6 @@ export default {
               resolve(response);
             })
             .catch((error) => {
-              commit('auth_error');
               reject(error);
             });
         });
