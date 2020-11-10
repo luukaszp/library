@@ -47,13 +47,13 @@
                     <v-row>
                       <v-col cols="12" sm="6" md="4">
                         <v-menu
-                                    v-model="menu"
-                                    :close-on-content-click="false"
-                                    :nudge-right="40"
-                                    transition="scale-transition"
-                                    offset-y
-                                    min-width="290px"
-                            >
+                        v-model="menu"
+                        :close-on-content-click="false"
+                        :nudge-right="40"
+                        transition="scale-transition"
+                        offset-y
+                        min-width="290px"
+                        >
                             <template v-slot:activator="{ on, attrs }">
                                 <v-text-field
                                 v-model="editedItem.borrows_date"
@@ -206,11 +206,24 @@ export default {
     },
 
     returnBook(item) {
-      axios.put(`/api/borrow/returnBook/${item.id}`, {
-        is_returned: item.is_returned,
-        bookID: item.bookID
+      this.$swal({
+        title: 'Czy jesteś pewien, że chcesz potwierdzić oddanie książki?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Zwróć',
+        cancelButtonText: 'Anuluj'
+      }).then((result) => {
+        if (result.value) {
+          axios.put(`/api/borrow/returnBook/${item.id}`, {
+            is_returned: item.is_returned,
+            bookID: item.bookID
+          });
+          this.$swal('Zatwierdzono', 'Pomyślnie zwrócono książkę do biblioteki', 'success');
+        } else {
+          this.$swal('Anulowano', 'Akcja została anulowana', 'info');
+        }
+        this.$store.dispatch('fetchBorrows', {});
       });
-      this.$store.dispatch('fetchBorrows', {});
     }
   }
 };

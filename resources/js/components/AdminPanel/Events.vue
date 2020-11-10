@@ -88,7 +88,7 @@
                                                 </v-menu>
                                             </v-row>
                                             <v-row>
-                                                <v-select
+                                                <v-autocomplete
                                                     v-model="selectedType"
                                                     :items="types"
                                                     item-text="name"
@@ -99,7 +99,7 @@
                                                     required
                                                     :rules="typeRules"
                                                 >
-                                                </v-select>
+                                                </v-autocomplete>
                                             </v-row>
                                         </v-form>
                                     </v-container>
@@ -260,6 +260,7 @@ export default {
         }
         this.$store.dispatch('fetchEvents', {});
         this.$refs.form.resetValidation();
+        this.$refs.form.reset();
         this.close();
       }
     },

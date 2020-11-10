@@ -182,6 +182,7 @@ export default {
             });
           })
           .catch((error) => {
+            this.$swal('Błędne dane', 'Użytkownik o podanym loginie/e-mailu już istnieje!', 'error');
             console.log(error);
           });
       }

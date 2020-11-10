@@ -188,6 +188,7 @@ export default {
             });
         }
         this.$store.dispatch('fetchPublishers', {});
+        this.$refs.form.resetValidation();
         this.close();
       }
     },

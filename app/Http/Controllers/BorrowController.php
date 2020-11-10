@@ -251,16 +251,7 @@ class BorrowController extends Controller
             ->get()
             ->toArray();
 
-        if (!$borrow) {
-            return response()->json(
-                [
-                'success' => false,
-                'message' => 'Sorry, borrowing cannot be found.'
-                ], 400
-            );
-        } else {
-            return $borrow;
-        } 
+        return $borrow;
     }
 
     /**

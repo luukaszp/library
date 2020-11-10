@@ -115,8 +115,6 @@ export default {
             resolve(response);
           })
           .catch((error) => {
-            commit('auth_error');
-            localStorage.removeItem('access_token');
             reject(error);
           });
       });

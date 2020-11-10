@@ -189,6 +189,7 @@ export default {
             });
         }
         this.$store.dispatch('fetchCategories', {});
+        this.$refs.form.resetValidation();
         this.close();
       }
     },

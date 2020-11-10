@@ -29,7 +29,8 @@ export default {
       { title: 'Kalendarz wydarzeń', src: require('../assets/main/calendar.jpg'), route: '/calendar', flex: 4 },
       { title: 'Przeglądaj książki', src: require('../assets/main/books.jpg'), route: '/search', flex: 4 },
       { title: 'Nowe pozycje', src: require('../assets/main/books_new.jpg'), route: '/new', flex: 4 },
-      { title: 'Wyszukaj w katalogu', src: require('../assets/main/search_book.jpg'), route: '/catalog', flex: 4 }
+      { title: 'Wyszukaj w katalogu', src: require('../assets/main/search_book.jpg'), route: '/catalog', flex: 4 },
+      { title: 'Ranking czytelników', src: require('../assets/main/ranking_podium.jpg'), route: '/ranking', flex: 4 }
     ]
   })
 };

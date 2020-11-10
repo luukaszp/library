@@ -3,7 +3,7 @@
         <v-row style="margin-left: 10px; margin-right: 10px">
             <v-col md=3 style="justify-content: center; text-align: center;">
                 <v-avatar size="200">
-                    <v-img class="card-img" v-bind:src="('../storage/' + readers.avatar)"></v-img>
+                    <v-img class="card-img" :src="'../storage/' + readers.avatar"></v-img>
                 </v-avatar>
 
                 <v-form

@@ -21,7 +21,7 @@
 
                             <hr>
 
-                            <v-select
+                            <v-autocomplete
                                     class="pa-5 pb-0"
                                     v-model="selectedReader"
                                     :items="readers"
@@ -39,9 +39,9 @@
                             <template slot="selection" slot-scope="data">
                                 {{data.item.name}} {{data.item.surname}}
                             </template>
-                            </v-select>
+                            </v-autocomplete>
 
-                            <v-select
+                            <v-autocomplete
                                     class="pa-5 pb-0 pt-0"
                                     v-model="selectedBooks"
                                     :items="books"
@@ -53,7 +53,7 @@
                                     required
                                     :rules="booksRules"
                                     multiple
-                            ></v-select>
+                            ></v-autocomplete>
 
                             <v-menu
                                     v-model="menu"
