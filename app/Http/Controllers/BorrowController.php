@@ -334,7 +334,7 @@ class BorrowController extends Controller
     }
 
     /**
-     * Get amount of borrowings for all months.
+     * Get amount of borrowings for all months (every month for one user)
      *
      * @param  Request $request
      * @return \Illuminate\Http\JsonResponse
@@ -376,6 +376,81 @@ class BorrowController extends Controller
         }
 
         return $amount;
+    }
+
+    /**
+     * Get amount of borrowings for specific month
+     *
+     * @param  Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    public function getMonthlyAmount()
+    {
+        $position = [];
+        $status = [];
+
+        $firstDay = Carbon::now()->startOfMonth(); //current month
+        $lastDay = Carbon::now()->endOfMonth(); 
+
+        $lastMonthFDay = Carbon::now()->subMonth()->startOfMonth(); //previous month
+        $lastMonthLDay = Carbon::now()->subMonth()->endOfMonth();
+
+        //item.status = up, down, same in array - na podstawie pozycji ustalic status (-2, 0, +3)
+
+        $previousMonth = DB::table('borrows')
+            ->whereBetween('borrows.borrows_date', [$lastMonthFDay, $lastMonthLDay])
+            ->join('users', 'users.id', '=', 'borrows.user_id')
+            ->select(
+                'users.name', 'users.surname', 'users.avatar', DB::raw('COUNT(borrows.borrows_date) as count')
+            )
+            ->groupBy('users.id')
+            ->orderBy('count', 'desc')
+            ->take(10)
+            ->get();
+
+        $currentMonth = DB::table('borrows')
+            ->whereBetween('borrows.borrows_date', [$firstDay, $lastDay])
+            ->join('users', 'users.id', '=', 'borrows.user_id')
+            ->select(
+                'users.name', 'users.surname', 'users.avatar', DB::raw('COUNT(borrows.borrows_date) as count')
+            )
+            ->groupBy('users.id')
+            ->orderBy('count', 'desc')
+            ->take(10)
+            ->get();
+
+            for ($i = 0; $i < count($previousMonth); $i++) {
+                if ($previousMonth[$i]->surname !== $currentMonth[$i]->surname) {
+                    for ($j = 0; $j < count($previousMonth); $j++) {
+                        if ($previousMonth[$i]->surname === $currentMonth[$j]->surname) {
+                            $position[$i] = $i - $j;
+                        }
+                    }
+                } else {
+                    $position[$i] = 0;
+                }
+            }
+
+            for ($i = 0; $i < count($position); $i++) {
+                if ($position[$i] > 0) {
+                    $status[$i] = 'down';
+                } else if ($position[$i] < 0) {
+                    $status[$i] = 'up';
+                } else {
+                    $status[$i] = 'same';
+                }
+            }
+
+            for ($i = 0; $i < count($currentMonth); $i++) {
+                $currentMonth[$i]->status = $status[$i];
+                if ($position[$i] < 0) {
+                    $position[$i] *= -1;
+                }
+                $currentMonth[$i]->position = $position[$i];
+            }
+
+        return $currentMonth;
     }
 
     /**

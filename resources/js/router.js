@@ -43,6 +43,7 @@ import Questionnaires from './components/Profile/Questionnaires.vue';
 import FirstLogin from './components/FirstLogin.vue';
 import PasswordReset from './components/PasswordReset.vue';
 import NewPassword from './components/NewPassword.vue';
+import Ranking from './components/Ranking.vue';
 import NotFound from './components/NotFound.vue';
 import store from './store/store.js';
 
@@ -314,6 +315,11 @@ const routes = [
     path: '/new-password/:user_id',
     name: 'new-password',
     component: NewPassword
+  },
+  {
+    path: '/ranking',
+    name: 'ranking',
+    component: Ranking
   },
   {
     path: '*',

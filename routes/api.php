@@ -39,6 +39,8 @@ Route::post('password-reset', 'AuthController@passwordReset');
 Route::post('password-change', 'AuthController@passwordChange');
 Route::post('first-login-password', 'AuthController@firstLoginPassword');
 
+Route::get('borrow/monthly', 'BorrowController@getMonthlyAmount');
+
 Route::group(
     ['middleware' => 'auth.jwt'], function () {
         Route::get('logout', 'AuthController@logout');
