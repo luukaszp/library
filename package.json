@@ -35,7 +35,7 @@
         "eslint": "^7.13.0",
         "jwt-decode": "^2.2.0",
         "swiper": "5.4.5",
-        "vee-validate": "^3.4.4",
+        "vee-validate": "^3.4.5",
         "vue-apexcharts": "^1.6.0",
         "vue-awesome-swiper": "^4.1.1",
         "vue-axios": "^2.1.5",

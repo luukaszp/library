@@ -175,7 +175,6 @@ class BookController extends Controller
             $imageArray = ['cover' => $imagePath];
         }
 
-        //if (auth()->user()->books()->save($book)) { Tutaj użytkownik zalogowany
         if ($book->save()) {
             return response()->json(
                 [

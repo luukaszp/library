@@ -265,15 +265,15 @@ export default {
       this.$refs.form.reset();
     },
     onButtonClick() {
-      this.isSelecting = true
+      this.isSelecting = true;
       window.addEventListener('focus', () => {
-        this.isSelecting = false
-      }, { once: true })
+        this.isSelecting = false;
+      }, { once: true });
 
-      this.$refs.uploader.click()
+      this.$refs.uploader.click();
     },
     onFileChanged(e) {
-      this.cover = e.target.files[0]
+      this.cover = e.target.files[0];
     }
   },
 
@@ -291,7 +291,7 @@ export default {
       return this.$store.getters.getPublishers;
     },
     buttonText() {
-      return this.selectedFile ? this.selectedFile.name : this.defaultButtonText
+      return this.selectedFile ? this.selectedFile.name : this.defaultButtonText;
     }
   },
 
