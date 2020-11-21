@@ -104,7 +104,6 @@ export default {
         })
           .then((response) => {
             if (response.data.success === true) {
-              alert('Zarejestrowano pomyślnie!');
               if (user.id_number === '') {
                 router.push('/admin-panel/readers');
               } else {
@@ -116,8 +115,6 @@ export default {
             resolve(response);
           })
           .catch((error) => {
-            commit('auth_error');
-            localStorage.removeItem('access_token');
             reject(error);
           });
       });
@@ -129,7 +126,31 @@ export default {
         delete axios.defaults.headers.Authorization;
         resolve();
       });
-    }
+    },
+    firstLogin({ commit }, user) {
+        return new Promise((resolve, reject) => {
+          commit('auth_request');
+          axios({
+            method: 'POST',
+            url: 'http://127.0.0.1:8000/api/first-login-password',
+            data: user
+          })
+            .then((response) => {
+              if (response.data.success === true) {
+                alert('Pomyślnie zmieniono hasło! Zaloguj się ponownie!');
+                localStorage.removeItem('access_token');
+                delete axios.defaults.headers.Authorization;
+                router.push('/login');
+              } else {
+                alert('Coś poszło nie tak!');
+              }
+              resolve(response);
+            })
+            .catch((error) => {
+              reject(error);
+            });
+        });
+      },
   },
 
   getters: {

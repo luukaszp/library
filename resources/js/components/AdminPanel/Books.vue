@@ -3,11 +3,20 @@
     :headers="headers"
     :search="search"
     :items="books"
+    :expanded.sync="expanded"
+    show-expand
+    :single-expand="true"
     sort-by="card_number"
     class="elevation-1"
     style="word-break: initial"
   >
   <template #[`item.fullName`]="{ item }"> {{ item.authorName }} {{ item.surname }} </template>
+
+  <template v-slot:expanded-item="{ headers, item }">
+    <td :colspan="headers.length">
+        Opis książki: {{ item.description }}
+    </td>
+  </template>
 
     <template v-slot:top>
       <v-toolbar flat color="white">
@@ -72,7 +81,7 @@
             </v-card>
           </v-dialog>
 
-          <v-dialog v-model="editImageDialog" max-width="700px">
+          <v-dialog v-model="editImageDialog" max-width="550px" class="rounded-xl">
             <v-card>
               <v-card-text>
                 <v-container>
@@ -89,9 +98,11 @@
                 </v-container>
               </v-card-text>
 
-              <v-card-actions style="justify-content: center; display: block ruby; text-align: center">
+              <v-divider></v-divider>
+
+              <v-card-actions style="justify-content: center; display: block ruby; text-align: center; padding-bottom: 25px">
                 <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" text @click="closeImage">Anuluj</v-btn>
+                <v-btn color="#228B22" text @click="closeImage">Anuluj</v-btn>
                 <v-btn
                     color="primary"
                     class="text-none pl-5 pr-5"
@@ -117,11 +128,12 @@
                     @change="onFileChanged"
                 >
                 <v-btn
-                  color=brown
-                  @click="refreshImage"
+                  color=#228B22
+                  @click="sendImage"
                   :disabled="!valid"
+                  text
                 >
-                  Odśwież
+                  Wgraj
                 </v-btn>
                 </v-card-actions>
             </v-card>
@@ -180,6 +192,7 @@ export default {
     cover: [],
     image: '',
     show: false,
+    expanded: [],
     headers: [
       {
         text: 'Tytuł książki',
@@ -189,7 +202,6 @@ export default {
       { text: 'Autor', value: 'fullName' },
       { text: 'Kategoria', value: 'categoryName' },
       { text: 'ISBN', value: 'isbn' },
-      { text: 'Opis', value: 'description' },
       { text: 'Rok wydania', value: 'publish_year' },
       { text: 'Wydawnictwo', value: 'publisherName' },
       { text: 'Ilość', value: 'amount' },
@@ -340,7 +352,7 @@ export default {
       this.valid = true;
     },
 
-    refreshImage () {
+    sendImage () {
       const formData = new FormData();
       formData.append('cover', this.cover); // formData nie działa z PUT ale z POST
 
@@ -349,8 +361,15 @@ export default {
           'Content-Type': 'multipart/form-data'
         }
       };
-
-      axios.post(`/api/book/changeImage/${this.editedItem.id}`, formData, config);
+      axios.post(`/api/book/changeImage/${this.editedItem.id}`, formData, config)
+        .then((response) => {
+          if (response.data.success === true) {
+            this.$swal('Dodano', 'Pomyślnie zmieniono okładkę książki!', 'success');
+            this.editImageDialog = false;
+          } else {
+            this.$swal('Błąd', 'Okładka książki nie mogła zostać zmieniona!', 'error');
+          }
+        });
       this.$store.dispatch('fetchBooks', {});
     },
 

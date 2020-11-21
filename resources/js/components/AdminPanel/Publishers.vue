@@ -166,11 +166,29 @@ export default {
           axios.post('/api/publisher/add', {
             name: this.editedItem.name
           })
+          .then(() => {
+            const Toast = this.$swal.mixin({
+              toast: true,
+              position: 'top-end',
+              showConfirmButton: false,
+              timer: 2000,
+              didOpen: (toast) => {
+                toast.addEventListener('mouseenter', this.$swal.stopTimer);
+                toast.addEventListener('mouseleave', this.$swal.resumeTimer);
+              }
+            });
+
+            Toast.fire({
+              icon: 'success',
+              title: 'Dodano wydawnictwo!'
+            });
+          })
             .catch((error) => {
               console.log(error);
             });
         }
         this.$store.dispatch('fetchPublishers', {});
+        this.$refs.form.resetValidation();
         this.close();
       }
     },

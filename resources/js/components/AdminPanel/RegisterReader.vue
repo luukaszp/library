@@ -54,6 +54,7 @@
                                     :rules="cardNumberRules"
                                     label="Numer karty bibliotecznej"
                                     outlined
+                                    required
                             ></v-text-field>
 
                             <v-text-field
@@ -137,11 +138,11 @@ export default {
       ],
       nameRules: [
         (v) => !!v || 'Imię jest wymagane!',
-        (v) => /^[a-zA-Z]+$/.test(v) || 'Imię powinno zawierać tylko litery'
+        (v) => /^[a-zA-ZąęćżźńłóśĄĆĘŁŃÓŚŹŻ\s]+$/.test(v) || 'Imię powinno zawierać tylko litery'
       ],
       surnameRules: [
         (v) => !!v || 'Nazwisko jest wymagane!',
-        (v) => /^[a-zA-Z]+$/.test(v) || 'Nazwisko powinno zawierać tylko litery'
+        (v) => /^[a-zA-ZąęćżźńłóśĄĆĘŁŃÓŚŹŻ\s]+$/.test(v) || 'Nazwisko powinno zawierać tylko litery'
       ],
       cardNumberRules: [
         (v) => !!v || 'Numer karty bibliotecznej jest wymagany!',
@@ -150,7 +151,6 @@ export default {
       ]
     };
   },
-
   methods: {
     validate() {
       if (this.$refs.form.validate()) {
@@ -164,7 +164,25 @@ export default {
           password_confirmation: this.password_confirmation
         };
         this.$store.dispatch('userRegister', data)
+          .then(() => {
+            const Toast = this.$swal.mixin({
+              toast: true,
+              position: 'top-end',
+              showConfirmButton: false,
+              timer: 2000,
+              didOpen: (toast) => {
+                toast.addEventListener('mouseenter', this.$swal.stopTimer);
+                toast.addEventListener('mouseleave', this.$swal.resumeTimer);
+              }
+            });
+
+            Toast.fire({
+              icon: 'success',
+              title: 'Dodano nowego czytelnika!'
+            });
+          })
           .catch((error) => {
+            this.$swal('Błędne dane', 'Użytkownik o podanym loginie/e-mailu już istnieje!', 'error');
             console.log(error);
           });
       }
@@ -173,7 +191,6 @@ export default {
       this.$refs.form.reset();
     }
   },
-
   computed: {
     passwordConfirmationRule() {
       return () => this.password === this.password_confirmation || 'Hasło musi być takie same';
@@ -183,5 +200,4 @@ export default {
 </script>
 
 <style scoped>
-
 </style>

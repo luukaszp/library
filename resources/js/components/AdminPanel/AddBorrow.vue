@@ -4,7 +4,7 @@
             <v-row class="justify-center justify-md-center align-center">
                 <v-col
                         cols="12"
-                        md="6"
+                        md="4"
                 >
 
                     <v-card
@@ -21,7 +21,7 @@
 
                             <hr>
 
-                            <v-select
+                            <v-autocomplete
                                     class="pa-5 pb-0"
                                     v-model="selectedReader"
                                     :items="readers"
@@ -39,9 +39,9 @@
                             <template slot="selection" slot-scope="data">
                                 {{data.item.name}} {{data.item.surname}}
                             </template>
-                            </v-select>
+                            </v-autocomplete>
 
-                            <v-select
+                            <v-autocomplete
                                     class="pa-5 pb-0 pt-0"
                                     v-model="selectedBooks"
                                     :items="books"
@@ -53,7 +53,7 @@
                                     required
                                     :rules="booksRules"
                                     multiple
-                            ></v-select>
+                            ></v-autocomplete>
 
                             <v-menu
                                     v-model="menu"
@@ -137,6 +137,23 @@ export default {
           book_id: this.selectedBooks,
           borrows_date: this.date
         })
+        .then(() => {
+            const Toast = this.$swal.mixin({
+              toast: true,
+              position: 'top-end',
+              showConfirmButton: false,
+              timer: 2000,
+              didOpen: (toast) => {
+                toast.addEventListener('mouseenter', this.$swal.stopTimer);
+                toast.addEventListener('mouseleave', this.$swal.resumeTimer);
+              }
+            });
+
+            Toast.fire({
+              icon: 'success',
+              title: 'Wypożyczono książkę!'
+            });
+          })
           .catch((error) => {
             console.log(error);
           });

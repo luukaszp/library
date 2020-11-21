@@ -23,7 +23,7 @@
             solo-inverted
             hide-details
             prepend-inner-icon="mdi-magnify"
-            label="Search"
+            label="Wyszukaj"
           ></v-text-field>
           <template v-if="$vuetify.breakpoint.mdAndUp">
             <v-spacer></v-spacer>
@@ -34,7 +34,7 @@
               hide-details
               :items="keys"
               prepend-inner-icon="mdi-sort"
-              label="Sort by"
+              label="Sortuj według"
             ></v-select>
             <v-spacer></v-spacer>
             <v-btn-toggle
@@ -70,7 +70,7 @@
             cols="12"
             sm="6"
             md="4"
-            lg="3"
+            lg="2"
             class="py-2"
             >
             <v-card class="card fill-height">
@@ -87,7 +87,7 @@
 
                 <v-divider></v-divider>
 
-                <v-card-text style="justify-content: center">
+                <v-card-text style="justify-content: center; text-align: center">
                     <p>Autor: <span v-text="item.authorName + ' ' + item.surname" class="mr-2"></span></p>
                     <p>Kategoria: <span v-text="item.categoryName" class="mr-2"></span></p>
                     <p>Dostępna ilość książek: <v-chip v-text="item.amount" :color="getColor(item.amount)" dark></v-chip></p>
@@ -178,12 +178,7 @@ export default {
           'authorName',
           'surname',
           'categoryName',
-          'ISBN',
-          'description',
-          'publish_year ',
-          'publisherName',
           'amount',
-          'cover',
         ],
     items: [
       {

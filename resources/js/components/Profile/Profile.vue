@@ -3,14 +3,14 @@
         <v-row style="margin-left: 10px; margin-right: 10px">
             <v-col md=3 style="justify-content: center; text-align: center;">
                 <v-avatar size="200">
-                    <v-img class="card-img" v-bind:src="('../storage/' + readers.avatar)"></v-img>
+                    <v-img class="card-img" :src="'../storage/' + readers.avatar"></v-img>
                 </v-avatar>
 
                 <v-form
                     ref="form"
                     v-model="valid"
                 >
-                <div class="upload" style="padding-top: 15px">
+                <div class="upload" style="padding-top: 15px" v-if="this.$route.params.user_id.toString() === this.authId.toString()">
                     <v-btn
                         color="primary"
                         class="text-none pa-5 pb-0 pt-0"
@@ -47,7 +47,7 @@
 
         <v-divider></v-divider>
 
-        <v-row style="margin-left: 10px; margin-right: 10px; justify-content: center;">
+        <v-row style="margin-left: 10px; margin-right: 10px; justify-content: center;" v-if="this.$route.params.user_id.toString() === this.authId.toString()">
             <ProfileTabs v-bind:user_id="user_id"/>
         </v-row>
 
@@ -78,6 +78,9 @@ export default {
     },
     buttonText() {
       return this.selectedFile ? this.selectedFile.name : this.defaultButtonText
+    },
+    authId() {
+      return this.$store.getters.authId;
     }
   },
 

@@ -5,12 +5,16 @@ namespace App\Http\Controllers;
 use App\Http\Requests\AuthRequest;
 use App\Http\Requests\Reactivation;
 use App\User;
+use App\Mail\NewUserMail;
+use App\Mail\ResetPasswordMail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use JWTAuth;
 use JWTFactory;
+use Carbon\Carbon;
 
 class AuthController extends Controller
 {
@@ -93,6 +97,130 @@ class AuthController extends Controller
         }
 
         $user->save();
+
+        $details = [
+            'title' => 'Zmiana hasła',
+            'url' => "http://127.0.0.1:8000/first-login",
+            'name' => $user->name
+        ];
+
+        if($request->id_number === null) {
+            Mail::to($user->email)->send(new NewUserMail($details));
+        }
+
+        return response()->json(['success' => true]);
+    }
+
+    /**
+     * Password change
+     *
+     * @param  Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Illuminate\Validation\ValidationException
+     */
+
+    public function passwordChange(Request $request)
+    {
+        $user = User::where('id', '=', $request->user_id)->first();
+
+        if (!$user) {
+            return response()->json(
+                [
+                'success' => false,
+                'message' => 'Sorry, something went wrong.'
+                ], 400
+            );
+        }
+
+        $user->password = bcrypt($request->password);
+        $user->save();
+
+        return response()->json(['success' => true]);
+    }
+
+    /**
+     * Password change during first login
+     *
+     * @param  Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Illuminate\Validation\ValidationException
+     */
+
+    public function firstLoginPassword(Request $request)
+    {
+        $user = User::where('card_number', '=', $request->card_number)->first();
+
+        if (!$user) {
+            return response()->json(
+                [
+                'success' => false,
+                'message' => 'Wrong card number given.'
+                ], 401
+            );
+        }
+
+        if ($user->email !== $request->email) {
+            return response()->json(
+                [
+                'success' => false,
+                'message' => 'Wrong email.'
+                ], 400
+            );
+        }
+
+        if ($user->email_verified_at !== null) {
+            return response()->json(
+                [
+                'success' => false,
+                'message' => 'Sorry, your email is already verified.'
+                ], 400
+            );
+        }
+
+        $user->password = bcrypt($request->password);
+        $user->email_verified_at = Carbon::now()->toDateTimeString();
+        $user->save();
+
+        return response()->json(['success' => true]);
+    }
+
+    /**
+     * Password reset
+     *
+     * @param  Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Illuminate\Validation\ValidationException
+     */
+
+    public function passwordReset(Request $request)
+    {
+        $user = User::where('email', '=', $request->email)->first();
+
+        if (!$user) {
+            return response()->json(
+                [
+                'success' => false,
+                'message' => 'Sorry, user with provided email cannot be found.'
+                ], 400
+            );
+        }
+
+        if ($user->email_verified_at === null) {
+            return response()->json(
+                [
+                'success' => false,
+                'message' => 'Sorry, you need to verify your email first.'
+                ], 400
+            );
+        }
+
+        $details = [
+            'title' => 'Resetowanie hasła',
+            'url' => "http://127.0.0.1:8000/new-password/$user->id",
+            'name' => $user->name
+        ];
+
+        Mail::to($user->email)->send(new ResetPasswordMail($details));
 
         return response()->json(['success' => true]);
     }

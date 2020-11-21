@@ -53,7 +53,7 @@
                                                 <template v-slot:activator="{ on, attrs }">
                                                     <v-text-field
                                                     v-model="editedItem.date"
-                                                    label="Wybierz datę wypożyczenia"
+                                                    label="Wybierz datę wydarzenia"
                                                     prepend-icon="mdi-calendar"
                                                     readonly
                                                     v-bind="attrs"
@@ -76,7 +76,7 @@
                                                 <template v-slot:activator="{ on, attrs }">
                                                     <v-text-field
                                                     v-model="editedItem.time"
-                                                    label="Wybierz czas wypożyczenia"
+                                                    label="Wybierz czas wydarzenia"
                                                     prepend-icon="mdi-calendar"
                                                     readonly
                                                     v-bind="attrs"
@@ -88,7 +88,7 @@
                                                 </v-menu>
                                             </v-row>
                                             <v-row>
-                                                <v-select
+                                                <v-autocomplete
                                                     v-model="selectedType"
                                                     :items="types"
                                                     item-text="name"
@@ -99,7 +99,7 @@
                                                     required
                                                     :rules="typeRules"
                                                 >
-                                                </v-select>
+                                                </v-autocomplete>
                                             </v-row>
                                         </v-form>
                                     </v-container>
@@ -259,6 +259,8 @@ export default {
             });
         }
         this.$store.dispatch('fetchEvents', {});
+        this.$refs.form.resetValidation();
+        this.$refs.form.reset();
         this.close();
       }
     },

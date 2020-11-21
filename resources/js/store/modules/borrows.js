@@ -25,7 +25,6 @@ export default {
         })
           .then((response) => {
             if (response.data.success === true) {
-              alert('Wypożyczenie książki powiodło się!')
               router.push('/admin-panel/borrows');
             } else {
               alert('Coś poszło nie tak!');
@@ -105,7 +104,20 @@ export default {
           .catch((error) => {
             console.log(error);
           });
-      }
+      },
+
+      fetchMonth(context) {
+        axios({
+          method: 'GET',
+          url: 'http://127.0.0.1:8000/api/borrow/monthly'
+        })
+          .then((response) => {
+            context.commit('setBorrows', response.data);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      },
   },
   getters: {
     getBorrows(state) {

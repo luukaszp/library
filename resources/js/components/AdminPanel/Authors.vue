@@ -1,11 +1,21 @@
 <template>
             <v-data-table
-                    :headers="headers"
-                    :items="authors"
-                    :search="search"
-                    sort-by="amount"
-                    class="elevation-1"
+                :headers="headers"
+                :items="authors"
+                :search="search"
+                :expanded.sync="expanded"
+                show-expand
+                :single-expand="true"
+                sort-by="amount"
+                class="elevation-1"
             >
+
+            <template v-slot:expanded-item="{ headers, item }">
+                <td :colspan="headers.length">
+                    Życiorys autora: {{ item.description }}
+                </td>
+            </template>
+
                 <template v-slot:top>
                     <v-toolbar flat color="white">
                         <v-toolbar-title>Autorzy</v-toolbar-title>
@@ -86,57 +96,60 @@
                             </v-card>
                         </v-dialog>
 
-                        <v-dialog v-model="editPhotoDialog" max-width="700px">
+                        <v-dialog v-model="editPhotoDialog" max-width="550px" class="rounded-xl">
                             <v-card>
-                            <v-card-text>
-                                <v-container>
-                                <v-row align="center" justify="center">
-                                    <v-col cols="6">
-                                    <v-card>
-                                        <v-img
-                                        v-bind:src="('../storage/' + image)"
-                                        aspect-ratio="1"
-                                        ></v-img>
-                                    </v-card>
-                                    </v-col>
-                                </v-row>
-                                </v-container>
-                            </v-card-text>
+                                <v-card-text>
+                                    <v-container>
+                                        <v-row align="center" justify="center">
+                                            <v-col cols="6">
+                                            <v-card>
+                                                <v-img
+                                                v-bind:src="('../storage/' + image)"
+                                                aspect-ratio="1"
+                                                ></v-img>
+                                            </v-card>
+                                            </v-col>
+                                        </v-row>
+                                    </v-container>
+                                </v-card-text>
 
-                            <v-card-actions style="justify-content: center; display: block ruby; text-align: center">
-                                <v-spacer></v-spacer>
-                                <v-btn color="blue darken-1" text @click="closePhoto">Anuluj</v-btn>
-                                <v-btn
-                                    color="primary"
-                                    class="text-none pl-5 pr-5"
-                                    style="margin-right: 15px"
-                                    rounded
-                                    depressed
-                                    :loading="isSelecting"
-                                    v-model="photo"
-                                    @click="onButtonClick"
-                                >
-                                    <v-icon left>
-                                        mdi-book
-                                    </v-icon>
-                                    {{ buttonText }}
-                                </v-btn>
-                                <input
-                                    ref="uploader"
-                                    :rules="photoRules"
-                                    required
-                                    class="d-none"
-                                    type="file"
-                                    accept="image/*"
-                                    @change="onFileChanged"
-                                >
-                                <v-btn
-                                color=brown
-                                @click="refreshPhoto"
-                                :disabled="!valid"
-                                >
-                                Odśwież
-                                </v-btn>
+                                <v-divider></v-divider>
+
+                                <v-card-actions style="justify-content: center; display: block ruby; text-align: center; padding-bottom: 25px">
+                                    <v-spacer></v-spacer>
+                                    <v-btn color="#228B22" text @click="closePhoto">Anuluj</v-btn>
+                                    <v-btn
+                                        color="primary"
+                                        class="text-none pl-5 pr-5"
+                                        style="margin-right: 15px"
+                                        rounded
+                                        depressed
+                                        :loading="isSelecting"
+                                        v-model="photo"
+                                        @click="onButtonClick"
+                                    >
+                                        <v-icon left>
+                                            mdi-book
+                                        </v-icon>
+                                        {{ buttonText }}
+                                    </v-btn>
+                                    <input
+                                        ref="uploader"
+                                        :rules="photoRules"
+                                        required
+                                        class="d-none"
+                                        type="file"
+                                        accept="image/*"
+                                        @change="onFileChanged"
+                                    >
+                                    <v-btn
+                                    color=#228B22
+                                    @click="sendPhoto"
+                                    :disabled="!valid"
+                                    text
+                                    >
+                                    Wgraj
+                                    </v-btn>
                                 </v-card-actions>
                             </v-card>
                         </v-dialog>
@@ -185,12 +198,13 @@ export default {
   data: () => ({
     addAuthorDialog: false,
     editPhotoDialog: false,
-    defaultButtonText: 'Wgraj zdjęcie autora',
+    defaultButtonText: 'Zmień zdjęcie autora',
     isSelecting: false,
     valid: false,
     search: '',
     image: '',
     photo: [],
+    expanded: [],
     headers: [
       {
         text: 'Imię',
@@ -198,7 +212,6 @@ export default {
         value: 'name'
       },
       { text: 'Nazwisko', value: 'surname' },
-      { text: 'Życiorys', value: 'description' },
       { text: 'Zdjęcie', value: 'photo' },
       { text: 'Akcje', value: 'action', sortable: false }
     ],
@@ -294,7 +307,7 @@ export default {
           formData.append('name', this.editedItem.name);
           formData.append('surname', this.editedItem.surname);
           formData.append('description', this.editedItem.description);
-          
+
           const config = {
             headers: {
               'Content-Type': 'multipart/form-data'
@@ -302,11 +315,29 @@ export default {
           };
 
           axios.post('http://127.0.0.1:8000/api/author/add', formData, config)
+          .then(() => {
+            const Toast = this.$swal.mixin({
+              toast: true,
+              position: 'top-end',
+              showConfirmButton: false,
+              timer: 2000,
+              didOpen: (toast) => {
+                toast.addEventListener('mouseenter', this.$swal.stopTimer);
+                toast.addEventListener('mouseleave', this.$swal.resumeTimer);
+              }
+            });
+
+            Toast.fire({
+              icon: 'success',
+              title: 'Dodano autora!'
+            });
+          })
             .catch((error) => {
               console.log(error);
             });
         }
         this.$store.dispatch('fetchAuthors', {});
+        this.$refs.form.resetValidation();
         this.close();
       }
     },
@@ -347,7 +378,7 @@ export default {
       this.editPhotoDialog = true;
     },
 
-    refreshPhoto () {
+    sendPhoto () {
       const formData = new FormData();
       formData.append('photo', this.photo);
 
@@ -356,10 +387,17 @@ export default {
           'Content-Type': 'multipart/form-data'
         }
       };
-
-      axios.post(`/api/author/changePhoto/${this.editedItem.id}`, formData, config);
+      axios.post(`/api/author/changePhoto/${this.editedItem.id}`, formData, config)
+        .then((response) => {
+          if (response.data.success === true) {
+            this.$swal('Dodano', 'Pomyślnie zmieniono awatar autora!', 'success');
+            this.editPhotoDialog = false;
+          } else {
+            this.$swal('Błąd', 'Awatar autora nie mógł zostać zmieniony!', 'error');
+          }
+        });
       this.$store.dispatch('fetchAuthors', {});
-    },
+    }
   }
 };
 </script>

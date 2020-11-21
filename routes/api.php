@@ -35,6 +35,12 @@ Route::get('rating/all/{id}', 'RatingController@getRatings');
 
 Route::get('opinion/all/{id}', 'OpinionController@getOpinions');
 
+Route::post('password-reset', 'AuthController@passwordReset');
+Route::post('password-change', 'AuthController@passwordChange');
+Route::post('first-login-password', 'AuthController@firstLoginPassword');
+
+Route::get('borrow/monthly', 'BorrowController@getMonthlyAmount');
+
 Route::group(
     ['middleware' => 'auth.jwt'], function () {
         Route::get('logout', 'AuthController@logout');
@@ -106,7 +112,7 @@ Route::group(
 
         Route::post('book/store', 'BookController@store');
         Route::post('book/changeImage/{id}', 'BookController@changeImage');
-        Route::get('book/getAvailableBooks', 'BookController@getAvailableBooks');
+        Route::get('book/get/availableBooks', 'BookController@getAvailableBooks');
         Route::put('book/edit/{id}', 'BookController@editBook');
         Route::delete('book/delete/{id}', 'BookController@deleteBook');
 

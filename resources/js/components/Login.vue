@@ -8,14 +8,14 @@
                             contain
                             class="shrink"
                             :src="require('../assets/app_logo.png')"
-                    /> <!-- zmienic logo -->
+                    />
                 </v-row>
                 <v-divider
                         vertical
                 ></v-divider>
                 <v-col
                         cols="12"
-                        md="7"
+                        md="6"
                         class="form"
                 >
 
@@ -29,7 +29,7 @@
                                 md="6"
                         >
                             <h1 class="pt-8" style="text-align: center">Biblioteka</h1>
-<!--czy dodac logowanie za pomoca numeru karty i emaila ??? -->
+
                             <v-text-field
                                     class="pa-5 pb-0"
                                     v-model="login"
@@ -53,7 +53,6 @@
                             ></v-text-field>
 
                             <v-row class="pb-5 justify-center">
-
                                 <v-btn
                                         :disabled="!valid"
                                         color=brown
@@ -70,6 +69,9 @@
                                 >
                                     Wyczyść dane
                                 </v-btn>
+                            </v-row>
+                            <v-row class="pb-5 justify-center">
+                                <a style="color: #0080ff; font-weight: bold" href="/reset-password">Nie pamiętam hasła</a>
                             </v-row>
                         </v-form>
                     </v-card>
@@ -131,7 +133,7 @@ export default {
             });
           })
           .catch((error) => {
-            console.log(error);
+            this.$swal('Błąd', 'Nieprawidłowy login lub hasło!', 'error');
           });
       }
     },

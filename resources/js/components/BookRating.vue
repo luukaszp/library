@@ -64,7 +64,7 @@
 
                             <v-list-item-action>
                                 <v-list-item-action-text v-text="item.created_at"></v-list-item-action-text>
-                                <div class="action" v-if="parseInt(item.user_id) === authId">
+                                <div class="action" v-if="parseInt(item.user_id) === loggedUser.id || loggedUser.is_worker === true">
                                   <v-icon
                                       small
                                       class="mr-2"
@@ -134,7 +134,6 @@ export default {
   props: ['book_id'],
   data: () => ({
     opinion: '',
-    items: [],
     rating: 0,
     valid: false,
     editOpinionDialog: false,
@@ -163,13 +162,13 @@ export default {
     opinions() {
       return this.$store.getters.getOpinions;
     },
-    authId() {
-      return this.$store.getters.authId;
+    loggedUser() {
+      return this.$store.getters.loggedUser;
     },
     check() {
       if(this.ratings.length != 0) {
         for (let i = 0; i < this.ratings.length; i++) {
-          if(this.ratings[i].user_id === this.authId.toString()) {
+          if(this.ratings[i].user_id === this.loggedUser.id.toString()) {
             return true
           }
         }

@@ -8,7 +8,7 @@
                 cols="10"
                 sm="6"
                 md="4"
-                lg="5"
+                lg="2"
             >
                 <v-card class="card fill-height">
                     <v-card-title style="justify-content: center; padding-top: 30px">

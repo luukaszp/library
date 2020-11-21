@@ -26,15 +26,6 @@ class OpinionController extends Controller
             ->get()
             ->toArray();
 
-        /*if (!$opinion) {
-            return response()->json(
-                [
-                'success' => false,
-                'message' => 'Sorry, opinion with id ' . $id . ' cannot be found.',
-                ], 400
-            );
-        }*/
-
         return $opinion;
     }
 

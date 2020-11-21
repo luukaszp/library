@@ -4,7 +4,7 @@
             <v-row class="justify-center justify-md-center align-center">
                 <v-col
                         cols="12"
-                        md="6"
+                        md="4"
                 >
 
                     <v-card
@@ -92,7 +92,7 @@
                                     :rules="amountRules"
                             ></v-text-field>
 
-                            <v-select
+                            <v-autocomplete
                                     class="pa-5 pb-0 pt-0"
                                     v-model="selectedAuthor"
                                     :items="authors"
@@ -110,9 +110,9 @@
                             <template slot="selection" slot-scope="data">
                                 {{data.item.name}} {{data.item.surname}}
                             </template>
-                            </v-select>
+                            </v-autocomplete>
 
-                            <v-select
+                            <v-autocomplete
                                     class="pa-5 pb-0 pt-0"
                                     v-model="selectedCategory"
                                     :items="categories"
@@ -123,10 +123,9 @@
                                     outlined
                                     required
                                     :rules="categoryRules"
-                            ></v-select>
+                            ></v-autocomplete>
 
-                            <v-select
-
+                            <v-autocomplete
                                     class="pa-5 pb-0 pt-0"
                                     v-model="selectedPublisher"
                                     :items="publishers"
@@ -137,7 +136,7 @@
                                     outlined
                                     required
                                     :rules="publisherRules"
-                            ></v-select>
+                            ></v-autocomplete>
 
                             <v-row class="pb-5 justify-center">
 
@@ -208,7 +207,8 @@ export default {
       publishYearRules: [
         (v) => !!v || 'Pole jest wymagane!',
         (v) => /^\d+$/.test(v) || 'Rok wydania musi być prawidłowy',
-        (v) => v.length === 4 || 'Rok wydania powinien zawierać 4 cyfry'
+        (v) => v.length === 4 || 'Rok wydania powinien zawierać 4 cyfry',
+        (v) => v <= new Date().getFullYear() || 'Rok wydania musi być prawidłowy'
       ],
       coverRules: [
         (v) => !!v || 'Zdjęcie okładki książki jest wymagane!',
@@ -256,6 +256,7 @@ export default {
             }
           })
           .catch((error) => {
+            this.$swal('Błędny ISBN', 'Książka o podanym ISBN już istnieje!', 'error');
             console.log(error);
           });
       }
@@ -264,15 +265,15 @@ export default {
       this.$refs.form.reset();
     },
     onButtonClick() {
-      this.isSelecting = true
+      this.isSelecting = true;
       window.addEventListener('focus', () => {
-        this.isSelecting = false
-      }, { once: true })
+        this.isSelecting = false;
+      }, { once: true });
 
-      this.$refs.uploader.click()
+      this.$refs.uploader.click();
     },
     onFileChanged(e) {
-      this.cover = e.target.files[0]
+      this.cover = e.target.files[0];
     }
   },
 
@@ -290,7 +291,7 @@ export default {
       return this.$store.getters.getPublishers;
     },
     buttonText() {
-      return this.selectedFile ? this.selectedFile.name : this.defaultButtonText
+      return this.selectedFile ? this.selectedFile.name : this.defaultButtonText;
     }
   },
 

@@ -115,7 +115,6 @@ export default {
       name: '',
       surname: '',
       email: '',
-      card_number: '',
       id_number: '',
       password: '',
       password_confirmation: '',
@@ -137,11 +136,11 @@ export default {
       ],
       nameRules: [
         (v) => !!v || 'Imię jest wymagane!',
-        (v) => /^[a-zA-Z]+$/.test(v) || 'Imię powinno zawierać tylko litery'
+        (v) => /^[a-zA-ZąęćżźńłóśĄĆĘŁŃÓŚŹŻ\s]+$/.test(v) || 'Imię powinno zawierać tylko litery'
       ],
       surnameRules: [
         (v) => !!v || 'Nazwisko jest wymagane!',
-        (v) => /^[a-zA-Z]+$/.test(v) || 'Nazwisko powinno zawierać tylko litery'
+        (v) => /^[a-zA-ZąęćżźńłóśĄĆĘŁŃÓŚŹŻ\s]+$/.test(v) || 'Nazwisko powinno zawierać tylko litery'
       ],
       idNumberRules: [(v) => !!v || 'Identyfikator jest wymagany!',
         (v) => /^\d+$/.test(v) || 'Identyfikator musi być prawidłowy',
@@ -157,13 +156,30 @@ export default {
           name: this.name,
           surname: this.surname,
           email: this.email,
-          card_number: this.card_number,
           id_number: this.id_number,
           password: this.password,
           password_confirmation: this.password_confirmation
         };
         this.$store.dispatch('userRegister', data)
+          .then(() => {
+            const Toast = this.$swal.mixin({
+              toast: true,
+              position: 'top-end',
+              showConfirmButton: false,
+              timer: 2000,
+              didOpen: (toast) => {
+                toast.addEventListener('mouseenter', this.$swal.stopTimer);
+                toast.addEventListener('mouseleave', this.$swal.resumeTimer);
+              }
+            });
+
+            Toast.fire({
+              icon: 'success',
+              title: 'Dodano nowego pracownika!'
+            });
+          })
           .catch((error) => {
+            this.$swal('Błędne dane', 'Użytkownik o podanym loginie/e-mailu już istnieje!', 'error');
             console.log(error);
           });
       }

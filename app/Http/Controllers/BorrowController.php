@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Borrow;
 use App\Book;
+use App\User;
 use DB;
 use Carbon\Carbon;
 
@@ -106,6 +107,7 @@ class BorrowController extends Controller
     public function getDelayedBorrows()
     {
         $this->checkDelay();
+
         $data = DB::table('borrows')
             ->where('borrows.delay', '!=', 'null')
             ->join('users', 'users.id', '=', 'borrows.user_id')
@@ -141,21 +143,6 @@ class BorrowController extends Controller
                 $borrow->save();
             }
         }
-        if ($borrow->save()) {
-            return response()->json(
-                [
-                'success' => true,
-                'book' => $borrow
-                ], 201
-            );
-        } else {
-            return response()->json(
-                [
-                'success' => false,
-                'message' => 'Sorry, borrowing could not be added.',
-                ], 500
-            );
-        }
     }
 
     /**
@@ -175,6 +162,10 @@ class BorrowController extends Controller
         $book = Book::find($request->bookID);
         $book->amount = $book->amount+1;
 
+        $user = User::find($borrow->user_id);
+        $user->can_extend = 1;
+
+        $user->save();
         $book->save();
         $borrow->save();
 
@@ -254,22 +245,13 @@ class BorrowController extends Controller
             ->join('books', 'books.id', '=', 'borrows.book_id')
             ->join('authors', 'authors.id', '=', 'books.author_id')
             ->select(
-                'books.id', 'books.title', 'authors.name', 'authors.surname', 'borrows.borrows_date', 
+                'borrows.id', 'books.title', 'authors.name', 'authors.surname', 'borrows.borrows_date', 
                 'borrows.returns_date'
             )
             ->get()
             ->toArray();
 
-        if (!$borrow) {
-            return response()->json(
-                [
-                'success' => false,
-                'message' => 'Sorry, borrowing cannot be found.'
-                ], 400
-            );
-        } else {
-            return $borrow;
-        } 
+        return $borrow;
     }
 
     /**
@@ -281,7 +263,7 @@ class BorrowController extends Controller
      */
     public function showDelay($id)
     {
-        $borrow = DB::table('borrows')
+        $delay = DB::table('borrows')
             ->where('borrows.user_id', '=', $id)
             ->where('borrows.delay', '!=', null)
             ->join('books', 'books.id', '=', 'borrows.book_id')
@@ -292,16 +274,7 @@ class BorrowController extends Controller
             ->get()
             ->toArray();
 
-        if (!$borrow) {
-            return response()->json(
-                [
-                'success' => false,
-                'message' => 'Sorry, borrowing cannot be found.'
-                ], 400
-            );
-        } else {
-            return $borrow;
-        } 
+        return $delay; 
     }
 
     /**
@@ -314,6 +287,17 @@ class BorrowController extends Controller
     public function extendDate(Request $request, $id)
     {
         $borrow = Borrow::find($id);
+
+        $user = User::find($borrow->user_id);
+
+        if ($user->can_extend === '0') {
+            return response()->json(
+                [
+                'success' => false,
+                'message' => 'Sorry, user cannot extend the date any further.'
+                ], 400
+            );
+        }
 
         if (!$borrow) {
             return response()->json(
@@ -328,7 +312,9 @@ class BorrowController extends Controller
         $daysToAdd = 7;
         $date = $date->addDays($daysToAdd);
         $borrow->returns_date = $date->toDateString();
-        $borrow->save();
+
+        $user->can_extend = 0;
+        $user->save();
 
         if ($borrow->save()) {
             return response()->json(
@@ -348,7 +334,7 @@ class BorrowController extends Controller
     }
 
     /**
-     * Get amount of borrowings for all months.
+     * Get amount of borrowings for all months (every month for one user)
      *
      * @param  Request $request
      * @return \Illuminate\Http\JsonResponse
@@ -390,6 +376,81 @@ class BorrowController extends Controller
         }
 
         return $amount;
+    }
+
+    /**
+     * Get amount of borrowings for specific month
+     *
+     * @param  Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    public function getMonthlyAmount()
+    {
+        $position = [];
+        $status = [];
+
+        $firstDay = Carbon::now()->startOfMonth(); //current month
+        $lastDay = Carbon::now()->endOfMonth(); 
+
+        $lastMonthFDay = Carbon::now()->subMonth()->startOfMonth(); //previous month
+        $lastMonthLDay = Carbon::now()->subMonth()->endOfMonth();
+
+        //item.status = up, down, same in array - na podstawie pozycji ustalic status (-2, 0, +3)
+
+        $previousMonth = DB::table('borrows')
+            ->whereBetween('borrows.borrows_date', [$lastMonthFDay, $lastMonthLDay])
+            ->join('users', 'users.id', '=', 'borrows.user_id')
+            ->select(
+                'users.name', 'users.surname', 'users.avatar', DB::raw('COUNT(borrows.borrows_date) as count')
+            )
+            ->groupBy('users.id')
+            ->orderBy('count', 'desc')
+            ->take(10)
+            ->get();
+
+        $currentMonth = DB::table('borrows')
+            ->whereBetween('borrows.borrows_date', [$firstDay, $lastDay])
+            ->join('users', 'users.id', '=', 'borrows.user_id')
+            ->select(
+                'users.name', 'users.surname', 'users.avatar', DB::raw('COUNT(borrows.borrows_date) as count')
+            )
+            ->groupBy('users.id')
+            ->orderBy('count', 'desc')
+            ->take(10)
+            ->get();
+
+            for ($i = 0; $i < count($previousMonth); $i++) {
+                if ($previousMonth[$i]->surname !== $currentMonth[$i]->surname) {
+                    for ($j = 0; $j < count($previousMonth); $j++) {
+                        if ($previousMonth[$i]->surname === $currentMonth[$j]->surname) {
+                            $position[$i] = $i - $j;
+                        }
+                    }
+                } else {
+                    $position[$i] = 0;
+                }
+            }
+
+            for ($i = 0; $i < count($position); $i++) {
+                if ($position[$i] > 0) {
+                    $status[$i] = 'down';
+                } else if ($position[$i] < 0) {
+                    $status[$i] = 'up';
+                } else {
+                    $status[$i] = 'same';
+                }
+            }
+
+            for ($i = 0; $i < count($currentMonth); $i++) {
+                $currentMonth[$i]->status = $status[$i];
+                if ($position[$i] < 0) {
+                    $position[$i] *= -1;
+                }
+                $currentMonth[$i]->position = $position[$i];
+            }
+
+        return $currentMonth;
     }
 
     /**
