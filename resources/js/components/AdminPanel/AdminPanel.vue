@@ -79,6 +79,7 @@ export default {
           title: 'Książki',
           items: [
             { title: 'Ogólne zestawienie', route: '/admin-panel/books' },
+            { title: 'Zestawienie z ISBN', route: '/admin-panel/books-isbn' },
             { title: 'Autorzy', route: '/admin-panel/authors' },
             { title: 'Kategorie', route: '/admin-panel/categories' },
             { title: 'Wydawnictwa', route: '/admin-panel/publishers' }

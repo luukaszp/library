@@ -23,6 +23,19 @@ export default {
         });
     },
 
+    fetchBooksISBN(context) {
+      axios({
+        method: 'GET',
+        url: 'http://127.0.0.1:8000/api/book/getBooks/isbn'
+      })
+        .then((response) => {
+          context.commit('setBooks', response.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+
     fetchAvailableBooks(context) {
       axios({
         method: 'GET',

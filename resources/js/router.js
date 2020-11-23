@@ -12,6 +12,7 @@ import Readers from './components/AdminPanel/Readers.vue';
 import Workers from './components/AdminPanel/Workers.vue';
 import Roles from './components/AdminPanel/Roles.vue';
 import Books from './components/AdminPanel/Books.vue';
+import BooksISBN from './components/AdminPanel/BooksISBN.vue';
 import Authors from './components/AdminPanel/Authors.vue';
 import Categories from './components/AdminPanel/Categories.vue';
 import Publishers from './components/AdminPanel/Publishers.vue';
@@ -138,6 +139,11 @@ const routes = [
         path: '/admin-panel/books',
         name: 'books',
         component: Books
+      },
+      {
+        path: '/admin-panel/books-isbn',
+        name: 'books-isbn',
+        component: BooksISBN
       },
       {
         path: '/admin-panel/authors',

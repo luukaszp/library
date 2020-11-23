@@ -36,10 +36,6 @@ class BorrowController extends Controller
             $date = $date->addDays($daysToAdd);
             $borrow->returns_date = $date->toDateString();
             $borrow->save();
-
-            $book = Book::find($stringToInt);
-            $book->amount = $book->amount-1;
-            $book->save();
         }
 
         if ($borrow->save()) {
@@ -159,14 +155,10 @@ class BorrowController extends Controller
         $borrow->is_returned = $request->is_returned;
         $borrow->when_returned = $todayDate;
 
-        $book = Book::find($request->bookID);
-        $book->amount = $book->amount+1;
-
         $user = User::find($borrow->user_id);
         $user->can_extend = 1;
 
         $user->save();
-        $book->save();
         $borrow->save();
 
         if ($borrow->save()) {

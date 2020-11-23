@@ -107,10 +107,13 @@ Route::group(
         Route::post('author/changePhoto/{id}', 'AuthorController@changePhoto');
 
         Route::post('book/store', 'BookController@store');
+        Route::get('book/getBooks/isbn', 'BookController@getBooksISBN');
         Route::post('book/changeImage/{id}', 'BookController@changeImage');
         Route::get('book/get/availableBooks', 'BookController@getAvailableBooks');
         Route::put('book/edit/{id}', 'BookController@editBook');
+        Route::put('book/edit/isbn/{id}', 'BookController@editBookISBN');
         Route::delete('book/delete/{id}', 'BookController@deleteBook');
+        Route::delete('book/delete/group/{id}', 'BookController@deleteGroup');
 
         Route::post('borrow/addBorrow', 'BorrowController@addBorrow');
         Route::put('borrow/returnBook/{id}', 'BorrowController@returnBook');

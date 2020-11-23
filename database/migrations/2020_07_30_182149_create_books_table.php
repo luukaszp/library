@@ -21,7 +21,6 @@ class CreateBooksTable extends Migration
                 $table->string('description');
                 $table->string('publish_year');
                 $table->string('cover');
-                $table->integer('amount');
                 $table->unsignedInteger('author_id');
                 $table->unsignedInteger('category_id');
                 $table->unsignedInteger('publisher_id');

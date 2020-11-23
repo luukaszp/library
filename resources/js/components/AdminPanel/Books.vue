@@ -58,16 +58,10 @@
                       <v-text-field v-model="editedItem.title" :rules="titleRules" label="Tytuł książki"></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.isbn" :rules="isbnRules" label="ISBN"></v-text-field>
-                    </v-col>
-                    <v-col cols="12" sm="6" md="4">
                       <v-text-field v-model="editedItem.description" :rules="descriptionRules" label="Opis"></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
                       <v-text-field v-model="editedItem.publish_year" :rules="publishYearRules" label="Rok wydania"></v-text-field>
-                    </v-col>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.amount" :rules="amountRules" label="Ilość"></v-text-field>
                     </v-col>
                   </v-row>
                 </v-container>
@@ -201,7 +195,6 @@ export default {
       },
       { text: 'Autor', value: 'fullName' },
       { text: 'Kategoria', value: 'categoryName' },
-      { text: 'ISBN', value: 'isbn' },
       { text: 'Rok wydania', value: 'publish_year' },
       { text: 'Wydawnictwo', value: 'publisherName' },
       { text: 'Ilość', value: 'amount' },
@@ -211,31 +204,17 @@ export default {
     editedIndex: -1,
     editedItem: {
       title: '',
-      isbn: '',
       description: '',
       publish_year: '',
-      amount: ''
     },
     defaultItem: {
       title: '',
-      isbn: '',
       description: '',
       publish_year: '',
-      amount: ''
     },
     titleRules: [
       (v) => !!v || 'Pole jest wymagane!',
       (v) => v.length <= 60 || 'Tytuł jest za długi!'
-    ],
-    isbnRules: [
-      (v) => !!v || 'Pole jest wymagane!',
-      (v) => /^\d+$/.test(v) || 'Numer ISBN musi być prawidłowy',
-      (v) => v.length === 13 || 'Numer ISBN powinien zawierać 13 cyfr'
-    ],
-    amountRules: [
-      (v) => !!v || 'Pole jest wymagane!',
-      (v) => /^\d+$/.test(v) || 'Ilość musi być prawidłowa',
-      (v) => v > 0 || 'Ilość książek powinna być większa od 0'
     ],
     descriptionRules: [
       (v) => !!v || 'Pole jest wymagane!',
@@ -286,10 +265,8 @@ export default {
         Object.assign(this.books[this.editedIndex], this.editedItem);
         axios.put(`/api/book/edit/${this.editedItem.id}`, {
           title: this.editedItem.title,
-          isbn: this.editedItem.isbn,
           description: this.editedItem.description,
           publish_year: this.editedItem.publish_year,
-          amount: this.editedItem.amount
         });
       }
       this.$store.dispatch('fetchBooks', {});
@@ -299,16 +276,16 @@ export default {
     deleteBook (item) {
       const index = this.books.indexOf(item);
       this.$swal({
-        title: 'Czy jesteś pewien, że chcesz usunąć tę książkę?',
+        title: 'Czy jesteś pewien, że chcesz usunąć te książki?',
         icon: 'question',
         showCancelButton: true,
         confirmButtonText: 'Usuń',
         cancelButtonText: 'Anuluj'
       }).then((result) => {
         if (result.value) {
-          axios.delete(`/api/book/delete/${item.id}`, {});
+          axios.delete(`/api/book/delete/group/${item.id}`, {});
           this.books.splice(index, 1);
-          this.$swal('Usunięto', 'Pomyślnie usunięto książkę', 'success');
+          this.$swal('Usunięto', 'Pomyślnie usunięto książki', 'success');
         } else {
           this.$swal('Anulowano', 'Akcja została anulowana', 'info');
         }
@@ -374,7 +351,8 @@ export default {
     },
 
     getColor (amount) {
-      if (amount === 0) return 'red';
+      if (amount === '0') return 'red';
+      if (amount === '1') return 'orange';
       return 'green';
     }
   }

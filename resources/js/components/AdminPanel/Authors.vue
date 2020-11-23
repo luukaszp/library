@@ -56,7 +56,7 @@
                                             </v-row>
                                             <v-row>
                                                 <v-col>
-                                                    <v-text-field v-model="editedItem.description" :rules="descriptionRules" label="Życiorys"></v-text-field>
+                                                    <v-textarea v-model="editedItem.description" :rules="descriptionRules" label="Życiorys"></v-textarea>
                                                 </v-col>
                                             </v-row>
                                             <v-row style="justify-content: center; text-align: center">
