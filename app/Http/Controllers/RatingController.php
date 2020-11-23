@@ -46,7 +46,8 @@ class RatingController extends Controller
             ->where('ratings.book_id', '=', $id)
             ->join('users', 'users.id', '=', 'ratings.user_id')
             ->select(
-                'ratings.id', 'ratings.rate', 'ratings.created_at', 'users.name', 'users.surname', 'users.id as user_id'
+                'ratings.id', 'ratings.rate', 'ratings.created_at', 'ratings.opinion', 'users.name', 
+                'users.surname', 'users.id as user_id'
             )
             ->get()
             ->toArray();
@@ -73,6 +74,7 @@ class RatingController extends Controller
 
         $rating = new Rating();
         $rating->rate = $request->rate;
+        $rating->opinion = $request->opinion;
         $rating->user_id = auth()->user()->id;
         $rating->book_id = $request->book_id;
 
@@ -171,5 +173,50 @@ class RatingController extends Controller
         }
 
         return $amount;
+    }
+
+    /**
+     * Edit specific rating.
+     *
+     * @param  Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    public function editRating(Request $request, $id)
+    {
+        $rating = Rating::find($id);
+
+        if (!$rating) {
+            return response()->json(
+                [
+                'success' => false,
+                'message' => 'Sorry, rating with id ' . $id . ' cannot be found.'
+                ], 400
+            );
+        }
+
+        $rating->rate = $request->rate;
+        $rating->opinion = $request->opinion;
+        $rating->user_id = auth()->user()->id;
+        $rating->book_id = $request->book_id;
+        //$opinion->rating_id = Rating::latest()->first()->id;
+
+        $rating->save();
+
+        if ($rating->save()) {
+            return response()->json(
+                [
+                'success' => true,
+                'message' => 'Rating has been updated',
+                ]
+            );
+        } else {
+            return response()->json(
+                [
+                'success' => false,
+                'message' => 'Sorry, rating could not be updated.',
+                ], 500
+            );
+        }
     }
 }

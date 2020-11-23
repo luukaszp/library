@@ -33,8 +33,6 @@ Route::get('author/{id}', 'AuthorController@showAuthor');
 Route::get('rating/{id}', 'RatingController@showRating');
 Route::get('rating/all/{id}', 'RatingController@getRatings');
 
-Route::get('opinion/all/{id}', 'OpinionController@getOpinions');
-
 Route::post('password-reset', 'AuthController@passwordReset');
 Route::post('password-change', 'AuthController@passwordChange');
 Route::post('first-login-password', 'AuthController@firstLoginPassword');
@@ -48,11 +46,9 @@ Route::group(
         //Route::post('refresh', 'AuthController@refresh');
         Route::post('me', 'AuthController@me');
 
-        Route::post('opinion/add', 'OpinionController@addOpinion');
-        Route::put('opinion/edit/{id}', 'OpinionController@editOpinion');
-
         Route::post('rating/add', 'RatingController@addRating');
         Route::delete('rating/delete/{id}', 'RatingController@deleteRating');
+        Route::put('rating/edit/{id}', 'RatingController@editRating');
 
         Route::get('user/profile/{id}', 'UserController@showReader');
         Route::post('user/profile/upload', 'UserController@changeAvatar');

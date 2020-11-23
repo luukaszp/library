@@ -43,7 +43,7 @@
             <h2 style="width: 100%; text-align: center">Oceny i opinie czytelników: {{ratings.length}}</h2>
                 <v-list two-line style="width: 100%">
                     <v-list-item-group>
-                        <template v-for="(item,index) in ratings">
+                        <template v-for="(item) in ratings">
                         <v-list-item :key="item.id +- item.rate">
                             <v-list-item-content>
                                 <v-col
@@ -59,7 +59,7 @@
                                     readonly
                                 ></v-rating>
                                 </v-col>
-                                <v-list-item-subtitle style="padding-top: 10px; margin-left: 10px" class="text--primary" v-text="opinions[index].opinion"></v-list-item-subtitle>
+                                <v-list-item-subtitle style="padding-top: 10px; margin-left: 10px" class="text--primary" v-text="item.opinion"></v-list-item-subtitle>
                             </v-list-item-content>
 
                             <v-list-item-action>
@@ -68,7 +68,7 @@
                                   <v-icon
                                       small
                                       class="mr-2"
-                                      @click="editOpinion(opinions[index])"
+                                      @click="editOpinion(item)"
                                   >
                                   mdi-pencil
                                   </v-icon>
@@ -91,7 +91,7 @@
 
         <v-dialog v-model="editOpinionDialog" max-width="400px">
           <v-card  style="text-align: center">
-            <v-card-title  style="justify-content: center">
+            <v-card-title style="justify-content: center">
               <span class="headline">Edytuj swoją opinię</span>
             </v-card-title>
 
@@ -99,6 +99,13 @@
               <v-container>
                 <v-form v-model="valid" ref="form">
                   <v-row style="display: inline-block">
+                    <v-rating
+                        v-model="editedItem.rate"
+                        background-color="orange lighten-3"
+                        color="orange"
+                        medium
+                        :rules="ratingRules"
+                    ></v-rating>
                     <v-col>
                       <v-textarea
                         v-model="editedItem.opinion"
@@ -108,6 +115,7 @@
                         rows="3"
                         row-height="25"
                         style="width: 300px"
+                        :rules="opinionRules"
                       ></v-textarea>
                     </v-col>
                   </v-row>
@@ -139,10 +147,12 @@ export default {
     editOpinionDialog: false,
     editedIndex: -1,
     editedItem: {
-      opinion: ''
+      opinion: '',
+      rate: ''
     },
     defaultItem: {
-      opinion: ''
+      opinion: '',
+      rate: ''
     },
     ratingRules: [
       (v) => !!v || 'Ocena jest wymagana!'
@@ -158,9 +168,6 @@ export default {
     },
     ratings() {
       return this.$store.getters.getRatings;
-    },
-    opinions() {
-      return this.$store.getters.getOpinions;
     },
     loggedUser() {
       return this.$store.getters.loggedUser;
@@ -179,43 +186,37 @@ export default {
 
   created () {
     this.$store.dispatch('fetchRatings', this.book_id);
-    this.$store.dispatch('fetchOpinions', this.book_id);
   },
 
   methods: {
     addOpinion() {
       if (this.$refs.form.validate()) {
         if (this.editedIndex > -1) {
-          Object.assign(this.opinions[this.editedIndex], this.editedItem);
-          axios.put(`/api/opinion/edit/${this.editedItem.id}`, {
+            console.log(this.ratings[this.editedIndex]);
+          Object.assign(this.ratings[this.editedIndex], this.editedItem);
+          axios.put(`/api/rating/edit/${this.editedItem.id}`, {
             opinion: this.editedItem.opinion,
+            rate: this.editedItem.rate,
             book_id: parseInt(this.book_id)
           });
         } else {
         axios.post('/api/rating/add', {
           rate: this.rating,
+          opinion: this.opinion,
           book_id: parseInt(this.book_id)
         })
           .catch((error) => {
             console.log(error);
           });
-          axios.post('/api/opinion/add', {
-            opinion: this.opinion,
-            book_id: parseInt(this.book_id)
-          })
-            .catch((error) => {
-              console.log(error);
-            });
         }
       }
       this.$store.dispatch('fetchAverage', this.book_id);
       this.$store.dispatch('fetchRatings', this.book_id);
-      this.$store.dispatch('fetchOpinions', this.book_id);
       this.close();
     },
 
     editOpinion(item) {
-      this.editedIndex = this.opinions.indexOf(item);
+      this.editedIndex = this.ratings.indexOf(item);
       this.editedItem = { ...item };
       this.editOpinionDialog = true;
     },
