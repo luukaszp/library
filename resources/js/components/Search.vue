@@ -229,7 +229,8 @@ export default {
         this.itemsPerPage = number
     },
     getColor (amount) {
-      if (amount === 0) return 'red';
+      if (amount === '0') return 'red';
+      if (amount === '1' || amount === '2') return 'orange';
       return 'green';
     }
   }

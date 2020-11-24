@@ -185,6 +185,7 @@ export default {
   },
 
   created () {
+    this.$store.dispatch('fetchAverage', this.book_id);
     this.$store.dispatch('fetchRatings', this.book_id);
   },
 
@@ -192,7 +193,6 @@ export default {
     addOpinion() {
       if (this.$refs.form.validate()) {
         if (this.editedIndex > -1) {
-            console.log(this.ratings[this.editedIndex]);
           Object.assign(this.ratings[this.editedIndex], this.editedItem);
           axios.put(`/api/rating/edit/${this.editedItem.id}`, {
             opinion: this.editedItem.opinion,
@@ -233,6 +233,8 @@ export default {
         if (result.value) {
           axios.delete(`/api/rating/delete/${item.id}`, {});
           this.ratings.splice(index, 1);
+          this.$store.dispatch('fetchAverage', this.book_id);
+          this.$store.dispatch('fetchRatings', this.book_id);
           this.$swal('Usunięto', 'Pomyślnie usunięto opinię', 'success');
         } else {
           this.$swal('Anulowano', 'Akcja została anulowana', 'info');

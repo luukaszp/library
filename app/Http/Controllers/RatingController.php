@@ -75,8 +75,8 @@ class RatingController extends Controller
         $rating = new Rating();
         $rating->rate = $request->rate;
         $rating->opinion = $request->opinion;
-        $rating->user_id = auth()->user()->id;
         $rating->book_id = $request->book_id;
+        $rating->user_id = auth()->user()->id;
 
         if ($rating->save()) {
             return response()->json(

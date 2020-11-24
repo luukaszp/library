@@ -163,8 +163,9 @@ export default {
         cancelButtonText: 'Anuluj'
       }).then((result) => {
         if (result.value) {
-          axios.delete(`/api/book/delete/${item.id}`, {});
+          axios.delete(`/api/book/delete/${item.id}`, {})
           this.books.splice(index, 1);
+          this.$store.dispatch('fetchBooksISBN', {});
           this.$swal('Usunięto', 'Pomyślnie usunięto książkę', 'success');
         } else {
           this.$swal('Anulowano', 'Akcja została anulowana', 'info');

@@ -83,8 +83,8 @@ export default {
       const differenceInTime = dateOfReturn.getTime() - todayDate.getTime();
       const differenceInDays = Math.round(differenceInTime / (1000 * 3600 * 24));
 
-      if (differenceInDays < 3) return 'red';
-      if (differenceInDays < 10) return 'orange';
+      if (differenceInDays < 0) return 'red';
+      if (differenceInDays < 7) return 'orange';
       return 'green';
     }
   }

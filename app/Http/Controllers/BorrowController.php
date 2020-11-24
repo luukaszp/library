@@ -21,6 +21,17 @@ class BorrowController extends Controller
     public function addBorrow(Request $request)
     {
         $book = $request->book_id;
+        $checkISBN = Book::where('id', '=', $request->book_id)->first()->isbn;
+        $test = $request->isbn;
+        
+        if($checkISBN !== $test) {
+            return response()->json(
+                [
+                'success' => false,
+                'message' => 'Sorry, wrong ISBN given.',
+                ], 500
+            );
+        }
 
         for($index = 0; $index < sizeof($request->book_id); $index++) {
             $borrow = new Borrow();
@@ -36,6 +47,10 @@ class BorrowController extends Controller
             $date = $date->addDays($daysToAdd);
             $borrow->returns_date = $date->toDateString();
             $borrow->save();
+
+            $book = Book::find($stringToInt);
+            $book->amount = $book->amount-1;
+            $book->save();
         }
 
         if ($borrow->save()) {
@@ -155,10 +170,14 @@ class BorrowController extends Controller
         $borrow->is_returned = $request->is_returned;
         $borrow->when_returned = $todayDate;
 
+        $book = Book::find($request->bookID);
+        $book->amount = $book->amount+1;
+
         $user = User::find($borrow->user_id);
         $user->can_extend = 1;
 
         $user->save();
+        $book->save();
         $borrow->save();
 
         if ($borrow->save()) {
@@ -412,35 +431,35 @@ class BorrowController extends Controller
             ->take(10)
             ->get();
 
-            for ($i = 0; $i < count($previousMonth); $i++) {
-                if ($previousMonth[$i]->surname !== $currentMonth[$i]->surname) {
-                    for ($j = 0; $j < count($previousMonth); $j++) {
-                        if ($previousMonth[$i]->surname === $currentMonth[$j]->surname) {
-                            $position[$i] = $i - $j;
-                        }
+        for ($i = 0; $i < count($previousMonth); $i++) {
+            if ($previousMonth[$i]->surname !== $currentMonth[$i]->surname) {
+                for ($j = 0; $j < count($previousMonth); $j++) {
+                    if ($previousMonth[$i]->surname === $currentMonth[$j]->surname) {
+                        $position[$i] = $i - $j;
                     }
-                } else {
-                    $position[$i] = 0;
                 }
+            } else {
+                $position[$i] = 0;
             }
+        }
 
-            for ($i = 0; $i < count($position); $i++) {
-                if ($position[$i] > 0) {
-                    $status[$i] = 'down';
-                } else if ($position[$i] < 0) {
-                    $status[$i] = 'up';
-                } else {
-                    $status[$i] = 'same';
-                }
+        for ($i = 0; $i < count($position); $i++) {
+            if ($position[$i] > 0) {
+                $status[$i] = 'down';
+            } else if ($position[$i] < 0) {
+                $status[$i] = 'up';
+            } else {
+                $status[$i] = 'same';
             }
+        }
 
-            for ($i = 0; $i < count($currentMonth); $i++) {
-                $currentMonth[$i]->status = $status[$i];
-                if ($position[$i] < 0) {
-                    $position[$i] *= -1;
-                }
-                $currentMonth[$i]->position = $position[$i];
+        for ($i = 0; $i < count($currentMonth); $i++) {
+            $currentMonth[$i]->status = $status[$i];
+            if ($position[$i] < 0) {
+                $position[$i] *= -1;
             }
+            $currentMonth[$i]->position = $position[$i];
+        }
 
         return $currentMonth;
     }

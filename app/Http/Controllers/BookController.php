@@ -6,6 +6,7 @@ use App\Book;
 use App\Category;
 use App\Author;
 use App\Publisher;
+use App\Rating;
 use App\Http\Requests\StoreBook;
 use Illuminate\Http\Request;
 use Intervention\Image\Facades\Image;
@@ -15,25 +16,19 @@ use Carbon\Carbon;
 class BookController extends Controller
 {
     /**
-     * Display a listing of books.
+     * Display a listing of books (listing by groups).
      *
      * @return Response
      */
     public function getBooks()
     {
-        $check = Book::get('id')->first();
-
-        if($check === null) {
-            return [];
-        }
-
         $data = DB::table('books')
             ->join('categories', 'categories.id', '=', 'books.category_id')
             ->join('publishers', 'publishers.id', '=', 'books.publisher_id')
             ->join('authors', 'authors.id', '=', 'books.author_id')
             ->select(
                 'books.id', 'books.title', 'books.isbn', 'books.description', 'books.publish_year',
-                DB::raw('COUNT(books.description) as amount'), 'categories.name as categoryName', 'authors.name as authorName',
+                'books.amount', 'categories.name as categoryName', 'authors.name as authorName',
                 'authors.surname', 'publishers.name as publisherName', 'books.cover'
             )
             ->groupBy('books.description')
@@ -44,25 +39,19 @@ class BookController extends Controller
     }
 
     /**
-     * Display a listing of books with ISBN.
+     * Display a listing of books with ISBN (every single book listed).
      *
      * @return Response
      */
     public function getBooksISBN()
     {
-        $check = Book::get('id')->first();
-
-        if($check === null) {
-            return [];
-        }
-
         $data = DB::table('books')
             ->join('categories', 'categories.id', '=', 'books.category_id')
             ->join('publishers', 'publishers.id', '=', 'books.publisher_id')
             ->join('authors', 'authors.id', '=', 'books.author_id')
             ->select(
                 'books.id', 'books.title', 'books.isbn', 'books.description', 'books.publish_year',
-                DB::raw('COUNT(books.description) as amount'), 'categories.name as categoryName', 'authors.name as authorName',
+                'books.amount', 'categories.name as categoryName', 'authors.name as authorName',
                 'authors.surname', 'publishers.name as publisherName', 'books.cover'
             )
             ->groupBy('books.isbn')
@@ -91,7 +80,7 @@ class BookController extends Controller
             )
             ->get()
             ->toArray();
-            
+
         return $data;
     }
 
@@ -110,7 +99,7 @@ class BookController extends Controller
             ->join('authors', 'authors.id', '=', 'books.author_id')
             ->select(
                 'books.id', 'books.title', 'books.isbn', 'books.description', 'books.publish_year',
-                'books.amount', 'categories.name as categoryName', 'authors.name as authorName',
+                DB::raw('COUNT(books.description) as amount'), 'categories.name as categoryName', 'authors.name as authorName',
                 'authors.surname', 'authors.id as authorID', 'publishers.name as publisherName', 'books.cover'
             )
             ->get()
@@ -141,9 +130,10 @@ class BookController extends Controller
             ->join('categories', 'categories.id', '=', 'books.category_id')
             ->join('publishers', 'publishers.id', '=', 'books.publisher_id')
             ->select(
-                'books.id', 'books.title', 'books.isbn', 'books.description', 'books.publish_year',
+                'books.id', 'books.title', 'books.description', 'books.publish_year',
                 'categories.name as categoryName', 'publishers.name as publisherName', 'books.cover'
             )
+            ->groupBy('books.description')
             ->get()
             ->toArray();
 
@@ -193,7 +183,7 @@ class BookController extends Controller
     public function store(StoreBook $request) //create StoreBook
     {
         $isbn = explode("\r", $request->get('isbn'));
-        $isbn = preg_replace( "/\r|\n/", "", $isbn );
+        $isbn = preg_replace("/\r|\n/", "", $isbn);
         $amount = count($isbn);
 
         for($index = 0; $index < $amount; $index++) {
@@ -205,6 +195,7 @@ class BookController extends Controller
             $book->author_id = $request->get('author');
             $book->category_id = $request->get('category');
             $book->publisher_id = $request->get('publisher');
+            $book->amount = $amount;
 
             if ($file = $request->hasFile('cover')) {
                 $book->cover = $imagePath = $request->file('cover')->store('books', 'public');
@@ -380,6 +371,9 @@ class BookController extends Controller
     public function deleteBook($id)
     {
         $book = Book::find($id);
+        $amount = (int)$book->where('id', '=', $id)->first()->amount;
+        $amount = $amount - 1;
+        $desc = $book->where('id', '=', $id)->pluck('description');
 
         if (!$book) {
             return response()->json(
@@ -390,10 +384,27 @@ class BookController extends Controller
             );
         }
 
+        $duplicates = Book::where('description', '=', $desc)->skip(1)->take(1)->get('id');
+
+        if (!$duplicates) {
+            return response()->json(
+                [
+                'success' => true,
+                'message' => 'The last book of this collection was deleted (with ratings).'
+                ]
+            );
+        }
+
+        $rating = Rating::where('book_id', '=', $id)->update(['book_id' => $duplicates[0]->id]);
+
+        $book = Book::where('description', '=', $desc)->update(['amount' => $amount]);
+        $book = Book::find($id);
+
         if ($book->destroy($id)) {
             return response()->json(
                 [
-                'success' => true
+                'success' => true,
+                'message' => 'Book was deleted.'
                 ]
             );
         } else {

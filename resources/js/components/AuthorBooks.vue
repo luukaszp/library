@@ -28,7 +28,6 @@
                         <p>Kategoria: <span v-text="item.categoryName" class="mr-2"></span></p>
                         <p>Wydawnictwo: <span v-text="item.publisherName" class="mr-2"></span></p>
                         <p>Opis: <span v-text="item.description" class="mr-2"></span></p>
-                        <p>ISBN: <span v-text="item.isbn" class="mr-2"></span></p>
                         <p>Rok wydania: <span v-text="item.publish_year" class="mr-2"></span></p>
                         <v-divider></v-divider>
                         <router-link :to="{ name: 'bookview', params: { book_id: item.id } }"><v-btn outlined style="border: 0px; text-decoration: none"><v-card-title style="color: blue; font-weight: bold">Zobacz więcej</v-card-title></v-btn></router-link>

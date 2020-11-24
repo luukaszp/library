@@ -20,14 +20,13 @@ export default {
           data: {
             user_id: credentials.user_id,
             book_id: credentials.book_id,
-            borrows_date: credentials.borrows_date
+            borrows_date: credentials.borrows_date,
+            isbn: credentials.isbn
           }
         })
           .then((response) => {
             if (response.data.success === true) {
               router.push('/admin-panel/borrows');
-            } else {
-              alert('Coś poszło nie tak!');
             }
             resolve(response);
           })

@@ -352,7 +352,7 @@ export default {
 
     getColor (amount) {
       if (amount === '0') return 'red';
-      if (amount === '1') return 'orange';
+      if (amount === '1' || amount === '2') return 'orange';
       return 'green';
     }
   }

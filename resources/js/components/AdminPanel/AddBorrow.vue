@@ -55,6 +55,15 @@
                                     multiple
                             ></v-autocomplete>
 
+                            <v-text-field
+                                    class="pa-5 pb-0"
+                                    v-model="isbn"
+                                    label="ISBN"
+                                    outlined
+                                    required
+                                    :rules="isbnRules"
+                            ></v-text-field>
+
                             <v-menu
                                     v-model="menu"
                                     :close-on-content-click="false"
@@ -113,6 +122,7 @@ export default {
       valid: false,
       value: true,
       selectedReader: '',
+      isbn: '',
       selectedBooks: [],
       date: '',
       menu: false,
@@ -125,7 +135,10 @@ export default {
       ],
       dateRules: [
         (v) => !!v || 'Wymagane jest wybranie daty!'
-      ]
+      ],
+      isbnRules: [
+        (v) => !!v || 'Pole jest wymagane!'
+      ],
     };
   },
 
@@ -135,9 +148,10 @@ export default {
         this.$store.dispatch('borrowBooks', {
           user_id: this.selectedReader,
           book_id: this.selectedBooks,
-          borrows_date: this.date
+          borrows_date: this.date,
+          isbn: this.isbn
         })
-        .then(() => {
+        .then((response) => {
             const Toast = this.$swal.mixin({
               toast: true,
               position: 'top-end',
@@ -155,6 +169,7 @@ export default {
             });
           })
           .catch((error) => {
+            this.$swal('Błędny ISBN', 'Podano zły numer ISBN. Spróbuj ponownie.', 'error');
             console.log(error);
           });
       }
