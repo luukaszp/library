@@ -92,6 +92,7 @@ class AuthorController extends Controller
     public function deleteAuthor($id)
     {
         $author = Author::find($id);
+        $author->books()->attach($author);
 
         if (!$author) {
             return response()->json(

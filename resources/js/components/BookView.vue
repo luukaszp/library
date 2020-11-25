@@ -57,16 +57,6 @@
             <v-col>
                 <h3>Status: <v-chip :color="getColor(item.amount)" dark>{{ status }}</v-chip></h3>
             </v-col>
-            <v-col>
-                <v-btn
-                outlined
-                color="indigo"
-                @click="addFavourite()"
-                >
-                    DODAJ DO ULUBIONYCH
-                    <v-icon style="padding-left: 10px" color="#FFD700">mdi-star</v-icon>
-                </v-btn>
-            </v-col>
         </v-col>
       </v-row>
 
@@ -123,47 +113,6 @@ export default {
       }
       this.status = 'Dostępne';
       return 'green';
-    },
-
-    addFavourite() {
-      axios.post('/api/favourite/addBook', {
-        user_id: this.authId,
-        book_id: parseInt(this.book_id)
-      })
-        .then((response) => {
-          const Toast = this.$swal.mixin({
-            toast: true,
-            position: 'top-end',
-            showConfirmButton: false,
-            timer: 3000,
-            didOpen: (toast) => {
-              toast.addEventListener('mouseenter', this.$swal.stopTimer);
-              toast.addEventListener('mouseleave', this.$swal.resumeTimer);
-            }
-          });
-
-          Toast.fire({
-            icon: 'success',
-            title: 'Książka została dodana do listy ulubionych!'
-          });
-        })
-        .catch((error) => {
-          const Toast = this.$swal.mixin({
-            toast: true,
-            position: 'top-end',
-            showConfirmButton: false,
-            timer: 3000,
-            didOpen: (toast) => {
-              toast.addEventListener('mouseenter', this.$swal.stopTimer);
-              toast.addEventListener('mouseleave', this.$swal.resumeTimer);
-            }
-          });
-
-          Toast.fire({
-            icon: 'error',
-            title: 'Książka już istnieje na liście ulubionych!'
-          });
-        });
     }
   }
 };

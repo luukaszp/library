@@ -38,7 +38,7 @@ import BorrowsAmount from './components/Profile/Charts/BorrowsAmount.vue';
 import FavoriteAuthor from './components/Profile/Charts/FavoriteAuthor.vue';
 import FavoriteCategory from './components/Profile/Charts/FavoriteCategory.vue';
 import RatingsAmount from './components/Profile/Charts/RatingsAmount.vue';
-import Favourites from './components/Profile/Favourites.vue';
+import Follows from './components/Profile/Follows.vue';
 import UserSuggestions from './components/Profile/UserSuggestions.vue';
 import Questionnaires from './components/Profile/Questionnaires.vue';
 import FirstLogin from './components/FirstLogin.vue';
@@ -288,9 +288,9 @@ const routes = [
         ]
       },
       {
-        path: '/profile/:user_id/favourites',
-        name: 'favourites',
-        component: Favourites,
+        path: '/profile/:user_id/follows',
+        name: 'follows',
+        component: Follows,
         props: true
       },
       {

@@ -420,6 +420,11 @@ class BorrowController extends Controller
             ->take(10)
             ->get();
 
+
+        if($previousMonth->first() === null) {
+            return $currentMonth;
+        }
+
         for ($i = 0; $i < count($previousMonth); $i++) {
             if ($previousMonth[$i]->surname !== $currentMonth[$i]->surname) {
                 for ($j = 0; $j < count($previousMonth); $j++) {

@@ -62,13 +62,9 @@ Route::group(
 
         Route::get('rating/ratingsAmount/{id}', 'RatingController@ratingsAmount');
 
-        Route::post('favourite/addBook', 'FavouritesController@addBook');
-        Route::get('favourite/getFavouriteBooks/{id}', 'FavouritesController@getFavouriteBooks');
-        Route::delete('favourite/delete/{id}/book', 'FavouritesController@removeBook');
-
-        Route::post('favourite/addAuthor', 'FavouritesController@addAuthor');
-        Route::get('favourite/getFavouriteAuthors/{id}', 'FavouritesController@getFavouriteAuthors');
-        Route::delete('favourite/delete/{id}/author', 'FavouritesController@removeAuthor');
+        Route::post('follow/addAuthor', 'FollowController@addAuthor');
+        Route::get('follow/getFollowedAuthors/{id}', 'FollowController@getFollowedAuthors');
+        Route::delete('follow/delete/{id}/author', 'FollowController@removeAuthor');
 
         Route::post('suggestions/add', 'SuggestionController@addSuggestion');
     }

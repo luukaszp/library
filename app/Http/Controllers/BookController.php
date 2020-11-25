@@ -408,7 +408,9 @@ class BookController extends Controller
         $rating = Rating::where('book_id', '=', $id)->update(['book_id' => $duplicates[0]->id]);
 
         $book = Book::where('description', '=', $desc)->update(['amount' => $amount]);
+
         $book = Book::find($id);
+        $book->authors()->attach($book);
 
         if ($book->destroy($id)) {
             return response()->json(

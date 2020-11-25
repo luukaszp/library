@@ -15,7 +15,7 @@
                 <v-btn
                     outlined
                     color="indigo"
-                    @click="addFavourite()"
+                    @click="followAuthor()"
                 >
                     DODAJ DO ULUBIONYCH
                     <v-icon style="padding-left: 10px" color="#FFD700">mdi-star</v-icon>
@@ -61,8 +61,8 @@ export default {
   },
 
   methods: {
-      addFavourite() {
-      axios.post('/api/favourite/addAuthor', {
+      followAuthor() {
+      axios.post('/api/follow/addAuthor', {
         user_id: this.authId,
         author_id: parseInt(this.author_id)
       })

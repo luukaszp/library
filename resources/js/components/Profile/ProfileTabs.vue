@@ -54,8 +54,8 @@ export default {
             icon: 'mdi-chart-bar'
         },
         {
-            title: 'ULUBIONE',
-            route: `/profile/${this.user_id}/favourites`,
+            title: 'OBSERWOWANI',
+            route: `/profile/${this.user_id}/follows`,
             icon: 'mdi-heart'
         },
         {
