@@ -22,10 +22,8 @@ class CreateBooksTable extends Migration
                 $table->string('publish_year');
                 $table->string('cover');
                 $table->integer('amount');
-                $table->unsignedInteger('author_id');
                 $table->unsignedInteger('category_id');
                 $table->unsignedInteger('publisher_id');
-                $table->foreign('author_id')->references('id')->on('authors');
                 $table->foreign('category_id')->references('id')->on('categories');
                 $table->foreign('publisher_id')->references('id')->on('publishers');
                 $table->timestamps();

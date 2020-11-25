@@ -59,7 +59,7 @@
                             <v-textarea
                                     class="pa-5 pb-0 pt-0"
                                     v-model="isbn"
-                                    label="ISBN"
+                                    label="ISBN (ENTER jako separator)"
                                     outlined
                                     required
                                     :rules="isbnRules"

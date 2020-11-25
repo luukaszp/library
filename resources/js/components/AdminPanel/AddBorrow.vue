@@ -53,16 +53,14 @@
                                     required
                                     :rules="booksRules"
                                     multiple
-                            ></v-autocomplete>
-
-                            <v-text-field
-                                    class="pa-5 pb-0"
-                                    v-model="isbn"
-                                    label="ISBN"
-                                    outlined
-                                    required
-                                    :rules="isbnRules"
-                            ></v-text-field>
+                            >
+                            <template slot="item" slot-scope="data">
+                                Tytuł: {{data.item.title}}, ISBN: {{data.item.isbn}}
+                            </template>
+                            <template slot="selection" slot-scope="data">
+                                {{data.item.title}}
+                            </template>
+                            </v-autocomplete>
 
                             <v-menu
                                     v-model="menu"

@@ -41,7 +41,7 @@
         "vue-axios": "^2.1.5",
         "vue-router": "^3.4.9",
         "vue-sweetalert2": "^3.0.8",
-        "vuetify": "^2.3.18",
+        "vuetify": "^2.3.19",
         "vuetify-loader": "^1.6.0",
         "vuex": "^3.5.1",
         "vuex-persistedstate": "^3.1.0",

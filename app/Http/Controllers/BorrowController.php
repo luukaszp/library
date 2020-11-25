@@ -21,17 +21,6 @@ class BorrowController extends Controller
     public function addBorrow(Request $request)
     {
         $book = $request->book_id;
-        $checkISBN = Book::where('id', '=', $request->book_id)->first()->isbn;
-        $test = $request->isbn;
-        
-        if($checkISBN !== $test) {
-            return response()->json(
-                [
-                'success' => false,
-                'message' => 'Sorry, wrong ISBN given.',
-                ], 500
-            );
-        }
 
         for($index = 0; $index < sizeof($request->book_id); $index++) {
             $borrow = new Borrow();
