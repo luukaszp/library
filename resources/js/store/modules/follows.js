@@ -11,11 +11,11 @@ export default {
   },
   actions: {
     // eslint-disable-next-line camelcase
-    fetchFollowedAuthors(context, user_id) {
+    fetchFollowedAuthors(context, reader_id) {
       axios({
         method: 'GET',
         // eslint-disable-next-line camelcase
-        url: `http://127.0.0.1:8000/api/follow/getFollowedAuthors/${user_id}`
+        url: `http://127.0.0.1:8000/api/follow/getFollowedAuthors/${reader_id}`
       })
         .then((response) => {
           context.commit('setFollows', response.data);

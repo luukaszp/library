@@ -9,8 +9,9 @@ export default {
     token: localStorage.getItem('access_token') || '',
     loggedUser: {
       id: '',
-      is_worker: '',
-      is_admin: ''
+      is_admin: '',
+      id_number: '',
+      card_number: ''
     }
   },
 
@@ -22,9 +23,10 @@ export default {
       state.status = 'success';
       state.token = token;
       state.loggedUser = {
-        id: jwt_decode(token).sub,
-        is_worker: jwt_decode(token).is_worker,
-        is_admin: jwt_decode(token).is_admin
+        id: jwt_decode(token).user_id,
+        is_admin: jwt_decode(token).is_admin,
+        id_number: jwt_decode(token).id_number,
+        card_number: jwt_decode(token).card_number
       };
     },
     auth_error(state) {
@@ -35,8 +37,9 @@ export default {
       state.token = '';
       state.loggedUser = {
         id: null,
-        is_worker: null,
-        is_admin: null
+        is_admin: null,
+        id_number: null,
+        card_number: null
       };
     }
   },

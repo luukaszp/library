@@ -62,11 +62,6 @@ export default {
             title: 'ZASUGERUJ',
             route: `/profile/${this.user_id}/suggestions`,
             icon: 'mdi-lightbulb-on'
-        },
-        {
-            title: 'ANKIETY',
-            route: `/profile/${this.user_id}/questionnaires`,
-            icon: 'mdi-comment-question-outline'
         }
         ]
   }},

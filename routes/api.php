@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::post('loginReader', 'AuthController@loginReader');
+Route::post('loginReader', 'LoginController@loginReader');
 Route::post('loginWorker', 'AuthController@loginWorker');
 Route::post('refresh', 'AuthController@refresh');
 
@@ -50,7 +50,7 @@ Route::group(
         Route::delete('rating/delete/{id}', 'RatingController@deleteRating');
         Route::put('rating/edit/{id}', 'RatingController@editRating');
 
-        Route::get('user/profile/{id}', 'UserController@showReader');
+        Route::get('user/profile/{id}', 'ReaderController@showReader');
         Route::post('user/profile/upload', 'UserController@changeAvatar');
 
         Route::get('borrow/showBorrow/{id}', 'BorrowController@showBorrow');
@@ -72,12 +72,12 @@ Route::group(
 
 Route::group(
     ['middleware' => ['auth.jwt', 'admin']], function () {
-        Route::get('user/getWorkers', 'UserController@getWorkers');
-        Route::put('worker/edit/{id}', 'UserController@editWorker');
-        Route::delete('worker/delete/{id}', 'UserController@deleteWorker');
+        Route::get('user/getWorkers', 'WorkerController@getWorkers');
+        Route::put('worker/edit/{id}', 'WorkerController@editWorker');
+        Route::delete('worker/delete/{id}', 'WorkerController@deleteWorker');
         
-        Route::get('user/getRoles', 'UserController@getRoles');
-        Route::put('roles/edit/{id}', 'UserController@editRoles');
+        Route::get('user/getRoles', 'RoleController@getRoles');
+        Route::put('roles/edit/{id}', 'RoleController@editRoles');
     }
 );
 
@@ -85,9 +85,9 @@ Route::group(
     ['middleware' => ['auth.jwt', 'worker']], function () {
         Route::post('register', 'AuthController@register');
 
-        Route::get('user/getReaders', 'UserController@getReaders');
-        Route::put('reader/edit/{id}', 'UserController@editReader');
-        Route::delete('reader/delete/{id}', 'UserController@deleteReader');
+        Route::get('user/getReaders', 'ReaderController@getReaders');
+        Route::put('reader/edit/{id}', 'ReaderController@editReader');
+        Route::delete('reader/delete/{id}', 'ReaderController@deleteReader');
 
         Route::put('category/edit/{id}', 'CategoryController@editCategory');
         Route::post('category/add', 'CategoryController@addCategory');

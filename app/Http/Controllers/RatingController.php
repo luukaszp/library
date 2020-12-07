@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Rating;
+use App\Reader;
 use App\Book;
 use DB;
 use Carbon\Carbon;
@@ -44,7 +45,8 @@ class RatingController extends Controller
     {
         $rating = DB::table('ratings')
             ->where('ratings.book_id', '=', $id)
-            ->join('users', 'users.id', '=', 'ratings.user_id')
+            ->join('readers', 'readers.id', '=', 'ratings.reader_id')
+            ->join('users', 'users.id', '=', 'readers.user_id')
             ->select(
                 'ratings.id', 'ratings.rate', 'ratings.created_at', 'ratings.opinion', 'users.name', 
                 'users.surname', 'users.id as user_id'
@@ -76,7 +78,7 @@ class RatingController extends Controller
         $rating->rate = $request->rate;
         $rating->opinion = $request->opinion;
         $rating->book_id = $request->book_id;
-        $rating->user_id = auth()->user()->id;
+        $rating->reader_id = auth()->user()->id;
 
         if ($rating->save()) {
             return response()->json(
@@ -139,7 +141,8 @@ class RatingController extends Controller
      */
     public function ratingsAmount($id)
     {
-        $rating = Rating::where('user_id', '=', $id)
+        $reader = Reader::where('user_id', '=', $id)->pluck('id');
+        $rating = Rating::where('reader_id', '=', $reader[0])
             ->select('rate', 'updated_at')
             ->get()
             ->groupBy(
@@ -152,7 +155,7 @@ class RatingController extends Controller
             return response()->json(
                 [
                 'success' => false,
-                'message' => 'Sorry, user has no ratings.'
+                'message' => 'Sorry, reader has no ratings.'
                 ], 400
             );
         }

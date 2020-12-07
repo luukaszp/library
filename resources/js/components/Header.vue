@@ -51,7 +51,7 @@
 
                         <About/>
 
-                        <router-link to="/admin-panel" v-if="loggedUser.is_worker">
+                        <router-link to="/admin-panel" v-if="loggedUser.id_number">
                             <v-btn icon>
                                 <v-icon x-large>mdi-view-dashboard</v-icon>
                             </v-btn>
@@ -71,7 +71,7 @@
                             </template>
 
                             <v-list>
-                                <v-list-item :to="{ name: 'profile', params: { user_id: authId } }">
+                                <v-list-item :to="{ name: 'profile', params: { user_id: authId } }" v-if="loggedUser.card_number">
                                     Profil
                                 </v-list-item>
                                 <v-list-item>

@@ -4,14 +4,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Author;
-use App\User;
+use App\Reader;
 use DB;
 use Auth;
 
 class FollowController extends Controller
 {
     /**
-     * Add author to the list of following authors.
+     * Add author to the list of followed authors.
      *
      * @param  Request $request
      * @return \Illuminate\Http\JsonResponse
@@ -21,8 +21,8 @@ class FollowController extends Controller
     {
         $author = Author::find($request->author_id);
 
-        $author->users()->attach($author);
-        
+        $author->readers()->attach($author);
+
         return response()->json(
             [
             'success' => true,
@@ -40,7 +40,7 @@ class FollowController extends Controller
      */
     public function removeAuthor($id)
     {
-        if (User::find($id)->authors()->detach()) {
+        if (Reader::find($id)->authors()->detach()) {
             return response()->json(
                 [
                 'success' => true,
@@ -58,12 +58,12 @@ class FollowController extends Controller
     }
 
     /**
-     * Display the list of favourite authors for a specific user.
+     * Display the list of followed authors for a specific reader.
      *
      * @return Response
      */
     public function getFollowedAuthors($id)
     {
-        return $followed = User::find($id)->authors;
+        return $followed = Reader::find($id)->authors;
     }
 }

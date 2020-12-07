@@ -18,7 +18,7 @@ export default {
           method: 'POST',
           url: 'http://127.0.0.1:8000/api/borrow/addBorrow',
           data: {
-            user_id: credentials.user_id,
+            reader_id: credentials.reader_id,
             book_id: credentials.book_id,
             borrows_date: credentials.borrows_date,
             isbn: credentials.isbn

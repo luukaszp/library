@@ -33,6 +33,8 @@ axios.interceptors.response.use((response) => response,
       return Promise.reject(error);
     }
     if (error.response.data.message === 'Token has expired' && localStorage.access_token != null) {
+      // eslint-disable-next-line no-undef
+      commit('logout');
       localStorage.removeItem('access_token');
       Vue.swal({
         title: 'Sesja wygasła',

@@ -19,9 +19,9 @@ class CreateRatingsTable extends Migration
                 $table->integer('rate');
                 $table->string('opinion')->nullable();
                 $table->unsignedInteger('book_id');
-                $table->unsignedInteger('user_id');
+                $table->unsignedInteger('reader_id');
                 $table->foreign('book_id')->references('id')->on('books');
-                $table->foreign('user_id')->references('id')->on('users');
+                $table->foreign('reader_id')->references('id')->on('readers');
                 $table->timestamps();
             }
         );

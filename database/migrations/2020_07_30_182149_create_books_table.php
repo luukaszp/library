@@ -22,6 +22,7 @@ class CreateBooksTable extends Migration
                 $table->string('publish_year');
                 $table->string('cover');
                 $table->integer('amount');
+                $table->boolean('is_available')->default(1);
                 $table->unsignedInteger('category_id');
                 $table->unsignedInteger('publisher_id');
                 $table->foreign('category_id')->references('id')->on('categories');

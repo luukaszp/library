@@ -18,14 +18,15 @@ class CreateBorrowsTable extends Migration
                 $table->increments('id');
                 $table->string('borrows_date');
                 $table->string('returns_date');
-                $table->boolean('is_returned')->default(0);
                 $table->string('when_returned')->nullable();
                 $table->integer('delay')->nullable();
                 $table->integer('penalty')->nullable();
-                $table->unsignedInteger('user_id');
+                $table->unsignedInteger('reader_id');
                 $table->unsignedInteger('book_id');
-                $table->foreign('user_id')->references('id')->on('users');
+                $table->unsignedInteger('worker_id');
+                $table->foreign('reader_id')->references('id')->on('readers');
                 $table->foreign('book_id')->references('id')->on('books');
+                $table->foreign('worker_id')->references('id')->on('workers');
                 $table->timestamps();
             }
         );

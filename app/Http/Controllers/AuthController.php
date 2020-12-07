@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\AuthRequest;
 use App\Http\Requests\Reactivation;
 use App\User;
+use App\Worker;
+use App\Reader;
 use App\Mail\NewUserMail;
 use App\Mail\ResetPasswordMail;
 use Illuminate\Http\Request;
@@ -15,28 +17,16 @@ use Tymon\JWTAuth\Exceptions\JWTException;
 use JWTAuth;
 use JWTFactory;
 use Carbon\Carbon;
+use Config;
 
 class AuthController extends Controller
 {
-    /**
-     * Get a JWT via given credentials for reader
-     *
-     * @param  Request $request
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function loginReader(Request $request)
+    function __construct()
     {
-        $credentials = $request->only('card_number', 'password');
-
-        try {
-            if (!$token = JWTAuth::attempt($credentials)) {
-                return response()->json(['error' => 'Invalid card_number or password'], 401);
-            }
-        } catch (JWTException $e) {
-            return response()->json(['error' => 'Could not create token'], 500);
-        }
-
-        return $this->respondWithToken($token);
+        Config::set('auth.providers', ['users' => [
+            'driver' => 'eloquent',
+            'model' => Worker::class,
+        ]]);
     }
 
     /**
@@ -51,15 +41,17 @@ class AuthController extends Controller
         $user->name = 'admin';
         $user->surname = 'admin';
         $user->email = 'admin@admin.admin';
-        $user->card_number = null;
-        $user->id_number = '123123123123';
-        $user->password = bcrypt('zaq1@WSX');
         $user->activation_token = Str::random(40);
-        $user->is_admin = 1;
-        $user->is_worker = 1;
 
-        $user->save();*/
-        
+        $worker = new Worker();
+        $worker->id_number = '123123123123';
+        $worker->is_admin = 1;
+        $worker->user_id = 1;
+        $worker->password = bcrypt('zaq1@WSX');
+
+        $user->save();
+        $worker->save();*/
+
         $credentials = $request->only('id_number', 'password');
 
         try {
@@ -87,16 +79,25 @@ class AuthController extends Controller
         $user->name = $request->name;
         $user->surname = $request->surname;
         $user->email = $request->email;
-        $user->card_number = $request->card_number;
-        $user->id_number = $request->id_number;
-        $user->password = bcrypt($request->password);
         $user->activation_token = Str::random(40);
 
+        $user->save();
+
         if($request->id_number != null) {
-            $user->is_worker = 1;
+            $worker = new Worker();
+            $worker->id_number = $request->id_number;
+            $worker->password = bcrypt($request->password);
+            $worker->user_id = $user->id;
+            $worker->save();
         }
 
-        $user->save();
+        if($request->card_number != null) {
+            $reader = new Reader();
+            $reader->card_number = $request->card_number;
+            $reader->password = bcrypt($request->password);
+            $reader->user_id = $user->id;
+            $reader->save();
+        }
 
         $details = [
             'title' => 'Zmiana hasła',
@@ -121,9 +122,9 @@ class AuthController extends Controller
 
     public function passwordChange(Request $request)
     {
-        $user = User::where('id', '=', $request->user_id)->first();
+        $reader = Reader::where('user_id', '=', $request->user_id)->first();
 
-        if (!$user) {
+        if (!$reader) {
             return response()->json(
                 [
                 'success' => false,
@@ -132,8 +133,8 @@ class AuthController extends Controller
             );
         }
 
-        $user->password = bcrypt($request->password);
-        $user->save();
+        $reader->password = bcrypt($request->password);
+        $reader->save();
 
         return response()->json(['success' => true]);
     }
@@ -148,9 +149,9 @@ class AuthController extends Controller
 
     public function firstLoginPassword(Request $request)
     {
-        $user = User::where('card_number', '=', $request->card_number)->first();
+        $reader = Reader::where('card_number', '=', $request->card_number)->first();
 
-        if (!$user) {
+        if (!$reader) {
             return response()->json(
                 [
                 'success' => false,
@@ -159,7 +160,9 @@ class AuthController extends Controller
             );
         }
 
-        if ($user->email !== $request->email) {
+        $user = User::where('email', '=', $request->email)->first();
+
+        if (!$user) {
             return response()->json(
                 [
                 'success' => false,
@@ -177,9 +180,11 @@ class AuthController extends Controller
             );
         }
 
-        $user->password = bcrypt($request->password);
+        $reader->password = bcrypt($request->password);
         $user->email_verified_at = Carbon::now()->toDateTimeString();
+
         $user->save();
+        $reader->save();
 
         return response()->json(['success' => true]);
     }

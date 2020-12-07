@@ -40,7 +40,6 @@
             <v-col style="text-align: left">
                 <h2>{{readers.name + ' ' + readers.surname}}</h2>
                 <v-divider></v-divider>
-                <p>Numer karty bibliotecznej: {{readers.card_number}}</p>
                 <p>Email: {{readers.email}}</p>
             </v-col>
         </v-row>

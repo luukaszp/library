@@ -16,6 +16,10 @@ class Admin
      */
     public function handle($request, Closure $next)
     {
+        if (Auth::check() && Auth::user()->workers->is_admin === true) {
+            return $next($request);
+        }
+
         if (Auth::check() && Auth::user()->is_admin === true) {
             return $next($request);
         }

@@ -20,7 +20,7 @@ class SuggestionController extends Controller
         $suggestion = new Suggestion();
         $suggestion->type = $request->type;
         $suggestion->description = $request->description;
-        $suggestion->user_id = auth()->user()->id;
+        $suggestion->reader_id = auth()->user()->id;
 
         $suggestion->save();
 
@@ -75,7 +75,8 @@ class SuggestionController extends Controller
     public function getSuggestions()
     {
         $suggestion = DB::table('suggestions')
-            ->join('users', 'users.id', '=', 'suggestions.user_id')
+            ->join('readers', 'readers.id', '=', 'suggestions.reader_id')
+            ->join('users', 'users.id', '=', 'readers.user_id')
             ->select(
                 'suggestions.id', 'suggestions.type', 'suggestions.description', 'users.name', 'users.surname'
             )

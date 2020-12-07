@@ -23,13 +23,18 @@ class Borrow extends Model
         'book_id' => 'array'
     ];
 
-    public function users()
+    public function readers()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Reader::class);
     }
 
     public function books()
     {
         return $this->belongsTo(Book::class);
+    }
+
+    public function workers()
+    {
+        return $this->belongsTo(Worker::class);
     }
 }
