@@ -462,30 +462,37 @@ class BorrowController extends Controller
             if ($previousMonth[$i]->surname !== $currentMonth[$i]->surname) {
                 for ($j = 0; $j < count($currentMonth); $j++) {
                     if ($previousMonth[$i]->surname === $currentMonth[$j]->surname) {
-                        $position[$i] = $i - $j;
+                        $position[$j] = $i - $j;
+                        //$position[$i] = $i;
                     }
                 }
             } else {
                 $position[$i] = 0;
             }
         }
-
-        for ($i = 0; $i < count($position); $i++) {
-            if ($position[$i] > 0) {
-                $status[$i] = 'down';
-            } else if ($position[$i] < 0) {
+        
+        for ($i = 0; $i <= key($position); $i++) {
+            if (!array_key_exists($i, $position)) {
+                $status[$i] = 'new';
+            } else if ($position[$i] > 0) {
                 $status[$i] = 'up';
+            } else if ($position[$i] < 0) {
+                $status[$i] = 'down';
             } else {
                 $status[$i] = 'same';
             }
         }
 
-        for ($i = 0; $i < count($previousMonth); $i++) {
+        for ($i = 0; $i < count($status); $i++) {
             $currentMonth[$i]->status = $status[$i];
-            if ($position[$i] < 0) {
+            if ($status[$i] === 'down') {
                 $position[$i] *= -1;
             }
-            $currentMonth[$i]->position = $position[$i];
+            if (!array_key_exists($i, $position)) {
+                $currentMonth[$i]->position = 0;
+            } else {
+                $currentMonth[$i]->position = $position[$i];
+            }
         }
 
         return $currentMonth;

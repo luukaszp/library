@@ -26,17 +26,17 @@ class BookController extends Controller
             ->join('categories', 'categories.id', '=', 'books.category_id')
             ->join('publishers', 'publishers.id', '=', 'books.publisher_id')
             ->join('authors', 'authors.id', '=', 'author_book.author_id')
-            ->join('author_book', 'author_book.author_id', '=', 'authors.id')
+            ->join('author_book', 'author_book.book_id', '=', 'books.id')
             ->select(
-                'books.id', 'books.title', 'books.isbn', 'books.description', 'books.publish_year',
-                'books.amount', 'categories.name as categoryName', 'authors.name as authorName',
-                'authors.surname', 'publishers.name as publisherName', 'books.cover'
+                'books.id', 'books.title', 'books.description', 'books.publish_year',
+                'categories.name as categoryName', 'authors.name as authorName',
+                DB::raw('COUNT(books.title) as amount'), 'authors.surname', 'publishers.name as publisherName', 'books.cover'
             )
-            ->groupBy('books.description')
+            ->groupBy('books.title')
             ->get()
             ->toArray();
 
-        return $data;
+            return $data;
     }
 
     /**
@@ -47,14 +47,11 @@ class BookController extends Controller
     public function getBooksISBN()
     {
         $data = DB::table('books')
-            ->join('categories', 'categories.id', '=', 'books.category_id')
-            ->join('publishers', 'publishers.id', '=', 'books.publisher_id')
             ->join('authors', 'authors.id', '=', 'author_book.author_id')
             ->join('author_book', 'author_book.author_id', '=', 'authors.id')
             ->select(
-                'books.id', 'books.title', 'books.isbn', 'books.description', 'books.publish_year',
-                'books.amount', 'categories.name as categoryName', 'authors.name as authorName',
-                'authors.surname', 'publishers.name as publisherName', 'books.cover'
+                'books.id', 'books.title', 'books.isbn', 'authors.name as authorName',
+                'authors.surname'
             )
             ->groupBy('books.isbn')
             ->get()
@@ -72,15 +69,8 @@ class BookController extends Controller
     {
         $data = DB::table('books')
             ->where('books.is_available', '=', '1')
-            //->join('borrows', 'borrows.book_id', '!=', 'books.id')
-            ->join('categories', 'categories.id', '=', 'books.category_id')
-            ->join('publishers', 'publishers.id', '=', 'books.publisher_id')
-            ->join('authors', 'authors.id', '=', 'author_book.author_id')
-            ->join('author_book', 'author_book.author_id', '=', 'authors.id')
             ->select(
-                'books.id', 'books.title', 'books.isbn', 'books.description', 'books.publish_year',
-                'books.amount', 'categories.name as categoryName', 'authors.name as authorName',
-                'authors.surname', 'publishers.name as publisherName', 'books.cover'
+                'books.id', 'books.title', 'books.isbn'
             )
             ->get()
             ->toArray();
@@ -101,10 +91,10 @@ class BookController extends Controller
             ->join('categories', 'categories.id', '=', 'books.category_id')
             ->join('publishers', 'publishers.id', '=', 'books.publisher_id')
             ->join('authors', 'authors.id', '=', 'author_book.author_id')
-            ->join('author_book', 'author_book.author_id', '=', 'authors.id')
+            ->join('author_book', 'author_book.book_id', '=', 'books.id')
             ->select(
                 'books.id', 'books.title', 'books.isbn', 'books.description', 'books.publish_year',
-                DB::raw('COUNT(books.description) as amount'), 'categories.name as categoryName', 'authors.name as authorName',
+                DB::raw('COUNT(books.title) as amount'), 'categories.name as categoryName', 'authors.name as authorName',
                 'authors.surname', 'authors.id as authorID', 'publishers.name as publisherName', 'books.cover'
             )
             ->get()
@@ -132,7 +122,7 @@ class BookController extends Controller
     {
         $book = DB::table('books')
             ->join('authors', 'authors.id', '=', 'author_book.author_id')
-            ->join('author_book', 'author_book.author_id', '=', 'authors.id')
+            ->join('author_book', 'author_book.book_id', '=', 'books.id')
             ->where('author_book.author_id', '=', $id)
             ->join('categories', 'categories.id', '=', 'books.category_id')
             ->join('publishers', 'publishers.id', '=', 'books.publisher_id')
@@ -168,16 +158,16 @@ class BookController extends Controller
         $data = DB::table('books')
             ->where('books.created_at', '>=', $date)
             ->join('categories', 'categories.id', '=', 'books.category_id')
-            ->join('publishers', 'publishers.id', '=', 'books.publisher_id')
             ->join('authors', 'authors.id', '=', 'author_book.author_id')
-            ->join('author_book', 'author_book.author_id', '=', 'authors.id')
+            ->join('author_book', 'author_book.book_id', '=', 'books.id')
             ->select(
-                'books.id', 'books.title', 'books.isbn', 'books.description', 'books.publish_year',
-                'books.amount', 'categories.name as categoryName', 'authors.name as authorName',
-                'authors.surname', 'publishers.name as publisherName', 'books.cover'
+                'books.id', 'books.title', 'categories.name as categoryName', 'authors.name as authorName',
+                'authors.surname', 'books.cover'
             )
+            ->groupBy('books.title')
             ->get()
             ->toArray();
+
         return $data;
     }
 
@@ -194,6 +184,9 @@ class BookController extends Controller
         $isbn = preg_replace("/\r|\n/", "", $isbn);
         $amount = count($isbn);
 
+        $authors = explode(",", $request->get('author'));
+        $authorsNumber = count($authors);
+
         for($index = 0; $index < $amount; $index++) {
             $book = new Book();
             $book->title = $request->get('title');
@@ -202,7 +195,6 @@ class BookController extends Controller
             $book->isbn = $isbn[$index];
             $book->category_id = $request->get('category');
             $book->publisher_id = $request->get('publisher');
-            $book->amount = $amount;
 
             if ($file = $request->hasFile('cover')) {
                 $book->cover = $imagePath = $request->file('cover')->store('books', 'public');
@@ -215,8 +207,10 @@ class BookController extends Controller
 
             $book->save();
 
-            $author = Author::find($request->get('author'));
-            $book->authors()->attach($author);
+            for($i = 0; $i < $authorsNumber; $i++) {
+                $author = Author::find($authors[$i]);
+                $book->authors()->attach($author);
+            }
         }
         
         if ($book->save()) {
@@ -381,8 +375,6 @@ class BookController extends Controller
     public function deleteBook($id)
     {
         $book = Book::find($id);
-        $amount = (int)$book->where('id', '=', $id)->first()->amount;
-        $amount = $amount - 1;
         $desc = $book->where('id', '=', $id)->pluck('description');
 
         if (!$book) {
@@ -408,10 +400,8 @@ class BookController extends Controller
 
         $rating = Rating::where('book_id', '=', $id)->update(['book_id' => $duplicates[0]->id]);
 
-        $book = Book::where('description', '=', $desc)->update(['amount' => $amount]);
-
         $book = Book::find($id);
-        $book->authors()->attach($book);
+        $book->authors()->detach($book);
 
         if ($book->destroy($id)) {
             return response()->json(
@@ -481,7 +471,7 @@ class BookController extends Controller
             );
         }
 
-        $updated = $book->update($request->only(['isbn', 'title', 'description', 'publish_year', 'amount']));
+        $updated = $book->update($request->only(['isbn', 'title', 'description', 'publish_year']));
 
         if ($updated) {
             return response()->json(

@@ -164,9 +164,6 @@ export default {
       }).then((result) => {
         if (result.value) {
           axios.delete(`/api/book/delete/${item.id}`, {})
-          .then((response) => {
-              console.log(response)
-          });
           this.books.splice(index, 1);
           this.$store.dispatch('fetchBooksISBN', {});
           this.$swal('Usunięto', 'Pomyślnie usunięto książkę', 'success');

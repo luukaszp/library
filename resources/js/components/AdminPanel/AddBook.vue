@@ -94,6 +94,7 @@
                                     outlined
                                     required
                                     :rules="authorRules"
+                                    multiple
                             >
                             <template slot="item" slot-scope="data">
                                 {{data.item.name}} {{data.item.surname}}
@@ -173,7 +174,7 @@ export default {
       description: '',
       publish_year: '',
       cover: [],
-      selectedAuthor: '',
+      selectedAuthor: [],
       selectedCategory: '',
       selectedPublisher: '',
       titleRules: [

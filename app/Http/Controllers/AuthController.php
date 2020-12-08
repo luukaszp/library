@@ -23,10 +23,12 @@ class AuthController extends Controller
 {
     function __construct()
     {
-        Config::set('auth.providers', ['users' => [
+        Config::set(
+            'auth.providers', ['users' => [
             'driver' => 'eloquent',
             'model' => Worker::class,
-        ]]);
+            ]]
+        );
     }
 
     /**
