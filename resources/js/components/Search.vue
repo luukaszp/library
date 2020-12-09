@@ -63,15 +63,14 @@
       </template>
 
       <template v-slot:default="props">
-        <v-row class="fill-height overflow-auto" id="container">
+        <v-row class="fill-height overflow-auto" style="width: 100%" id="container">
             <v-col
             v-for="item in props.items"
             :key="item.name"
             cols="12"
             sm="6"
             md="4"
-            lg="2"
-            class="py-2"
+            lg="3"
             >
             <v-card class="card fill-height">
                 <v-card-title style="justify-content: center">
@@ -162,50 +161,48 @@
 
 <script>
 /*eslint-disable*/
-import axios from 'axios';
-
 export default {
   data: () => ({
     itemsPerPageArray: [4, 8, 12],
-        search: '',
-        filter: {},
-        sortDesc: false,
-        page: 1,
-        itemsPerPage: 4,
-        sortBy: 'title',
-        keys: [
-          'Title',
-          'authorName',
-          'surname',
-          'categoryName',
-          'amount',
-        ],
+    search: '',
+    filter: {},
+    sortDesc: false,
+    page: 1,
+    itemsPerPage: 4,
+    sortBy: 'title',
+    keys: [
+      'Title',
+      'authorName',
+      'surname',
+      'categoryName',
+      'amount'
+    ],
     items: [
       {
-       title: '',
-       authorName: '',
-       surname: '',
-       categoryName: '',
-       isbn: '',
-       description: '',
-       publish_year: '',
-       publisherName: '',
-       amount: '',
-       cover: '',
-      },
-    ],
+        title: '',
+        authorName: '',
+        surname: '',
+        categoryName: '',
+        isbn: '',
+        description: '',
+        publish_year: '',
+        publisherName: '',
+        amount: '',
+        cover: ''
+      }
+    ]
   }),
 
   computed: {
     books() {
-        return this.$store.getters.getBooks;
+      return this.$store.getters.getBooks;
     },
     numberOfPages () {
-        return Math.ceil(this.items.length / this.itemsPerPage)
+      return Math.ceil(this.books.length / this.itemsPerPage);
     },
     filteredKeys () {
-        return this.keys.filter(key => key !== `Name`)
-    },
+      return this.keys.filter((key) => key !== 'Name');
+    }
   },
 
   watch: {
@@ -220,13 +217,13 @@ export default {
 
   methods: {
     nextPage () {
-        if (this.page + 1 <= this.numberOfPages) this.page += 1
-      },
+      if (this.page + 1 <= this.numberOfPages) this.page += 1;
+    },
     formerPage () {
-        if (this.page - 1 >= 1) this.page -= 1
+      if (this.page - 1 >= 1) this.page -= 1;
     },
     updateItemsPerPage (number) {
-        this.itemsPerPage = number
+      this.itemsPerPage = number;
     },
     getColor (amount) {
       if (amount === '0') return 'red';

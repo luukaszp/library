@@ -25,7 +25,6 @@ import Suggestions from './components/AdminPanel/Suggestions.vue';
 import Calendar from './components/Calendar.vue';
 import Search from './components/Search.vue';
 import NewPositions from './components/NewPositions.vue';
-import Catalog from './components/Catalog.vue';
 import AuthorView from './components/AuthorView.vue';
 import BookView from './components/BookView.vue';
 import Profile from './components/Profile/Profile.vue';
@@ -199,11 +198,6 @@ const routes = [
     path: '/new',
     name: 'new',
     component: NewPositions
-  },
-  {
-    path: '/catalog',
-    name: 'catalog',
-    component: Catalog
   },
   {
     path: '/book/:book_id',

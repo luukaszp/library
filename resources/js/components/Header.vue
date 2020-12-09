@@ -30,20 +30,11 @@
                                 class="white--text ma-8"
                                 v-bind="attrs"
                                 v-on="on"
+                                :to="item.route"
                                 >
                                 {{ item.text }}
                                 </v-btn>
                             </template>
-
-                            <v-list>
-                                <v-list-item
-                                v-for="subItem in item.items"
-                                :key="subItem.title"
-                                :to="subItem.route"
-                                >
-                                <v-list-item-title v-text="subItem.title"></v-list-item-title>
-                                </v-list-item>
-                            </v-list>
                             </v-menu>
                         </div>
 
@@ -96,30 +87,20 @@ export default {
   data: () => ({
     items: [
       {
-        text: 'ZBIORY',
-        items: [
-          { title: 'Nowości na półce', route: '' },
-          { title: 'Ostatnio polecane', route: '' },
-          { title: 'Wyszukaj w katalogu', route: '' },
-          { title: 'Zaproponuj nową książkę', route: '' },
-          { title: 'Przedłuż termin zwrotu', route: '' }
-        ]
+        text: 'KALENDARZ',
+        route: '/calendar'
       },
       {
-        text: 'WYDARZENIA',
-        items: [
-          { title: 'Kalendarz wydarzeń', route: '' },
-          { title: 'Zapowiedzi', route: '' },
-          { title: 'Archiwum wydarzeń', route: '' }
-        ]
+        text: 'PRZEGLĄDAJ',
+        route: '/search'
       },
       {
-        text: 'INFORMACJE',
-        items: [
-          { title: 'Kontakt', route: '' },
-          { title: 'Godziny otwarcia', route: '' },
-          { title: 'Regulamin', route: '' }
-        ]
+        text: 'NOWOŚCI',
+        route: '/new'
+      },
+      {
+        text: 'RANKING',
+        route: '/ranking'
       }
     ]
   }),
