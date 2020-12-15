@@ -27,6 +27,9 @@ Route::get('category/getCategories', 'CategoryController@getCategories');
 
 Route::get('publisher/getPublishers', 'PublisherController@getPublishers');
 
+Route::get('notifications/{id}', 'NotificationController@getNotifications');
+Route::get('notifications/read/{id}', 'NotificationController@markAsRead');
+
 Route::get('author/getAuthors', 'AuthorController@getAuthors');
 Route::get('author/{id}', 'AuthorController@showAuthor');
 

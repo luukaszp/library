@@ -7,6 +7,8 @@ use App\Category;
 use App\Author;
 use App\Publisher;
 use App\Rating;
+use App\User;
+use App\Reader;
 use App\Http\Requests\StoreBook;
 use Illuminate\Http\Request;
 use Intervention\Image\Facades\Image;
@@ -213,6 +215,41 @@ class BookController extends Controller
             }
         }
         
+        for($i = 0; $i < $authorsNumber; $i++) {
+            $authorName = Author::where('id', $authors[$i])->select('name', 'surname')->get();
+        }
+
+        $details = [
+            'message' => 'Nowa pozycja',
+            'title' => $book->title,
+            'author' => $authorName,
+        ];
+
+        $data = DB::table('readers')
+            ->join('authors', 'authors.id', '=', 'author_reader.author_id')
+            ->join('author_reader', 'author_reader.reader_id', '=', 'readers.id')
+            ->select(
+                'authors.name', 'authors.surname', 'readers.id'
+            )
+            ->get()
+            ->toArray();
+
+        $readerID = [];
+
+        for($i = 0; $i < count($data); $i++) {
+            for($j = 0; $j < count($authorName); $j++) {
+                if($data[$i]->name === $authorName[$j]->name && $data[$i]->surname === $authorName[$j]->surname) {
+                    $readerID[$i] = $data[$i]->id;
+                }
+            }
+        }
+
+        for($i = 0; $i < count($readerID); $i++) {
+            $reader = Reader::where('id', $readerID[$i])->get('user_id');
+            $user = User::find($reader);
+            $user[$i]->notify(new \App\Notifications\BookAdded($details));
+        }
+
         if ($book->save()) {
             return response()->json(
                 [

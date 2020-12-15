@@ -40,17 +40,50 @@
 
                         <v-spacer></v-spacer>
 
+                        <v-menu offset-y>
+                            <template v-slot:activator="{ on }">
+                                <v-badge :content="messages" :value="messages" color="green" overlap>
+                                    <v-btn icon v-on="on" :disabled="!messages">
+                                        <v-icon>mdi-email</v-icon>
+                                    </v-btn>
+                                </v-badge>
+                            </template>
+                            <v-card>
+                                <v-list
+                                v-for="notification in notifications"
+                                :key="notification.id"
+                                >
+                                    <v-list-item-content
+                                    v-for="data in notification.data"
+                                    :key="data.id"
+                                >
+                                        <p v-text="data.message"></p>
+                                        <v-list-item-title>Właśnie została dodana książka pod tytułem: {{data.title}}</v-list-item-title>
+                                            <v-list-item-subtitle
+                                            v-for="author in data.author"
+                                            :key="author.id"
+                                            >
+                                            Autor: {{author.name}} {{author.surname}}
+                                            </v-list-item-subtitle>
+                                    </v-list-item-content>
+                                </v-list>
+                                <v-btn @click="markAsRead()">
+                                    Oznacz jako przeczytane
+                                </v-btn>
+                            </v-card>
+                        </v-menu>
+
                         <About/>
 
                         <router-link to="/admin-panel" v-if="loggedUser.id_number">
                             <v-btn icon>
-                                <v-icon x-large>mdi-view-dashboard</v-icon>
+                                <v-icon large>mdi-view-dashboard</v-icon>
                             </v-btn>
                         </router-link>
 
                         <router-link to="/login" v-if="!isLoggedIn">
                             <v-btn icon>
-                                <v-icon x-large>mdi-login</v-icon>
+                                <v-icon large>mdi-login</v-icon>
                             </v-btn>
                         </router-link>
 
@@ -77,6 +110,7 @@
 </template>
 
 <script>
+import axios from 'axios';
 import About from './About.vue';
 
 export default {
@@ -102,10 +136,14 @@ export default {
         text: 'RANKING',
         route: '/ranking'
       }
-    ]
+    ],
+    notifications: []
   }),
   computed: {
     isLoggedIn() {
+      if (this.$store.getters.isLoggedIn.length !== 0) {
+        this.getNotifications();
+      }
       return this.$store.getters.isLoggedIn;
     },
     loggedUser() {
@@ -113,9 +151,34 @@ export default {
     },
     authId() {
       return this.$store.getters.authId;
+    },
+    messages() {
+      let messages = 0;
+      // eslint-disable-next-line no-restricted-syntax
+      for (const key in this.notifications) {
+        if (this.notifications[key] != null) {
+          messages++;
+        }
+      }
+      return messages;
     }
   },
+
   methods: {
+    getNotifications() {
+      axios
+        .get(`http://127.0.0.1:8000/api/notifications/${this.authId}`)
+        .then((response) => {
+          this.notifications = response.data;
+        });
+    },
+
+    markAsRead() {
+      axios
+        .get(`http://127.0.0.1:8000/api/notifications/read/${this.authId}`);
+      this.notifications = null;
+    },
+
     logout() {
       this.$store.dispatch('logout')
         .then(() => this.$router.push({ name: 'login' }));
@@ -134,6 +197,7 @@ export default {
         icon: 'success',
         title: 'Wylogowano!'
       });
+      this.notifications = null;
     }
   }
 };

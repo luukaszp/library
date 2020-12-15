@@ -6,7 +6,7 @@
         >
             <template v-slot:activator="{ on }">
                 <v-btn icon v-on="on">
-                    <v-icon x-large>mdi-information-outline</v-icon>
+                    <v-icon large>mdi-information-outline</v-icon>
                 </v-btn>
             </template>
 
