@@ -101,6 +101,8 @@ class BookController extends Controller
             )
             ->get()
             ->toArray();
+        
+        //$book = Book::with(['publishers:name,id'])->find($id);
 
         if (!$book) {
             return response()->json(

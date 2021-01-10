@@ -1,59 +1,57 @@
 <template>
-    <v-row style="height: 100%">
-        <v-col md="auto" style="padding-top: 0px; padding-bottom: 0px">
-            <v-card
-            style="height: 100%; border-radius: 0px; max-width: 280px"
-        >
-            <!--mini-variant-width zamieniony na width--><v-navigation-drawer
-            permanent
-            width="280px"
-            dark
-            style="padding-top: 20px"
-            >
-            <template v-slot:prepend>
-                <v-list-item two-line>
-                <v-list-item-avatar>
-                    <img src="https://randomuser.me/api/portraits/men/81.jpg">
-                </v-list-item-avatar>
-
-                <v-list-item-content>
-                    <v-list-item-title>Biblioteka</v-list-item-title>
-                    <v-list-item-subtitle>Panel zarządzania</v-list-item-subtitle>
-                </v-list-item-content>
-                </v-list-item>
-            </template>
-
-            <v-divider></v-divider>
-
-            <v-list dense>
-                <v-list-group
-                    v-for="item in items"
-                    :key="item.title"
-                    v-model="item.active"
-                    :prepend-icon="item.action"
-                    no-action
+    <v-row fill-height style="height: 100%; margin: 0">
+        <v-col md="auto" style="padding: 0">
+            <v-card style="height: 100%; border-radius: 0px; max-width: 280px">
+                <v-navigation-drawer
+                permanent
+                width="280px"
+                dark
+                style="padding-top: 20px"
                 >
-                    <template v-slot:activator>
-                    <v-list-item-content>
-                        <v-list-item-title v-text="item.title"></v-list-item-title>
-                    </v-list-item-content>
+                    <template v-slot:prepend>
+                        <v-list-item two-line>
+                        <v-list-item-avatar>
+                            <img src="https://randomuser.me/api/portraits/men/81.jpg">
+                        </v-list-item-avatar>
+
+                        <v-list-item-content>
+                            <v-list-item-title>Biblioteka</v-list-item-title>
+                            <v-list-item-subtitle>Panel zarządzania</v-list-item-subtitle>
+                        </v-list-item-content>
+                        </v-list-item>
                     </template>
 
-                    <v-list-item
-                    v-for="subItem in item.items"
-                    :key="subItem.title"
-                    :to="subItem.route"
+                <v-divider></v-divider>
+
+                <v-list dense>
+                    <v-list-group
+                        v-for="item in items"
+                        :key="item.title"
+                        v-model="item.active"
+                        :prepend-icon="item.action"
+                        no-action
                     >
-                    <v-list-item-content>
-                        <v-list-item-title v-text="subItem.title"></v-list-item-title>
-                    </v-list-item-content>
-                    </v-list-item>
-                </v-list-group>
-            </v-list>
+                        <template v-slot:activator>
+                        <v-list-item-content>
+                            <v-list-item-title v-text="item.title"></v-list-item-title>
+                        </v-list-item-content>
+                        </template>
+
+                        <v-list-item
+                        v-for="subItem in item.items"
+                        :key="subItem.title"
+                        :to="subItem.route"
+                        >
+                        <v-list-item-content>
+                            <v-list-item-title v-text="subItem.title"></v-list-item-title>
+                        </v-list-item-content>
+                        </v-list-item>
+                    </v-list-group>
+                </v-list>
             </v-navigation-drawer>
         </v-card>
         </v-col>
-        <v-col style="margin-right: 20px">
+        <v-col style="padding: 0px">
             <router-view></router-view>
         </v-col>
     </v-row>

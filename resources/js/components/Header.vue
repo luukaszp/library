@@ -5,7 +5,7 @@
                         tile
                 >
                     <v-app-bar
-                            color=#865840
+                            color=#4E1D04
                             dark
                     >
                         <router-link to="/">
@@ -40,7 +40,7 @@
 
                         <v-spacer></v-spacer>
 
-                        <v-menu offset-y>
+                        <v-menu offset-y v-if="loggedUser.card_number">
                             <template v-slot:activator="{ on }">
                                 <v-badge :content="messages" :value="messages" color="green" overlap>
                                     <v-btn icon v-on="on" :disabled="!messages">

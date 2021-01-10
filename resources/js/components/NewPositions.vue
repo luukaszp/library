@@ -7,7 +7,7 @@
             <v-col
                 cols="6"
             >
-                <swiper ref="mySwiper" :options="swiperOptions" style="height: 650px">
+                <swiper ref="mySwiper" :options="swiperOptions">
                     <swiper-slide
                         v-for="book in books"
                         :key="book.name"
@@ -21,7 +21,6 @@
 
                             <v-img
                                 v-bind:src="('../storage/' + book.cover)"
-                                height="300px"
                                 width="300px"
                                 style="display: inline-block"
                             >
@@ -36,7 +35,6 @@
                             </v-card-text>
                         </v-card>
                     </swiper-slide>
-                    <div class="swiper-pagination" slot="pagination"></div>
                     <div class="swiper-button-prev" slot="button-prev"></div>
                     <div class="swiper-button-next" slot="button-next"></div>
                 </swiper>

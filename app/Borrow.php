@@ -25,16 +25,16 @@ class Borrow extends Model
 
     public function readers()
     {
-        return $this->belongsTo(Reader::class);
+        return $this->belongsTo(Reader::class, 'reader_id');
     }
 
     public function books()
     {
-        return $this->belongsTo(Book::class);
+        return $this->belongsTo(Book::class, 'book_id');
     }
 
     public function workers()
     {
-        return $this->belongsTo(Worker::class);
+        return $this->belongsTo(Worker::class, 'worker_id');
     }
 }

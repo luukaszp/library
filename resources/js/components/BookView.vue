@@ -1,11 +1,11 @@
 <template>
 <v-container style="justify-content: center; display: flex">
-  <v-card style="width: 1000px">
+  <v-card>
       <v-row style="justify-content: center; margin-left: 10px; margin-right: 10px" v-for="item in books" :key="item.name">
         <v-col cols="auto">
           <v-img
-            height="300"
-            width="300"
+            width="200px"
+            style="margin-top: 15px"
             :src="('../storage/' + item.cover)"
           ></v-img>
         </v-col>
@@ -24,7 +24,7 @@
               <h1 v-text="item.title" style="font-weight: bold; text-align: center" class="mr-2"> </h1>
             </v-col>
 
-            <v-col>
+            <v-col v-if="item.authorID">
               <span>Autor: </span><router-link :to="{ name: 'authorview', params: { author_id: item.authorID } }" style="text-decoration: none; color: grey"><span style="font-weight: bold" v-text="item.authorName + ' ' + item.surname" class="mr-2"></span></router-link>
             </v-col>
 
@@ -50,8 +50,8 @@
 
         <v-divider vertical style="margin-left: 10px; margin-right: 10px"></v-divider>
 
-        <v-col>
-            <v-col>
+        <v-col cols="auto">
+            <v-col style="padding-top: 20px">
                 <span style="font-weight: bold">Opis: </span><span v-text="item.description" class="mr-2"></span>
             </v-col>
             <v-col>
@@ -70,7 +70,6 @@
 
 <script>
 /*eslint-disable*/
-import axios from 'axios';
 import BookRating from './BookRating.vue';
 
 export default {
@@ -90,9 +89,6 @@ export default {
     },
     averages() {
       return this.$store.getters.getAverages;
-    },
-    authId() {
-      return this.$store.getters.authId;
     }
   },
 

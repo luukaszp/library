@@ -59,6 +59,6 @@ class Worker extends Authenticatable implements JWTSubject
 
     public function users()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

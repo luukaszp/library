@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid style="margin-left: 10px; margin-right: 10px">
+  <v-container>
     <v-data-iterator
       :items="books"
       :items-per-page.sync="itemsPerPage"
@@ -14,7 +14,6 @@
           dark
           color="blue darken-3"
           class="mb-1"
-          style="margin-right: 15px"
         >
           <v-text-field
             v-model="search"
@@ -63,7 +62,7 @@
       </template>
 
       <template v-slot:default="props">
-        <v-row class="fill-height overflow-auto" style="width: 100%" id="container">
+        <v-row>
             <v-col
             v-for="item in props.items"
             :key="item.name"
@@ -71,8 +70,9 @@
             sm="6"
             md="4"
             lg="3"
+            style="display: flex; justify-content: center"
             >
-            <v-card class="card fill-height">
+            <v-card>
                 <v-card-title style="justify-content: center">
                     <span v-text="item.title"></span>
                 </v-card-title>
@@ -80,6 +80,7 @@
                 <v-divider></v-divider>
 
                 <v-img
+                style="width: 300px"
                 v-bind:src="('../storage/' + item.cover)"
                 >
                 </v-img>

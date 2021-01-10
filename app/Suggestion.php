@@ -20,6 +20,6 @@ class Suggestion extends Model
 
     public function readers()
     {
-        return $this->belongsTo(Reader::class);
+        return $this->belongsTo(Reader::class, 'reader_id');
     }
 }

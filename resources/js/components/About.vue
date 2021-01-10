@@ -16,7 +16,11 @@
                 </v-toolbar>
 
                 <v-card-text class="pt-5 text-center">
-                    <strong>Biblioteka</strong>
+                    <strong>Aplikacja webowa służy do wspomagania funkcjonowania biblioteki oraz usprawnienia jej
+                        działania. Oferuje ona wiele przydatnych opcji dla pracowników placówki w kwestii zarządzania
+                        danymi. Czytelnicy natomiast mogą przeglądać pozycje książkowe znajdujące się w bibliotece, dodatkowo
+                        mogą obserwować ulubionych autorów w celu otrzymania powiadomienia o dodaniu nowej książki jednego z nich.
+                        Oprócz tego do dyspozycji mają statystyki konta, ranking miesięczny czytelników czy kalendarz wydarzeń.</strong>
                 </v-card-text>
             </v-card>
         </v-dialog>

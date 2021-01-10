@@ -9,6 +9,7 @@
                 sm="6"
                 md="4"
                 lg="2"
+                style="display: flex; justify-content: center"
             >
                 <v-card class="card fill-height">
                     <v-card-title style="justify-content: center; padding-top: 30px">
@@ -18,6 +19,7 @@
                     <v-divider></v-divider>
 
                     <v-img
+                        style="width: 300px"
                         v-bind:src="('../storage/' + item.cover)"
                     >
                     </v-img>

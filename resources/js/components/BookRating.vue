@@ -40,7 +40,7 @@
         <v-divider></v-divider>
 
         <v-row style="justify-content: center; margin-left: 10px; margin-right: 10px">
-            <h2 style="width: 100%; text-align: center">Oceny i opinie czytelników: {{ratings.length}}</h2>
+            <h2 style="width: 100%; text-align: center; padding-top: 20px">Oceny i opinie czytelników: {{ratings.length}}</h2>
                 <v-list two-line style="width: 100%">
                     <v-list-item-group>
                         <template v-for="(item) in ratings">
