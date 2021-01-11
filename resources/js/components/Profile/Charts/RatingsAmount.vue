@@ -1,6 +1,9 @@
 <template>
-  <div>
+  <div v-if="series.data">
       <apexchart ref="realtimeChart" width="800" type="bar" :options="options" :series="series"></apexchart>
+  </div>
+  <div v-else>
+      <h1>Brak danych!</h1>
   </div>
 </template>
 

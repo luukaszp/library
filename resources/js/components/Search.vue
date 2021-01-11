@@ -92,7 +92,9 @@
                     <p>Kategoria: <span v-text="item.categoryName" class="mr-2"></span></p>
                     <p>Dostępna ilość książek: <v-chip v-text="item.amount" :color="getColor(item.amount)" dark></v-chip></p>
                     <v-divider></v-divider>
-                    <router-link :to="{ name: 'bookview', params: { book_id: item.id } }"><v-btn outlined style="border: 0px; text-decoration: none"><v-card-title style="color: blue; font-weight: bold">Zobacz więcej</v-card-title></v-btn></router-link>
+                    <template v-if="item.id">
+                        <router-link :to="{ name: 'bookview', params: { book_id: item.id } }"><v-btn outlined style="border: 0px; text-decoration: none"><v-card-title style="color: blue; font-weight: bold">Zobacz więcej</v-card-title></v-btn></router-link>
+                    </template>
                 </v-card-text>
             </v-card>
             </v-col>
@@ -169,6 +171,7 @@ export default {
     filter: {},
     sortDesc: false,
     page: 1,
+    books: [],
     itemsPerPage: 4,
     sortBy: 'title',
     keys: [
@@ -195,9 +198,6 @@ export default {
   }),
 
   computed: {
-    books() {
-      return this.$store.getters.getBooks;
-    },
     numberOfPages () {
       return Math.ceil(this.books.length / this.itemsPerPage);
     },
@@ -212,11 +212,10 @@ export default {
     }
   },
 
-  created () {
-    this.$store.dispatch('fetchBooks', {});
-  },
-
   methods: {
+    setData(books) {
+      this.books = books;
+    }, 
     nextPage () {
       if (this.page + 1 <= this.numberOfPages) this.page += 1;
     },
@@ -231,6 +230,14 @@ export default {
       if (amount === '1' || amount === '2') return 'orange';
       return 'green';
     }
-  }
+  },
+
+  beforeRouteEnter (to, from, next) {
+    axios
+     .get('/api/book/getBooks')
+     .then(response => {
+       next(vm => vm.setData(response.data));
+   });
+  },
 };
 </script>

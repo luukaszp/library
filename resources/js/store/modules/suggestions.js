@@ -13,7 +13,7 @@ export default {
     fetchSuggestions(context) {
       axios({
         method: 'GET',
-        url: 'http://127.0.0.1:8000/api/suggestions/getSuggestions'
+        url: '/api/suggestions/getSuggestions'
       })
         .then((response) => {
           context.commit('setSuggestions', response.data);

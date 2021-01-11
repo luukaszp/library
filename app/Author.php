@@ -16,6 +16,8 @@ class Author extends Model
      */
     protected $guarded = [];
 
+    protected $hidden = ['pivot'];
+
     protected $fillable = [
         'name', 'surname', 'description', 'photo'
     ];

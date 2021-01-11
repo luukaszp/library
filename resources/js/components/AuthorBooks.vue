@@ -8,7 +8,7 @@
                 cols="10"
                 sm="6"
                 md="4"
-                lg="2"
+                lg="3"
                 style="display: flex; justify-content: center"
             >
                 <v-card class="card fill-height">

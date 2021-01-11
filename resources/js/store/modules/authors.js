@@ -13,7 +13,7 @@ export default {
     fetchAuthors(context) {
       axios({
         method: 'GET',
-        url: 'http://127.0.0.1:8000/api/author/getAuthors'
+        url: '/api/author/getAuthors'
       })
         .then((response) => {
           context.commit('setAuthors', response.data);
@@ -28,7 +28,7 @@ export default {
       axios({
         method: 'GET',
         // eslint-disable-next-line camelcase
-        url: `http://127.0.0.1:8000/api/author/${author_id}`
+        url: `/api/author/${author_id}`
       })
         .then((response) => {
           context.commit('setAuthors', response.data);

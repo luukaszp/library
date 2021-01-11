@@ -1,12 +1,12 @@
 <template>
 <v-container style="justify-content: center; display: flex">
   <v-card>
-      <v-row style="justify-content: center; margin-left: 10px; margin-right: 10px" v-for="item in books" :key="item.name">
+      <v-row style="justify-content: center; margin-left: 10px; margin-right: 10px">
         <v-col cols="auto">
           <v-img
             width="200px"
             style="margin-top: 15px"
-            :src="('../storage/' + item.cover)"
+            :src="('../storage/' + books.cover)"
           ></v-img>
         </v-col>
 
@@ -21,15 +21,15 @@
              style="text-align: left;"
           >
             <v-col>
-              <h1 v-text="item.title" style="font-weight: bold; text-align: center" class="mr-2"> </h1>
-            </v-col>
-
-            <v-col v-if="item.authorID">
-              <span>Autor: </span><router-link :to="{ name: 'authorview', params: { author_id: item.authorID } }" style="text-decoration: none; color: grey"><span style="font-weight: bold" v-text="item.authorName + ' ' + item.surname" class="mr-2"></span></router-link>
+              <h1 v-text="books.title" style="font-weight: bold; text-align: center" class="mr-2"> </h1>
             </v-col>
 
             <v-col>
-              <span>Kategoria: </span><span style="font-weight: bold" v-text="item.categoryName" class="mr-2"></span>
+              <span v-if="books.authors.id">Autor: </span><router-link :to="{ name: 'authorview', params: { author_id: books.authors.id } }" style="text-decoration: none; color: grey"><span style="font-weight: bold" v-text="books.authors.name + ' ' + books.authors.surname" class="mr-2"></span></router-link>
+            </v-col>
+
+            <v-col>
+              <span>Kategoria: </span><span style="font-weight: bold" v-text="books.categories.name" class="mr-2"></span>
             </v-col>
 
             <v-col>
@@ -52,10 +52,10 @@
 
         <v-col cols="auto">
             <v-col style="padding-top: 20px">
-                <span style="font-weight: bold">Opis: </span><span v-text="item.description" class="mr-2"></span>
+                <span style="font-weight: bold">Opis: </span><span v-text="books.description" class="mr-2"></span>
             </v-col>
             <v-col>
-                <h3>Status: <v-chip :color="getColor(item.amount)" dark>{{ status }}</v-chip></h3>
+                <h3>Status: <v-chip :color="getColor(books.amount)" dark>{{ status }}</v-chip></h3>
             </v-col>
         </v-col>
       </v-row>

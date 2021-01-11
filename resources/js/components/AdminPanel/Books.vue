@@ -184,6 +184,7 @@ export default {
     valid: false,
     search: '',
     cover: [],
+    books: [],
     image: '',
     show: false,
     expanded: [],
@@ -235,9 +236,6 @@ export default {
     formTitle () {
       return this.editedIndex === -1 ? 'Edytuj dane o książce' : 'Edytuj dane o książce';
     },
-    books() {
-      return this.$store.getters.getBooks;
-    },
     buttonText() {
       return this.selectedFile ? this.selectedFile.name : this.defaultButtonText;
     }
@@ -249,11 +247,11 @@ export default {
     }
   },
 
-  created () {
-    this.$store.dispatch('fetchBooks', {});
-  },
-
   methods: {
+    setData(books) {
+      this.books = books;
+    }, 
+    
     editBook (item) {
       this.editedIndex = this.books.indexOf(item);
       this.editedItem = { ...item };
@@ -355,6 +353,14 @@ export default {
       if (amount === '1' || amount === '2') return 'orange';
       return 'green';
     }
+  },
+
+  beforeRouteEnter (to, from, next) {
+    axios
+     .get('/api/book/getBooks')
+     .then(response => {
+       next(vm => vm.setData(response.data));
+   });
   }
 };
 </script>

@@ -13,7 +13,7 @@ export default {
     fetchEvents(context) {
       axios({
         method: 'GET',
-        url: 'http://127.0.0.1:8000/api/calendar/event/getEvents'
+        url: '/api/calendar/event/getEvents'
       })
         .then((response) => {
           context.commit('setEvents', response.data);

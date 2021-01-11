@@ -59,28 +59,21 @@ export default {
   }),
 
   computed: {
-    /*readers() {
+    readers() {
       return this.$store.getters.getReaders;
     },
     borrows() {
       return this.$store.getters.getBorrows;
-    }*/
+    }
   },
 
-  async created () {
-    /*this.$store.dispatch('fetchOneReader', this.user_id);
-    this.$store.dispatch('fetchSpecificDelay', this.user_id);*/
-   await this.getDelays();
+  created () {
+    this.$store.dispatch('fetchOneReader', this.user_id);
+    this.$store.dispatch('fetchSpecificDelay', this.user_id);
   },
 
   methods: {
-   async getDelays() {
-		await axios
-        .get(`api/borrow/showDelay/${this.user_id}`)
-        .then((response) => {
-            this.delays = response.data;
-        });
-    }
+      
   }
 };
 </script>

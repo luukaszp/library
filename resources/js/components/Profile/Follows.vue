@@ -1,29 +1,21 @@
 <template>
     <v-row style="justify-content: center; text-align: center">
-        <v-col md=12>
+        <v-col md=12 v-if="this.follows">
             <h1>Obserwowani autorzy</h1>
-            <v-list-item
-                v-for="folAuthor in this.followedAuthors"
-                :key="folAuthor.name"
-            >
+            <v-list-item :items="follows">
                 <v-list-item-content>
-                <v-list-item-title v-text="folAuthor.name + ' ' + folAuthor.surname"></v-list-item-title>
+                <v-list-item-title v-text="follows.name + ' ' + follows.surname"></v-list-item-title>
                 </v-list-item-content>
 
                 <v-list-item-action>
                 <v-btn icon>
-                    <v-icon color="grey lighten-1" @click="removeAuthor(folAuthor)">mdi-close</v-icon>
+                    <v-icon color="grey lighten-1" @click="removeAuthor(follows)">mdi-close</v-icon>
                 </v-btn>
                 </v-list-item-action>
             </v-list-item>
-
-            <v-list-item
-                v-if="!this.followedAuthors.length"
-            >
-            <v-list-item-content>
-                <v-list-item-title>Brak</v-list-item-title>
-            </v-list-item-content>
-            </v-list-item>
+        </v-col>
+        <v-col v-else>
+            <h1>Obserwowani autorzy: brak</h1>
         </v-col>
     </v-row>
 </template>
@@ -40,19 +32,17 @@ export default {
     followedAuthors: []
   }),
 
-  async created () {
-    await this.getFollowedAuthors();
+  computed: {
+    follows() {
+      return this.$store.getters.getFollows;
+    }
+  },
+
+  created () {
+    this.$store.dispatch('fetchFollowedAuthors', this.user_id);
   },
 
   methods: {
-    async getFollowedAuthors() {
-      await axios
-        .get(`api/follow/getFollowedAuthors/${this.user_id}`)
-        .then((response) => {
-          this.followedAuthors = response.data;
-        })
-    },
-
     removeAuthor(folAuthor) {
       this.$swal({
         title: 'Czy jesteś pewien, że chcesz usunąć tego autora z listy obserwowanych?',
@@ -67,7 +57,7 @@ export default {
         } else {
           this.$swal('Anulowano', 'Akcja została anulowana', 'info');
         }
-        this.getFollowedAuthors();
+        this.$store.dispatch('fetchFollowedAuthors', this.user_id);
       });
     }
   }

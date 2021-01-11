@@ -13,7 +13,7 @@ export default {
     fetchPublishers(context) {
       axios({
         method: 'GET',
-        url: 'http://127.0.0.1:8000/api/publisher/getPublishers'
+        url: '/api/publisher/getPublishers'
       })
         .then((response) => {
           context.commit('setPublishers', response.data);

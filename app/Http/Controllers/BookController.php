@@ -18,6 +18,28 @@ use Carbon\Carbon;
 class BookController extends Controller
 {
     /**
+     * Get amount of books.
+     *
+     * @return Response
+     */
+    public function getAmount($id)
+    {
+        $getAmount = DB::table('books')
+            ->select('books.*', DB::raw('COUNT(books.title) as amount'))
+            ->groupBy('books.title')
+            ->orderBy('amount')
+            ->get();
+
+        if(!$id) {
+            return $getAmount->pluck('amount');
+        }
+        
+        $count = $getAmount->where('id', '=', $id)->pluck('amount')->first();
+
+        return $count;
+    }
+
+    /**
      * Display a listing of books (listing by groups).
      *
      * @return Response
@@ -38,7 +60,21 @@ class BookController extends Controller
             ->get()
             ->toArray();
 
-            return $data;
+        //$amount = $this->getAmount(0)->toArray();
+
+        /*$book = Book::with(['publishers:name,id', 'categories:name,id'])->groupBy('title')->get()->toArray();
+
+        $author = Book::with(['authors:name,surname,id'])->get()->toArray();
+    
+        array_push($book, $amount);
+        array_push($book, $author);*/
+        //$data['amount'] = $amount;
+        //$data->toArray();
+        //array_push($data, $amount);
+        //$data['amount'] = $amount;
+
+        return $data;
+
     }
 
     /**
@@ -88,21 +124,14 @@ class BookController extends Controller
      */
     public function showBook($id)
     {
-        $book = DB::table('books')
-            ->where('books.id', '=', $id)
-            ->join('categories', 'categories.id', '=', 'books.category_id')
-            ->join('publishers', 'publishers.id', '=', 'books.publisher_id')
-            ->join('authors', 'authors.id', '=', 'author_book.author_id')
-            ->join('author_book', 'author_book.book_id', '=', 'books.id')
-            ->select(
-                'books.id', 'books.title', 'books.isbn', 'books.description', 'books.publish_year',
-                DB::raw('COUNT(books.title) as amount'), 'categories.name as categoryName', 'authors.name as authorName',
-                'authors.surname', 'authors.id as authorID', 'publishers.name as publisherName', 'books.cover'
-            )
-            ->get()
-            ->toArray();
+        $amount = $this->getAmount($id);
         
-        //$book = Book::with(['publishers:name,id'])->find($id);
+        $author = Book::find($id)->authors()->select('id', 'name', 'surname')->first();
+
+        $book = Book::with(['publishers:name,id', 'categories:name,id'])->find($id);
+
+        $book['amount'] = $amount;
+        $book['authors'] = $author;
 
         if (!$book) {
             return response()->json(

@@ -51,7 +51,7 @@ export default {
         if (user.login.length === 10) {
           axios({
             method: 'POST',
-            url: 'http://127.0.0.1:8000/api/loginReader',
+            url: '/api/loginReader',
             data: {
               card_number: user.login,
               password: user.password
@@ -74,7 +74,7 @@ export default {
         } else {
           axios({
             method: 'POST',
-            url: 'http://127.0.0.1:8000/api/loginWorker',
+            url: '/api/loginWorker',
             data: {
               id_number: user.login,
               password: user.password
@@ -102,7 +102,7 @@ export default {
         commit('auth_request');
         axios({
           method: 'POST',
-          url: 'http://127.0.0.1:8000/api/register',
+          url: '/api/register',
           data: user
         })
           .then((response) => {
@@ -135,7 +135,7 @@ export default {
           commit('auth_request');
           axios({
             method: 'POST',
-            url: 'http://127.0.0.1:8000/api/first-login-password',
+            url: '/api/first-login-password',
             data: user
           })
             .then((response) => {

@@ -19,9 +19,11 @@ class FollowController extends Controller
      */
     public function addAuthor(Request $request)
     {
+        $readerID = Reader::where('user_id', '=', $request->user_id)->get()->first();
+
         $author = Author::find($request->author_id);
 
-        $author->readers()->attach($author);
+        $author->readers()->attach($readerID);
 
         return response()->json(
             [
@@ -40,7 +42,7 @@ class FollowController extends Controller
      */
     public function removeAuthor($id)
     {
-        if (Reader::find($id)->authors()->detach()) {
+        if (Reader::where('user_id', '=', $id)->authors()->detach()) {
             return response()->json(
                 [
                 'success' => true,
@@ -50,7 +52,7 @@ class FollowController extends Controller
         } else {
             return response()->json(
                 [
-                'success' => true,
+                'success' => false,
                 'message' => 'Author could not be removed from the list.'
                 ], 500
             );
@@ -64,6 +66,18 @@ class FollowController extends Controller
      */
     public function getFollowedAuthors($id)
     {
-        return $followed = Reader::find($id)->authors;
+        $readerID = Reader::where('user_id', '=', $id)->get('id')->first();
+        $followed = Reader::with(['authors:name,surname,id'])->where('user_id', '=', $id)->get()->toArray();
+
+        if (!$followed) {
+            return response()->json(
+                [
+                'success' => false,
+                'message' => 'Reader does not follow any authors.'
+                ], 400
+            );
+        }
+
+        return $followed = Reader::find($readerID->id)->authors()->select('id', 'name', 'surname')->first();
     }
 }

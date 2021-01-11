@@ -15,7 +15,7 @@ export default {
       axios({
         method: 'GET',
         // eslint-disable-next-line camelcase
-        url: `http://127.0.0.1:8000/api/follow/getFollowedAuthors/${reader_id}`
+        url: `/api/follow/getFollowedAuthors/${reader_id}`
       })
         .then((response) => {
           context.commit('setFollows', response.data);

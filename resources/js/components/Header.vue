@@ -56,8 +56,9 @@
                                     <v-list-item-content
                                     v-for="data in notification.data"
                                     :key="data.id"
+                                    style="margin-left: 10px"
                                 >
-                                        <p v-text="data.message"></p>
+                                        <v-subheader v-text="data.message"></v-subheader>
                                         <v-list-item-title>Właśnie została dodana książka pod tytułem: {{data.title}}</v-list-item-title>
                                             <v-list-item-subtitle
                                             v-for="author in data.author"
@@ -67,7 +68,7 @@
                                             </v-list-item-subtitle>
                                     </v-list-item-content>
                                 </v-list>
-                                <v-btn @click="markAsRead()">
+                                <v-btn color="success" @click="markAsRead()">
                                     Oznacz jako przeczytane
                                 </v-btn>
                             </v-card>
@@ -167,7 +168,7 @@ export default {
   methods: {
     getNotifications() {
       axios
-        .get(`http://127.0.0.1:8000/api/notifications/${this.authId}`)
+        .get(`/api/notifications/${this.authId}`)
         .then((response) => {
           this.notifications = response.data;
         });
@@ -175,7 +176,7 @@ export default {
 
     markAsRead() {
       axios
-        .get(`http://127.0.0.1:8000/api/notifications/read/${this.authId}`);
+        .get(`/api/notifications/read/${this.authId}`);
       this.notifications = null;
     },
 

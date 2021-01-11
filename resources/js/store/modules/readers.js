@@ -13,7 +13,7 @@ export default {
     fetchReaders(context) {
       axios({
         method: 'GET',
-        url: 'http://127.0.0.1:8000/api/user/getReaders'
+        url: '/api/user/getReaders'
       })
         .then((response) => {
           context.commit('setReaders', response.data);
@@ -28,7 +28,7 @@ export default {
       axios({
         method: 'GET',
         // eslint-disable-next-line camelcase
-        url: `http://127.0.0.1:8000/api/user/profile/${user_id}`
+        url: `/api/user/profile/${user_id}`
       })
         .then((response) => {
           context.commit('setReaders', response.data);

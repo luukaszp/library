@@ -92,6 +92,7 @@ export default {
     editBookDialog: false,
     valid: false,
     search: '',
+    books: [],
     headers: [
       {
         text: 'Tytuł książki',
@@ -119,9 +120,6 @@ export default {
   computed: {
     formTitle () {
       return this.editedIndex === -1 ? 'Edytuj dane o książce' : 'Edytuj dane o książce';
-    },
-    books() {
-      return this.$store.getters.getBooks;
     }
   },
 
@@ -131,11 +129,11 @@ export default {
     }
   },
 
-  created () {
-    this.$store.dispatch('fetchBooksISBN', {});
-  },
-
   methods: {
+    setData(books) {
+      this.books = books;
+    }, 
+
     editBook (item) {
       this.editedIndex = this.books.indexOf(item);
       this.editedItem = { ...item };
@@ -180,6 +178,14 @@ export default {
         this.editedIndex = -1;
       });
     }
+  },
+
+  beforeRouteEnter (to, from, next) {
+    axios
+     .get('/api/book/getBooks/isbn')
+     .then(response => {
+       next(vm => vm.setData(response.data));
+   });
   }
 };
 </script>
