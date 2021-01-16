@@ -16,17 +16,19 @@ class Author extends Model
      */
     protected $guarded = [];
 
+    protected $hidden = ['pivot'];
+
     protected $fillable = [
         'name', 'surname', 'description', 'photo'
     ];
 
     public function books()
     {
-        return $this->hasMany(Book::class);
+        return $this->belongsToMany(Book::class, 'author_book', 'author_id', 'book_id');
     }
 
-    public function favouriteAuthors()
+    public function readers()
     {
-        return $this->belongsTo(favouriteAuthors::class);
+        return $this->belongsToMany(Reader::class, 'author_reader', 'author_id', 'reader_id');
     }
 }

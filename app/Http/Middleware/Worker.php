@@ -16,7 +16,11 @@ class Worker
      */
     public function handle($request, Closure $next)
     {
-        if (Auth::check() && Auth::user()->is_worker === true) {
+        if (Auth::check() && Auth::user()->id_number !== null) {
+            return $next($request);
+        }
+
+        if (Auth::check() && Auth::user()->workers->id_number !== null) {
             return $next($request);
         }
 

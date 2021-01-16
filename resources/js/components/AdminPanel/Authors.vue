@@ -56,7 +56,7 @@
                                             </v-row>
                                             <v-row>
                                                 <v-col>
-                                                    <v-text-field v-model="editedItem.description" :rules="descriptionRules" label="Życiorys"></v-text-field>
+                                                    <v-textarea v-model="editedItem.description" :rules="descriptionRules" label="Życiorys"></v-textarea>
                                                 </v-col>
                                             </v-row>
                                             <v-row style="justify-content: center; text-align: center">
@@ -204,6 +204,7 @@ export default {
     search: '',
     image: '',
     photo: [],
+    authors: [],
     expanded: [],
     headers: [
       {
@@ -248,9 +249,6 @@ export default {
     formTitle() {
       return this.editedIndex === -1 ? 'Nowy autor' : 'Edytuj dane autora';
     },
-    authors() {
-      return this.$store.getters.getAuthors;
-    },
     buttonText() {
       return this.selectedFile ? this.selectedFile.name : this.defaultButtonText;
     }
@@ -262,11 +260,11 @@ export default {
     }
   },
 
-  created() {
-    this.$store.dispatch('fetchAuthors', {});
-  },
-
   methods: {
+    setData(authors) {
+      this.authors = authors;
+    }, 
+
     editAuthor(item) {
       this.editedIndex = this.authors.indexOf(item);
       this.editedItem = { ...item };
@@ -398,6 +396,14 @@ export default {
         });
       this.$store.dispatch('fetchAuthors', {});
     }
+  },
+
+  beforeRouteEnter (to, from, next) {
+    axios
+     .get('/api/author/getAuthors')
+     .then(response => {
+       next(vm => vm.setData(response.data));
+   });
   }
 };
 </script>

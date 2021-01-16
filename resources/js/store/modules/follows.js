@@ -2,23 +2,23 @@ import axios from 'axios';
 
 export default {
   state: {
-    opinions: []
+    follows: []
   },
   mutations: {
-    setOpinions(state, opinions) {
-      state.opinions = opinions;
+    setFollows(state, follows) {
+      state.follows = follows;
     }
   },
   actions: {
     // eslint-disable-next-line camelcase
-    fetchOpinions(context, book_id) {
+    fetchFollowedAuthors(context, reader_id) {
       axios({
         method: 'GET',
         // eslint-disable-next-line camelcase
-        url: `http://127.0.0.1:8000/api/opinion/all/${book_id}`
+        url: `/api/follow/getFollowedAuthors/${reader_id}`
       })
         .then((response) => {
-          context.commit('setOpinions', response.data);
+          context.commit('setFollows', response.data);
         })
         .catch((error) => {
           console.log(error);
@@ -26,8 +26,8 @@ export default {
     }
   },
   getters: {
-    getOpinions(state) {
-      return state.opinions;
+    getFollows(state) {
+      return state.follows;
     }
   }
 };

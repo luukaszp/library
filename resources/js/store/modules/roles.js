@@ -13,7 +13,7 @@ export default {
     fetchRoles(context) {
       axios({
         method: 'GET',
-        url: 'http://127.0.0.1:8000/api/user/getRoles'
+        url: '/api/user/getRoles'
       })
         .then((response) => {
           context.commit('setRoles', response.data);

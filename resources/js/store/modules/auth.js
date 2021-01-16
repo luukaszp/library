@@ -9,8 +9,9 @@ export default {
     token: localStorage.getItem('access_token') || '',
     loggedUser: {
       id: '',
-      is_worker: '',
-      is_admin: ''
+      is_admin: '',
+      id_number: '',
+      card_number: ''
     }
   },
 
@@ -22,9 +23,10 @@ export default {
       state.status = 'success';
       state.token = token;
       state.loggedUser = {
-        id: jwt_decode(token).sub,
-        is_worker: jwt_decode(token).is_worker,
-        is_admin: jwt_decode(token).is_admin
+        id: jwt_decode(token).user_id,
+        is_admin: jwt_decode(token).is_admin,
+        id_number: jwt_decode(token).id_number,
+        card_number: jwt_decode(token).card_number
       };
     },
     auth_error(state) {
@@ -35,8 +37,9 @@ export default {
       state.token = '';
       state.loggedUser = {
         id: null,
-        is_worker: null,
-        is_admin: null
+        is_admin: null,
+        id_number: null,
+        card_number: null
       };
     }
   },
@@ -48,7 +51,7 @@ export default {
         if (user.login.length === 10) {
           axios({
             method: 'POST',
-            url: 'http://127.0.0.1:8000/api/loginReader',
+            url: '/api/loginReader',
             data: {
               card_number: user.login,
               password: user.password
@@ -71,7 +74,7 @@ export default {
         } else {
           axios({
             method: 'POST',
-            url: 'http://127.0.0.1:8000/api/loginWorker',
+            url: '/api/loginWorker',
             data: {
               id_number: user.login,
               password: user.password
@@ -99,7 +102,7 @@ export default {
         commit('auth_request');
         axios({
           method: 'POST',
-          url: 'http://127.0.0.1:8000/api/register',
+          url: '/api/register',
           data: user
         })
           .then((response) => {
@@ -132,7 +135,7 @@ export default {
           commit('auth_request');
           axios({
             method: 'POST',
-            url: 'http://127.0.0.1:8000/api/first-login-password',
+            url: '/api/first-login-password',
             data: user
           })
             .then((response) => {

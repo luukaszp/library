@@ -12,6 +12,7 @@ import Readers from './components/AdminPanel/Readers.vue';
 import Workers from './components/AdminPanel/Workers.vue';
 import Roles from './components/AdminPanel/Roles.vue';
 import Books from './components/AdminPanel/Books.vue';
+import BooksISBN from './components/AdminPanel/BooksISBN.vue';
 import Authors from './components/AdminPanel/Authors.vue';
 import Categories from './components/AdminPanel/Categories.vue';
 import Publishers from './components/AdminPanel/Publishers.vue';
@@ -21,12 +22,9 @@ import DelaysPenalties from './components/AdminPanel/DelaysPenalties.vue';
 import Events from './components/AdminPanel/Events.vue';
 import Types from './components/AdminPanel/Types.vue';
 import Suggestions from './components/AdminPanel/Suggestions.vue';
-import Opinions from './components/AdminPanel/Opinions.vue';
-import UserForms from './components/AdminPanel/UserForms.vue';
 import Calendar from './components/Calendar.vue';
 import Search from './components/Search.vue';
 import NewPositions from './components/NewPositions.vue';
-import Catalog from './components/Catalog.vue';
 import AuthorView from './components/AuthorView.vue';
 import BookView from './components/BookView.vue';
 import Profile from './components/Profile/Profile.vue';
@@ -37,9 +35,8 @@ import BorrowsAmount from './components/Profile/Charts/BorrowsAmount.vue';
 import FavoriteAuthor from './components/Profile/Charts/FavoriteAuthor.vue';
 import FavoriteCategory from './components/Profile/Charts/FavoriteCategory.vue';
 import RatingsAmount from './components/Profile/Charts/RatingsAmount.vue';
-import Favourites from './components/Profile/Favourites.vue';
+import Follows from './components/Profile/Follows.vue';
 import UserSuggestions from './components/Profile/UserSuggestions.vue';
-import Questionnaires from './components/Profile/Questionnaires.vue';
 import FirstLogin from './components/FirstLogin.vue';
 import PasswordReset from './components/PasswordReset.vue';
 import NewPassword from './components/NewPassword.vue';
@@ -60,8 +57,7 @@ const routes = [
     name: 'register-reader',
     component: RegisterReader,
     meta: {
-      requiresAuth: true,
-      is_worker: true
+      requiresAuth: true
     }
   },
   {
@@ -83,8 +79,7 @@ const routes = [
     name: 'add-book',
     component: AddBook,
     meta: {
-      requiresAuth: true,
-      is_worker: true
+      requiresAuth: true
     }
   },
   {
@@ -92,8 +87,7 @@ const routes = [
     name: 'add-borrow',
     component: AddBorrow,
     meta: {
-      requiresAuth: true,
-      is_worker: true
+      requiresAuth: true
     }
   },
   {
@@ -101,8 +95,7 @@ const routes = [
     name: 'admin-panel',
     component: AdminPanel,
     meta: {
-      requiresAuth: true,
-      is_worker: true
+      requiresAuth: true
     },
     children: [
       {
@@ -138,6 +131,11 @@ const routes = [
         path: '/admin-panel/books',
         name: 'books',
         component: Books
+      },
+      {
+        path: '/admin-panel/books-isbn',
+        name: 'books-isbn',
+        component: BooksISBN
       },
       {
         path: '/admin-panel/authors',
@@ -183,16 +181,6 @@ const routes = [
         path: '/admin-panel/suggestions',
         name: 'suggestions',
         component: Suggestions
-      },
-      {
-        path: '/admin-panel/opinions',
-        name: 'opinions',
-        component: Opinions
-      },
-      {
-        path: '/admin-panel/userforms',
-        name: 'userforms',
-        component: UserForms
       }
     ]
   },
@@ -210,11 +198,6 @@ const routes = [
     path: '/new',
     name: 'new',
     component: NewPositions
-  },
-  {
-    path: '/catalog',
-    name: 'catalog',
-    component: Catalog
   },
   {
     path: '/book/:book_id',
@@ -282,21 +265,15 @@ const routes = [
         ]
       },
       {
-        path: '/profile/:user_id/favourites',
-        name: 'favourites',
-        component: Favourites,
+        path: '/profile/:user_id/follows',
+        name: 'follows',
+        component: Follows,
         props: true
       },
       {
         path: '/profile/:user_id/suggestions',
         name: 'usersuggestions',
         component: UserSuggestions,
-        props: true
-      },
-      {
-        path: '/profile/:user_id/questionnaires',
-        name: 'questionnaires',
-        component: Questionnaires,
         props: true
       }
     ]
@@ -338,12 +315,6 @@ router.beforeEach((to, from, next) => {
   if (to.matched.some((record) => record.meta.requiresAuth)) {
     if (!store.getters.isLoggedIn) {
       next('/login');
-    } else if (to.matched.some((record) => record.meta.is_worker)) {
-      if (store.getters.loggedUser.is_worker === true) {
-        next();
-      } else {
-        Vue.swal('Nieautoryzowany', 'Odmowa dostępu!', 'error');
-      }
     } else if (to.matched.some((record) => record.meta.is_admin)) {
       if (store.getters.loggedUser.is_admin === true) {
         next();

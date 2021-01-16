@@ -16,18 +16,17 @@ export default {
       return new Promise((resolve, reject) => {
         axios({
           method: 'POST',
-          url: 'http://127.0.0.1:8000/api/borrow/addBorrow',
+          url: '/api/borrow/addBorrow',
           data: {
-            user_id: credentials.user_id,
+            reader_id: credentials.reader_id,
             book_id: credentials.book_id,
-            borrows_date: credentials.borrows_date
+            borrows_date: credentials.borrows_date,
+            isbn: credentials.isbn
           }
         })
           .then((response) => {
             if (response.data.success === true) {
               router.push('/admin-panel/borrows');
-            } else {
-              alert('Coś poszło nie tak!');
             }
             resolve(response);
           })
@@ -40,7 +39,7 @@ export default {
     fetchBorrows(context) {
       axios({
         method: 'GET',
-        url: 'http://127.0.0.1:8000/api/borrow/getBorrows'
+        url: '/api/borrow/getBorrows'
       })
         .then((response) => {
           context.commit('setBorrows', response.data);
@@ -53,7 +52,7 @@ export default {
     fetchDelays(context) {
       axios({
         method: 'GET',
-        url: 'http://127.0.0.1:8000/api/borrow/getDelayed'
+        url: '/api/borrow/getDelayed'
       })
         .then((response) => {
           context.commit('setBorrows', response.data);
@@ -66,7 +65,7 @@ export default {
     fetchHistory(context) {
       axios({
         method: 'GET',
-        url: 'http://127.0.0.1:8000/api/borrow/history'
+        url: '/api/borrow/history'
       })
         .then((response) => {
           context.commit('setBorrows', response.data);
@@ -81,7 +80,7 @@ export default {
         axios({
           method: 'GET',
           // eslint-disable-next-line camelcase
-          url: `http://127.0.0.1:8000/api/borrow/showBorrow/${user_id}`
+          url: `/api/borrow/showBorrow/${user_id}`
         })
           .then((response) => {
             context.commit('setBorrows', response.data);
@@ -96,7 +95,7 @@ export default {
         axios({
           method: 'GET',
           // eslint-disable-next-line camelcase
-          url: `http://127.0.0.1:8000/api/borrow/showDelay/${user_id}`
+          url: `/api/borrow/showDelay/${user_id}`
         })
           .then((response) => {
             context.commit('setBorrows', response.data);
@@ -109,7 +108,7 @@ export default {
       fetchMonth(context) {
         axios({
           method: 'GET',
-          url: 'http://127.0.0.1:8000/api/borrow/monthly'
+          url: '/api/borrow/monthly'
         })
           .then((response) => {
             context.commit('setBorrows', response.data);

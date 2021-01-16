@@ -15,11 +15,11 @@ class Suggestion extends Model
      * @var array
      */
     protected $fillable = [
-        'type', 'description', 'user_id'
+        'type', 'description', 'reader_id'
     ];
 
-    public function users()
+    public function readers()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Reader::class, 'reader_id');
     }
 }

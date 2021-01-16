@@ -114,6 +114,12 @@ export default {
     colors: ['blue', 'green', 'orange', 'grey darken-1', 'red', 'yellow', 'pink']
   }),
   computed: {
+    types() {
+      return this.$store.getters.getTypes;
+    },
+    events() {
+      return this.$store.getters.getEvents;
+    },
     title () {
       const { start } = this;
       if (!start) {
@@ -127,12 +133,6 @@ export default {
       return this.$refs.calendar.getFormatter({
         timeZone: 'UTC', month: 'long'
       });
-    },
-    events() {
-      return this.$store.getters.getEvents;
-    },
-    types() {
-      return this.$store.getters.getTypes;
     },
     getEvents() {
       // eslint-disable-next-line vue/no-side-effects-in-computed-properties

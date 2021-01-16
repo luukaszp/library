@@ -6,8 +6,11 @@ use Illuminate\Http\Request;
 use App\Borrow;
 use App\Book;
 use App\User;
+use App\Reader;
+use App\Worker;
 use DB;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class BorrowController extends Controller
 {
@@ -24,7 +27,10 @@ class BorrowController extends Controller
 
         for($index = 0; $index < sizeof($request->book_id); $index++) {
             $borrow = new Borrow();
-            $borrow->user_id = $request->user_id;
+            $readerID = Reader::where('user_id', '=', $request->reader_id)->pluck('id');
+            $borrow->reader_id = $readerID[0];
+            $workerID = Worker::where('user_id', '=', Auth::user()->id)->pluck('id');
+            $borrow->worker_id = $workerID[0];
             $borrow->borrows_date = $request->borrows_date;
 
             $idOfBook = $request->book_id[$index];
@@ -39,6 +45,7 @@ class BorrowController extends Controller
 
             $book = Book::find($stringToInt);
             $book->amount = $book->amount-1;
+            $book->is_available = 0;
             $book->save();
         }
 
@@ -67,8 +74,9 @@ class BorrowController extends Controller
     public function getBorrows()
     {
         $data = DB::table('borrows')
-            ->where('borrows.is_returned', '=', '0')
-            ->join('users', 'users.id', '=', 'borrows.user_id')
+            ->where('borrows.when_returned', '=', null)
+            ->join('readers', 'readers.id', '=', 'borrows.reader_id')
+            ->join('users', 'users.id', '=', 'readers.user_id')
             ->join('books', 'books.id', '=', 'borrows.book_id')
             ->select(
                 'books.title', 'users.name', 'users.surname', 'borrows.borrows_date', 'borrows.returns_date',
@@ -87,12 +95,13 @@ class BorrowController extends Controller
     public function getPastBorrows()
     {
         $data = DB::table('borrows')
-            ->where('borrows.is_returned', '=', '1')
-            ->join('users', 'users.id', '=', 'borrows.user_id')
+            ->where('borrows.when_returned', '!=', null)
+            ->join('readers', 'readers.id', '=', 'borrows.reader_id')
+            ->join('users', 'users.id', '=', 'readers.user_id')
             ->join('books', 'books.id', '=', 'borrows.book_id')
             ->select(
                 'books.title', 'users.name', 'users.surname', 'borrows.borrows_date', 'borrows.returns_date',
-                'borrows.id', 'borrows.when_returned', 'borrows.delay', 'borrows.penalty'
+                'borrows.id', 'borrows.when_returned', 'borrows.delay', 'borrows.penalty', 'borrows.worker_id'
             )
             ->get()
             ->toArray();
@@ -110,18 +119,20 @@ class BorrowController extends Controller
 
         $data = DB::table('borrows')
             ->where('borrows.delay', '!=', 'null')
-            ->join('users', 'users.id', '=', 'borrows.user_id')
+            ->join('readers', 'readers.id', '=', 'borrows.reader_id')
+            ->join('users', 'users.id', '=', 'readers.user_id')
             ->join('books', 'books.id', '=', 'borrows.book_id')
             ->select(
                 'books.title', 'users.name', 'users.surname', 'borrows.delay', 'borrows.penalty'  
             )
             ->get()
             ->toArray();
+        
         return $data;
     }
 
     /**
-     * Check is there is any delayed book.
+     * Check if there is any delayed book.
      *
      * @return Response
      */
@@ -129,18 +140,31 @@ class BorrowController extends Controller
     {
         $returnDates = Borrow::pluck('returns_date');
         $todayDate = Carbon::now();
+        $howMany = 0;
 
         for($index = 0; $index < sizeof($returnDates); $index++) {
             $date = $returnDates[$index];
             $dateOfReturn = Carbon::createFromFormat('Y-m-d', $date)->toFormattedDateString();
             $differenceInDays[$index] = $todayDate->diffInDays($dateOfReturn, false);
+
+            if($index >= 1) {
+                if($returnDates[$index] !== $returnDates[$index - 1]) {
+                    $howMany = 0;
+                }
+            }
+
             if($differenceInDays[$index] < 0) {
-                $delay = $differenceInDays[$index] * -1;
-                $penalty = $differenceInDays[$index] * -0.5;
-                $borrow = Borrow::where('returns_date', '=', $returnDates[$index])->first();
-                $borrow->delay = $delay;
-                $borrow->penalty = $penalty;
-                $borrow->save();
+                $borrow = Borrow::where('returns_date', '=', $returnDates[$index])->skip($howMany)->first();
+
+                if($borrow->when_returned === null) {
+                    $delay = $differenceInDays[$index] * -1;
+                    $penalty = $differenceInDays[$index] * -0.5;
+                    $borrow->delay = $delay;
+                    $borrow->penalty = $penalty;
+                    $borrow->save();
+                }
+
+                $howMany++;
             }
         }
     }
@@ -156,18 +180,20 @@ class BorrowController extends Controller
         $borrow = Borrow::find($id);
         $todayDate = Carbon::now();
 
-        $borrow->is_returned = $request->is_returned;
         $borrow->when_returned = $todayDate;
 
         $book = Book::find($request->bookID);
         $book->amount = $book->amount+1;
+        $book->is_available = $request->is_available;
 
-        $user = User::find($borrow->user_id);
-        $user->can_extend = 1;
+        $reader = Reader::find($borrow->reader_id);
+        $reader->can_extend = 1;
 
-        $user->save();
+        $reader->save();
         $book->save();
         $borrow->save();
+
+        $this->checkDelay();
 
         if ($borrow->save()) {
             return response()->json(
@@ -231,7 +257,7 @@ class BorrowController extends Controller
     }
 
     /**
-     * Show borrowings for a specific user.
+     * Show borrowings for a specific reader.
      *
      * @param  Request $request
      * @return \Illuminate\Http\JsonResponse
@@ -239,13 +265,15 @@ class BorrowController extends Controller
      */
     public function showBorrow($id)
     {
+        $reader = Reader::where('user_id', '=', $id)->pluck('id');
         $borrow = DB::table('borrows')
-            ->where('borrows.user_id', '=', $id)
+            ->where('borrows.reader_id', '=', $reader[0])
             ->where('borrows.when_returned', '=', null)
             ->join('books', 'books.id', '=', 'borrows.book_id')
-            ->join('authors', 'authors.id', '=', 'books.author_id')
+            //->join('authors', 'authors.id', '=', 'author_book.author_id')
+            //->join('author_book', 'author_book.author_id', '=', 'authors.id')
             ->select(
-                'borrows.id', 'books.title', 'authors.name', 'authors.surname', 'borrows.borrows_date', 
+                'borrows.id', 'books.title', 'borrows.borrows_date', 
                 'borrows.returns_date'
             )
             ->get()
@@ -255,7 +283,7 @@ class BorrowController extends Controller
     }
 
     /**
-     * Show delays for a specific user.
+     * Show delays for a specific reader.
      *
      * @param  Request $request
      * @return \Illuminate\Http\JsonResponse
@@ -263,13 +291,15 @@ class BorrowController extends Controller
      */
     public function showDelay($id)
     {
+        $reader = Reader::where('user_id', '=', $id)->pluck('id');
         $delay = DB::table('borrows')
-            ->where('borrows.user_id', '=', $id)
+            ->where('borrows.reader_id', '=', $reader[0])
             ->where('borrows.delay', '!=', null)
             ->join('books', 'books.id', '=', 'borrows.book_id')
-            ->join('authors', 'authors.id', '=', 'books.author_id')
+            //->join('authors', 'authors.id', '=', 'author_book.author_id')
+            //->join('author_book', 'author_book.author_id', '=', 'authors.id')
             ->select(
-                'books.title', 'authors.name', 'authors.surname', 'borrows.delay', 'borrows.penalty'
+                'books.title', 'borrows.delay', 'borrows.penalty'
             )
             ->get()
             ->toArray();
@@ -288,13 +318,13 @@ class BorrowController extends Controller
     {
         $borrow = Borrow::find($id);
 
-        $user = User::find($borrow->user_id);
+        $reader = Reader::find($borrow->reader_id);
 
-        if ($user->can_extend === '0') {
+        if ($reader->can_extend === '0') {
             return response()->json(
                 [
                 'success' => false,
-                'message' => 'Sorry, user cannot extend the date any further.'
+                'message' => 'Sorry, reader cannot extend the date any further.'
                 ], 400
             );
         }
@@ -313,28 +343,28 @@ class BorrowController extends Controller
         $date = $date->addDays($daysToAdd);
         $borrow->returns_date = $date->toDateString();
 
-        $user->can_extend = 0;
-        $user->save();
+        $reader->can_extend = 0;
+        $reader->save();
 
         if ($borrow->save()) {
             return response()->json(
                 [
                 'success' => true,
-                'message' => 'Borrowing has been updated',
+                'message' => 'Borrowing has been extended by 7 days',
                 ]
             );
         } else {
             return response()->json(
                 [
                 'success' => false,
-                'message' => 'Sorry, borrowing could not be updated.',
+                'message' => 'Sorry, borrowing could not be expended any further.',
                 ], 500
             );
         }
     }
 
     /**
-     * Get amount of borrowings for all months (every month for one user)
+     * Get amount of borrowings for all months (every month for one reader)
      *
      * @param  Request $request
      * @return \Illuminate\Http\JsonResponse
@@ -342,7 +372,8 @@ class BorrowController extends Controller
      */
     public function getAmount($id)
     {
-        $borrow = Borrow::where('user_id', '=', $id)
+        $reader = Reader::where('user_id', '=', $id)->pluck('id');
+        $borrow = Borrow::where('reader_id', '=', $reader[0])
             ->select('borrows_date')
             ->get()
             ->groupBy(
@@ -355,7 +386,7 @@ class BorrowController extends Controller
             return response()->json(
                 [
                 'success' => false,
-                'message' => 'Sorry, user has no borrowings.'
+                'message' => 'Sorry, reader has no borrowings.'
                 ], 400
             );
         }
@@ -390,17 +421,18 @@ class BorrowController extends Controller
         $position = [];
         $status = [];
 
-        $firstDay = Carbon::now()->startOfMonth(); //current month
-        $lastDay = Carbon::now()->endOfMonth(); 
+        $firstDay = Carbon::now()->startOfMonth()->toDateString(); //current month
+        $lastDay = Carbon::now()->endOfMonth()->toDateString(); 
 
-        $lastMonthFDay = Carbon::now()->subMonth()->startOfMonth(); //previous month
-        $lastMonthLDay = Carbon::now()->subMonth()->endOfMonth();
+        $lastMonthFDay = Carbon::now()->subMonth()->startOfMonth()->toDateString(); //previous month
+        $lastMonthLDay = Carbon::now()->subMonth()->endOfMonth()->toDateString();
 
         //item.status = up, down, same in array - na podstawie pozycji ustalic status (-2, 0, +3)
 
         $previousMonth = DB::table('borrows')
             ->whereBetween('borrows.borrows_date', [$lastMonthFDay, $lastMonthLDay])
-            ->join('users', 'users.id', '=', 'borrows.user_id')
+            ->join('readers', 'readers.id', '=', 'borrows.reader_id')
+            ->join('users', 'users.id', '=', 'readers.user_id')
             ->select(
                 'users.name', 'users.surname', 'users.avatar', DB::raw('COUNT(borrows.borrows_date) as count')
             )
@@ -411,7 +443,8 @@ class BorrowController extends Controller
 
         $currentMonth = DB::table('borrows')
             ->whereBetween('borrows.borrows_date', [$firstDay, $lastDay])
-            ->join('users', 'users.id', '=', 'borrows.user_id')
+            ->join('readers', 'readers.id', '=', 'borrows.reader_id')
+            ->join('users', 'users.id', '=', 'readers.user_id')
             ->select(
                 'users.name', 'users.surname', 'users.avatar', DB::raw('COUNT(borrows.borrows_date) as count')
             )
@@ -420,35 +453,47 @@ class BorrowController extends Controller
             ->take(10)
             ->get();
 
-            for ($i = 0; $i < count($previousMonth); $i++) {
-                if ($previousMonth[$i]->surname !== $currentMonth[$i]->surname) {
-                    for ($j = 0; $j < count($previousMonth); $j++) {
-                        if ($previousMonth[$i]->surname === $currentMonth[$j]->surname) {
-                            $position[$i] = $i - $j;
-                        }
+
+        if($previousMonth->first() === null) {
+            return $currentMonth;
+        }
+
+        for ($i = 0; $i < count($previousMonth); $i++) {
+            if ($previousMonth[$i]->surname !== $currentMonth[$i]->surname) {
+                for ($j = 0; $j < count($currentMonth); $j++) {
+                    if ($previousMonth[$i]->surname === $currentMonth[$j]->surname) {
+                        $position[$j] = $i - $j;
+                        //$position[$i] = $i;
                     }
-                } else {
-                    $position[$i] = 0;
                 }
+            } else {
+                $position[$i] = 0;
             }
-
-            for ($i = 0; $i < count($position); $i++) {
-                if ($position[$i] > 0) {
-                    $status[$i] = 'down';
-                } else if ($position[$i] < 0) {
-                    $status[$i] = 'up';
-                } else {
-                    $status[$i] = 'same';
-                }
+        }
+        
+        for ($i = 0; $i <= key($position); $i++) {
+            if (!array_key_exists($i, $position)) {
+                $status[$i] = 'new';
+            } else if ($position[$i] > 0) {
+                $status[$i] = 'up';
+            } else if ($position[$i] < 0) {
+                $status[$i] = 'down';
+            } else {
+                $status[$i] = 'same';
             }
+        }
 
-            for ($i = 0; $i < count($currentMonth); $i++) {
-                $currentMonth[$i]->status = $status[$i];
-                if ($position[$i] < 0) {
-                    $position[$i] *= -1;
-                }
+        for ($i = 0; $i < count($status); $i++) {
+            $currentMonth[$i]->status = $status[$i];
+            if ($status[$i] === 'down') {
+                $position[$i] *= -1;
+            }
+            if (!array_key_exists($i, $position)) {
+                $currentMonth[$i]->position = 0;
+            } else {
                 $currentMonth[$i]->position = $position[$i];
             }
+        }
 
         return $currentMonth;
     }
@@ -462,9 +507,11 @@ class BorrowController extends Controller
      */
     public function getAuthors($id)
     {
-        $borrow = Borrow::where('user_id', '=', $id)
+        $reader = Reader::where('user_id', '=', $id)->pluck('id');
+        $borrow = Borrow::where('reader_id', '=', $reader[0])
             ->join('books', 'books.id', '=', 'borrows.book_id')
-            ->join('authors', 'authors.id', '=', 'books.author_id')
+            ->join('authors', 'authors.id', '=', 'author_book.author_id')
+            ->join('author_book', 'author_book.author_id', '=', 'authors.id')
             ->select('authors.name', 'authors.surname', DB::raw('COUNT(authors.name + authors.surname) as count'))
             ->groupBy('authors.surname')
             ->orderBy('count')
@@ -475,7 +522,7 @@ class BorrowController extends Controller
             return response()->json(
                 [
                 'success' => false,
-                'message' => 'Sorry, user has no borrowings.'
+                'message' => 'Sorry, reader has no borrowings.'
                 ], 400
             );
         }
@@ -492,7 +539,8 @@ class BorrowController extends Controller
      */
     public function getCategory($id)
     {
-        $borrow = Borrow::where('user_id', '=', $id)
+        $reader = Reader::where('user_id', '=', $id)->pluck('id');
+        $borrow = Borrow::where('reader_id', '=', $reader[0])
             ->join('books', 'books.id', '=', 'borrows.book_id')
             ->join('categories', 'categories.id', '=', 'books.category_id')
             ->select('categories.name', DB::raw('COUNT(categories.name) as count'))
@@ -505,7 +553,7 @@ class BorrowController extends Controller
             return response()->json(
                 [
                 'success' => false,
-                'message' => 'Sorry, user has no borrowings.'
+                'message' => 'Sorry, reader has no borrowings.'
                 ], 400
             );
         }

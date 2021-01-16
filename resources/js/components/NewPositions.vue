@@ -5,15 +5,14 @@
         </v-row>
         <v-row style="justify-content: center; text-align: center" v-if="books.length != 0">
             <v-col
-                cols="10"
+                cols="6"
             >
-                <swiper ref="mySwiper" :options="swiperOptions" style="height: 650px">
+                <swiper ref="mySwiper" :options="swiperOptions">
                     <swiper-slide
                         v-for="book in books"
                         :key="book.name"
-                        style="margin-left: 30px; margin-right: 30px"
                     >
-                        <v-card class="card" style="border: 1px solid black; width: 460px">
+                        <v-card class="card" style="border: 1px solid black;">
                             <v-card-title style="justify-content: center">
                                 <span v-text="book.title"></span>
                             </v-card-title>
@@ -22,7 +21,6 @@
 
                             <v-img
                                 v-bind:src="('../storage/' + book.cover)"
-                                height="300px"
                                 width="300px"
                                 style="display: inline-block"
                             >
@@ -37,7 +35,6 @@
                             </v-card-text>
                         </v-card>
                     </swiper-slide>
-                    <div class="swiper-pagination" slot="pagination"></div>
                     <div class="swiper-button-prev" slot="button-prev"></div>
                     <div class="swiper-button-next" slot="button-next"></div>
                 </swiper>
@@ -64,7 +61,7 @@ export default {
   data() {
     return {
       swiperOptions: {
-        slidesPerView: 2,
+        slidesPerView: 1,
         spaceBetween: 30,
         loop: true,
         pagination: {

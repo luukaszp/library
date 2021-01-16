@@ -18,8 +18,8 @@ class CreateSuggestionsTable extends Migration
                 $table->increments('id');
                 $table->string('type');
                 $table->string('description');
-                $table->unsignedInteger('user_id');
-                $table->foreign('user_id')->references('id')->on('users');
+                $table->unsignedInteger('reader_id');
+                $table->foreign('reader_id')->references('id')->on('readers');
                 $table->timestamps();
             }
         );

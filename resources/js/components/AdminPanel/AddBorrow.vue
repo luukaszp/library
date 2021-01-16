@@ -53,7 +53,14 @@
                                     required
                                     :rules="booksRules"
                                     multiple
-                            ></v-autocomplete>
+                            >
+                            <template slot="item" slot-scope="data">
+                                Tytuł: {{data.item.title}}, ISBN: {{data.item.isbn}}
+                            </template>
+                            <template slot="selection" slot-scope="data">
+                                {{data.item.title}}
+                            </template>
+                            </v-autocomplete>
 
                             <v-menu
                                     v-model="menu"
@@ -113,6 +120,7 @@ export default {
       valid: false,
       value: true,
       selectedReader: '',
+      isbn: '',
       selectedBooks: [],
       date: '',
       menu: false,
@@ -125,7 +133,10 @@ export default {
       ],
       dateRules: [
         (v) => !!v || 'Wymagane jest wybranie daty!'
-      ]
+      ],
+      isbnRules: [
+        (v) => !!v || 'Pole jest wymagane!'
+      ],
     };
   },
 
@@ -133,11 +144,12 @@ export default {
     validate() {
       if (this.$refs.form.validate()) {
         this.$store.dispatch('borrowBooks', {
-          user_id: this.selectedReader,
+          reader_id: this.selectedReader,
           book_id: this.selectedBooks,
-          borrows_date: this.date
+          borrows_date: this.date,
+          isbn: this.isbn
         })
-        .then(() => {
+        .then((response) => {
             const Toast = this.$swal.mixin({
               toast: true,
               position: 'top-end',
@@ -155,6 +167,7 @@ export default {
             });
           })
           .catch((error) => {
+            this.$swal('Błędny ISBN', 'Podano zły numer ISBN. Spróbuj ponownie.', 'error');
             console.log(error);
           });
       }

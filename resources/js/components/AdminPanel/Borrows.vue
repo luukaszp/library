@@ -96,8 +96,8 @@
       <p class="pt-5">Brak wypożyczeń</p>
     </template>
 
-    <template v-slot:[`item.is_returned`]="{ item }">
-      <v-simple-checkbox v-model="item.is_returned" @click="returnBook(item)"></v-simple-checkbox>
+    <template v-slot:[`item.is_available`]="{ item }">
+      <v-simple-checkbox v-model="item.is_available" @click="returnBook(item)"></v-simple-checkbox>
     </template>
 
     <template v-slot:[`item.returns_date`]="{ item }">
@@ -126,7 +126,7 @@ export default {
       { text: 'Czytelnik', value: 'fullName' },
       { text: 'Wypożyczenie', value: 'borrows_date' },
       { text: 'Termin zwrotu', value: 'returns_date' },
-      { text: 'Potwierdź oddanie', value: 'is_returned' },
+      { text: 'Potwierdź oddanie', value: 'is_available' },
       { text: 'Akcje', value: 'actions', sortable: false }
     ],
     editedIndex: -1,
@@ -215,7 +215,7 @@ export default {
       }).then((result) => {
         if (result.value) {
           axios.put(`/api/borrow/returnBook/${item.id}`, {
-            is_returned: item.is_returned,
+            is_available: item.is_available,
             bookID: item.bookID
           });
           this.$swal('Zatwierdzono', 'Pomyślnie zwrócono książkę do biblioteki', 'success');

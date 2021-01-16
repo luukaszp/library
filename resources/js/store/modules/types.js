@@ -13,7 +13,7 @@ export default {
     fetchTypes(context) {
       axios({
         method: 'GET',
-        url: 'http://127.0.0.1:8000/api/calendar/type/getTypes'
+        url: '/api/calendar/type/getTypes'
       })
         .then((response) => {
           context.commit('setTypes', response.data);

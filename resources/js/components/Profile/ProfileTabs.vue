@@ -54,19 +54,14 @@ export default {
             icon: 'mdi-chart-bar'
         },
         {
-            title: 'ULUBIONE',
-            route: `/profile/${this.user_id}/favourites`,
+            title: 'OBSERWOWANI',
+            route: `/profile/${this.user_id}/follows`,
             icon: 'mdi-heart'
         },
         {
             title: 'ZASUGERUJ',
             route: `/profile/${this.user_id}/suggestions`,
             icon: 'mdi-lightbulb-on'
-        },
-        {
-            title: 'ANKIETY',
-            route: `/profile/${this.user_id}/questionnaires`,
-            icon: 'mdi-comment-question-outline'
         }
         ]
   }},

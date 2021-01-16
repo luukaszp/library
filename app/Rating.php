@@ -15,7 +15,7 @@ class Rating extends Model
      * @var array
      */
     protected $fillable = [
-        'book_id', 'user_id', 'rate'
+        'book_id', 'user_id', 'rate', 'opinion'
     ];
 
     /**
@@ -27,6 +27,6 @@ class Rating extends Model
 
     public function books()
     {
-        return $this->belongsTo(Book::class);
+        return $this->belongsTo(Book::class, 'book_id');
     }
 }

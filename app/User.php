@@ -16,7 +16,7 @@ class User extends Authenticatable implements JWTSubject
      * @var array
      */
     protected $fillable = [
-        'name', 'surname', 'email', 'card_number', 'id_number', 'password',
+        'name', 'surname', 'email', 'password',
     ];
 
     /**
@@ -34,9 +34,7 @@ class User extends Authenticatable implements JWTSubject
      * @var array
      */
     protected $casts = [
-        'email_verified_at' => 'datetime',
-        'is_admin' => 'boolean',
-        'is_worker' => 'boolean',
+        'email_verified_at' => 'datetime'
     ];
 
     /**
@@ -60,33 +58,17 @@ class User extends Authenticatable implements JWTSubject
             'email' => $this->email,
             'card_number' => $this->card_number,
             'id_number' => $this->id_number,
-            'is_admin' => $this->is_admin,
-            'is_worker' => $this->is_worker,
+            'is_admin' => $this->is_admin
             ];
     }
 
-    public function borrows()
+    public function readers()
     {
-        return $this->hasMany(Borrow::class);
+        return $this->hasOne(Reader::class);
     }
 
-    public function opinions()
+    public function workers()
     {
-        return $this->hasMany(Opinion::class);
-    }
-
-    public function favouriteAuthors()
-    {
-        return $this->hasOne(favouriteAuthors::class);
-    }
-
-    public function favouriteBooks()
-    {
-        return $this->hasOne(favouriteBooks::class);
-    }
-
-    public function suggestions()
-    {
-        return $this->hasMany(Suggestion::class);
+        return $this->hasOne(Worker::class);
     }
 }

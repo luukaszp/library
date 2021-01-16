@@ -56,23 +56,23 @@
                                     :rules="titleRules"
                             ></v-text-field>
 
-                            <v-text-field
+                            <v-textarea
                                     class="pa-5 pb-0 pt-0"
                                     v-model="isbn"
-                                    label="ISBN"
+                                    label="ISBN (ENTER jako separator)"
                                     outlined
                                     required
                                     :rules="isbnRules"
-                            ></v-text-field>
+                            ></v-textarea>
 
-                            <v-text-field
+                            <v-textarea
                                     class="pa-5 pb-0 pt-0"
                                     v-model="description"
                                     label="Opis"
                                     outlined
                                     required
                                     :rules="descriptionRules"
-                            ></v-text-field>
+                            ></v-textarea>
 
                             <v-text-field
                                     class="pa-5 pb-0 pt-0"
@@ -81,15 +81,6 @@
                                     outlined
                                     required
                                     :rules="publishYearRules"
-                            ></v-text-field>
-
-                            <v-text-field
-                                    class="pa-5 pb-0 pt-0"
-                                    v-model="amount"
-                                    label="Ilość"
-                                    outlined
-                                    required
-                                    :rules="amountRules"
                             ></v-text-field>
 
                             <v-autocomplete
@@ -103,6 +94,7 @@
                                     outlined
                                     required
                                     :rules="authorRules"
+                                    multiple
                             >
                             <template slot="item" slot-scope="data">
                                 {{data.item.name}} {{data.item.surname}}
@@ -181,9 +173,8 @@ export default {
       isbn: '',
       description: '',
       publish_year: '',
-      amount: '',
       cover: [],
-      selectedAuthor: '',
+      selectedAuthor: [],
       selectedCategory: '',
       selectedPublisher: '',
       titleRules: [
@@ -191,14 +182,7 @@ export default {
         (v) => v.length <= 60 || 'Tytuł jest za długi!'
       ],
       isbnRules: [
-        (v) => !!v || 'Pole jest wymagane!',
-        (v) => /^\d+$/.test(v) || 'Numer ISBN musi być prawidłowy',
-        (v) => v.length === 13 || 'Numer ISBN powinien zawierać 13 cyfr'
-      ],
-      amountRules: [
-        (v) => !!v || 'Pole jest wymagane!',
-        (v) => /^\d+$/.test(v) || 'Ilość musi być prawidłowa',
-        (v) => v > 0 || 'Ilość książek powinna być większa od 0'
+        (v) => !!v || 'Pole jest wymagane!'
       ],
       descriptionRules: [
         (v) => !!v || 'Pole jest wymagane!',
@@ -235,7 +219,6 @@ export default {
         formData.append('isbn', this.isbn);
         formData.append('description', this.description);
         formData.append('publish_year', this.publish_year);
-        formData.append('amount', this.amount);
         formData.append('author', this.selectedAuthor);
         formData.append('category', this.selectedCategory);
         formData.append('publisher', this.selectedPublisher);
@@ -252,11 +235,11 @@ export default {
               this.$swal('Dodano', 'Pomyślnie dodano książkę do bazy bibliotecznej!', 'success');
               this.$router.push('/admin-panel/books');
             } else {
-              this.$swal('Błąd', 'Książka o podanych danych już isnieje', 'error');
+              this.$swal('Błąd', 'Coś poszło nie tak.', 'error');
             }
           })
           .catch((error) => {
-            this.$swal('Błędny ISBN', 'Książka o podanym ISBN już istnieje!', 'error');
+            this.$swal('Błędne informacje', 'Nie można dodać książki. Spróbuj ponownie.', 'error');
             console.log(error);
           });
       }

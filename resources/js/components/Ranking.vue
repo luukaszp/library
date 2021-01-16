@@ -32,6 +32,11 @@
                                 <strong style="margin-top: 3px; margin-left: 5px" v-text="item.position"></strong>
                             </v-list-item-icon>
 
+                             <v-list-item-icon v-if="item.status === 'new'">
+                                <v-icon color="yellow">mdi-star</v-icon>
+                                <strong style="margin-top: 3px; margin-left: 5px" v-text="item.position"></strong>
+                            </v-list-item-icon>
+
                             <v-list-item-avatar>
                                 <v-img :src="'../storage/' + item.avatar"></v-img>
                             </v-list-item-avatar>

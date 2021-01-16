@@ -25,9 +25,6 @@
                   <v-form v-model="valid" ref="form">
                     <v-row>
                       <v-col cols="12" sm="6" md="4">
-                        <v-text-field v-model="editedItem.is_worker" :rules="roleRules" label="Pracownik"></v-text-field>
-                      </v-col>
-                      <v-col cols="12" sm="6" md="4">
                         <v-text-field v-model="editedItem.is_admin" :rules="roleRules" label="Admin"></v-text-field>
                       </v-col>
                     </v-row>
@@ -77,7 +74,6 @@ export default {
       { text: 'Imię', value: 'name' },
       { text: 'Nazwisko', value: 'surname' },
       { text: 'E-mail', value: 'email' },
-      { text: 'Pracownik', value: 'is_worker' },
       { text: 'Admin', value: 'is_admin' },
       { text: 'Akcje', value: 'actions', sortable: false }
     ],
@@ -87,7 +83,6 @@ export default {
       name: '',
       surname: '',
       email: '',
-      is_worker: '',
       is_admin: ''
     },
     defaultItem: {
@@ -95,7 +90,6 @@ export default {
       name: '',
       surname: '',
       email: '',
-      is_worker: '',
       is_admin: ''
     },
     roleRules: [

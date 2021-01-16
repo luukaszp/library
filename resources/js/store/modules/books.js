@@ -13,7 +13,20 @@ export default {
     fetchBooks(context) {
       axios({
         method: 'GET',
-        url: 'http://127.0.0.1:8000/api/book/getBooks'
+        url: '/api/book/getBooks'
+      })
+        .then((response) => {
+          context.commit('setBooks', response.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+
+    fetchBooksISBN(context) {
+      axios({
+        method: 'GET',
+        url: '/api/book/getBooks/isbn'
       })
         .then((response) => {
           context.commit('setBooks', response.data);

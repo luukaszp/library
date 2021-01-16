@@ -13,3 +13,4 @@ yarn-error.log
 /.vscode
 LibraryDatabase.sqlite
 NOTATKI.txt
+.idea

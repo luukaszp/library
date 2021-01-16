@@ -1,12 +1,12 @@
 <template>
 <v-container style="justify-content: center; display: flex">
-  <v-card style="width: 1000px">
-      <v-row style="justify-content: center; margin-left: 10px; margin-right: 10px" v-for="item in books" :key="item.name">
+  <v-card>
+      <v-row style="justify-content: center; margin-left: 10px; margin-right: 10px">
         <v-col cols="auto">
           <v-img
-            height="300"
-            width="300"
-            :src="('../storage/' + item.cover)"
+            width="200px"
+            style="margin-top: 15px"
+            :src="('../storage/' + books.cover)"
           ></v-img>
         </v-col>
 
@@ -21,15 +21,15 @@
              style="text-align: left;"
           >
             <v-col>
-              <h1 v-text="item.title" style="font-weight: bold; text-align: center" class="mr-2"> </h1>
+              <h1 v-text="books.title" style="font-weight: bold; text-align: center" class="mr-2"> </h1>
             </v-col>
 
             <v-col>
-              <span>Autor: </span><router-link :to="{ name: 'authorview', params: { author_id: item.authorID } }" style="text-decoration: none; color: grey"><span style="font-weight: bold" v-text="item.authorName + ' ' + item.surname" class="mr-2"></span></router-link>
+              <span v-if="books.authors.id">Autor: </span><router-link :to="{ name: 'authorview', params: { author_id: books.authors.id } }" style="text-decoration: none; color: grey"><span style="font-weight: bold" v-text="books.authors.name + ' ' + books.authors.surname" class="mr-2"></span></router-link>
             </v-col>
 
             <v-col>
-              <span>Kategoria: </span><span style="font-weight: bold" v-text="item.categoryName" class="mr-2"></span>
+              <span>Kategoria: </span><span style="font-weight: bold" v-text="books.categories.name" class="mr-2"></span>
             </v-col>
 
             <v-col>
@@ -50,22 +50,12 @@
 
         <v-divider vertical style="margin-left: 10px; margin-right: 10px"></v-divider>
 
-        <v-col>
-            <v-col>
-                <span style="font-weight: bold">Opis: </span><span v-text="item.description" class="mr-2"></span>
+        <v-col cols="auto">
+            <v-col style="padding-top: 20px">
+                <span style="font-weight: bold">Opis: </span><span v-text="books.description" class="mr-2"></span>
             </v-col>
             <v-col>
-                <h3>Status: <v-chip :color="getColor(item.amount)" dark>{{ status }}</v-chip></h3>
-            </v-col>
-            <v-col>
-                <v-btn
-                outlined
-                color="indigo"
-                @click="addFavourite()"
-                >
-                    DODAJ DO ULUBIONYCH
-                    <v-icon style="padding-left: 10px" color="#FFD700">mdi-star</v-icon>
-                </v-btn>
+                <h3>Status: <v-chip :color="getColor(books.amount)" dark>{{ status }}</v-chip></h3>
             </v-col>
         </v-col>
       </v-row>
@@ -80,7 +70,6 @@
 
 <script>
 /*eslint-disable*/
-import axios from 'axios';
 import BookRating from './BookRating.vue';
 
 export default {
@@ -100,9 +89,6 @@ export default {
     },
     averages() {
       return this.$store.getters.getAverages;
-    },
-    authId() {
-      return this.$store.getters.authId;
     }
   },
 
@@ -113,57 +99,16 @@ export default {
 
   methods: {
     getColor (amount) {
-      if (amount === 0) {
+      if (amount === '0') {
         this.status = 'Brak pozycji';
         return 'red';
       }
-      if (amount <= 5) {
+      if (amount === '1' || amount === '2') {
         this.status = 'Ostatnie sztuki!';
         return 'orange';
       }
       this.status = 'Dostępne';
       return 'green';
-    },
-
-    addFavourite() {
-      axios.post('/api/favourite/addBook', {
-        user_id: this.authId,
-        book_id: parseInt(this.book_id)
-      })
-        .then((response) => {
-          const Toast = this.$swal.mixin({
-            toast: true,
-            position: 'top-end',
-            showConfirmButton: false,
-            timer: 3000,
-            didOpen: (toast) => {
-              toast.addEventListener('mouseenter', this.$swal.stopTimer);
-              toast.addEventListener('mouseleave', this.$swal.resumeTimer);
-            }
-          });
-
-          Toast.fire({
-            icon: 'success',
-            title: 'Książka została dodana do listy ulubionych!'
-          });
-        })
-        .catch((error) => {
-          const Toast = this.$swal.mixin({
-            toast: true,
-            position: 'top-end',
-            showConfirmButton: false,
-            timer: 3000,
-            didOpen: (toast) => {
-              toast.addEventListener('mouseenter', this.$swal.stopTimer);
-              toast.addEventListener('mouseleave', this.$swal.resumeTimer);
-            }
-          });
-
-          Toast.fire({
-            icon: 'error',
-            title: 'Książka już istnieje na liście ulubionych!'
-          });
-        });
     }
   }
 };

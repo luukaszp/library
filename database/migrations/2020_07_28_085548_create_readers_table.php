@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateFavouriteBooksTable extends Migration
+class CreateReadersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,14 +14,13 @@ class CreateFavouriteBooksTable extends Migration
     public function up()
     {
         Schema::create(
-            'favourite_books', function (Blueprint $table) {
+            'readers', function (Blueprint $table) {
                 $table->increments('id');
-                $table->unsignedInteger('book_id');
+                $table->string('card_number')->unique()->nullable();
+                $table->string('password')->nullable();
+                $table->boolean('can_extend')->default(1);
                 $table->unsignedInteger('user_id');
-                $table->foreign('book_id')->references('id')->on('books')
-                    ->onDelete('cascade');
-                $table->foreign('user_id')->references('id')->on('users')
-                    ->onDelete('cascade');
+                $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
                 $table->timestamps();
             }
         );
@@ -34,6 +33,6 @@ class CreateFavouriteBooksTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('favourite_books');
+        Schema::dropIfExists('readers');
     }
 }

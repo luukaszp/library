@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid style="margin-left: 10px; margin-right: 10px">
+  <v-container>
     <v-data-iterator
       :items="books"
       :items-per-page.sync="itemsPerPage"
@@ -14,7 +14,6 @@
           dark
           color="blue darken-3"
           class="mb-1"
-          style="margin-right: 15px"
         >
           <v-text-field
             v-model="search"
@@ -63,17 +62,17 @@
       </template>
 
       <template v-slot:default="props">
-        <v-row class="fill-height overflow-auto" id="container">
+        <v-row>
             <v-col
             v-for="item in props.items"
             :key="item.name"
             cols="12"
             sm="6"
             md="4"
-            lg="2"
-            class="py-2"
+            lg="3"
+            style="display: flex; justify-content: center"
             >
-            <v-card class="card fill-height">
+            <v-card>
                 <v-card-title style="justify-content: center">
                     <span v-text="item.title"></span>
                 </v-card-title>
@@ -81,6 +80,7 @@
                 <v-divider></v-divider>
 
                 <v-img
+                style="width: 300px"
                 v-bind:src="('../storage/' + item.cover)"
                 >
                 </v-img>
@@ -92,7 +92,9 @@
                     <p>Kategoria: <span v-text="item.categoryName" class="mr-2"></span></p>
                     <p>Dostępna ilość książek: <v-chip v-text="item.amount" :color="getColor(item.amount)" dark></v-chip></p>
                     <v-divider></v-divider>
-                    <router-link :to="{ name: 'bookview', params: { book_id: item.id } }"><v-btn outlined style="border: 0px; text-decoration: none"><v-card-title style="color: blue; font-weight: bold">Zobacz więcej</v-card-title></v-btn></router-link>
+                    <template v-if="item.id">
+                        <router-link :to="{ name: 'bookview', params: { book_id: item.id } }"><v-btn outlined style="border: 0px; text-decoration: none"><v-card-title style="color: blue; font-weight: bold">Zobacz więcej</v-card-title></v-btn></router-link>
+                    </template>
                 </v-card-text>
             </v-card>
             </v-col>
@@ -162,50 +164,46 @@
 
 <script>
 /*eslint-disable*/
-import axios from 'axios';
-
 export default {
   data: () => ({
     itemsPerPageArray: [4, 8, 12],
-        search: '',
-        filter: {},
-        sortDesc: false,
-        page: 1,
-        itemsPerPage: 4,
-        sortBy: 'title',
-        keys: [
-          'Title',
-          'authorName',
-          'surname',
-          'categoryName',
-          'amount',
-        ],
+    search: '',
+    filter: {},
+    sortDesc: false,
+    page: 1,
+    books: [],
+    itemsPerPage: 4,
+    sortBy: 'title',
+    keys: [
+      'Title',
+      'authorName',
+      'surname',
+      'categoryName',
+      'amount'
+    ],
     items: [
       {
-       title: '',
-       authorName: '',
-       surname: '',
-       categoryName: '',
-       isbn: '',
-       description: '',
-       publish_year: '',
-       publisherName: '',
-       amount: '',
-       cover: '',
-      },
-    ],
+        title: '',
+        authorName: '',
+        surname: '',
+        categoryName: '',
+        isbn: '',
+        description: '',
+        publish_year: '',
+        publisherName: '',
+        amount: '',
+        cover: ''
+      }
+    ]
   }),
 
   computed: {
-    books() {
-        return this.$store.getters.getBooks;
-    },
     numberOfPages () {
-        return Math.ceil(this.items.length / this.itemsPerPage)
+      return Math.ceil(this.books.length / this.itemsPerPage);
     },
     filteredKeys () {
-        return this.keys.filter(key => key !== `Name`)
-    },
+      return this.keys.filter((key) => key !== 'Name');
+    }
   },
 
   watch: {
@@ -214,24 +212,32 @@ export default {
     }
   },
 
-  created () {
-    this.$store.dispatch('fetchBooks', {});
-  },
-
   methods: {
+    setData(books) {
+      this.books = books;
+    }, 
     nextPage () {
-        if (this.page + 1 <= this.numberOfPages) this.page += 1
-      },
+      if (this.page + 1 <= this.numberOfPages) this.page += 1;
+    },
     formerPage () {
-        if (this.page - 1 >= 1) this.page -= 1
+      if (this.page - 1 >= 1) this.page -= 1;
     },
     updateItemsPerPage (number) {
-        this.itemsPerPage = number
+      this.itemsPerPage = number;
     },
     getColor (amount) {
-      if (amount === 0) return 'red';
+      if (amount === '0') return 'red';
+      if (amount === '1' || amount === '2') return 'orange';
       return 'green';
     }
-  }
+  },
+
+  beforeRouteEnter (to, from, next) {
+    axios
+     .get('/api/book/getBooks')
+     .then(response => {
+       next(vm => vm.setData(response.data));
+   });
+  },
 };
 </script>
