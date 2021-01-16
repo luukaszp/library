@@ -4,7 +4,7 @@
             <v-row class="justify-center justify-md-center align-center">
                 <v-col
                         cols="12"
-                        md="4"
+                        md="6"
                 >
 
                     <v-card
@@ -88,16 +88,16 @@
 
                                 <v-btn
                                         :disabled="!valid"
-                                        color=brown
-                                        class="mr-5 mb-6"
+                                        color=#008D18
+                                        class="white--text font-weight-bold mr-5 mb-6"
                                         @click="validate"
                                 >
                                     Wypożycz książkę
                                 </v-btn>
 
                                 <v-btn
-                                        color=orange
-                                        class="mr-5 mb-6"
+                                        color=#808080
+                                        class="white--text font-weight-bold mr-5 mb-6"
                                         @click="reset"
                                 >
                                     Wyczyść dane

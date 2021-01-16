@@ -25,7 +25,7 @@
             </v-col>
 
             <v-col>
-              <span v-if="books.authors.id">Autor: </span><router-link :to="{ name: 'authorview', params: { author_id: books.authors.id } }" style="text-decoration: none; color: grey"><span style="font-weight: bold" v-text="books.authors.name + ' ' + books.authors.surname" class="mr-2"></span></router-link>
+              <span v-if="books.authors.id">Autor: </span><router-link :to="{ name: 'authorview', params: { author_id: books.authors.id } }" style="text-decoration: none; color: #008D18"><span style="font-weight: bold" v-text="books.authors.name + ' ' + books.authors.surname" class="mr-2"></span></router-link>
             </v-col>
 
             <v-col>

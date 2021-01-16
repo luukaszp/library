@@ -70,6 +70,8 @@ Route::group(
         Route::delete('follow/delete/{id}/author', 'FollowController@removeAuthor');
 
         Route::post('suggestions/add', 'SuggestionController@addSuggestion');
+
+        Route::delete('reader/delete/{id}', 'ReaderController@deleteReader');
     }
 );
 
@@ -90,7 +92,6 @@ Route::group(
 
         Route::get('user/getReaders', 'ReaderController@getReaders');
         Route::put('reader/edit/{id}', 'ReaderController@editReader');
-        Route::delete('reader/delete/{id}', 'ReaderController@deleteReader');
 
         Route::put('category/edit/{id}', 'CategoryController@editCategory');
         Route::post('category/add', 'CategoryController@addCategory');

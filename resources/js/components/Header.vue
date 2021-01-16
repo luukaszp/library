@@ -5,7 +5,7 @@
                         tile
                 >
                     <v-app-bar
-                            color=#4E1D04
+                            color=#A53D09
                             dark
                     >
                         <router-link to="/">
@@ -27,7 +27,8 @@
                             <template v-slot:activator="{ attrs, on }">
                                 <v-btn
                                 outlined
-                                class="white--text ma-8"
+                                rounded
+                                class="white--text ma-8 font-weight-bold"
                                 v-bind="attrs"
                                 v-on="on"
                                 :to="item.route"

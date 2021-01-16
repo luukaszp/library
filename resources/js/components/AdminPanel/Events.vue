@@ -26,7 +26,7 @@
                         <v-spacer></v-spacer>
                         <v-dialog v-model="addEventDialog" max-width="350px">
                             <template v-slot:activator="{ on }">
-                                <v-btn color="#3eb4a7" dark class="mb-2" v-on="on">Nowe wydarzenie</v-btn>
+                                <v-btn color="#008D18" dark class="mb-2" v-on="on">Nowe wydarzenie</v-btn>
                             </template>
                             <v-card>
                                 <v-card-title>

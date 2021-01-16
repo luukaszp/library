@@ -12,7 +12,7 @@
       <template v-slot:header>
         <v-toolbar
           dark
-          color="blue darken-3"
+          color="#008D18"
           class="mb-1"
         >
           <v-text-field
@@ -43,7 +43,7 @@
               <v-btn
                 large
                 depressed
-                color="blue"
+                color="#008D18"
                 :value="false"
               >
                 <v-icon>mdi-arrow-up</v-icon>
@@ -51,7 +51,7 @@
               <v-btn
                 large
                 depressed
-                color="blue"
+                color="#008D18"
                 :value="true"
               >
                 <v-icon>mdi-arrow-down</v-icon>
@@ -93,7 +93,7 @@
                     <p>Dostępna ilość książek: <v-chip v-text="item.amount" :color="getColor(item.amount)" dark></v-chip></p>
                     <v-divider></v-divider>
                     <template v-if="item.id">
-                        <router-link :to="{ name: 'bookview', params: { book_id: item.id } }"><v-btn outlined style="border: 0px; text-decoration: none"><v-card-title style="color: blue; font-weight: bold">Zobacz więcej</v-card-title></v-btn></router-link>
+                        <router-link :to="{ name: 'bookview', params: { book_id: item.id } }"><v-btn outlined style="border: 0px; text-decoration: none"><v-card-title style="color: #008D18; font-weight: bold">Zobacz więcej</v-card-title></v-btn></router-link>
                     </template>
                 </v-card-text>
             </v-card>
@@ -109,7 +109,7 @@
               <v-btn
                 dark
                 text
-                color="primary"
+                color="#008D18"
                 class="ml-2"
                 v-bind="attrs"
                 v-on="on"
@@ -140,7 +140,7 @@
           <v-btn
             fab
             dark
-            color="blue darken-3"
+            color="#008D18"
             class="mr-1"
             @click="formerPage"
           >
@@ -149,7 +149,7 @@
           <v-btn
             fab
             dark
-            color="blue darken-3"
+            color="#008D18"
             class="ml-1"
             @click="nextPage"
             style="margin-right: 15px"

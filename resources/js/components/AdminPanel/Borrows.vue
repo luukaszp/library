@@ -28,7 +28,7 @@
         <v-spacer></v-spacer>
           <template>
             <v-btn
-              color="primary"
+              color="#008D18"
               dark
               class="mb-2"
               :to="'/add-borrow'"

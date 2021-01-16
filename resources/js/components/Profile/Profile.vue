@@ -12,8 +12,8 @@
                 >
                 <div class="upload" style="padding-top: 15px" v-if="this.$route.params.user_id.toString() === this.authId.toString()">
                     <v-btn
-                        color="primary"
-                        class="text-none pa-5 pb-0 pt-0"
+                        color="#008D18"
+                        class="white--text text-none pa-5 pb-0 pt-0"
                         rounded
                         depressed
                         :loading="isSelecting"

@@ -1,6 +1,6 @@
 <template>
     <v-row style="justify-content: center; text-align: center">
-        <v-col md=12 v-if="this.follows">
+        <v-col md=12 style="padding-top: 25px;" v-if="this.follows">
             <h1>Obserwowani autorzy</h1>
             <v-list-item :items="follows">
                 <v-list-item-content>
@@ -14,7 +14,7 @@
                 </v-list-item-action>
             </v-list-item>
         </v-col>
-        <v-col v-else>
+        <v-col v-else style="padding-top: 25px;">
             <h1>Obserwowani autorzy: brak</h1>
         </v-col>
     </v-row>

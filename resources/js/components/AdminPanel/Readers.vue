@@ -26,7 +26,7 @@
         <v-spacer></v-spacer>
           <template>
             <v-btn
-              color="primary"
+              color="#008D18"
               dark
               class="mb-2"
               :to="'/register-reader'"
@@ -61,8 +61,8 @@
 
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" text @click="close">Anuluj</v-btn>
-                <v-btn color="blue darken-1" text @click="addReader" :disabled="!valid">Zapisz</v-btn>
+                <v-btn color="#008D18" text @click="close">Anuluj</v-btn>
+                <v-btn color="#008D18" text @click="addReader" :disabled="!valid">Zapisz</v-btn>
                 </v-card-actions>
             </v-card>
           </v-dialog>
@@ -99,6 +99,7 @@ export default {
     editReaderDialog: false,
     valid: false,
     search: '',
+    readers: [],
     headers: [
       {
         text: 'Numer karty bibliotecznej',
@@ -146,9 +147,6 @@ export default {
   computed: {
     formTitle () {
       return this.editedIndex === -1 ? 'Edytuj dane czytelnika' : 'Edytuj dane czytelnika';
-    },
-    readers() {
-      return this.$store.getters.getReaders;
     }
   },
 
@@ -158,11 +156,11 @@ export default {
     }
   },
 
-  created () {
-    this.$store.dispatch('fetchReaders', {});
-  },
-
   methods: {
+    setData(readers) {
+      this.readers = readers;
+    },
+
     editReader (item) {
       this.editedIndex = this.readers.indexOf(item);
       this.editedItem = { ...item };
@@ -180,7 +178,10 @@ export default {
             email: this.editedItem.email
           });
         }
-        this.$store.dispatch('fetchReaders', {});
+        axios.get('/api/user/getReaders')
+        .then(response => {
+            this.readers = response.data
+        });
         this.close();
       }
     },
@@ -211,6 +212,14 @@ export default {
         this.editedIndex = -1;
       });
     }
+  },
+
+  beforeRouteEnter (to, from, next) {
+    axios
+     .get('/api/user/getReaders')
+     .then(response => {
+       next(vm => vm.setData(response.data));
+   });
   }
 };
 </script>

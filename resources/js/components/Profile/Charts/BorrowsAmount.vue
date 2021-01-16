@@ -1,9 +1,6 @@
 <template>
-  <div v-if="this.series">
+  <div>
       <apexchart ref="realtimeChart" width="800" type="bar" :options="options" :series="series"></apexchart>
-  </div>
-  <div v-else>
-      <h1>Brak danych!</h1>
   </div>
 </template>
 
@@ -43,9 +40,8 @@ export default {
 
   created () {
     axios
-      .get(`api/borrow/getAmount/${this.user_id}`)
+      .get(`/api/borrow/getAmount/${this.user_id}`)
       .then((response) => {
-        console.log(response);
         for (let i = 1; i <= 12; i++) {
           this.series[0].data.push(response.data[i]);
         }

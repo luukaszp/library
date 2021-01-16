@@ -4,7 +4,7 @@
             <v-row class="justify-center justify-md-center align-center">
                 <v-col
                         cols="12"
-                        md="4"
+                        md="6"
                 >
 
                     <v-card
@@ -23,8 +23,8 @@
 
                         <div class="upload">
                             <v-btn
-                                color="primary"
-                                class="text-none pa-5 pb-0 pt-0"
+                                color="#008D18"
+                                class="white--text text-none pa-5 pb-0 pt-0"
                                 rounded
                                 depressed
                                 :loading="isSelecting"
@@ -134,16 +134,16 @@
 
                                 <v-btn
                                         :disabled="this.cover != null && !valid"
-                                        color=brown
-                                        class="mr-5 mb-6"
+                                        color=#008D18
+                                        class="white--text font-weight-bold mr-5 mb-6"
                                         @click="validate"
                                 >
                                     Dodaj książkę
                                 </v-btn>
 
                                 <v-btn
-                                        color=orange
-                                        class="mr-5 mb-6"
+                                        color=#808080
+                                        class="white--text font-weight-bold mr-5 mb-6"
                                         @click="reset"
                                 >
                                     Wyczyść dane

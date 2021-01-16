@@ -44,7 +44,6 @@ class BorrowController extends Controller
             $borrow->save();
 
             $book = Book::find($stringToInt);
-            $book->amount = $book->amount-1;
             $book->is_available = 0;
             $book->save();
         }
@@ -183,7 +182,6 @@ class BorrowController extends Controller
         $borrow->when_returned = $todayDate;
 
         $book = Book::find($request->bookID);
-        $book->amount = $book->amount+1;
         $book->is_available = $request->is_available;
 
         $reader = Reader::find($borrow->reader_id);

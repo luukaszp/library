@@ -83,16 +83,16 @@
 
                                 <v-btn
                                         :disabled="!valid"
-                                        color=brown
-                                        class="mr-5 mb-6"
+                                        color=#008D18
+                                        class="white--text font-weight-bold mr-5 mb-6"
                                         @click="validate"
                                 >
                                     Zarejestruj czytelnika
                                 </v-btn>
 
                                 <v-btn
-                                        color=orange
-                                        class="mr-5 mb-6"
+                                        color=#808080
+                                       class="white--text font-weight-bold mr-5 mb-6"
                                         @click="reset"
                                 >
                                     Wyczyść dane

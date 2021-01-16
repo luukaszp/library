@@ -26,7 +26,7 @@
         <v-spacer></v-spacer>
           <template>
             <v-btn
-              color="primary"
+              color="#008D18"
               dark
               class="mb-2"
               :to="'/register-worker'"
@@ -61,8 +61,8 @@
 
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" text @click="close">Anuluj</v-btn>
-                <v-btn color="blue darken-1" text @click="addWorker" :disabled="!valid">Zapisz</v-btn>
+                <v-btn color="#008D18" text @click="close">Anuluj</v-btn>
+                <v-btn color="#008D18" text @click="addWorker" :disabled="!valid">Zapisz</v-btn>
                 </v-card-actions>
             </v-card>
           </v-dialog>
@@ -99,6 +99,7 @@ export default {
     editWorkerDialog: false,
     valid: false,
     search: '',
+    workers: [],
     headers: [
       {
         text: 'Numer identyfikacyjny',
@@ -145,9 +146,6 @@ export default {
   computed: {
     formTitle () {
       return this.editedIndex === -1 ? 'Edytuj dane pracownika' : 'Edytuj dane pracownika';
-    },
-    workers() {
-      return this.$store.getters.getWorkers;
     }
   },
 
@@ -157,11 +155,11 @@ export default {
     }
   },
 
-  created () {
-    this.$store.dispatch('fetchWorkers', {});
-  },
-
   methods: {
+    setData(workers) {
+      this.workers = workers;
+    },
+
     editWorker (item) {
       this.editedIndex = this.workers.indexOf(item);
       this.editedItem = { ...item };
@@ -179,7 +177,10 @@ export default {
             email: this.editedItem.email
           });
         }
-        this.$store.dispatch('fetchWorkers', {});
+        axios.get('/api/user/getWorkers')
+        .then(response => {
+            this.readers = response.data
+        });
         this.close();
       }
     },
@@ -210,6 +211,14 @@ export default {
         this.editedIndex = -1;
       });
     }
+  },
+
+  beforeRouteEnter (to, from, next) {
+    axios
+     .get('/api/user/getWorkers')
+     .then(response => {
+       next(vm => vm.setData(response.data));
+   });
   }
 };
 </script>

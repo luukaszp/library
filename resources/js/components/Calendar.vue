@@ -1,99 +1,101 @@
 <template>
-    <v-row class="fill-height" style="margin-left: 10px; margin-right: 10px; justify-content: center">
-        <v-col md="8">
-            <v-sheet
-                    tile
-                    height="64"
-                    color="grey lighten-3"
-                    class="d-flex"
-            >
-                <v-toolbar flat color="white">
-                <v-btn outlined class="mr-4" color="grey darken-2" @click="setToday">
-                    Today
-                </v-btn>
-                <v-btn
-                        icon
-                        class="ma-2"
-                        @click.native="$refs.calendar.prev()"
+    <v-container>
+        <v-row class="fill-height" style="justify-content: center">
+            <v-col md="8">
+                <v-sheet
+                        tile
+                        height="64"
+                        color="grey lighten-3"
+                        class="d-flex"
                 >
-                    <v-icon>mdi-chevron-left</v-icon>
-                </v-btn>
-                    <v-toolbar-title>{{title}}</v-toolbar-title>
-                <v-btn
-                        icon
-                        class="ma-2"
-                        @click.native="$refs.calendar.next()"
-                >
-                    <v-icon>mdi-chevron-right</v-icon>
-                </v-btn>
-                </v-toolbar>
-            </v-sheet>
-            <v-sheet height="600">
-                <v-calendar
-                        ref="calendar"
-                        v-model="focus"
-                        :weekdays="weekday"
-                        type="month"
-                        color="#A5F78F"
-                        :events="getEvents"
-                        :event-color="getEventColor"
-                        :interval-count = 0
-                        @change="updateRange"
-                        @click:more="viewDay"
-                        @click:date="viewDay"
-                ></v-calendar>
-                <v-toolbar>
-                    <h1 class="headline mr-10">Legenda</h1>
-                    <v-chip class="mr-6" v-for="value in legendInfo()" v-bind:key="value.id" :color="value.color" style="font-weight: bold" @click="showEvent(value)">{{value.type}}</v-chip>
-                    <v-chip class="mr-6" color="#B5651D" style="font-weight: bold" @click="allEvents()">Wszystkie</v-chip>
-                </v-toolbar>
-            </v-sheet>
-        </v-col>
+                    <v-toolbar flat color="white">
+                    <v-btn outlined class="mr-4" color="grey darken-2" @click="setToday">
+                        Today
+                    </v-btn>
+                    <v-btn
+                            icon
+                            class="ma-2"
+                            @click.native="$refs.calendar.prev()"
+                    >
+                        <v-icon>mdi-chevron-left</v-icon>
+                    </v-btn>
+                        <v-toolbar-title>{{title}}</v-toolbar-title>
+                    <v-btn
+                            icon
+                            class="ma-2"
+                            @click.native="$refs.calendar.next()"
+                    >
+                        <v-icon>mdi-chevron-right</v-icon>
+                    </v-btn>
+                    </v-toolbar>
+                </v-sheet>
+                <v-sheet height="600">
+                    <v-calendar
+                            ref="calendar"
+                            v-model="focus"
+                            :weekdays="weekday"
+                            type="month"
+                            color="#00A91C"
+                            :events="getEvents"
+                            :event-color="getEventColor"
+                            :interval-count = 0
+                            @change="updateRange"
+                            @click:more="viewDay"
+                            @click:date="viewDay"
+                    ></v-calendar>
+                    <v-toolbar>
+                        <h1 class="headline mr-10">Legenda</h1>
+                        <v-chip class="mr-6" v-for="value in legendInfo()" v-bind:key="value.id" :color="value.color" style="font-weight: bold" @click="showEvent(value)">{{value.type}}</v-chip>
+                        <v-chip class="mr-6" color="#B5651D" style="font-weight: bold" @click="allEvents()">Wszystkie</v-chip>
+                    </v-toolbar>
+                </v-sheet>
+            </v-col>
 
-        <v-dialog v-model="dailyModal" max-width="500">
-            <v-sheet
-                class="mx-auto"
-                elevation="8"
-                style="text-align: center"
-            >
-                <v-carousel
-                cycle
-                hide-delimiters
-                show-arrows
-                style="height: 225px"
+            <v-dialog v-model="dailyModal" max-width="500">
+                <v-sheet
+                    class="mx-auto"
+                    elevation="8"
+                    style="text-align: center"
                 >
-                <v-carousel-item
-                    v-for="value in eventInfo()"
-                    :key="value.id"
-                >
-                    <v-card
-                    :color="value.color"
-                    class="ma-4"
+                    <v-carousel
+                    cycle
+                    hide-delimiters
+                    show-arrows-on-hover
+                    style="height: 180px; width: 500px"
                     >
-                    <v-row
-                        align="center"
-                        justify="center"
+                    <v-carousel-item
+                        v-for="value in eventInfo()"
+                        :key="value.id"
                     >
-                        <p style="padding-top: 5px;">{{value.type}}</p>
-                    </v-row>
-                    <v-row
-                        align="center"
-                        justify="center"
-                    >
-                        <h3 style="font-weight: bold; line-height: 4.8">{{value.name}}</h3>
-                    </v-row>
-                    <v-row
-                        align="center"
-                        justify="center"
-                    >
-                        <span>Serdecznie zapraszamy na godzinę {{value.time}}!</span>
-                    </v-row>
-                    </v-card>
-                </v-carousel-item>
-                </v-carousel>
-            </v-sheet>
-        </v-dialog>
-    </v-row>
+                        <v-card
+                        :color="value.color"
+                        class="ma-4"
+                        >
+                        <v-row
+                            align="center"
+                            justify="center"
+                        >
+                            <p style="font-weight: bold; padding-top: 5px;">{{value.type}}</p>
+                        </v-row>
+                        <v-row
+                            align="center"
+                            justify="center"
+                        >
+                            <h3 style="font-weight: bold; line-height: 4.8">{{value.name}}</h3>
+                        </v-row>
+                        <v-row
+                            align="center"
+                            justify="center"
+                        >
+                            <span style="font-weight: bold">Serdecznie zapraszamy na godzinę {{value.time}}!</span>
+                        </v-row>
+                        </v-card>
+                    </v-carousel-item>
+                    </v-carousel>
+                </v-sheet>
+            </v-dialog>
+        </v-row>
+    </v-container>
 </template>
 
 <script>
@@ -241,6 +243,8 @@ export default {
 };
 </script>
 
-<style scoped>
-
+<style>
+    .v-toolbar__content {
+        justify-content: center;
+    }
 </style>
