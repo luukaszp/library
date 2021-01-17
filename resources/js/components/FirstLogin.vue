@@ -55,7 +55,7 @@
                     <v-row class="pb-5 justify-center">
                         <v-btn
                             :disabled="!valid"
-                            color=#9090ee
+                            color=#008D18
                             class="mr-5 mb-6"
                             @click="validate"
                         >
@@ -63,7 +63,7 @@
                         </v-btn>
 
                         <v-btn
-                            color=#3eb4a7
+                            color=#808080
                             class="mr-5 mb-6"
                             @click="reset"
                         >

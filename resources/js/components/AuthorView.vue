@@ -13,8 +13,9 @@
                 <p>{{authors.description}}</p>
 
                 <v-btn
+                    v-if="loggedUser.card_number"
                     outlined
-                    color="indigo"
+                    color="#008D18"
                     @click="followAuthor()"
                 >
                     DODAJ DO ULUBIONYCH
@@ -44,7 +45,7 @@ export default {
   },
 
   data: () => ({
-
+      
   }),
 
   computed: {
@@ -53,6 +54,9 @@ export default {
     },
     authId() {
       return this.$store.getters.authId;
+    },
+    loggedUser() {
+      return this.$store.getters.loggedUser;
     }
   },
 

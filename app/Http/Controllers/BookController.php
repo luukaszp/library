@@ -57,6 +57,7 @@ class BookController extends Controller
                 DB::raw('COUNT(books.title) as amount'), 'authors.surname', 'publishers.name as publisherName', 'books.cover'
             )
             ->groupBy('books.title')
+            ->distinct()
             ->get()
             ->toArray();
 
@@ -126,7 +127,7 @@ class BookController extends Controller
     {
         $amount = $this->getAmount($id);
         
-        $author = Book::find($id)->authors()->select('id', 'name', 'surname')->first();
+        $author = Book::find($id)->authors()->select('id', 'name', 'surname')->get();
 
         $book = Book::with(['publishers:name,id', 'categories:name,id'])->find($id);
 
@@ -219,6 +220,7 @@ class BookController extends Controller
 
         $authors = explode(",", $request->get('author'));
         $authorsNumber = count($authors);
+        $authorName = [];
 
         for($index = 0; $index < $amount; $index++) {
             $book = new Book();
@@ -247,13 +249,14 @@ class BookController extends Controller
         }
         
         for($i = 0; $i < $authorsNumber; $i++) {
-            $authorName = Author::where('id', $authors[$i])->select('name', 'surname')->get();
+            $authorName[$i] = Author::where('id', $authors[$i])->select('name', 'surname')->get()->first();
         }
 
         $details = [
             'message' => 'Nowa pozycja',
             'title' => $book->title,
             'author' => $authorName,
+            'id' => $book->id
         ];
 
         $data = DB::table('readers')
@@ -275,10 +278,12 @@ class BookController extends Controller
             }
         }
 
+        $user = [];
+
         for($i = 0; $i < count($readerID); $i++) {
             $reader = Reader::where('id', $readerID[$i])->get('user_id');
             $user = User::find($reader);
-            $user[$i]->notify(new \App\Notifications\BookAdded($details));
+            $user[0]->notify(new \App\Notifications\BookAdded($details));
         }
 
         if ($book->save()) {

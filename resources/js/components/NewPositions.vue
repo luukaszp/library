@@ -31,7 +31,7 @@
                             <v-card-text style="justify-content: center; padding: 0; margin-bottom: 15px">
                                 <p>Autor: <span v-text="book.authorName + ' ' + book.surname" class="mr-2"></span></p>
                                 <p>Kategoria: <span v-text="book.categoryName" class="mr-2"></span></p>
-                                <router-link :to="{ name: 'bookview', params: { book_id: book.id } }"><v-btn outlined style="border: 0px; text-decoration: none"><v-card-title style="color: blue; font-weight: bold">Zobacz więcej</v-card-title></v-btn></router-link>
+                                <router-link :to="{ name: 'bookview', params: { book_id: book.id } }"><v-btn outlined style="border: 0px; text-decoration: none"><v-card-title style="color: #008D18; font-weight: bold">Zobacz więcej</v-card-title></v-btn></router-link>
                             </v-card-text>
                         </v-card>
                     </swiper-slide>
@@ -63,7 +63,7 @@ export default {
       swiperOptions: {
         slidesPerView: 1,
         spaceBetween: 30,
-        loop: true,
+        loop: false,
         pagination: {
           el: '.swiper-pagination',
           clickable: true

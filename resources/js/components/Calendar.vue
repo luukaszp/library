@@ -1,6 +1,6 @@
 <template>
     <v-container>
-        <v-row class="fill-height" style="justify-content: center">
+        <v-row style="justify-content: center">
             <v-col md="8">
                 <v-sheet
                         tile
@@ -43,12 +43,14 @@
                             @click:more="viewDay"
                             @click:date="viewDay"
                     ></v-calendar>
+                </v-sheet>
+                <div>
                     <v-toolbar>
                         <h1 class="headline mr-10">Legenda</h1>
                         <v-chip class="mr-6" v-for="value in legendInfo()" v-bind:key="value.id" :color="value.color" style="font-weight: bold" @click="showEvent(value)">{{value.type}}</v-chip>
                         <v-chip class="mr-6" color="#B5651D" style="font-weight: bold" @click="allEvents()">Wszystkie</v-chip>
                     </v-toolbar>
-                </v-sheet>
+                </div>
             </v-col>
 
             <v-dialog v-model="dailyModal" max-width="500">

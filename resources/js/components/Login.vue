@@ -63,7 +63,7 @@
                                 </v-btn>
 
                                 <v-btn
-                                        color=#008D18
+                                        color=#808080
                                         class="white--text mr-5 mb-6 font-weight-bold"
                                         @click="reset"
                                 >

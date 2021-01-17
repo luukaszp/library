@@ -1,6 +1,6 @@
 <template>
     <v-container>
-        <h1 style="text-align: center">Książki tego autora:</h1>
+        <h1 style="text-align: center; padding-bottom: 10px">Książki tego autora:</h1>
         <v-row style="justify-content: space-around; text-align: center">
             <v-col
                 v-for="item in books"
@@ -19,7 +19,7 @@
                     <v-divider></v-divider>
 
                     <v-img
-                        style="width: 300px"
+                        style="width: 300px; height: 345px"
                         v-bind:src="('../storage/' + item.cover)"
                     >
                     </v-img>
@@ -32,7 +32,7 @@
                         <p>Opis: <span v-text="item.description" class="mr-2"></span></p>
                         <p>Rok wydania: <span v-text="item.publish_year" class="mr-2"></span></p>
                         <v-divider></v-divider>
-                        <router-link :to="{ name: 'bookview', params: { book_id: item.id } }"><v-btn outlined style="border: 0px; text-decoration: none"><v-card-title style="color: blue; font-weight: bold">Zobacz więcej</v-card-title></v-btn></router-link>
+                        <router-link :to="{ name: 'bookview', params: { book_id: item.id } }"><v-btn outlined style="border: 0px; text-decoration: none"><v-card-title style="color: #008D18; font-weight: bold">Zobacz więcej</v-card-title></v-btn></router-link>
                     </v-card-text>
                 </v-card>
             </v-col>
