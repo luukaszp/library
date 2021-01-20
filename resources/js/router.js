@@ -94,6 +94,13 @@ const routes = [
     path: '/admin-panel',
     name: 'admin-panel',
     component: AdminPanel,
+    beforeEnter: (to, from, next) => {
+        if (store.getters.loggedUser.id_number !== '') {
+          next();
+        } else {
+          Vue.swal('Nieautoryzowany', 'Odmowa dostępu!', 'error');
+        }
+      },
     meta: {
       requiresAuth: true
     },

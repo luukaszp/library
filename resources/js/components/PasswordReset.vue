@@ -1,7 +1,18 @@
 <template>
     <div class="reset">
         <v-container>
-            <v-row class="justify-center justify-md-center align-center">
+            <v-row class="justify-center justify-md-center align-center" style="margin-top: 50px">
+                <v-row class="justify-lg-end justify-sm-center pr-5 d-none d-sm-flex">
+                    <v-img
+                            alt="App Logo"
+                            contain
+                            class="shrink"
+                            :src="require('../assets/app_logo.png')"
+                    />
+                </v-row>
+                <v-divider
+                        vertical
+                ></v-divider>
                 <v-col
                         cols="12"
                         md="6"
@@ -34,16 +45,16 @@
 
                                 <v-btn
                                         :disabled="!valid"
-                                        color=brown
-                                        class="mr-5 mb-6"
+                                        color=#008D18
+                                        class="white--text mr-5 mb-6 font-weight-bold"
                                         @click="validate"
                                 >
                                     Resetuj hasło
                                 </v-btn>
 
                                 <v-btn
-                                        color=orange
-                                        class="mr-5 mb-6"
+                                        color=#808080
+                                        class="white--text mr-5 mb-6 font-weight-bold"
                                         @click="reset"
                                 >
                                     Wyczyść dane
@@ -97,8 +108,8 @@ export default {
               title: 'E-mail został wysłany!'
             });
           })
-          .catch((error) => {
-            console.log(error);
+          .catch(() => {
+            this.$swal('Błąd', 'Użytkownik o podanym e-mailu nie istnieje!', 'error');
           });
       }
     },

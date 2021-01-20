@@ -2,6 +2,7 @@
   <v-data-table
     :headers="headers"
     :items="roles"
+    :search="search"
     sort-by="id"
     class="elevation-1"
   >
@@ -13,10 +14,19 @@
           inset
           vertical
         ></v-divider>
+        <v-spacer></v-spacer>
+        <v-text-field
+          v-model="search"
+          append-icon="mdi-magnify"
+          label="Szukaj"
+          single-line
+          hide-details
+          class="mr-3"
+        ></v-text-field>
 
-          <v-dialog v-model="editRolesDialog" max-width="500px">
+          <v-dialog v-model="editRolesDialog" max-width="250px" persistent>
             <v-card>
-              <v-card-title>
+              <v-card-title style="justify-content: center">
                 <span class="headline">{{ formTitle }}</span>
               </v-card-title>
 
@@ -24,7 +34,7 @@
                 <v-container>
                   <v-form v-model="valid" ref="form">
                     <v-row>
-                      <v-col cols="12" sm="6" md="4">
+                      <v-col cols="12" sm="12" md="12">
                         <v-text-field v-model="editedItem.is_admin" :rules="roleRules" label="Admin"></v-text-field>
                       </v-col>
                     </v-row>
@@ -34,8 +44,8 @@
 
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" text @click="close">Anuluj</v-btn>
-                <v-btn color="blue darken-1" text @click="addRole" :disabled="!valid">Zapisz</v-btn>
+                <v-btn color="#008D18" text @click="close">Anuluj</v-btn>
+                <v-btn color="#008D18" text @click="addRole" :disabled="!valid">Zapisz</v-btn>
                 </v-card-actions>
             </v-card>
           </v-dialog>
@@ -65,6 +75,8 @@ export default {
   data: () => ({
     editRolesDialog: false,
     valid: false,
+    roles: [],
+    search: '',
     headers: [
       {
         text: 'ID',
@@ -102,23 +114,14 @@ export default {
   computed: {
     formTitle () {
       return this.editedIndex === -1 ? 'Nowa rola' : 'Edytuj rolę';
-    },
-    roles() {
-      return this.$store.getters.getRoles;
     }
-  },
-
-  watch: {
-    dialog (val) {
-      val || this.close();
-    }
-  },
-
-  created () {
-    this.$store.dispatch('fetchRoles', {});
   },
 
   methods: {
+    setData(roles) {
+      this.roles = roles;
+    },
+
     editRole (item) {
       this.editedIndex = this.roles.indexOf(item);
       this.editedItem = { ...item };
@@ -146,6 +149,14 @@ export default {
         this.editedIndex = -1;
       });
     }
+  },
+
+  beforeRouteEnter (to, from, next) {
+    axios
+     .get('/api/user/getRoles')
+     .then(response => {
+       next(vm => vm.setData(response.data));
+   });
   }
 };
 </script>

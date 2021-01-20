@@ -49,7 +49,7 @@ export default {
 
   created () {
     axios
-      .get(`api/borrow/getCategory/${this.user_id}`)
+      .get(`/api/borrow/getCategory/${this.user_id}`)
       .then((response) => {
         for (let i = 0; i < response.data.length; i++) {
           this.options.labels[i] = `${response.data[i].name}`;

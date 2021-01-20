@@ -1,11 +1,10 @@
 <template>
 <v-container style="justify-content: center; display: flex">
-  <v-card>
+  <v-card style="width: 1000px">
       <v-row style="justify-content: center; margin-left: 10px; margin-right: 10px">
         <v-col cols="auto">
           <v-img
-            width="200px"
-            style="margin-top: 15px"
+            style="margin-top: 15px; width: 300px; height: 365px"
             :src="('../storage/' + books.cover)"
           ></v-img>
         </v-col>
@@ -13,7 +12,7 @@
         <v-divider vertical style="margin-left: 10px; margin-right: 10px"></v-divider>
 
         <v-col
-          cols="auto"
+          cols="3"
           class="text-center pl-0"
         >
           <v-row
@@ -21,14 +20,22 @@
              style="text-align: left;"
           >
             <v-col>
-              <h1 v-text="books.title" style="font-weight: bold; text-align: center" class="mr-2"> </h1>
+              <h1 v-text="books.title" style="font-weight: bold; text-align: center"> </h1>
             </v-col>
 
-            <v-col>
-              <span v-if="books.authors.id">Autor: </span><router-link :to="{ name: 'authorview', params: { author_id: books.authors.id } }" style="text-decoration: none; color: grey"><span style="font-weight: bold" v-text="books.authors.name + ' ' + books.authors.surname" class="mr-2"></span></router-link>
+            <v-col style="text-align: center">
+                <p>Autor: </p>
+                <v-list-item-subtitle
+                v-for="author in books.authors"
+                :key="author.id"
+                >
+                <router-link v-if="author.id" :to="{ name: 'authorview', params: { author_id: author.id } }" style="text-decoration: none; color: #008D18">
+                    <span style="font-weight: bold" v-text="author.name + ' ' + author.surname" class="mr-2"></span>
+                </router-link>
+                </v-list-item-subtitle>
             </v-col>
 
-            <v-col>
+            <v-col style="text-align: center">
               <span>Kategoria: </span><span style="font-weight: bold" v-text="books.categories.name" class="mr-2"></span>
             </v-col>
 

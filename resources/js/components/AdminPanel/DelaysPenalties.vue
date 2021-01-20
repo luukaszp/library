@@ -42,6 +42,7 @@ export default {
   data: () => ({
     search: '',
     show: false,
+    borrows: [],
     headers: [
       {
         text: 'Tytuł książki',
@@ -54,20 +55,18 @@ export default {
     ]
   }),
 
-  computed: {
-    borrows() {
-      return this.$store.getters.getBorrows;
+  methods: {
+    setData(borrows) {
+      this.borrows = borrows;
     }
   },
 
-  watch: {
-    dialog (val) {
-      val || this.close();
-    }
-  },
-
-  created () {
-    this.$store.dispatch('fetchDelays', {});
+  beforeRouteEnter (to, from, next) {
+    axios
+     .get('/api/borrow/getDelayed')
+     .then(response => {
+       next(vm => vm.setData(response.data));
+   });
   }
 };
 </script>

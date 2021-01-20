@@ -38,7 +38,7 @@
         <v-spacer></v-spacer>
           <template>
             <v-btn
-              color="primary"
+              color="#008D18"
               dark
               class="mb-2"
               :to="'/add-book'"
@@ -47,21 +47,21 @@
 
           <v-dialog v-model="editBookDialog" max-width="500px">
             <v-card>
-              <v-card-title>
+              <v-card-title style="justify-content: center">
                 <span class="headline">{{ formTitle }}</span>
               </v-card-title>
 
               <v-card-text>
                 <v-container>
                   <v-row>
-                    <v-col cols="12" sm="6" md="4">
+                    <v-col cols="12" sm="6" md="5">
                       <v-text-field v-model="editedItem.title" :rules="titleRules" label="Tytuł książki"></v-text-field>
                     </v-col>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.description" :rules="descriptionRules" label="Opis"></v-text-field>
-                    </v-col>
-                    <v-col cols="12" sm="6" md="4">
+                    <v-col cols="12" sm="6" md="5">
                       <v-text-field v-model="editedItem.publish_year" :rules="publishYearRules" label="Rok wydania"></v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm="12" md="12">
+                      <v-text-field v-model="editedItem.description" :rules="descriptionRules" label="Opis"></v-text-field>
                     </v-col>
                   </v-row>
                 </v-container>
@@ -96,10 +96,10 @@
 
               <v-card-actions style="justify-content: center; display: block ruby; text-align: center; padding-bottom: 25px">
                 <v-spacer></v-spacer>
-                <v-btn color="#228B22" text @click="closeImage">Anuluj</v-btn>
+                <v-btn color="#008D18" text @click="closeImage">Anuluj</v-btn>
                 <v-btn
-                    color="primary"
-                    class="text-none pl-5 pr-5"
+                    color="#008D18"
+                    class="white--text text-none pl-5 pr-5"
                     style="margin-right: 15px"
                     rounded
                     depressed
@@ -122,7 +122,7 @@
                     @change="onFileChanged"
                 >
                 <v-btn
-                  color=#228B22
+                  color=#008D18
                   @click="sendImage"
                   :disabled="!valid"
                   text
@@ -329,7 +329,7 @@ export default {
 
     sendImage () {
       const formData = new FormData();
-      formData.append('cover', this.cover); // formData nie działa z PUT ale z POST
+      formData.append('cover', this.cover);
 
       const config = {
         headers: {

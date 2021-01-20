@@ -139,7 +139,7 @@ class AuthorTest extends TestCase
 
         $response = $this->delete('api/author/delete/1');
 
-        $response->assertStatus(500);
+        $response->assertStatus(200);
         
     }
 }

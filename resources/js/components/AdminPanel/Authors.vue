@@ -34,12 +34,12 @@
                                 class="mr-3"
                         ></v-text-field>
                         <v-spacer></v-spacer>
-                        <v-dialog v-model="addAuthorDialog" max-width="500px">
+                        <v-dialog v-model="addAuthorDialog" max-width="500px" persistent>
                             <template v-slot:activator="{ on }">
-                                <v-btn color="#3eb4a7" dark class="mb-2" v-on="on">Nowy autor</v-btn>
+                                <v-btn color="#008D18" dark class="mb-2" v-on="on">Nowy autor</v-btn>
                             </template>
                             <v-card>
-                                <v-card-title>
+                                <v-card-title style="justify-content: center">
                                     <span class="headline">{{ formTitle }}</span>
                                 </v-card-title>
 
@@ -61,8 +61,8 @@
                                             </v-row>
                                             <v-row style="justify-content: center; text-align: center">
                                                 <v-btn
-                                                    color="primary"
-                                                    class="text-none pa-5 pb-0 pt-0"
+                                                    color="#008D18"
+                                                    class="white--text text-none pa-5 pb-0 pt-0"
                                                     rounded
                                                     depressed
                                                     :loading="isSelecting"
@@ -90,13 +90,13 @@
 
                                 <v-card-actions>
                                     <v-spacer></v-spacer>
-                                    <v-btn color="blue darken-1" text @click="close">Anuluj</v-btn>
-                                    <v-btn color="blue darken-1" text @click="addAuthor" :disabled="!valid">Zapisz</v-btn>
+                                    <v-btn color="#008D18" text @click="close">Anuluj</v-btn>
+                                    <v-btn color="#008D18" text @click="addAuthor" :disabled="!valid">Zapisz</v-btn>
                                 </v-card-actions>
                             </v-card>
                         </v-dialog>
 
-                        <v-dialog v-model="editPhotoDialog" max-width="550px" class="rounded-xl">
+                        <v-dialog v-model="editPhotoDialog" max-width="550px" class="rounded-xl" persistent>
                             <v-card>
                                 <v-card-text>
                                     <v-container>
@@ -119,8 +119,8 @@
                                     <v-spacer></v-spacer>
                                     <v-btn color="#228B22" text @click="closePhoto">Anuluj</v-btn>
                                     <v-btn
-                                        color="primary"
-                                        class="text-none pl-5 pr-5"
+                                        color="#228B22"
+                                        class="white--text text-none pl-5 pr-5"
                                         style="margin-right: 15px"
                                         rounded
                                         depressed
@@ -198,7 +198,7 @@ export default {
   data: () => ({
     addAuthorDialog: false,
     editPhotoDialog: false,
-    defaultButtonText: 'Zmień zdjęcie autora',
+    defaultButtonText: 'Dodaj zdjęcie autora',
     isSelecting: false,
     valid: false,
     search: '',
@@ -334,7 +334,12 @@ export default {
               console.log(error);
             });
         }
-        this.$store.dispatch('fetchAuthors', {});
+
+        axios.get('/api/author/getAuthors')
+        .then(response => {
+            this.authors = response.data
+        });
+
         this.$refs.form.resetValidation();
         this.close();
       }
@@ -342,6 +347,7 @@ export default {
 
     close() {
       this.addAuthorDialog = false;
+      this.$refs.form.resetValidation();
       this.$nextTick(() => {
         this.editedItem = { ...this.defaultItem };
         this.editedIndex = -1;
@@ -394,7 +400,10 @@ export default {
             this.$swal('Błąd', 'Awatar autora nie mógł zostać zmieniony!', 'error');
           }
         });
-      this.$store.dispatch('fetchAuthors', {});
+      axios.get('/api/author/getAuthors')
+        .then(response => {
+            this.authors = response.data
+        });
     }
   },
 

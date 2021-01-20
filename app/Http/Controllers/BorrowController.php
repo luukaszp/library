@@ -44,7 +44,6 @@ class BorrowController extends Controller
             $borrow->save();
 
             $book = Book::find($stringToInt);
-            $book->amount = $book->amount-1;
             $book->is_available = 0;
             $book->save();
         }
@@ -183,7 +182,6 @@ class BorrowController extends Controller
         $borrow->when_returned = $todayDate;
 
         $book = Book::find($request->bookID);
-        $book->amount = $book->amount+1;
         $book->is_available = $request->is_available;
 
         $reader = Reader::find($borrow->reader_id);
@@ -270,8 +268,6 @@ class BorrowController extends Controller
             ->where('borrows.reader_id', '=', $reader[0])
             ->where('borrows.when_returned', '=', null)
             ->join('books', 'books.id', '=', 'borrows.book_id')
-            //->join('authors', 'authors.id', '=', 'author_book.author_id')
-            //->join('author_book', 'author_book.author_id', '=', 'authors.id')
             ->select(
                 'borrows.id', 'books.title', 'borrows.borrows_date', 
                 'borrows.returns_date'
@@ -296,8 +292,6 @@ class BorrowController extends Controller
             ->where('borrows.reader_id', '=', $reader[0])
             ->where('borrows.delay', '!=', null)
             ->join('books', 'books.id', '=', 'borrows.book_id')
-            //->join('authors', 'authors.id', '=', 'author_book.author_id')
-            //->join('author_book', 'author_book.author_id', '=', 'authors.id')
             ->select(
                 'books.title', 'borrows.delay', 'borrows.penalty'
             )
@@ -427,8 +421,6 @@ class BorrowController extends Controller
         $lastMonthFDay = Carbon::now()->subMonth()->startOfMonth()->toDateString(); //previous month
         $lastMonthLDay = Carbon::now()->subMonth()->endOfMonth()->toDateString();
 
-        //item.status = up, down, same in array - na podstawie pozycji ustalic status (-2, 0, +3)
-
         $previousMonth = DB::table('borrows')
             ->whereBetween('borrows.borrows_date', [$lastMonthFDay, $lastMonthLDay])
             ->join('readers', 'readers.id', '=', 'borrows.reader_id')
@@ -463,7 +455,6 @@ class BorrowController extends Controller
                 for ($j = 0; $j < count($currentMonth); $j++) {
                     if ($previousMonth[$i]->surname === $currentMonth[$j]->surname) {
                         $position[$j] = $i - $j;
-                        //$position[$i] = $i;
                     }
                 }
             } else {

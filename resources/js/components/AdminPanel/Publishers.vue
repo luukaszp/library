@@ -24,12 +24,12 @@
                                 class="mr-3"
                         ></v-text-field>
                         <v-spacer></v-spacer>
-                        <v-dialog v-model="addPublisherDialog" max-width="300px">
+                        <v-dialog v-model="addPublisherDialog" max-width="300px" persistent>
                             <template v-slot:activator="{ on }">
-                                <v-btn color="#3eb4a7" dark class="mb-2" v-on="on">Nowe wydawnictwo</v-btn>
+                                <v-btn color="#008D18" dark class="mb-2" v-on="on">Nowe wydawnictwo</v-btn>
                             </template>
                             <v-card>
-                                <v-card-title>
+                                <v-card-title style="justify-content: center">
                                     <span class="headline">{{ formTitle }}</span>
                                 </v-card-title>
 
@@ -47,8 +47,8 @@
 
                                 <v-card-actions>
                                     <v-spacer></v-spacer>
-                                    <v-btn color="blue darken-1" text @click="close">Anuluj</v-btn>
-                                    <v-btn color="blue darken-1" text @click="addPublisher" :disabled="!valid">Zapisz</v-btn>
+                                    <v-btn color="#008D18" text @click="close">Anuluj</v-btn>
+                                    <v-btn color="#008D18" text @click="addPublisher" :disabled="!valid">Zapisz</v-btn>
                                 </v-card-actions>
                             </v-card>
                         </v-dialog>
@@ -195,6 +195,7 @@ export default {
 
     close() {
       this.addPublisherDialog = false;
+      this.$refs.form.resetValidation();
       this.$nextTick(() => {
         this.editedItem = { ...this.defaultItem };
         this.editedIndex = -1;

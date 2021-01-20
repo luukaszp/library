@@ -4,14 +4,17 @@
     fill-height
   >
     <v-row align="center">
+      <v-col cols=12>
+        <v-img
+            style="width: 477px; height: 298px; display: inline-block"
+            :src="require('../assets/notfound/404error.jpg')"
+        >
+        </v-img>
+      </v-col>
       <v-col>
-        <h1 class="display-2 primary--text">Whoops, 404</h1>
-
-        <p>Strona którą szukasz nie istnieje</p>
-
         <v-btn
           :to="`/`"
-          color="primary"
+          color="#008D18"
           outlined
         >
           Zabierz mnie stąd!

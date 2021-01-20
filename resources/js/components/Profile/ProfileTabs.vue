@@ -3,7 +3,7 @@
         <v-row style="margin-left: 10px; margin-right: 10px; justify-content: center; padding-bottom: 10px">
             <div class="d-flex justify-center align-center">
                 <v-tabs
-                    color="deep-purple accent-4"
+                    color="#008D18"
                     icons-and-text
                     centered
                 >

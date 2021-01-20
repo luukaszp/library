@@ -26,7 +26,7 @@
                         <v-spacer></v-spacer>
                         <v-dialog v-model="addEventDialog" max-width="350px">
                             <template v-slot:activator="{ on }">
-                                <v-btn color="#3eb4a7" dark class="mb-2" v-on="on">Nowe wydarzenie</v-btn>
+                                <v-btn color="#008D18" dark class="mb-2" v-on="on">Nowe wydarzenie</v-btn>
                             </template>
                             <v-card>
                                 <v-card-title>
@@ -107,8 +107,8 @@
 
                                 <v-card-actions>
                                     <v-spacer></v-spacer>
-                                    <v-btn color="blue darken-1" text @click="close">Anuluj</v-btn>
-                                    <v-btn color="blue darken-1" text @click="addEvent" :disabled="!valid">Zapisz</v-btn>
+                                    <v-btn color="#008D18" text @click="close">Anuluj</v-btn>
+                                    <v-btn color="#008D18" text @click="addEvent" :disabled="!valid">Zapisz</v-btn>
                                 </v-card-actions>
                             </v-card>
                         </v-dialog>
@@ -150,6 +150,7 @@ export default {
     menu1: false,
     menu2: false,
     selectedType: '',
+    events: [],
     search: '',
     eventName: '',
     headers: [
@@ -192,25 +193,16 @@ export default {
     formTitle() {
       return this.editedIndex === -1 ? 'Nowe wydarzenie' : 'Edytuj wydarzenie';
     },
-    events() {
-      return this.$store.getters.getEvents;
-    },
     types() {
       return this.$store.getters.getTypes;
     }
   },
 
-  watch: {
-    dialog(val) {
-      val || this.close();
-    }
-  },
-
-  created() {
-    this.$store.dispatch('fetchEvents', {});
-  },
-
   methods: {
+    setData(events) {
+      this.events = events;
+    },
+
     editEvent(item) {
       this.editedIndex = this.events.indexOf(item);
       this.editedItem = { ...item };
@@ -272,6 +264,14 @@ export default {
         this.editedIndex = -1;
       });
     }
+  },
+
+  beforeRouteEnter (to, from, next) {
+    axios
+     .get('/api/calendar/event/getEvents')
+     .then(response => {
+       next(vm => vm.setData(response.data));
+   });
   }
 };
 </script>

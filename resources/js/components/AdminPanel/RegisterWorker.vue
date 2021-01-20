@@ -9,18 +9,20 @@
 
                     <v-card
                             class="ma-2"
-                            max-width="600"
                     >
                         <v-form
                                 ref="form"
                                 v-model="valid"
                                 md="6"
                         >
+                        <v-col>
                             <h1 class="pt-8" style="text-align: center">Biblioteka</h1>
                             <h2 class="pt-2" style="text-align: center">Tworzenie konta pracownika</h2>
+                        </v-col>
 
                             <hr>
 
+                        <v-col cols="12" style="display: inline-flex; padding-bottom: 0px">
                             <v-text-field
                                     class="pa-5 pb-0"
                                     v-model="name"
@@ -31,16 +33,17 @@
                             ></v-text-field>
 
                             <v-text-field
-                                    class="pa-5 pb-0 pt-0"
+                                    class="pa-5 pb-0"
                                     v-model="surname"
                                     :rules="surnameRules"
                                     label="Nazwisko"
                                     outlined
                                     required
                             ></v-text-field>
-
+                        </v-col>
+                        <v-col cols="12" style="display: inline-flex; padding-bottom: 0px">
                             <v-text-field
-                                    class="pa-5 pb-0 pt-0"
+                                    class="pa-5 pb-0"
                                     v-model="email"
                                     :rules="emailRules"
                                     label="E-mail"
@@ -49,15 +52,16 @@
                             ></v-text-field>
 
                             <v-text-field
-                                    class="pa-5 pb-0 pt-0"
+                                    class="pa-5 pb-0"
                                     v-model="id_number"
                                     :rules="idNumberRules"
                                     label="Numer identyfikacyjny pracownika"
                                     outlined
                             ></v-text-field>
-
+                        </v-col>
+                        <v-col cols="12" style="display: inline-flex; padding-bottom: 0px">
                             <v-text-field
-                                    class="pa-5 pb-0 pt-0"
+                                    class="pa-5"
                                     :value="password"
                                     label="Hasło"
                                     :type="'password'"
@@ -68,7 +72,7 @@
                             ></v-text-field>
 
                             <v-text-field
-                                    class="pa-5 pt-0"
+                                    class="pa-5"
                                     :value="password_confirmation"
                                     v-model="password_confirmation"
                                     label="Powtórz hasło"
@@ -77,21 +81,21 @@
                                     outlined
                                     required
                             ></v-text-field>
-
+                        </v-col>
                             <v-row class="pb-5 justify-center">
 
                                 <v-btn
                                         :disabled="!valid"
-                                        color=brown
-                                        class="mr-5 mb-6"
+                                        color=#008D18
+                                        class="white--text font-weight-bold mr-5 mb-6"
                                         @click="validate"
                                 >
                                     Zarejestruj pracownika
                                 </v-btn>
 
                                 <v-btn
-                                        color=orange
-                                        class="mr-5 mb-6"
+                                        color=#808080
+                                        class="white--text font-weight-bold mr-5 mb-6"
                                         @click="reset"
                                 >
                                     Wyczyść dane

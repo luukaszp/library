@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\User;
 use App\Reader;
 use DB;
+use Carbon\Carbon;
 
 class ReaderController extends Controller
 {
@@ -33,7 +34,7 @@ class ReaderController extends Controller
      */
     public function showReader($id)
     {
-        return User::find($id);
+        return User::where('id', $id)->with('readers')->first();
     }
 
     /**
@@ -116,5 +117,22 @@ class ReaderController extends Controller
                 ], 500
             );
         }
+    }
+
+    /**
+     * Get amount of readers that sign up in current month
+     *
+     * @param  Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    public function getMonthlyReaders()
+    {
+        $firstDay = Carbon::now()->startOfMonth()->toDateString(); //current month
+        $lastDay = Carbon::now()->endOfMonth()->toDateString(); 
+
+        $currentMonth = Reader::whereBetween('readers.created_at', [$firstDay, $lastDay])->count('id');
+
+        return $currentMonth;
     }
 }

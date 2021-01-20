@@ -54,24 +54,11 @@ class BookController extends Controller
             ->select(
                 'books.id', 'books.title', 'books.description', 'books.publish_year',
                 'categories.name as categoryName', 'authors.name as authorName',
-                DB::raw('COUNT(books.title) as amount'), 'authors.surname', 'publishers.name as publisherName', 'books.cover'
+                DB::raw('COUNT(distinct author_book.book_id) as amount'), 'authors.surname', 'publishers.name as publisherName', 'books.cover'
             )
             ->groupBy('books.title')
             ->get()
             ->toArray();
-
-        //$amount = $this->getAmount(0)->toArray();
-
-        /*$book = Book::with(['publishers:name,id', 'categories:name,id'])->groupBy('title')->get()->toArray();
-
-        $author = Book::with(['authors:name,surname,id'])->get()->toArray();
-    
-        array_push($book, $amount);
-        array_push($book, $author);*/
-        //$data['amount'] = $amount;
-        //$data->toArray();
-        //array_push($data, $amount);
-        //$data['amount'] = $amount;
 
         return $data;
 
@@ -126,7 +113,7 @@ class BookController extends Controller
     {
         $amount = $this->getAmount($id);
         
-        $author = Book::find($id)->authors()->select('id', 'name', 'surname')->first();
+        $author = Book::find($id)->authors()->select('id', 'name', 'surname')->get();
 
         $book = Book::with(['publishers:name,id', 'categories:name,id'])->find($id);
 
@@ -219,6 +206,7 @@ class BookController extends Controller
 
         $authors = explode(",", $request->get('author'));
         $authorsNumber = count($authors);
+        $authorName = [];
 
         for($index = 0; $index < $amount; $index++) {
             $book = new Book();
@@ -247,13 +235,14 @@ class BookController extends Controller
         }
         
         for($i = 0; $i < $authorsNumber; $i++) {
-            $authorName = Author::where('id', $authors[$i])->select('name', 'surname')->get();
+            $authorName[$i] = Author::where('id', $authors[$i])->select('name', 'surname')->get()->first();
         }
 
         $details = [
             'message' => 'Nowa pozycja',
             'title' => $book->title,
             'author' => $authorName,
+            'id' => $book->id
         ];
 
         $data = DB::table('readers')
@@ -275,10 +264,12 @@ class BookController extends Controller
             }
         }
 
+        $user = [];
+
         for($i = 0; $i < count($readerID); $i++) {
             $reader = Reader::where('id', $readerID[$i])->get('user_id');
             $user = User::find($reader);
-            $user[$i]->notify(new \App\Notifications\BookAdded($details));
+            $user[0]->notify(new \App\Notifications\BookAdded($details));
         }
 
         if ($book->save()) {
@@ -592,5 +583,22 @@ class BookController extends Controller
                 ], 500
             );
         }
+    }
+
+    /**
+     * Get amount of books that were added in current month
+     *
+     * @param  Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    public function getMonthlyBooks()
+    {
+        $firstDay = Carbon::now()->startOfMonth()->toDateString(); //current month
+        $lastDay = Carbon::now()->endOfMonth()->toDateString(); 
+
+        $currentMonth = Book::whereBetween('books.created_at', [$firstDay, $lastDay])->count('id');
+
+        return $currentMonth;
     }
 }

@@ -41,6 +41,9 @@ Route::post('password-change', 'AuthController@passwordChange');
 Route::post('first-login-password', 'AuthController@firstLoginPassword');
 
 Route::get('borrow/monthly', 'BorrowController@getMonthlyAmount');
+Route::get('rating/monthly/get', 'RatingController@getMonthlyRating');
+Route::get('reader/get/monthly', 'ReaderController@getMonthlyReaders');
+Route::get('book/monthly/get/all', 'BookController@getMonthlyBooks');
 
 Route::group(
     ['middleware' => 'auth.jwt'], function () {
@@ -70,6 +73,8 @@ Route::group(
         Route::delete('follow/delete/{id}/author', 'FollowController@removeAuthor');
 
         Route::post('suggestions/add', 'SuggestionController@addSuggestion');
+
+        Route::delete('reader/delete/{id}', 'ReaderController@deleteReader');
     }
 );
 
@@ -90,7 +95,6 @@ Route::group(
 
         Route::get('user/getReaders', 'ReaderController@getReaders');
         Route::put('reader/edit/{id}', 'ReaderController@editReader');
-        Route::delete('reader/delete/{id}', 'ReaderController@deleteReader');
 
         Route::put('category/edit/{id}', 'CategoryController@editCategory');
         Route::post('category/add', 'CategoryController@addCategory');
