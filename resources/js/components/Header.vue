@@ -55,7 +55,7 @@
                                 dense
                                 v-for="notification in notifications"
                                 :key="notification.id"
-                                style="width: 480px"
+                                style="width: 480px; padding-top: 0px; padding-bottom: 0px"
                                 >
                                     <v-list-item-content
                                     v-for="data in notification.data"
@@ -82,7 +82,9 @@
                                         </v-list-item-group>
                                     </router-link>
                                     </v-list-item-content>
+                                    <v-divider></v-divider>
                                 </v-list>
+                                <v-divider></v-divider>
                                 <v-card-actions style="justify-content: center">
                                     <v-btn class="white--text" color="#008D18" @click="markAsRead()">
                                         Oznacz jako przeczytane
@@ -114,10 +116,20 @@
 
                             <v-list>
                                 <v-list-item :to="{ name: 'profile', params: { user_id: authId } }" v-if="loggedUser.card_number">
-                                    Profil
+                                    <v-list-item-icon>
+                                        <v-icon>mdi-account</v-icon>
+                                    </v-list-item-icon>
+                                    <v-list-item-content>
+                                        <v-list-item-title>Profil</v-list-item-title>
+                                    </v-list-item-content>
                                 </v-list-item>
                                 <v-list-item>
-                                    <span v-if="isLoggedIn"><a @click="logout">Wyloguj się</a></span>
+                                    <v-list-item-icon>
+                                        <v-icon>mdi-logout</v-icon>
+                                    </v-list-item-icon>
+                                    <v-list-item-content>
+                                        <v-list-item-title v-if="isLoggedIn"><a @click="logout">Wyloguj się</a></v-list-item-title>
+                                    </v-list-item-content>
                                 </v-list-item>
                             </v-list>
                         </v-menu>
@@ -224,5 +236,9 @@ export default {
 <style scoped>
     a {
         text-decoration: none;
+    }
+
+    .v-menu__content {
+        max-height: 280px;
     }
 </style>

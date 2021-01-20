@@ -16,18 +16,14 @@ class Worker
      */
     public function handle($request, Closure $next)
     {
-        if (Auth::check() && Auth::user()->id_number !== null) {
-            return $next($request);
-        }
-
-        if (Auth::check() && Auth::user()->workers->id_number !== null) {
+        if (Auth::check() && \App\Worker::find(auth()->user()->id)) {
             return $next($request);
         }
 
         return response()->json(
             [
             'success' => false,
-            'message' => 'You do not have Worker permissions.'
+            'message' => Auth::user()->workers
             ], 401
         );
     }

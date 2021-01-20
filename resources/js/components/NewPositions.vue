@@ -3,7 +3,7 @@
         <v-row style="text-align: center; justify-content: center; padding-bottom: 10px; padding-top: 20px;">
             <h1>Nowości książkowe</h1>
         </v-row>
-        <v-row style="justify-content: center; text-align: center" v-if="books.length != 0">
+        <v-row style="justify-content: center; text-align: center" v-if="books.length !=  0">
             <v-col
                 cols="6"
             >
@@ -43,7 +43,24 @@
 
         <v-row align="center" style="justify-content: center; text-align: center; padding-top: 55px; display: inline-block" v-if="books.length === 0">
             <h2>Brak nowych książek z ostatnich 10 dni!</h2>
-            <v-icon x-large>mdi-emoticon-confused-outline</v-icon>
+            <v-col style="display: inline-flex;">
+            <v-img
+                :src="require('../assets/new/owl.png')"
+            />
+            <div style="padding: 180px 0">
+                <h4 style="padding-bottom: 20px">Zapraszamy do przejrzenia katalogu biblioteki!</h4>
+                <router-link :to="{ name: 'search' }">
+                    <v-btn
+                        elevation="24"
+                        x-large
+                        color=#008D18
+                        class="white--text mr-5 mb-6 font-weight-bold"
+                    >
+                    KATALOG
+                    </v-btn>
+                </router-link>
+            </div>
+            </v-col>
         </v-row>
     </v-container>
 </template>

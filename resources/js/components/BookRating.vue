@@ -41,7 +41,7 @@
 
         <v-row style="justify-content: center; margin-left: 10px; margin-right: 10px">
             <h2 style="width: 100%; text-align: center; padding-top: 20px">Oceny i opinie czytelników: {{ratings.length}}</h2>
-                <v-list disabled two-line style="width: 100%">
+                <v-list two-line style="width: 100%">
                     <v-list-item-group>
                         <template v-for="(item) in ratings">
                         <v-list-item :key="item.id +- item.rate">
@@ -50,6 +50,9 @@
                                     :cols=6
                                     style="display: inline-flex"
                                 >
+                                <v-list-item-avatar>
+                                    <v-img :src="'../storage/' + item.avatar"></v-img>
+                                </v-list-item-avatar>
                                 <v-list-item-title v-text="item.name + ' ' + item.surname"></v-list-item-title>
                                 <v-rating
                                     :value="parseInt(item.rate)"
@@ -57,6 +60,7 @@
                                     color="orange"
                                     medium
                                     readonly
+                                    style="padding-top: 15px"
                                 ></v-rating>
                                 </v-col>
                                 <v-list-item-subtitle style="padding-top: 10px; margin-left: 10px" class="text--primary" v-text="item.opinion"></v-list-item-subtitle>
@@ -64,16 +68,16 @@
 
                             <v-list-item-action>
                                 <v-list-item-action-text v-text="item.created_at"></v-list-item-action-text>
-                                <div class="action" v-if="parseInt(item.user_id) === loggedUser.id || loggedUser.is_worker === true">
+                                <div class="action">
                                   <v-icon
-                                      small
+                                      v-if="item.user_id === loggedUser.id"
                                       class="mr-2"
                                       @click="editOpinion(item)"
                                   >
                                   mdi-pencil
                                   </v-icon>
                                   <v-icon
-                                      small
+                                      v-if="item.user_id === loggedUser.id || loggedUser.id_number !== ''"
                                       @click="deleteOpinion(item)"
                                   >
                                   mdi-delete
@@ -125,8 +129,8 @@
 
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="blue darken-1" text @click="close">Anuluj</v-btn>
-              <v-btn color="blue darken-1" text @click="addOpinion" :disabled="!valid">Zapisz</v-btn>
+              <v-btn color="#008D18" text @click="close">Anuluj</v-btn>
+              <v-btn color="#008D18" text @click="addOpinion" :disabled="!valid">Zapisz</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>

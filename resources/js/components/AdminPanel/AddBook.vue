@@ -9,15 +9,16 @@
 
                     <v-card
                             class="ma-2"
-                            max-width="600"
                     >
                         <v-form
                                 ref="form"
                                 v-model="valid"
                                 md="6"
                         >
+                        <v-col>
                             <h1 class="pt-8" style="text-align: center">Biblioteka</h1>
                             <h2 class="pt-2" style="text-align: center">Dodawanie nowej książki</h2>
+                        </v-col>
 
                             <hr>
 
@@ -47,6 +48,7 @@
                             >
                         </div>
 
+                        <v-col cols="12" style="display: inline-flex; padding-bottom: 0px">
                             <v-text-field
                                     class="pa-5 pb-0"
                                     v-model="title"
@@ -56,35 +58,38 @@
                                     :rules="titleRules"
                             ></v-text-field>
 
-                            <v-textarea
-                                    class="pa-5 pb-0 pt-0"
-                                    v-model="isbn"
-                                    label="ISBN (ENTER jako separator)"
-                                    outlined
-                                    required
-                                    :rules="isbnRules"
-                            ></v-textarea>
-
-                            <v-textarea
-                                    class="pa-5 pb-0 pt-0"
-                                    v-model="description"
-                                    label="Opis"
-                                    outlined
-                                    required
-                                    :rules="descriptionRules"
-                            ></v-textarea>
-
                             <v-text-field
-                                    class="pa-5 pb-0 pt-0"
+                                    class="pa-5 pb-0"
                                     v-model="publish_year"
                                     label="Rok wydania"
                                     outlined
                                     required
                                     :rules="publishYearRules"
                             ></v-text-field>
-
+                        </v-col>
+                        <v-col cols="12" style="display: inline-flex; padding-bottom: 0px">
+                            <v-textarea
+                                    class="pa-5 pb-0"
+                                    v-model="isbn"
+                                    label="ISBN (ENTER jako separator)"
+                                    outlined
+                                    required
+                                    :rules="isbnRules"
+                            ></v-textarea>
+                        </v-col>
+                        <v-col cols="12" style="display: inline-flex; padding-bottom: 0px">
+                            <v-textarea
+                                    class="pa-5 pb-0"
+                                    v-model="description"
+                                    label="Opis"
+                                    outlined
+                                    required
+                                    :rules="descriptionRules"
+                            ></v-textarea>
+                        </v-col>
+                        <v-col cols="12" style="display: inline-flex; padding-bottom: 0px">
                             <v-autocomplete
-                                    class="pa-5 pb-0 pt-0"
+                                    class="pa-5 pt-0"
                                     v-model="selectedAuthor"
                                     :items="authors"
                                     item-text="name"
@@ -105,7 +110,7 @@
                             </v-autocomplete>
 
                             <v-autocomplete
-                                    class="pa-5 pb-0 pt-0"
+                                    class="pa-5 pt-0"
                                     v-model="selectedCategory"
                                     :items="categories"
                                     item-text="name"
@@ -118,7 +123,7 @@
                             ></v-autocomplete>
 
                             <v-autocomplete
-                                    class="pa-5 pb-0 pt-0"
+                                    class="pa-5 pt-0"
                                     v-model="selectedPublisher"
                                     :items="publishers"
                                     item-text="name"
@@ -129,7 +134,7 @@
                                     required
                                     :rules="publisherRules"
                             ></v-autocomplete>
-
+                        </v-col>
                             <v-row class="pb-5 justify-center">
 
                                 <v-btn

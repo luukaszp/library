@@ -52,6 +52,7 @@ import axios from 'axios';
 export default {
   data: () => ({
     search: '',
+    suggestions: [],
     headers: [
       {
         text: 'Rodzaj sugestii',
@@ -64,17 +65,11 @@ export default {
     ]
   }),
 
-  computed: {
-    suggestions() {
-      return this.$store.getters.getSuggestions;
-    }
-  },
-
-  created () {
-    this.$store.dispatch('fetchSuggestions', {});
-  },
-
   methods: {
+    setData(suggestions) {
+      this.suggestions = suggestions;
+    },
+
     deleteSugestion (item) {
       const index = this.suggestions.indexOf(item);
       this.$swal({
@@ -93,6 +88,14 @@ export default {
         }
       });
     }
+  },
+
+  beforeRouteEnter (to, from, next) {
+    axios
+     .get('/api/suggestions/getSuggestions')
+     .then(response => {
+       next(vm => vm.setData(response.data));
+   });
   }
 };
 </script>

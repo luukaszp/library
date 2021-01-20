@@ -23,6 +23,18 @@ export default {
         .catch((error) => {
           console.log(error);
         });
+    },
+    fetchMonthRating(context) {
+      axios({
+        method: 'GET',
+        url: '/api/rating/monthly/get'
+      })
+        .then((response) => {
+          context.commit('setRatings', response.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     }
   },
   getters: {

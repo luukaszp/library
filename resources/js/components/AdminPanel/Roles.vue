@@ -75,6 +75,7 @@ export default {
   data: () => ({
     editRolesDialog: false,
     valid: false,
+    roles: [],
     search: '',
     headers: [
       {
@@ -113,23 +114,14 @@ export default {
   computed: {
     formTitle () {
       return this.editedIndex === -1 ? 'Nowa rola' : 'Edytuj rolę';
-    },
-    roles() {
-      return this.$store.getters.getRoles;
     }
-  },
-
-  watch: {
-    dialog (val) {
-      val || this.close();
-    }
-  },
-
-  created () {
-    this.$store.dispatch('fetchRoles', {});
   },
 
   methods: {
+    setData(roles) {
+      this.roles = roles;
+    },
+
     editRole (item) {
       this.editedIndex = this.roles.indexOf(item);
       this.editedItem = { ...item };
@@ -157,6 +149,14 @@ export default {
         this.editedIndex = -1;
       });
     }
+  },
+
+  beforeRouteEnter (to, from, next) {
+    axios
+     .get('/api/user/getRoles')
+     .then(response => {
+       next(vm => vm.setData(response.data));
+   });
   }
 };
 </script>

@@ -329,7 +329,7 @@ export default {
 
     sendImage () {
       const formData = new FormData();
-      formData.append('cover', this.cover); // formData nie działa z PUT ale z POST
+      formData.append('cover', this.cover);
 
       const config = {
         headers: {

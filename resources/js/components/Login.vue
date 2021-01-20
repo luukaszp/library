@@ -71,7 +71,9 @@
                                 </v-btn>
                             </v-row>
                             <v-row class="pb-5 justify-center">
-                                <a style="color: #008D18; font-weight: bold" href="/reset-password">Nie pamiętam hasła</a>
+                                <router-link :to="{ name: 'reset-password'}" style="text-decoration: none; color: #008D18">
+                                    <span style="font-weight: bold">Nie pamiętam hasła</span>
+                                </router-link>
                             </v-row>
                         </v-form>
                     </v-card>
@@ -120,7 +122,7 @@ export default {
               toast: true,
               position: 'top-end',
               showConfirmButton: false,
-              timer: 3000,
+              timer: 2000,
               didOpen: (toast) => {
                 toast.addEventListener('mouseenter', this.$swal.stopTimer);
                 toast.addEventListener('mouseleave', this.$swal.resumeTimer);

@@ -1,6 +1,6 @@
 <template>
     <v-row fill-height style="height: 100%; margin: 0">
-        <v-col md="auto" style="padding: 0">
+        <v-col md="auto" style="padding: 0; margin-top: -15px; margin-bottom: -15px">
             <v-card style="height: 100%; border-radius: 0px; max-width: 280px">
                 <v-navigation-drawer
                 permanent

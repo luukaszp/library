@@ -20,10 +20,10 @@
              style="text-align: left;"
           >
             <v-col>
-              <h1 v-text="books.title" style="font-weight: bold; text-align: center" class="mr-2"> </h1>
+              <h1 v-text="books.title" style="font-weight: bold; text-align: center"> </h1>
             </v-col>
 
-            <v-col>
+            <v-col style="text-align: center">
                 <p>Autor: </p>
                 <v-list-item-subtitle
                 v-for="author in books.authors"
@@ -35,7 +35,7 @@
                 </v-list-item-subtitle>
             </v-col>
 
-            <v-col>
+            <v-col style="text-align: center">
               <span>Kategoria: </span><span style="font-weight: bold" v-text="books.categories.name" class="mr-2"></span>
             </v-col>
 

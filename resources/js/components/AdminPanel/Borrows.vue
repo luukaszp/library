@@ -115,6 +115,7 @@ export default {
     editBorrowDialog: false,
     valid: false,
     search: '',
+    borrows: [],
     show: false,
     menu: false,
     headers: [
@@ -150,23 +151,14 @@ export default {
   computed: {
     formTitle () {
       return this.editedIndex === -1 ? 'Edytuj dane o wypożyczeniu' : 'Edytuj dane o wypożyczeniu';
-    },
-    borrows() {
-      return this.$store.getters.getBorrows;
     }
-  },
-
-  watch: {
-    dialog (val) {
-      val || this.close();
-    }
-  },
-
-  created () {
-    this.$store.dispatch('fetchBorrows', {});
   },
 
   methods: {
+    setData(borrows) {
+      this.borrows = borrows;
+    },
+
     editBorrow (item) {
       this.editedIndex = this.borrows.indexOf(item);
       this.editedItem = { ...item };
@@ -225,6 +217,14 @@ export default {
         this.$store.dispatch('fetchBorrows', {});
       });
     }
+  },
+
+  beforeRouteEnter (to, from, next) {
+    axios
+     .get('/api/borrow/getBorrows')
+     .then(response => {
+       next(vm => vm.setData(response.data));
+   });
   }
 };
 </script>

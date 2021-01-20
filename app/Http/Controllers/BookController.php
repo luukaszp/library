@@ -54,25 +54,11 @@ class BookController extends Controller
             ->select(
                 'books.id', 'books.title', 'books.description', 'books.publish_year',
                 'categories.name as categoryName', 'authors.name as authorName',
-                DB::raw('COUNT(books.title) as amount'), 'authors.surname', 'publishers.name as publisherName', 'books.cover'
+                DB::raw('COUNT(distinct author_book.book_id) as amount'), 'authors.surname', 'publishers.name as publisherName', 'books.cover'
             )
             ->groupBy('books.title')
-            ->distinct()
             ->get()
             ->toArray();
-
-        //$amount = $this->getAmount(0)->toArray();
-
-        /*$book = Book::with(['publishers:name,id', 'categories:name,id'])->groupBy('title')->get()->toArray();
-
-        $author = Book::with(['authors:name,surname,id'])->get()->toArray();
-    
-        array_push($book, $amount);
-        array_push($book, $author);*/
-        //$data['amount'] = $amount;
-        //$data->toArray();
-        //array_push($data, $amount);
-        //$data['amount'] = $amount;
 
         return $data;
 
@@ -597,5 +583,22 @@ class BookController extends Controller
                 ], 500
             );
         }
+    }
+
+    /**
+     * Get amount of books that were added in current month
+     *
+     * @param  Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    public function getMonthlyBooks()
+    {
+        $firstDay = Carbon::now()->startOfMonth()->toDateString(); //current month
+        $lastDay = Carbon::now()->endOfMonth()->toDateString(); 
+
+        $currentMonth = Book::whereBetween('books.created_at', [$firstDay, $lastDay])->count('id');
+
+        return $currentMonth;
     }
 }

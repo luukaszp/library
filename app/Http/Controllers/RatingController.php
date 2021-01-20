@@ -49,7 +49,7 @@ class RatingController extends Controller
             ->join('users', 'users.id', '=', 'readers.user_id')
             ->select(
                 'ratings.id', 'ratings.rate', 'ratings.created_at', 'ratings.opinion', 'users.name', 
-                'users.surname', 'users.id as user_id'
+                'users.surname', 'users.avatar', 'users.id as user_id'
             )
             ->get()
             ->toArray();
@@ -198,11 +198,12 @@ class RatingController extends Controller
             );
         }
 
+        $reader_id = Reader::where('id', auth()->user()->id)->get('id')->first();
+
         $rating->rate = $request->rate;
         $rating->opinion = $request->opinion;
-        $rating->user_id = auth()->user()->id;
+        $rating->reader_id = $reader_id->id;
         $rating->book_id = $request->book_id;
-        //$opinion->rating_id = Rating::latest()->first()->id;
 
         $rating->save();
 
@@ -221,5 +222,32 @@ class RatingController extends Controller
                 ], 500
             );
         }
+    }
+
+    /**
+     * Get amount of ratings for current month
+     *
+     * @param  Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    public function getMonthlyRating()
+    {
+        $firstDay = Carbon::now()->startOfMonth()->toDateString(); //current month
+        $lastDay = Carbon::now()->endOfMonth()->toDateString(); 
+
+        $currentMonth = DB::table('ratings')
+            ->whereBetween('ratings.created_at', [$firstDay, $lastDay])
+            ->join('readers', 'readers.id', '=', 'ratings.reader_id')
+            ->join('users', 'users.id', '=', 'readers.user_id')
+            ->select(
+                'users.name', 'users.surname', 'users.avatar', DB::raw('COUNT(ratings.created_at) as count')
+            )
+            ->groupBy('users.id')
+            ->orderBy('count', 'desc')
+            ->take(10)
+            ->get();
+
+        return $currentMonth;
     }
 }

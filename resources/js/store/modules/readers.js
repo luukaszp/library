@@ -36,6 +36,19 @@ export default {
         .catch((error) => {
           console.log(error);
         });
+    },
+
+    fetchMonthReaders(context) {
+      axios({
+        method: 'GET',
+        url: '/api/reader/get/monthly'
+      })
+        .then((response) => {
+          context.commit('setReaders', response.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     }
   },
   getters: {

@@ -41,6 +41,9 @@ Route::post('password-change', 'AuthController@passwordChange');
 Route::post('first-login-password', 'AuthController@firstLoginPassword');
 
 Route::get('borrow/monthly', 'BorrowController@getMonthlyAmount');
+Route::get('rating/monthly/get', 'RatingController@getMonthlyRating');
+Route::get('reader/get/monthly', 'ReaderController@getMonthlyReaders');
+Route::get('book/monthly/get/all', 'BookController@getMonthlyBooks');
 
 Route::group(
     ['middleware' => 'auth.jwt'], function () {

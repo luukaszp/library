@@ -90,6 +90,19 @@ export default {
         .catch((error) => {
           console.log(error);
         });
+    },
+
+    fetchMonthBooks(context) {
+      axios({
+        method: 'GET',
+        url: '/api/book/monthly/get/all'
+      })
+        .then((response) => {
+          context.commit('setBooks', response.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     }
 
   },

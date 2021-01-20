@@ -44,6 +44,7 @@ export default {
   data: () => ({
     search: '',
     show: false,
+    borrows: [],
     headers: [
       {
         text: 'Tytuł książki',
@@ -59,24 +60,11 @@ export default {
     ]
   }),
 
-  computed: {
-    borrows() {
-      return this.$store.getters.getBorrows;
-    }
-  },
-
-  watch: {
-    dialog (val) {
-      val || this.close();
-    }
-  },
-
-  created () {
-    this.$store.dispatch('fetchDelays', {});
-    this.$store.dispatch('fetchHistory', {});
-  },
-
   methods: {
+    setData(borrows) {
+      this.borrows = borrows;
+    },
+
     getColor (returns_date) {
       const todayDate = new Date();
       const dateOfReturn = new Date(returns_date);
@@ -87,6 +75,14 @@ export default {
       if (differenceInDays < 7) return 'orange';
       return 'green';
     }
+  },
+
+  beforeRouteEnter (to, from, next) {
+    axios
+     .get('/api/borrow/history')
+     .then(response => {
+       next(vm => vm.setData(response.data));
+   });
   }
 };
 </script>
