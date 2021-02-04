@@ -4,6 +4,7 @@ use Illuminate\Database\Seeder;
 use App\User;
 use App\Worker;
 use App\Reader;
+use Carbon\Carbon;
 
 class UsersTableSeeder extends Seeder
 {
@@ -20,6 +21,7 @@ class UsersTableSeeder extends Seeder
         $user->surname = 'admin';
         $user->email = 'admin@admin.admin';
         $user->activation_token = Str::random(40);
+        $user->email_verified_at = Carbon::now()->toDateTimeString();
 
         $worker = new Worker();
         $worker->id_number = '123123123123';
@@ -36,6 +38,7 @@ class UsersTableSeeder extends Seeder
         $user->surname = 'worker';
         $user->email = 'worker@worker.worker';
         $user->activation_token = Str::random(40);
+        $user->email_verified_at = Carbon::now()->toDateTimeString();
 
         $worker = new Worker();
         $worker->id_number = '321321321321';
@@ -52,6 +55,7 @@ class UsersTableSeeder extends Seeder
         $user->surname = 'reader';
         $user->email = 'reader@reader.reader';
         $user->activation_token = Str::random(40);
+        $user->email_verified_at = Carbon::now()->toDateTimeString();
 
         $reader = new Reader();
         $reader->card_number = '1212121212';
