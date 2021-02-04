@@ -39,21 +39,6 @@ class AuthController extends Controller
      */
     public function loginWorker(Request $request)
     {
-        /*$user = new User();
-        $user->name = 'admin';
-        $user->surname = 'admin';
-        $user->email = 'admin@admin.admin';
-        $user->activation_token = Str::random(40);
-
-        $worker = new Worker();
-        $worker->id_number = '123123123123';
-        $worker->is_admin = 1;
-        $worker->user_id = 1;
-        $worker->password = bcrypt('zaq1@WSX');
-
-        $user->save();
-        $worker->save();*/
-
         $credentials = $request->only('id_number', 'password');
 
         try {
