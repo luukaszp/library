@@ -49,8 +49,8 @@ class BookController extends Controller
         $data = DB::table('books')
             ->join('categories', 'categories.id', '=', 'books.category_id')
             ->join('publishers', 'publishers.id', '=', 'books.publisher_id')
-            ->join('authors', 'authors.id', '=', 'author_book.author_id')
             ->join('author_book', 'author_book.book_id', '=', 'books.id')
+            ->join('authors', 'authors.id', '=', 'author_book.author_id')
             ->select(
                 'books.id', 'books.title', 'books.description', 'books.publish_year',
                 'categories.name as categoryName', 'authors.name as authorName',
@@ -72,8 +72,8 @@ class BookController extends Controller
     public function getBooksISBN()
     {
         $data = DB::table('books')
+            ->join('author_book', 'author_book.book_id', '=', 'books.id')
             ->join('authors', 'authors.id', '=', 'author_book.author_id')
-            ->join('author_book', 'author_book.author_id', '=', 'authors.id')
             ->select(
                 'books.id', 'books.title', 'books.isbn', 'authors.name as authorName',
                 'authors.surname'
@@ -141,8 +141,8 @@ class BookController extends Controller
     public function authorBooks($id)
     {
         $book = DB::table('books')
-            ->join('authors', 'authors.id', '=', 'author_book.author_id')
             ->join('author_book', 'author_book.book_id', '=', 'books.id')
+            ->join('authors', 'authors.id', '=', 'author_book.author_id')
             ->where('author_book.author_id', '=', $id)
             ->join('categories', 'categories.id', '=', 'books.category_id')
             ->join('publishers', 'publishers.id', '=', 'books.publisher_id')
@@ -178,8 +178,8 @@ class BookController extends Controller
         $data = DB::table('books')
             ->where('books.created_at', '>=', $date)
             ->join('categories', 'categories.id', '=', 'books.category_id')
-            ->join('authors', 'authors.id', '=', 'author_book.author_id')
             ->join('author_book', 'author_book.book_id', '=', 'books.id')
+            ->join('authors', 'authors.id', '=', 'author_book.author_id')
             ->select(
                 'books.id', 'books.title', 'categories.name as categoryName', 'authors.name as authorName',
                 'authors.surname', 'books.cover'
@@ -246,8 +246,8 @@ class BookController extends Controller
         ];
 
         $data = DB::table('readers')
-            ->join('authors', 'authors.id', '=', 'author_reader.author_id')
             ->join('author_reader', 'author_reader.reader_id', '=', 'readers.id')
+            ->join('authors', 'authors.id', '=', 'author_reader.author_id')
             ->select(
                 'authors.name', 'authors.surname', 'readers.id'
             )

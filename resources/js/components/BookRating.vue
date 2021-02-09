@@ -179,7 +179,7 @@ export default {
     check() {
       if(this.ratings.length != 0) {
         for (let i = 0; i < this.ratings.length; i++) {
-          if(this.ratings[i].user_id === this.loggedUser.id.toString()) {
+          if(this.ratings[i].user_id === this.loggedUser.id) {
             return true
           }
         }

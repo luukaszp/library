@@ -501,8 +501,8 @@ class BorrowController extends Controller
         $reader = Reader::where('user_id', '=', $id)->pluck('id');
         $borrow = Borrow::where('reader_id', '=', $reader[0])
             ->join('books', 'books.id', '=', 'borrows.book_id')
+            ->join('author_book', 'author_book.book_id', '=', 'books.id')
             ->join('authors', 'authors.id', '=', 'author_book.author_id')
-            ->join('author_book', 'author_book.author_id', '=', 'authors.id')
             ->select('authors.name', 'authors.surname', DB::raw('COUNT(authors.name + authors.surname) as count'))
             ->groupBy('authors.surname')
             ->orderBy('count')
