@@ -126,12 +126,7 @@ class UserController extends Controller
         $user = User::find($request->get('user_id'));
         
         if ($file = $request->hasFile('avatar')) {
-            $user->avatar = $imagePath = $request->file('avatar')->store('avatars', 'public');
-
-            $avatar = Image::make(public_path("storage/{$imagePath}"))->fit(1000, 1000);
-            $avatar->save();
-
-            $imageArray = ['avatar' => $imagePath];
+            $user->avatar = $imagePath = $request->file('avatar')->store('avatars', 'azure');
         }
 
         if ($user->save()) {

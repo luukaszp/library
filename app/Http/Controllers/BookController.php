@@ -218,15 +218,7 @@ class BookController extends Controller
             $book->publisher_id = $request->get('publisher');
 
             if ($file = $request->hasFile('cover')) {
-                $book->cover = $imagePath = $request->file('cover')->store('books', 'public');
-
-                $cover = Image::make(public_path("storage/{$imagePath}"))->fit(300, 400, function ($constraint) {
-                    $constraint->aspectRatio();
-                    $constraint->upsize();
-                });
-                $cover->save();
-
-                $imageArray = ['cover' => $imagePath];
+                $book->cover = $imagePath = $request->file('cover')->store('books', 'azure');
             }
 
             $book->save();
@@ -315,16 +307,7 @@ class BookController extends Controller
 
         for($index = 0; $index < count($book); $index++) {
             if ($file = $request->hasFile('cover')) {
-                $book[$index]->cover = $imagePath = $request->file('cover')->store('books', 'public');
-
-                $cover = Image::make(public_path("storage/{$imagePath}"))->fit(300, 400, function ($constraint) {
-                    $constraint->aspectRatio();
-                    $constraint->upsize();
-                });
-                $cover->save();
-
-                $imageArray = ['cover' => $imagePath];
-
+                $book[$index]->cover = $imagePath = $request->file('cover')->store('books', 'azure');
                 $book[$index]->save();
             }
         }
