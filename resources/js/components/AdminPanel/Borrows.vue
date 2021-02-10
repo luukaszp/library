@@ -214,7 +214,10 @@ export default {
         } else {
           this.$swal('Anulowano', 'Akcja została anulowana', 'info');
         }
-        this.$store.dispatch('fetchBorrows', {});
+        axios.get('/api/borrow/getBorrows')
+        .then(response => {
+            this.borrows = response.data
+        });
       });
     }
   },

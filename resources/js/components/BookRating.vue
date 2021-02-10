@@ -1,6 +1,6 @@
 <template>
     <v-container>
-        <v-row v-if="authStatus && check === false" style="justify-content: center; margin-left: 10px; margin-right: 10px">
+        <v-row v-if="loggedUser.card_number && check === false" style="justify-content: center; margin-left: 10px; margin-right: 10px">
             <h2 style="width: 100%; text-align: center">Oceń książkę: </h2>
         <v-form v-model="valid" ref="form" style="width: 100%; text-align: center">
             <v-rating
@@ -28,12 +28,12 @@
             </div>
         </v-row>
 
-        <v-row v-if="authStatus && check === true" style="justify-content: center; margin: 25px 10px">
+        <v-row v-if="loggedUser && check === true" style="justify-content: center; margin: 25px 10px">
             <h2 style="width: 100%; text-align: center">Serdecznie dziękujemy za wystawienie opinii!</h2>
             <v-icon x-large>mdi-emoticon-excited</v-icon>
         </v-row>
 
-        <v-row v-if="!authStatus" style="justify-content: center; margin: 25px 10px">
+        <v-row v-if="!loggedUser" style="justify-content: center; margin: 25px 10px">
             <h2 style="width: 100%; text-align: center">Aby wystawić opinię należy się zalogować!</h2>
         </v-row>
 
@@ -47,7 +47,7 @@
                         <v-list-item :key="item.id +- item.rate">
                             <v-list-item-content>
                                 <v-col
-                                    :cols=6
+                                    :cols=8
                                     style="display: inline-flex"
                                 >
                                 <v-list-item-avatar>
@@ -77,7 +77,7 @@
                                   mdi-pencil
                                   </v-icon>
                                   <v-icon
-                                      v-if="item.user_id === loggedUser.id || loggedUser.id_number !== ''"
+                                      v-if="(item.user_id === loggedUser.id) || (loggedUser.id_number)"
                                       @click="deleteOpinion(item)"
                                   >
                                   mdi-delete

@@ -250,7 +250,10 @@ export default {
               console.log(error);
             });
         }
-        this.$store.dispatch('fetchEvents', {});
+        axios.get('/api/calendar/event/getEvents')
+        .then(response => {
+            this.events = response.data
+        });
         this.$refs.form.resetValidation();
         this.$refs.form.reset();
         this.close();

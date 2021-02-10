@@ -179,7 +179,7 @@ export default {
   data: () => ({
     editBookDialog: false,
     editImageDialog: false,
-    defaultButtonText: 'Zmień zdjęcie okładki',
+    defaultButtonText: 'Zmień zdjęcie okładki (*.jpg)',
     isSelecting: false,
     valid: false,
     search: '',
@@ -345,7 +345,10 @@ export default {
             this.$swal('Błąd', 'Okładka książki nie mogła zostać zmieniona!', 'error');
           }
         });
-      this.$store.dispatch('fetchBooks', {});
+      axios.get('/api/book/getBooks')
+        .then(response => {
+            this.books = response.data
+        });
     },
 
     getColor (amount) {
