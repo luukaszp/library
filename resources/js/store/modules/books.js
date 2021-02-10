@@ -39,7 +39,7 @@ export default {
     fetchAvailableBooks(context) {
       axios({
         method: 'GET',
-        url: 'http://127.0.0.1:8000/api/book/get/availableBooks'
+        url: '/api/book/get/availableBooks'
       })
         .then((response) => {
           context.commit('setBooks', response.data);
@@ -52,7 +52,7 @@ export default {
     fetchNewBooks(context) {
       axios({
         method: 'GET',
-        url: 'http://127.0.0.1:8000/api/book/getNewBooks'
+        url: '/api/book/getNewBooks'
       })
         .then((response) => {
           context.commit('setBooks', response.data);
@@ -67,7 +67,7 @@ export default {
       axios({
         method: 'GET',
         // eslint-disable-next-line camelcase
-        url: `http://127.0.0.1:8000/api/book/${book_id}`
+        url: `/api/book/${book_id}`
       })
         .then((response) => {
           context.commit('setBooks', response.data);
@@ -82,7 +82,7 @@ export default {
       axios({
         method: 'GET',
         // eslint-disable-next-line camelcase
-        url: `http://127.0.0.1:8000/api/author/${author_id}/books`
+        url: `/api/author/${author_id}/books`
       })
         .then((response) => {
           context.commit('setBooks', response.data);
