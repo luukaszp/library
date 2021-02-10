@@ -312,7 +312,7 @@ export default {
             }
           };
 
-          axios.post('http://127.0.0.1:8000/api/author/add', formData, config)
+          axios.post('/api/author/add', formData, config)
           .then(() => {
             const Toast = this.$swal.mixin({
               toast: true,

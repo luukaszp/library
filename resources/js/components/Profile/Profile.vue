@@ -104,7 +104,7 @@ export default {
           }
         };
 
-        axios.post('http://127.0.0.1:8000/api/user/profile/upload', formData, config)
+        axios.post('/api/user/profile/upload', formData, config)
           .then((response) => {
             if (response.data.success == true) {
               this.$swal('Zmieniono', 'Pomyślnie zmieniono awatar!', 'success');
