@@ -20,7 +20,7 @@
 
                     <v-img
                         style="width: 300px; height: 345px"
-                        v-bind:src="('../storage/' + item.cover)"
+                        v-bind:src="('https://storageforlibrary.blob.core.windows.net/library/' + item.cover)"
                     >
                     </v-img>
 

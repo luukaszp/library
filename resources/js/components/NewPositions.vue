@@ -20,7 +20,7 @@
                             <v-divider></v-divider>
 
                             <v-img
-                                v-bind:src="('../storage/' + book.cover)"
+                                v-bind:src="('https://storageforlibrary.blob.core.windows.net/library/' + book.cover)"
                                 width="300px"
                                 style="display: inline-block"
                             >

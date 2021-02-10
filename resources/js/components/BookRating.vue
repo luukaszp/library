@@ -51,7 +51,7 @@
                                     style="display: inline-flex"
                                 >
                                 <v-list-item-avatar>
-                                    <v-img :src="'../storage/' + item.avatar"></v-img>
+                                    <v-img :src="'https://storageforlibrary.blob.core.windows.net/library/' + item.avatar"></v-img>
                                 </v-list-item-avatar>
                                 <v-list-item-title v-text="item.name + ' ' + item.surname"></v-list-item-title>
                                 <v-rating

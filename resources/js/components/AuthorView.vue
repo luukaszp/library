@@ -3,7 +3,7 @@
         <v-row style="margin-left: 10px; margin-right: 10px">
             <v-col md=3 style="justify-content: center; text-align: center;">
                 <v-avatar size="200">
-                    <v-img class="card-img" v-bind:src="('../storage/' + authors.photo)"></v-img>
+                    <v-img class="card-img" v-bind:src="('https://storageforlibrary.blob.core.windows.net/library/' + authors.photo)"></v-img>
                 </v-avatar>
             </v-col>
 

@@ -83,7 +83,7 @@
                     <v-col cols="8">
                       <v-card>
                         <v-img
-                          v-bind:src="('../storage/' + image)"
+                          v-bind:src="('https://storageforlibrary.blob.core.windows.net/library/' + image)"
                           aspect-ratio="1"
                           style="height: 400px;width: 320px;"
                         ></v-img>
