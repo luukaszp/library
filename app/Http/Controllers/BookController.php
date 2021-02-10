@@ -220,7 +220,10 @@ class BookController extends Controller
             if ($file = $request->hasFile('cover')) {
                 $book->cover = $imagePath = $request->file('cover')->store('books', 'public');
 
-                $cover = Image::make(public_path("storage/{$imagePath}"))->fit(1000, 1000);
+                $cover = Image::make(public_path("storage/{$imagePath}"))->fit(300, 400, function ($constraint) {
+                    $constraint->aspectRatio();
+                    $constraint->upsize();
+                });
                 $cover->save();
 
                 $imageArray = ['cover' => $imagePath];
@@ -314,7 +317,10 @@ class BookController extends Controller
             if ($file = $request->hasFile('cover')) {
                 $book[$index]->cover = $imagePath = $request->file('cover')->store('books', 'public');
 
-                $cover = Image::make(public_path("storage/{$imagePath}"))->fit(1000, 1000);
+                $cover = Image::make(public_path("storage/{$imagePath}"))->fit(300, 400, function ($constraint) {
+                    $constraint->aspectRatio();
+                    $constraint->upsize();
+                });
                 $cover->save();
 
                 $imageArray = ['cover' => $imagePath];

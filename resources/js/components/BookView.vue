@@ -4,7 +4,7 @@
       <v-row style="justify-content: center; margin-left: 10px; margin-right: 10px">
         <v-col cols="auto">
           <v-img
-            style="margin-top: 15px; width: 300px; height: 365px"
+            style="margin-top: 15px; width: 300px; height: 400px"
             :src="('../storage/' + books.cover)"
           ></v-img>
         </v-col>

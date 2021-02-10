@@ -80,11 +80,12 @@
               <v-card-text>
                 <v-container>
                   <v-row align="center" justify="center">
-                    <v-col cols="6">
+                    <v-col cols="8">
                       <v-card>
                         <v-img
                           v-bind:src="('../storage/' + image)"
                           aspect-ratio="1"
+                          style="height: 400px;width: 320px;"
                         ></v-img>
                       </v-card>
                     </v-col>
