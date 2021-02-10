@@ -234,7 +234,7 @@ export default {
           }
         };
 
-        axios.post('http://127.0.0.1:8000/api/book/store', formData, config)
+        axios.post('/api/book/store', formData, config)
           .then((response) => {
             if (response.data.success == true) {
               this.$swal('Dodano', 'Pomyślnie dodano książkę do bazy bibliotecznej!', 'success');
