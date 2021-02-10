@@ -45,6 +45,9 @@ Route::get('rating/monthly/get', 'RatingController@getMonthlyRating');
 Route::get('reader/get/monthly', 'ReaderController@getMonthlyReaders');
 Route::get('book/monthly/get/all', 'BookController@getMonthlyBooks');
 
+Route::get('calendar/event/getEvents', 'EventController@getEvents');
+Route::get('calendar/type/getTypes', 'TypeController@getTypes');
+
 Route::group(
     ['middleware' => 'auth.jwt'], function () {
         Route::get('logout', 'AuthController@logout');
@@ -125,12 +128,10 @@ Route::group(
         Route::get('borrow/getDelayed', 'BorrowController@getDelayedBorrows');
         Route::put('borrow/edit/{id}', 'BorrowController@editBorrow');
 
-        Route::get('calendar/type/getTypes', 'TypeController@getTypes');
         Route::put('calendar/type/edit/{id}', 'TypeController@editType');
         Route::post('calendar/type/add', 'TypeController@addType');
         Route::delete('calendar/type/delete/{id}', 'TypeController@deleteType');
 
-        Route::get('calendar/event/getEvents', 'EventController@getEvents');
         Route::put('calendar/event/edit/{id}', 'EventController@editEvent');
         Route::post('calendar/event/add', 'EventController@addEvent');
         Route::delete('calendar/event/delete/{id}', 'EventController@deleteEvent');

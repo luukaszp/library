@@ -198,6 +198,10 @@ export default {
     }
   },
 
+  created () {
+    this.$store.dispatch('fetchTypes', {});
+  },
+
   methods: {
     setData(events) {
       this.events = events;
