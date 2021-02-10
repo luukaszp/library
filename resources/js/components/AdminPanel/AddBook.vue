@@ -171,7 +171,7 @@ export default {
   data() {
     return {
       valid: false,
-      defaultButtonText: 'Wgraj zdjęcie okładki',
+      defaultButtonText: 'Wgraj zdjęcie okładki (*.jpg)',
       isSelecting: false,
       value: true,
       title: '',

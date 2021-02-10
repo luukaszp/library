@@ -198,7 +198,7 @@ export default {
   data: () => ({
     addAuthorDialog: false,
     editPhotoDialog: false,
-    defaultButtonText: 'Dodaj zdjęcie autora',
+    defaultButtonText: 'Wgraj zdjęcie autora (*.jpg)',
     isSelecting: false,
     valid: false,
     search: '',

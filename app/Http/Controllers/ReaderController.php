@@ -132,7 +132,6 @@ class ReaderController extends Controller
         $lastDay = Carbon::now()->endOfMonth()->toDateString(); 
 
         $currentMonth = Reader::whereBetween('readers.created_at', [$firstDay, $lastDay])->count('id');
-
         return $currentMonth;
     }
 }

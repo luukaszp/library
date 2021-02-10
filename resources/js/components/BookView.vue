@@ -106,11 +106,11 @@ export default {
 
   methods: {
     getColor (amount) {
-      if (amount === '0') {
+      if (amount === 0) {
         this.status = 'Brak pozycji';
         return 'red';
       }
-      if (amount === '1' || amount === '2') {
+      if (amount === 1 || amount === 2) {
         this.status = 'Ostatnie sztuki!';
         return 'orange';
       }

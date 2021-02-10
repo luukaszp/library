@@ -220,7 +220,7 @@ class BookController extends Controller
             if ($file = $request->hasFile('cover')) {
                 $book->cover = $imagePath = $request->file('cover')->store('books', 'public');
 
-                $cover = Image::make(public_path("storage/{$imagePath}"))->fit(600, 800);
+                $cover = Image::make(public_path("storage/{$imagePath}"))->fit(1000, 1000);
                 $cover->save();
 
                 $imageArray = ['cover' => $imagePath];

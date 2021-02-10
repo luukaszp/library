@@ -108,7 +108,8 @@ import axios from 'axios';
 
 export default {
   data: () => ({
-    books: []
+    books: [],
+    readers: []
   }),
 
   computed: {
@@ -117,21 +118,25 @@ export default {
     },
     ratings() {
       return this.$store.getters.getRatings;
-    },
-    readers() {
-      return this.$store.getters.getReaders;
     }
   },
 
   created () {
     this.$store.dispatch('fetchMonth', {});
     this.$store.dispatch('fetchMonthRating', {});
-    this.$store.dispatch('fetchMonthReaders', {});
   },
 
   methods: {
-    setData(books) {
+    setDataBooks(books) {
       this.books = books;
+      axios
+        .get('/api/reader/get/monthly')
+        .then((response) => {
+          this.setDataReaders(response.data);
+        });
+    },
+    setDataReaders(readers) {
+      this.readers = readers;
     }
   },
 
@@ -139,7 +144,7 @@ export default {
     axios
       .get('/api/book/monthly/get/all')
       .then((response) => {
-        next((vm) => vm.setData(response.data));
+        next((vm) => vm.setDataBooks(response.data));
       });
   }
 };
