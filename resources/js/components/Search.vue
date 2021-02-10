@@ -80,7 +80,7 @@
                 <v-divider></v-divider>
 
                 <v-img
-                style="width: 300px; height: 365px"
+                style="width: 300px; height: 400px"
                 v-bind:src="('../storage/' + item.cover)"
                 >
                 </v-img>
