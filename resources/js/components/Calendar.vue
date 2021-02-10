@@ -161,6 +161,12 @@ export default {
       return this.libraryEvent;
     }
   },
+
+  created () {
+    this.$store.dispatch('fetchTypes', {});
+    this.$store.dispatch('fetchEvents', {});
+  },
+
   methods: {
     getEventColor (events) {
       return events.color;
