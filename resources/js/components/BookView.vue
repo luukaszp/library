@@ -1,7 +1,7 @@
 <template>
 <v-container style="justify-content: center; display: flex">
   <v-card style="width: 1000px">
-      <v-row style="justify-content: center; margin-left: 10px; margin-right: 10px">
+      <v-row style="justify-content: space-evenly; margin-left: 10px; margin-right: 10px">
         <v-col cols="auto">
           <v-img
             style="margin-top: 15px; width: 300px; height: 400px"
@@ -54,9 +54,11 @@
             </v-col>
           </v-row>
         </v-col>
+      </v-row>
 
-        <v-divider vertical style="margin-left: 10px; margin-right: 10px"></v-divider>
+        <v-divider></v-divider>
 
+      <v-row style="text-align: center; margin-left: 10px; margin-right: 10px">
         <v-col cols="auto">
             <v-col style="padding-top: 20px">
                 <span style="font-weight: bold">Opis: </span><span v-text="books.description" class="mr-2"></span>
