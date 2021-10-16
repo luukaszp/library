@@ -1,2 +1,2 @@
 web: vendor/bin/heroku-php-apache2 public/
-web: npm run prod
+web: npm run dev
