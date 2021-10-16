@@ -5,46 +5,46 @@
   */
 
 /*!
-  * vue-router v3.4.9
-  * (c) 2020 Evan You
+  * vue-router v3.5.2
+  * (c) 2021 Evan You
   * @license MIT
   */
 
 /*!
- * ApexCharts v3.23.1
- * (c) 2018-2020 Juned Chhipa
+ * ApexCharts v3.29.0
+ * (c) 2018-2021 ApexCharts
  * Released under the MIT License.
  */
 
 /*!
- * Sizzle CSS Selector Engine v2.3.5
+ * Sizzle CSS Selector Engine v2.3.6
  * https://sizzlejs.com/
  *
  * Copyright JS Foundation and other contributors
  * Released under the MIT license
  * https://js.foundation/
  *
- * Date: 2020-03-14
+ * Date: 2021-02-16
  */
 
 /*!
- * Vue.js v2.6.12
- * (c) 2014-2020 Evan You
+ * Vue.js v2.6.14
+ * (c) 2014-2021 Evan You
  * Released under the MIT License.
  */
 
 /*!
- * jQuery JavaScript Library v3.5.1
+ * jQuery JavaScript Library v3.6.0
  * https://jquery.com/
  *
  * Includes Sizzle.js
  * https://sizzlejs.com/
  *
- * Copyright JS Foundation and other contributors
+ * Copyright OpenJS Foundation and other contributors
  * Released under the MIT license
  * https://jquery.org/license
  *
- * Date: 2020-05-04T22:49Z
+ * Date: 2021-03-02T17:08Z
  */
 
 /*!
@@ -55,8 +55,8 @@
  */
 
 /*!
- * vuex v3.6.0
- * (c) 2020 Evan You
+ * vuex v3.6.2
+ * (c) 2021 Evan You
  * @license MIT
  */
 
@@ -207,6 +207,8 @@ and limitations under the License.
 
 /*! ../../presets/default */
 
+/*! ../../services/goto */
+
 /*! ../../services/goto/easing-patterns */
 
 /*! ../../styles/components/_selection-controls.sass */
@@ -226,6 +228,8 @@ and limitations under the License.
 /*! ../../util/dateTimeUtils */
 
 /*! ../../util/dedupeModelListeners */
+
+/*! ../../util/dom */
 
 /*! ../../util/helpers */
 
@@ -340,6 +344,8 @@ and limitations under the License.
 /*! ../comparable */
 
 /*! ../delayable */
+
+/*! ../detachable */
 
 /*! ../framework */
 
@@ -989,6 +995,8 @@ and limitations under the License.
 
 /*! ./ru */
 
+/*! ./sanitizeDateString */
+
 /*! ./scroll */
 
 /*! ./services */
@@ -998,6 +1006,8 @@ and limitations under the License.
 /*! ./sl */
 
 /*! ./sr-Cyrl */
+
+/*! ./sr-Latn */
 
 /*! ./stack */
 
@@ -1035,6 +1045,8 @@ and limitations under the License.
 
 /*! ./utils */
 
+/*! ./vi */
+
 /*! ./zh-Hans */
 
 /*! ./zh-Hant */
@@ -1046,8 +1058,6 @@ and limitations under the License.
 /*! exports provided: BaseItem, default */
 
 /*! exports provided: BaseItemGroup, default */
-
-/*! exports provided: BaseSlideGroup, default */
 
 /*! exports provided: Breakpoint */
 
@@ -1249,7 +1259,11 @@ and limitations under the License.
 
 /*! exports provided: VWindow, VWindowItem, default */
 
-/*! exports provided: af, ar, bg, ca, ckb, cs, de, el, en, es, et, fa, fi, fr, hr, hu, he, id, it, ja, ko, lv, lt, nl, no, pl, pt, ro, ru, sk, sl, srCyrl, sv, th, tr, az, uk, zhHans, zhHant */
+/*! exports provided: af, ar, bg, ca, ckb, cs, de, el, en, es, et, fa, fi, fr, hr, hu, he, id, it, ja, ko, lv, lt, nl, no, pl, pt, ro, ru, sk, sl, srCyrl, srLatn, sv, th, tr, az, uk, vi, zhHans, zhHant */
+
+/*! exports provided: attachedRoot */
+
+/*! exports provided: calculateUpdatedOffset, calculateCenteredOffset, BaseSlideGroup, default */
 
 /*! exports provided: checkCollinear, getDistance, moveTo */
 
@@ -1259,11 +1273,11 @@ and limitations under the License.
 
 /*! exports provided: convertToComponentDeclarations, default */
 
-/*! exports provided: createItemTypeListeners, createItemTypeNativeListeners, createNativeLocaleFormatter, monthChange, pad */
+/*! exports provided: createItemTypeListeners, createItemTypeNativeListeners, createNativeLocaleFormatter, monthChange, sanitizeDateString, pad */
 
 /*! exports provided: createItemTypeNativeListeners, createItemTypeListeners */
 
-/*! exports provided: createSimpleFunctional, directiveConfig, addOnceEventListener, passiveSupported, addPassiveEventListener, getNestedValue, deepEqual, getObjectValueByPath, getPropertyFromItem, createRange, getZIndex, escapeHTML, filterObjectOnKeys, convertToUnit, kebabCase, isObject, keyCodes, remapInternalIcon, keys, camelize, arrayDiff, upperFirst, groupItems, wrapInArray, sortItems, defaultFilter, searchItems, getSlotType, debounce, throttle, getPrefixedScopedSlots, getSlot, clamp, padEnd, chunk, humanReadableFileSize, camelizeObjectKeys, mergeDeep, fillArray */
+/*! exports provided: createSimpleFunctional, directiveConfig, addOnceEventListener, passiveSupported, addPassiveEventListener, getNestedValue, deepEqual, getObjectValueByPath, getPropertyFromItem, createRange, getZIndex, escapeHTML, filterObjectOnKeys, convertToUnit, kebabCase, isObject, keyCodes, remapInternalIcon, keys, camelize, arrayDiff, upperFirst, groupItems, wrapInArray, sortItems, defaultFilter, searchItems, getSlotType, debounce, throttle, getPrefixedScopedSlots, getSlot, clamp, padEnd, chunk, humanReadableFileSize, camelizeObjectKeys, mergeDeep, fillArray, composedPath */
 
 /*! exports provided: createSimpleTransition, createJavascriptTransition */
 
@@ -1307,7 +1321,7 @@ and limitations under the License.
 
 /*! exports provided: parse, genStyles, genVariations, lighten, darken */
 
-/*! exports provided: parseEvent, isEventOn, isEventStart, isEventOverlapping */
+/*! exports provided: parseEvent, isEventOn, isEventHiddenOn, isEventStart, isEventOverlapping */
 
 /*! exports provided: parsedCategoryText, getParsedCategories */
 
@@ -1338,6 +1352,10 @@ and limitations under the License.
 /*!************************!*\
   !*** ./src/install.ts ***!
   \************************/
+
+/*!*************************!*\
+  !*** ./src/util/dom.ts ***!
+  \*************************/
 
 /*!**************************!*\
   !*** ./src/framework.ts ***!
@@ -1483,6 +1501,10 @@ and limitations under the License.
   !*** ./src/locale/uk.ts ***!
   \**************************/
 
+/*!**************************!*\
+  !*** ./src/locale/vi.ts ***!
+  \**************************/
+
 /*!***************************!*\
   !*** ./src/locale/ckb.ts ***!
   \***************************/
@@ -1513,6 +1535,10 @@ and limitations under the License.
 
 /*!*******************************!*\
   !*** ./src/locale/sr-Cyrl.ts ***!
+  \*******************************/
+
+/*!*******************************!*\
+  !*** ./src/locale/sr-Latn.ts ***!
   \*******************************/
 
 /*!*******************************!*\
@@ -3141,6 +3167,10 @@ and limitations under the License.
 
 /*!***************************************************************!*\
   !*** ./src/components/VColorPicker/VColorPickerSwatches.sass ***!
+  \***************************************************************/
+
+/*!***************************************************************!*\
+  !*** ./src/components/VDatePicker/util/sanitizeDateString.ts ***!
   \***************************************************************/
 
 /*!***************************************************************!*\
