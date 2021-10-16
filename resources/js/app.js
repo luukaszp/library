@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 import Vue from 'vue';
 import axios from 'axios';
 import VueAxios from 'vue-axios';
@@ -12,7 +13,7 @@ import 'vuetify/dist/vuetify.min.css';
 
 require('./bootstrap');
 
-axios.defaults.baseURL = 'https://library-app.azurewebsites.net';
+axios.defaults.baseURL = 'https://library-site.herokuapp.com';
 
 axios.interceptors.request.use(
   (config) => {
