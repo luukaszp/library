@@ -23,7 +23,7 @@ class AuthorController extends Controller
         $author->description = $request->get('description');
 
         if ($file = $request->hasFile('photo')) {
-            $author->photo = $imagePath = $request->file('photo')->store('authors', 'azure');
+            $author->photo = $imagePath = $request->file('photo')->store('authors', 'public');
         }
 
         $author->save();
@@ -159,7 +159,7 @@ class AuthorController extends Controller
         $author = Author::find($id);
 
         if ($file = $request->hasFile('photo')) {
-            $author->photo = $imagePath = $request->file('photo')->store('authors', 'azure');
+            $author->photo = $imagePath = $request->file('photo')->store('authors', 'public');
         }
 
         if ($author->save()) {

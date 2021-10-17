@@ -104,7 +104,7 @@
                                             <v-col cols="6">
                                             <v-card>
                                                 <v-img
-                                                v-bind:src="('https://storageforlibrary.blob.core.windows.net/library/' + image)"
+                                                v-bind:src="('../storage/' + image)"
                                                 aspect-ratio="1"
                                                 ></v-img>
                                             </v-card>
@@ -263,7 +263,7 @@ export default {
   methods: {
     setData(authors) {
       this.authors = authors;
-    }, 
+    },
 
     editAuthor(item) {
       this.editedIndex = this.authors.indexOf(item);

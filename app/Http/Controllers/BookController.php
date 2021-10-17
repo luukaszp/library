@@ -33,7 +33,7 @@ class BookController extends Controller
         if(!$id) {
             return $getAmount->pluck('amount');
         }
-        
+
         $count = $getAmount->where('id', '=', $id)->pluck('amount')->first();
 
         return $count;
@@ -84,7 +84,7 @@ class BookController extends Controller
 
         return $data;
     }
-    
+
     /**
      * Display a listing of available books.
      *
@@ -112,7 +112,7 @@ class BookController extends Controller
     public function showBook($id)
     {
         $amount = $this->getAmount($id);
-        
+
         $author = Book::find($id)->authors()->select('id', 'name', 'surname')->get();
 
         $book = Book::with(['publishers:name,id', 'categories:name,id'])->find($id);
@@ -218,7 +218,7 @@ class BookController extends Controller
             $book->publisher_id = $request->get('publisher');
 
             if ($file = $request->hasFile('cover')) {
-                $book->cover = $imagePath = $request->file('cover')->store('books', 'azure');
+                $book->cover = $imagePath = $request->file('cover')->store('books', 'public');
             }
 
             $book->save();
@@ -228,7 +228,7 @@ class BookController extends Controller
                 $book->authors()->attach($author);
             }
         }
-        
+
         for($i = 0; $i < $authorsNumber; $i++) {
             $authorName[$i] = Author::where('id', $authors[$i])->select('name', 'surname')->get()->first();
         }
@@ -307,7 +307,7 @@ class BookController extends Controller
 
         for($index = 0; $index < count($book); $index++) {
             if ($file = $request->hasFile('cover')) {
-                $book[$index]->cover = $imagePath = $request->file('cover')->store('books', 'azure');
+                $book[$index]->cover = $imagePath = $request->file('cover')->store('books', 'public');
                 $book[$index]->save();
             }
         }
@@ -435,7 +435,7 @@ class BookController extends Controller
         }
 
         $duplicates = Book::where('description', '=', $desc)->skip(1)->take(1)->get('id');
-        
+
         if ($duplicates->first() === null) {
             $book->destroy($id);
             return response()->json(
@@ -479,7 +479,7 @@ class BookController extends Controller
         $desc = Book::where('id', '=', $id)->pluck('description');
         $book = Book::where('description', '=', $desc)->get();
         $bookID = $book->pluck('id');
-        
+
         if (!$book) {
             return response()->json(
                 [
@@ -488,7 +488,7 @@ class BookController extends Controller
                 ], 400
             );
         }
-        
+
         for($index = 0; $index < count($bookID); $index++) {
             $book = Book::find($bookID[$index])->destroy($bookID[$index]);
         }
@@ -584,7 +584,7 @@ class BookController extends Controller
     public function getMonthlyBooks()
     {
         $firstDay = Carbon::now()->startOfMonth()->toDateString(); //current month
-        $lastDay = Carbon::now()->endOfMonth()->toDateString(); 
+        $lastDay = Carbon::now()->endOfMonth()->toDateString();
 
         $currentMonth = Book::whereBetween('books.created_at', [$firstDay, $lastDay])->count('id');
 

@@ -124,9 +124,9 @@ class UserController extends Controller
     public function changeAvatar(Request $request)
     {
         $user = User::find($request->get('user_id'));
-        
+
         if ($file = $request->hasFile('avatar')) {
-            $user->avatar = $imagePath = $request->file('avatar')->store('avatars', 'azure');
+            $user->avatar = $imagePath = $request->file('avatar')->store('avatars', 'public');
         }
 
         if ($user->save()) {

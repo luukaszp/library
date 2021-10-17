@@ -5,7 +5,7 @@
         <v-col cols="auto">
           <v-img
             style="margin-top: 15px; width: 300px; height: 400px"
-            :src="('https://storageforlibrary.blob.core.windows.net/library/' + books.cover)"
+            :src="('../storage/' + books.cover)"
           ></v-img>
         </v-col>
 

@@ -47,7 +47,7 @@
                                 </v-list-item-icon>
 
                                 <v-list-item-avatar>
-                                    <v-img :src="'https://storageforlibrary.blob.core.windows.net/library/' + item.avatar"></v-img>
+                                    <v-img :src="'../storage/' + item.avatar"></v-img>
                                 </v-list-item-avatar>
 
                                 <v-list-item-content style="padding-left: 10px">
@@ -82,7 +82,7 @@
                         <template v-for="(item, index) in ratings">
                             <v-list-item :key="item.id">
                                 <v-list-item-avatar>
-                                    <v-img :src="'https://storageforlibrary.blob.core.windows.net/library/' + item.avatar"></v-img>
+                                    <v-img :src="'../storage/' + item.avatar"></v-img>
                                 </v-list-item-avatar>
 
                                 <v-list-item-content style="padding-left: 10px">
