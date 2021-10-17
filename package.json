@@ -10,7 +10,7 @@
         "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --config=node_modules/laravel-mix/setup/webpack.config.js",
         "lint": ".eslintrc.js",
         "serve": "vue-cli-service serve resources/js/app.js",
-        "build": "vue-cli-service build resources/js/app.js"
+        "heroku-postbuild": "npm run prod"
     },
     "devDependencies": {
         "axios": "^0.21.4",
