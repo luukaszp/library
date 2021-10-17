@@ -13,7 +13,8 @@ import 'vuetify/dist/vuetify.min.css';
 
 require('./bootstrap');
 
-axios.defaults.baseURL = 'https://library-site.herokuapp.com';
+//axios.defaults.baseURL = 'https://library-site.herokuapp.com';
+axios.defaults.baseURL = 'http://localhost:8080';
 
 axios.interceptors.request.use(
   (config) => {
@@ -22,6 +23,8 @@ axios.interceptors.request.use(
       config.headers.Authorization = `Bearer ${token}`;
     }
     config.headers['Access-Control-Allow-Origin'] = '*';
+    config.headers['Access-Control-Allow-Methods'] = 'POST, GET, OPTIONS, PUT, DELETE';
+    config.headers['Access-Control-Allow-Headers'] =  'Content-Type, X-Auth-Token, Origin, Authorization';
     return config;
   },
   (error) => Promise.reject(error)

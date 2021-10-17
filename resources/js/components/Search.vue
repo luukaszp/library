@@ -215,7 +215,7 @@ export default {
   methods: {
     setData(books) {
       this.books = books;
-    }, 
+    },
     nextPage () {
       if (this.page + 1 <= this.numberOfPages) this.page += 1;
     },

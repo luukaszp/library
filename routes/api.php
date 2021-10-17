@@ -86,7 +86,7 @@ Route::group(
         Route::get('user/getWorkers', 'WorkerController@getWorkers');
         Route::put('worker/edit/{id}', 'WorkerController@editWorker');
         Route::delete('worker/delete/{id}', 'WorkerController@deleteWorker');
-        
+
         Route::get('user/getRoles', 'RoleController@getRoles');
         Route::put('roles/edit/{id}', 'RoleController@editRoles');
     }
