@@ -13,8 +13,7 @@ import 'vuetify/dist/vuetify.min.css';
 
 require('./bootstrap');
 
-//axios.defaults.baseURL = 'https://library-site.herokuapp.com';
-axios.defaults.baseURL = 'http://localhost:8080';
+axios.defaults.baseURL = 'https://library-site.herokuapp.com';
 
 axios.interceptors.request.use(
   (config) => {
