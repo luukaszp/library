@@ -88,7 +88,7 @@ class AuthController extends Controller
 
         $details = [
             'title' => 'Zmiana hasła',
-            'url' => "http://127.0.0.1:8000/first-login",
+            'url' => "https://library-site.herokuapp.com/first-login",
             'name' => $user->name
         ];
 
@@ -208,7 +208,7 @@ class AuthController extends Controller
 
         $details = [
             'title' => 'Resetowanie hasła',
-            'url' => "http://127.0.0.1:8000/new-password/$user->id",
+            'url' => "https://library-site.herokuapp.com/new-password/$user->id",
             'name' => $user->name
         ];
 
