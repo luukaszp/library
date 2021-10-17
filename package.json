@@ -33,8 +33,10 @@
     "dependencies": {
         "@mdi/font": "^5.9.55",
         "@types/jwt-decode": "^2.2.1",
+        "@vue/cli": "^4.5.14",
         "apexcharts": "^3.29.0",
         "axios": "^0.21.4",
+        "babel-loader": "^8.2.2",
         "bootstrap": "^4.6.0",
         "cross-env": "^7.0.3",
         "eslint": "^7.32.0",
