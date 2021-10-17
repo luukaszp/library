@@ -1,4 +1,7 @@
 module.exports = {
+  devServer: {
+    disableHostCheck: true
+  },
   env: {
     browser: true,
     es2020: true
