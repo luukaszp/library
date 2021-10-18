@@ -104,7 +104,7 @@
                                             <v-col cols="6">
                                             <v-card>
                                                 <v-img
-                                                v-bind:src="('../storage/' + image)"
+                                                v-bind:src="('https://library-site.s3.eu-north-1.amazonaws.com/authors/' + image)"
                                                 aspect-ratio="1"
                                                 ></v-img>
                                             </v-card>

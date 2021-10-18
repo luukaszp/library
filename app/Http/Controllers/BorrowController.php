@@ -78,8 +78,7 @@ class BorrowController extends Controller
             ->join('users', 'users.id', '=', 'readers.user_id')
             ->join('books', 'books.id', '=', 'borrows.book_id')
             ->select(
-                'books.title', 'users.name', 'users.surname', 'borrows.borrows_date', 'borrows.returns_date',
-                'borrows.id', 'books.id as bookID'
+                'books.title', 'users.name', 'users.surname', 'borrows.borrows_date', 'borrows.returns_date', 'borrows.id', 'books.id as bookID'
             )
             ->get()
             ->toArray();
@@ -122,11 +121,12 @@ class BorrowController extends Controller
             ->join('users', 'users.id', '=', 'readers.user_id')
             ->join('books', 'books.id', '=', 'borrows.book_id')
             ->select(
-                'books.title', 'users.name', 'users.surname', 'borrows.delay', 'borrows.penalty'  
+                'books.title', 'users.name', 'users.surname', 'borrows.delay', 'borrows.penalty'
             )
+            ->groupBy('books.id', 'books.title', 'users.name', 'users.surname', 'borrows.delay', 'borrows.penalty')
             ->get()
             ->toArray();
-        
+
         return $data;
     }
 
@@ -269,7 +269,7 @@ class BorrowController extends Controller
             ->where('borrows.when_returned', '=', null)
             ->join('books', 'books.id', '=', 'borrows.book_id')
             ->select(
-                'borrows.id', 'books.title', 'borrows.borrows_date', 
+                'borrows.id', 'books.title', 'borrows.borrows_date',
                 'borrows.returns_date'
             )
             ->get()
@@ -298,7 +298,7 @@ class BorrowController extends Controller
             ->get()
             ->toArray();
 
-        return $delay; 
+        return $delay;
     }
 
     /**
@@ -375,7 +375,7 @@ class BorrowController extends Controller
                     return Carbon::parse($date->borrows_date)->format('m'); // grouping by months
                 }
             );
-            
+
         if (!$borrow) {
             return response()->json(
                 [
@@ -387,16 +387,16 @@ class BorrowController extends Controller
 
         $borrowsCount = [];
         $amount = [];
-        
+
         foreach ($borrow as $key => $value) {
             $borrowsCount[(int)$key] = count($value);
         }
-        
+
         for($i = 1; $i <= 12; $i++){
             if(!empty($borrowsCount[$i])) {
-                $amount[$i] = $borrowsCount[$i];    
+                $amount[$i] = $borrowsCount[$i];
             }else{
-                $amount[$i] = 0;    
+                $amount[$i] = 0;
             }
         }
 
@@ -416,7 +416,7 @@ class BorrowController extends Controller
         $status = [];
 
         $firstDay = Carbon::now()->startOfMonth()->toDateString(); //current month
-        $lastDay = Carbon::now()->endOfMonth()->toDateString(); 
+        $lastDay = Carbon::now()->endOfMonth()->toDateString();
 
         $lastMonthFDay = Carbon::now()->subMonth()->startOfMonth()->toDateString(); //previous month
         $lastMonthLDay = Carbon::now()->subMonth()->endOfMonth()->toDateString();
@@ -461,7 +461,7 @@ class BorrowController extends Controller
                 $position[$i] = 0;
             }
         }
-        
+
         for ($i = 0; $i <= key($position); $i++) {
             if (!array_key_exists($i, $position)) {
                 $status[$i] = 'new';

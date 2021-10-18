@@ -104,7 +104,26 @@ export default {
           }
         };
 
-        axios.post('/api/user/profile/upload', formData, config)
+        axios({
+            method: 'post',
+            url: '/api/user/profile/upload',
+            data: {
+                data: this.formData
+            },
+            config,
+            validateStatus: (status) => {
+                return true; // I'm always returning true, you may want to do it depending on the status received
+            },
+        }).catch((error) => {
+            console.log(error);
+        }).then(response => {
+            if (response.data.success == true) {
+              this.$swal('Zmieniono', 'Pomyślnie zmieniono awatar!', 'success');
+            } else {
+              this.$swal('Błąd', 'Zmiana awataru zakończyła się niepowodzeniem!', 'error');
+            }
+        });
+        /*axios.post('/api/user/profile/upload', formData, config)
           .then((response) => {
             if (response.data.success == true) {
               this.$swal('Zmieniono', 'Pomyślnie zmieniono awatar!', 'success');
@@ -114,7 +133,7 @@ export default {
           })
           .catch((error) => {
             console.log(error);
-          });
+          });*/
           this.$store.dispatch('fetchOneReader', this.user_id);
       }
     },

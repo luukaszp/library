@@ -5,7 +5,7 @@
         <v-col cols="auto">
           <v-img
             style="margin-top: 15px; width: 300px; height: 400px"
-            :src="('../storage/' + books.cover)"
+            :src="('https://library-site.s3.eu-north-1.amazonaws.com/covers/' + books.cover)"
           ></v-img>
         </v-col>
 

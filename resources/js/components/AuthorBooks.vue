@@ -20,7 +20,7 @@
 
                     <v-img
                         style="width: 300px; height: 400px; display: inline-block"
-                        v-bind:src="('../storage/' + item.cover)"
+                        v-bind:src="('https://library-site.s3.eu-north-1.amazonaws.com/covers/' + item.cover)"
                     >
                     </v-img>
 

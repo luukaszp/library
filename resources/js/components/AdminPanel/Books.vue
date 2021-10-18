@@ -83,7 +83,7 @@
                     <v-col cols="8">
                       <v-card>
                         <v-img
-                          v-bind:src="('../storage/' + image)"
+                          v-bind:src="('https://library-site.s3.eu-north-1.amazonaws.com/covers/' + image)"
                           aspect-ratio="1"
                           style="height: 400px;width: 320px;"
                         ></v-img>

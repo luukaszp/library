@@ -51,7 +51,7 @@
                                     style="display: inline-flex"
                                 >
                                 <v-list-item-avatar>
-                                     <v-img :src="'../storage/' + item.avatar"></v-img>
+                                     <v-img :src="'https://library-site.s3.eu-north-1.amazonaws.com/avatars/' + item.avatar"></v-img>
                                 </v-list-item-avatar>
                                 <v-list-item-title v-text="item.name + ' ' + item.surname"></v-list-item-title>
                                 <v-rating
