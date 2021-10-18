@@ -22,9 +22,6 @@ axios.interceptors.request.use(
       config.headers.Authorization = `Bearer ${token}`;
     }
     config.headers['Access-Control-Allow-Origin'] = '*';
-    config.headers["Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"];
-    config.headers["Access-Control-Allow-Methods", "GET,POST,PUT,PATCH,DELETE"];
     return config;
   },
   (error) => Promise.reject(error)

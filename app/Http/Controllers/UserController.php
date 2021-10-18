@@ -126,21 +126,22 @@ class UserController extends Controller
         $user = User::find($request->get('user_id'));
 
         if ($file = $request->hasFile('avatar')) {
-            $user->avatar = $imagePath = $request->file('avatar')->store('avatars', 'public');
-        }
+            $uploadedImage = $request->file('avatar');
+            $imageName = time() . '.' . $uploadedImage->getClientOriginalExtension();
+            $destinationPath = public_path('images/avatars/');
+            $uploadedImage->move($destinationPath, $imageName);
+            $imagePath = $destinationPath . $imageName;
 
-        /*
-        //$imagePath = $request->file('avatar')->store('avatars', 'public');
-            $path = Storage::disk('s3')->put('avatars', $request->file('avatar'));
-            $path = Storage::disk('s3')->url($path);
-            /*$s3 = AWS::createClient('s3');
+            $s3 = AWS::createClient('s3');
             $s3->putObject(array(
-                'Bucket'     => env('S3_BUCKET_NAME', ''),
-                'Key'        => env('AWS_ACCESS_KEY_ID', ''),
+                'Bucket'     => 'library-site',
+                'Key'        => 'avatars/'.$imageName,
                 'SourceFile' => $imagePath,
+                'ACL'        => 'public-read',
             ));
-            $user->avatar = $path;
-        */
+
+            $user->avatar = $imageName;
+        }
 
         if ($user->save()) {
             return response()->json(
