@@ -11,28 +11,29 @@
                     v-model="valid"
                 >
                 <div class="upload" style="padding-top: 15px" v-if="this.$route.params.user_id.toString() === this.authId.toString()">
-                    <v-btn
-                        color="#008D18"
-                        class="white--text text-none pa-5 pb-0 pt-0"
-                        rounded
-                        depressed
-                        :loading="isSelecting"
-                        v-model="avatar"
-                        @click="onButtonClick"
-                    >
-                        <v-icon left>
-                            mdi-camera-account
-                        </v-icon>
-                        {{ buttonText }}
-                    </v-btn>
-                    <input
-                        ref="uploader"
-                        required
-                        class="d-none"
-                        type="file"
-                        accept="image/*"
-                        @change="onFileChanged"
-                    >
+                    <v-form ref="form" v-model="form1" lazy-validation>
+                      <v-file-input
+                          v-model="avatar"
+                          accept="image/png, image/jpeg"
+                          label="Pick a Picture"
+                          outlined
+                          dense
+                          prepend-icon=""
+                          prepend-inner-icon="mdi-camera"
+                          hide-details
+                        >
+                        </v-file-input>
+                        <v-btn
+                          color="primary"
+                          rounded
+                          block
+                          class="mt-3"
+                          @click="validate"
+                          :disabled="!form1"
+                        >
+                          Submit
+                        </v-btn>
+                    </v-form>
                 </div>
                 </v-form>
 
@@ -71,8 +72,9 @@ export default {
   data: () => ({
     isSelecting: false,
     defaultButtonText: 'Wgraj awatar',
-    avatar: [],
-    valid: false
+    avatar: null,
+    valid: false,
+    form1: false
   }),
 
   computed: {
@@ -94,13 +96,24 @@ export default {
   methods: {
     validate() {
       if (this.$refs.form.validate()) {
+        //const formData = new FormData();
+        const blob = this.avatar
+        //const FormData = require('form-data')
         const formData = new FormData();
-
-        formData.append('avatar', this.avatar);
+        //const form = new FormData();
+        formData.append('avatar', blob)
         formData.append('user_id', parseInt(this.user_id));
-        formData.append("_method", "put");
 
-        delete result.headers['Content-Type'];
+        const config = {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        };
+        /*let url = 'https://library-site.herokuapp.com/api/user/profile/upload';
+        let request = new XMLHttpRequest();
+        request.open('POST', url);
+        request.send(form);*/
+        //axios.defaults.headers.common['Content-Type'] = 'multipart/form-data';
 
         axios.post('/api/user/profile/upload', formData)
           .then((response) => {
@@ -114,9 +127,18 @@ export default {
             console.log(error);
           });
           this.$store.dispatch('fetchOneReader', this.user_id);
+
+          /*
+          const request = require('request');
+        const formData = {
+          avatar: this.avatar
+        }
+        console.log(formData);
+        request.post({url:'http://localhost:8080/api/user/profile/upload', formData: formData})
+        */
       }
     },
-    onButtonClick() {
+    /*onButtonClick() {
       this.isSelecting = true
       window.addEventListener('focus', () => {
         this.isSelecting = false
@@ -127,7 +149,7 @@ export default {
     onFileChanged(e) {
       this.avatar = e.target.files[0]
       this.validate();
-    }
+    }*/
   }
 };
 </script>
