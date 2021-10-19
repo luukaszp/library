@@ -116,14 +116,14 @@ class BorrowController extends Controller
         $this->checkDelay();
 
         $data = DB::table('borrows')
-            ->where('borrows.delay', '!=', 'null')
+            ->where('borrows.delay', '!=', null)
             ->join('readers', 'readers.id', '=', 'borrows.reader_id')
             ->join('users', 'users.id', '=', 'readers.user_id')
             ->join('books', 'books.id', '=', 'borrows.book_id')
             ->select(
                 'books.title', 'users.name', 'users.surname', 'borrows.delay', 'borrows.penalty'
             )
-            ->groupBy('books.id', 'books.title', 'users.name', 'users.surname', 'borrows.delay', 'borrows.penalty')
+            ->groupBy('books.title')
             ->get()
             ->toArray();
 
@@ -367,7 +367,8 @@ class BorrowController extends Controller
     public function getAmount($id)
     {
         $reader = Reader::where('user_id', '=', $id)->pluck('id');
-        $borrow = Borrow::where('reader_id', '=', $reader[0])
+        $borrow = DB::table('borrows')
+            ->where('borrows.reader_id', '=', $reader[0])
             ->select('borrows_date')
             ->get()
             ->groupBy(
@@ -499,12 +500,13 @@ class BorrowController extends Controller
     public function getAuthors($id)
     {
         $reader = Reader::where('user_id', '=', $id)->pluck('id');
-        $borrow = Borrow::where('reader_id', '=', $reader[0])
+        $borrow = DB::table('borrows')
+            ->where('borrows.reader_id', '=', $reader[0])
             ->join('books', 'books.id', '=', 'borrows.book_id')
             ->join('author_book', 'author_book.book_id', '=', 'books.id')
             ->join('authors', 'authors.id', '=', 'author_book.author_id')
-            ->select('authors.name', 'authors.surname', DB::raw('COUNT(authors.name + authors.surname) as count'))
-            ->groupBy('authors.surname')
+            ->select('authors.name', 'authors.surname', DB::raw('COUNT(authors.surname) as count'))
+            ->groupBy('authors.name', 'authors.surname')
             ->orderBy('count')
             ->take(5)
             ->get();
@@ -531,7 +533,8 @@ class BorrowController extends Controller
     public function getCategory($id)
     {
         $reader = Reader::where('user_id', '=', $id)->pluck('id');
-        $borrow = Borrow::where('reader_id', '=', $reader[0])
+        $borrow = DB::table('borrows')
+            ->where('borrows.reader_id', '=', $reader[0])
             ->join('books', 'books.id', '=', 'borrows.book_id')
             ->join('categories', 'categories.id', '=', 'books.category_id')
             ->select('categories.name', DB::raw('COUNT(categories.name) as count'))
