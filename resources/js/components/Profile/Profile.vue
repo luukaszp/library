@@ -108,11 +108,7 @@ export default {
           }
         };
 
-        axios.post('/api/user/profile/upload', form, {
-          headers: {
-            'Accept': 'multipart/form-data',
-            'Content-Type': 'multipart/form-data',
-        }})
+        axios.post('/api/user/profile/upload', form, { headers: form.getHeaders() })
           .then((response) => {
             if (response.data.success == true) {
               this.$swal('Zmieniono', 'Pomyślnie zmieniono awatar!', 'success');
