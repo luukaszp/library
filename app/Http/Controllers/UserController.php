@@ -123,7 +123,7 @@ class UserController extends Controller
      */
     public function changeAvatar(Request $request)
     {
-        $user = User::find($request->file('user_id'));
+        $user = User::find(auth()->user()->id);
 
         if ($file = $request->hasFile('avatar')) {
             $uploadedImage = $request->file('avatar');
