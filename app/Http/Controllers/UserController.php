@@ -143,6 +143,8 @@ class UserController extends Controller
             $user->avatar = $imageName;
         }
 
+        $user->save();
+
         if ($user->save()) {
             return response()->json(
                 [
