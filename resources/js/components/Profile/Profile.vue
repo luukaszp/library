@@ -100,7 +100,7 @@ export default {
 
         const config = {
           headers: {
-            'Content-Type': 'multipart/form-data',
+            'Content-Type': null,
           }
         };
 
