@@ -94,21 +94,15 @@ export default {
   methods: {
     validate() {
       if (this.$refs.form.validate()) {
-        const FormData = require('form-data');
+        const formData = new FormData();
 
-        const form = new FormData();
-        //const formData = new FormData();
-        form.append('avatar', this.avatar);
-        form.append('user_id', parseInt(this.user_id));
-        form.append("_method", "put");
+        formData.append('avatar', this.avatar);
+        formData.append('user_id', parseInt(this.user_id));
+        formData.append("_method", "put");
 
-        const config = {
-          headers: {
-            'Content-Type': undefined,
-          }
-        };
+        delete result.headers['Content-Type'];
 
-        axios.post('/api/user/profile/upload', form, config)
+        axios.post('/api/user/profile/upload', formData)
           .then((response) => {
             if (response.data.success == true) {
               this.$swal('Zmieniono', 'Pomyślnie zmieniono awatar!', 'success');
