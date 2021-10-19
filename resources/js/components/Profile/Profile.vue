@@ -97,8 +97,15 @@ export default {
         const formData = new FormData();
         formData.append('avatar', this.avatar);
         formData.append('user_id', parseInt(this.user_id));
+        formData.append("_method", "put");
 
-        axios.post('/api/user/profile/upload', formData)
+        const config = {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          }
+        };
+
+        axios.post('/api/user/profile/upload', formData, config)
           .then((response) => {
             if (response.data.success == true) {
               this.$swal('Zmieniono', 'Pomyślnie zmieniono awatar!', 'success');
