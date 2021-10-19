@@ -104,16 +104,11 @@ export default {
 
         const config = {
           headers: {
-            'Content-Type': 'multipart/form-data',
+            'Content-Type': undefined,
           }
         };
 
-        let url = 'https://library-site.herokuapp.com/api/user/profile/upload';
-        let request = new XMLHttpRequest();
-        request.open('POST', url);
-        request.send(form);
-
-        /*axios.post('/api/user/profile/upload', form, { headers: form.getHeaders() })
+        axios.post('/api/user/profile/upload', form, config)
           .then((response) => {
             if (response.data.success == true) {
               this.$swal('Zmieniono', 'Pomyślnie zmieniono awatar!', 'success');
@@ -123,7 +118,7 @@ export default {
           })
           .catch((error) => {
             console.log(error);
-          });*/
+          });
           this.$store.dispatch('fetchOneReader', this.user_id);
       }
     },
