@@ -14,8 +14,9 @@
                     <v-form ref="form" v-model="form1" lazy-validation>
                       <v-file-input
                           v-model="avatar"
-                          accept="image/png, image/jpeg"
-                          label="Pick a Picture"
+                          accept="image/png, image/jpeg, image/bmp"
+                          label="Wybierz avatar"
+                          :rules="photoRules"
                           outlined
                           dense
                           prepend-icon=""
@@ -24,14 +25,14 @@
                         >
                         </v-file-input>
                         <v-btn
-                          color="primary"
+                          color="success"
                           rounded
                           block
                           class="mt-3"
                           @click="validate"
                           :disabled="!form1"
                         >
-                          Submit
+                          Zmień avatar
                         </v-btn>
                     </v-form>
                 </div>
@@ -70,11 +71,11 @@ export default {
   },
 
   data: () => ({
-    isSelecting: false,
     defaultButtonText: 'Wgraj awatar',
     avatar: null,
     valid: false,
-    form1: false
+    form1: false,
+    photoRules: [v => !v || v.size < 2000000 || 'Zdjęcie powinno mieć poniżej 5MB!'],
   }),
 
   computed: {

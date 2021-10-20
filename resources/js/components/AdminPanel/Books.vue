@@ -95,40 +95,29 @@
 
               <v-divider></v-divider>
 
-              <v-card-actions style="justify-content: center; display: block ruby; text-align: center; padding-bottom: 25px">
+              <v-card-actions style="justify-content: center; display: flex; text-align: center; padding-bottom: 25px">
                 <v-spacer></v-spacer>
                 <v-btn color="#008D18" text @click="closeImage">Anuluj</v-btn>
-                <v-btn
-                    color="#008D18"
-                    class="white--text text-none pl-5 pr-5"
-                    style="margin-right: 15px"
-                    rounded
-                    depressed
-                    :loading="isSelecting"
+                <v-file-input
                     v-model="cover"
-                    @click="onButtonClick"
-                >
-                    <v-icon left>
-                        mdi-book
-                    </v-icon>
-                    {{ buttonText }}
-                </v-btn>
-                <input
-                    ref="uploader"
+                    accept="image/png, image/jpeg, image/bmp"
+                    label="Wybierz zdjęcie"
                     :rules="coverRules"
-                    required
-                    class="d-none"
-                    type="file"
-                    accept="image/*"
+                    outlined
+                    dense
+                    prepend-icon=""
+                    prepend-inner-icon="mdi-book"
+                    hide-details
                     @change="onFileChanged"
-                >
+                    >
+                </v-file-input>
                 <v-btn
-                  color=#008D18
-                  @click="sendImage"
-                  :disabled="!valid"
-                  text
+                color=#228B22
+                @click="sendImage"
+                :disabled="!valid"
+                text
                 >
-                  Wgraj
+                Wgraj
                 </v-btn>
                 </v-card-actions>
             </v-card>
@@ -314,30 +303,17 @@ export default {
       this.editImageDialog = true;
     },
 
-    onButtonClick() {
-      this.isSelecting = true;
-      window.addEventListener('focus', () => {
-        this.isSelecting = false;
-      }, { once: true });
-
-      this.$refs.uploader.click();
-    },
-
-    onFileChanged(e) {
-      this.cover = e.target.files[0];
+    onFileChanged() {
       this.valid = true;
     },
 
     sendImage () {
+      const blob = this.cover
       const formData = new FormData();
-      formData.append('cover', this.cover);
+      formData.append('cover', blob);
 
-      const config = {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
       };
-      axios.post(`/api/book/changeImage/${this.editedItem.id}`, formData, config)
+      axios.post(`/api/book/changeImage/${this.editedItem.id}`, formData)
         .then((response) => {
           if (response.data.success === true) {
             this.$swal('Dodano', 'Pomyślnie zmieniono okładkę książki!', 'success');

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Author;
 use Intervention\Image\Facades\Image;
+use AWS;
 
 class AuthorController extends Controller
 {
@@ -22,8 +23,21 @@ class AuthorController extends Controller
         $author->surname = $request->get('surname');
         $author->description = $request->get('description');
 
-        if ($file = $request->hasFile('photo')) {
-            $author->photo = $imagePath = $request->file('photo')->store('authors', 'public');
+        if ($request->hasFile('photo')) {
+            $uploadedImage = $request->file('photo');
+            $imageName = time() . '.' . $uploadedImage->getClientOriginalExtension();
+            $destinationPath = public_path('images/authors/');
+            $uploadedImage->move($destinationPath, $imageName);
+            $imagePath = $destinationPath . $imageName;
+            $author->photo = $imageName;
+
+            $s3 = AWS::createClient('s3');
+            $s3->putObject(array(
+                'Bucket'     => 'library-site',
+                'Key'        => 'authors/'.$imageName,
+                'SourceFile' => $imagePath,
+                'ACL'        => 'public-read',
+            ));
         }
 
         $author->save();
@@ -158,8 +172,21 @@ class AuthorController extends Controller
     {
         $author = Author::find($id);
 
-        if ($file = $request->hasFile('photo')) {
-            $author->photo = $imagePath = $request->file('photo')->store('authors', 'public');
+        if ($request->hasFile('photo')) {
+            $uploadedImage = $request->file('photo');
+            $imageName = time() . '.' . $uploadedImage->getClientOriginalExtension();
+            $destinationPath = public_path('images/authors/');
+            $uploadedImage->move($destinationPath, $imageName);
+            $imagePath = $destinationPath . $imageName;
+            $author->photo = $imageName;
+
+            $s3 = AWS::createClient('s3');
+            $s3->putObject(array(
+                'Bucket'     => 'library-site',
+                'Key'        => 'authors/'.$imageName,
+                'SourceFile' => $imagePath,
+                'ACL'        => 'public-read',
+            ));
         }
 
         if ($author->save()) {

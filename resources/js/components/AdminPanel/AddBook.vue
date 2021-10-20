@@ -22,30 +22,21 @@
 
                             <hr>
 
-                        <div class="upload">
-                            <v-btn
-                                color="#008D18"
-                                class="white--text text-none pa-5 pb-0 pt-0"
-                                rounded
-                                depressed
-                                :loading="isSelecting"
+                        <div class="upload" style="justify-content: center">
+                            <v-file-input
+                                class="col-8 pt-5"
+                                style="display: inline-block"
                                 v-model="cover"
-                                @click="onButtonClick"
-                            >
-                                <v-icon left>
-                                    mdi-book
-                                </v-icon>
-                                {{ buttonText }}
-                            </v-btn>
-                            <input
-                                ref="uploader"
+                                accept="image/png, image/jpeg, image/bmp"
+                                label="Wybierz zdjęcie okładki"
                                 :rules="coverRules"
-                                required
-                                class="d-none"
-                                type="file"
-                                accept="image/*"
-                                @change="onFileChanged"
-                            >
+                                outlined
+                                dense
+                                prepend-icon=""
+                                prepend-inner-icon="mdi-book"
+                                hide-details
+                                >
+                            </v-file-input>
                         </div>
 
                         <v-col cols="12" style="display: inline-flex; padding-bottom: 0px">
@@ -171,8 +162,6 @@ export default {
   data() {
     return {
       valid: false,
-      defaultButtonText: 'Wgraj zdjęcie okładki (*.jpg)',
-      isSelecting: false,
       value: true,
       title: '',
       isbn: '',
@@ -219,7 +208,8 @@ export default {
     validate() {
       if (this.$refs.form.validate()) {
         const formData = new FormData();
-        formData.append('cover', this.cover);
+        const blob = this.cover
+        formData.append('cover', blob);
         formData.append('title', this.title);
         formData.append('isbn', this.isbn);
         formData.append('description', this.description);
@@ -228,13 +218,7 @@ export default {
         formData.append('category', this.selectedCategory);
         formData.append('publisher', this.selectedPublisher);
 
-        const config = {
-          headers: {
-            'Content-Type': 'multipart/form-data'
-          }
-        };
-
-        axios.post('/api/book/store', formData, config)
+        axios.post('/api/book/store', formData)
           .then((response) => {
             if (response.data.success == true) {
               this.$swal('Dodano', 'Pomyślnie dodano książkę do bazy bibliotecznej!', 'success');
@@ -251,17 +235,6 @@ export default {
     },
     reset() {
       this.$refs.form.reset();
-    },
-    onButtonClick() {
-      this.isSelecting = true;
-      window.addEventListener('focus', () => {
-        this.isSelecting = false;
-      }, { once: true });
-
-      this.$refs.uploader.click();
-    },
-    onFileChanged(e) {
-      this.cover = e.target.files[0];
     }
   },
 

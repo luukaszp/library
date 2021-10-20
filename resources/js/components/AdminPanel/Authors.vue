@@ -60,29 +60,19 @@
                                                 </v-col>
                                             </v-row>
                                             <v-row style="justify-content: center; text-align: center">
-                                                <v-btn
-                                                    color="#008D18"
-                                                    class="white--text text-none pa-5 pb-0 pt-0"
-                                                    rounded
-                                                    depressed
-                                                    :loading="isSelecting"
+                                                <v-file-input
                                                     v-model="photo"
-                                                    @click="onButtonClick"
-                                                >
-                                                    <v-icon left>
-                                                        mdi-book
-                                                    </v-icon>
-                                                    {{ buttonText }}
-                                                </v-btn>
-                                                <input
-                                                    ref="uploader"
+                                                    accept="image/png, image/jpeg, image/bmp"
+                                                    label="Wybierz zdjęcie autora"
                                                     :rules="photoRules"
-                                                    required
-                                                    class="d-none"
-                                                    type="file"
-                                                    accept="image/*"
+                                                    outlined
+                                                    dense
+                                                    prepend-icon=""
+                                                    prepend-inner-icon="mdi-book"
+                                                    hide-details
                                                     @change="onFileChanged"
-                                                >
+                                                    >
+                                                </v-file-input>
                                             </v-row>
                                         </v-form>
                                     </v-container>
@@ -105,7 +95,6 @@
                                             <v-card>
                                                 <v-img
                                                 v-bind:src="('https://library-site.s3.eu-north-1.amazonaws.com/authors/' + image)"
-                                                aspect-ratio="1"
                                                 ></v-img>
                                             </v-card>
                                             </v-col>
@@ -115,33 +104,22 @@
 
                                 <v-divider></v-divider>
 
-                                <v-card-actions style="justify-content: center; display: block ruby; text-align: center; padding-bottom: 25px">
+                                <v-card-actions style="justify-content: center; display: flex; text-align: center; padding-bottom: 25px">
                                     <v-spacer></v-spacer>
                                     <v-btn color="#228B22" text @click="closePhoto">Anuluj</v-btn>
-                                    <v-btn
-                                        color="#228B22"
-                                        class="white--text text-none pl-5 pr-5"
-                                        style="margin-right: 15px"
-                                        rounded
-                                        depressed
-                                        :loading="isSelecting"
+                                    <v-file-input
                                         v-model="photo"
-                                        @click="onButtonClick"
-                                    >
-                                        <v-icon left>
-                                            mdi-book
-                                        </v-icon>
-                                        {{ buttonText }}
-                                    </v-btn>
-                                    <input
-                                        ref="uploader"
+                                        accept="image/png, image/jpeg, image/bmp"
+                                        label="Wybierz zdjęcie"
                                         :rules="photoRules"
-                                        required
-                                        class="d-none"
-                                        type="file"
-                                        accept="image/*"
+                                        outlined
+                                        dense
+                                        prepend-icon=""
+                                        prepend-inner-icon="mdi-account"
+                                        hide-details
                                         @change="onFileChanged"
-                                    >
+                                        >
+                                    </v-file-input>
                                     <v-btn
                                     color=#228B22
                                     @click="sendPhoto"
@@ -198,7 +176,6 @@ export default {
   data: () => ({
     addAuthorDialog: false,
     editPhotoDialog: false,
-    defaultButtonText: 'Wgraj zdjęcie autora (*.jpg)',
     isSelecting: false,
     valid: false,
     search: '',
@@ -300,19 +277,14 @@ export default {
             description: this.editedItem.description
           });
         } else {
+          const blob = this.photo
           const formData = new FormData();
-          formData.append('photo', this.photo);
+          formData.append('photo', blob);
           formData.append('name', this.editedItem.name);
           formData.append('surname', this.editedItem.surname);
           formData.append('description', this.editedItem.description);
 
-          const config = {
-            headers: {
-              'Content-Type': 'multipart/form-data'
-            }
-          };
-
-          axios.post('/api/author/add', formData, config)
+          axios.post('/api/author/add', formData)
           .then(() => {
             const Toast = this.$swal.mixin({
               toast: true,
@@ -354,16 +326,7 @@ export default {
       });
     },
 
-    onButtonClick() {
-      this.isSelecting = true;
-      window.addEventListener('focus', () => {
-        this.isSelecting = false;
-      }, { once: true });
-
-      this.$refs.uploader.click();
-    },
-    onFileChanged(e) {
-      this.photo = e.target.files[0];
+    onFileChanged() {
       this.valid = true;
     },
 
@@ -383,15 +346,11 @@ export default {
     },
 
     sendPhoto () {
+      const blob = this.photo
       const formData = new FormData();
-      formData.append('photo', this.photo);
+      formData.append('photo', blob);
 
-      const config = {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      };
-      axios.post(`/api/author/changePhoto/${this.editedItem.id}`, formData, config)
+      axios.post(`/api/author/changePhoto/${this.editedItem.id}`, formData)
         .then((response) => {
           if (response.data.success === true) {
             this.$swal('Dodano', 'Pomyślnie zmieniono awatar autora!', 'success');

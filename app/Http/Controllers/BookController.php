@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use Intervention\Image\Facades\Image;
 use DB;
 use Carbon\Carbon;
+use AWS;
 
 class BookController extends Controller
 {
@@ -211,6 +212,22 @@ class BookController extends Controller
         $authorsNumber = count($authors);
         $authorName = [];
 
+        if ($request->hasFile('cover')) {
+            $uploadedImage = $request->file('cover');
+            $imageName = time() . '.' . $uploadedImage->getClientOriginalExtension();
+            $destinationPath = public_path('images/covers/');
+            $uploadedImage->move($destinationPath, $imageName);
+            $imagePath = $destinationPath . $imageName;
+
+            $s3 = AWS::createClient('s3');
+            $s3->putObject(array(
+                'Bucket'     => 'library-site',
+                'Key'        => 'covers/'.$imageName,
+                'SourceFile' => $imagePath,
+                'ACL'        => 'public-read',
+            ));
+        }
+
         for($index = 0; $index < $amount; $index++) {
             $book = new Book();
             $book->title = $request->get('title');
@@ -219,18 +236,14 @@ class BookController extends Controller
             $book->isbn = $isbn[$index];
             $book->category_id = $request->get('category');
             $book->publisher_id = $request->get('publisher');
-
-            if ($file = $request->hasFile('cover')) {
-                $book->cover = $imagePath = $request->file('cover')->store('books', 'public');
-            }
-
+            $book->cover = $imageName;
             $book->save();
+        }
 
             for($i = 0; $i < $authorsNumber; $i++) {
                 $author = Author::find($authors[$i]);
                 $book->authors()->attach($author);
             }
-        }
 
         for($i = 0; $i < $authorsNumber; $i++) {
             $authorName[$i] = Author::where('id', $authors[$i])->select('name', 'surname')->get()->first();
@@ -296,6 +309,7 @@ class BookController extends Controller
      */
     public function changeImage(Request $request, $id)
     {
+        dd($request);
         $desc = Book::where('id', '=', $id)->pluck('description');
         $book = Book::where('description', '=', $desc)->get();
 
@@ -308,12 +322,21 @@ class BookController extends Controller
             );
         }
 
-        for($index = 0; $index < count($book); $index++) {
-            if ($file = $request->hasFile('cover')) {
-                $book[$index]->cover = $imagePath = $request->file('cover')->store('books', 'public');
+        if ($request->hasFile('cover')) {
+            $uploadedImage = $request->file('cover');
+            $imageName = time() . '.' . $uploadedImage->getClientOriginalExtension();
+            $destinationPath = public_path('images/covers/');
+            $uploadedImage->move($destinationPath, $imageName);
+            $imagePath = $destinationPath . $imageName;
+        }
+
+        if ($imagePath !== null) {
+            for($index = 0; $index < count($book); $index++) {
+                $book[$index]->cover = $imagePath;
                 $book[$index]->save();
             }
         }
+
 
         if ($book[count($book)-1]->save()) {
             return response()->json(
