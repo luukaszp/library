@@ -309,7 +309,6 @@ class BookController extends Controller
      */
     public function changeImage(Request $request, $id)
     {
-        dd($request);
         $desc = Book::where('id', '=', $id)->pluck('description');
         $book = Book::where('description', '=', $desc)->get();
 
