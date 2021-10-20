@@ -96,24 +96,10 @@ export default {
   methods: {
     validate() {
       if (this.$refs.form.validate()) {
-        //const formData = new FormData();
         const blob = this.avatar
-        //const FormData = require('form-data')
         const formData = new FormData();
-        //const form = new FormData();
         formData.append('avatar', blob)
         formData.append('user_id', parseInt(this.user_id));
-
-        const config = {
-          headers: {
-            'Content-Type': 'multipart/form-data'
-          }
-        };
-        /*let url = 'https://library-site.herokuapp.com/api/user/profile/upload';
-        let request = new XMLHttpRequest();
-        request.open('POST', url);
-        request.send(form);*/
-        //axios.defaults.headers.common['Content-Type'] = 'multipart/form-data';
 
         axios.post('/api/user/profile/upload', formData)
           .then((response) => {
@@ -127,29 +113,8 @@ export default {
             console.log(error);
           });
           this.$store.dispatch('fetchOneReader', this.user_id);
-
-          /*
-          const request = require('request');
-        const formData = {
-          avatar: this.avatar
-        }
-        console.log(formData);
-        request.post({url:'http://localhost:8080/api/user/profile/upload', formData: formData})
-        */
       }
-    },
-    /*onButtonClick() {
-      this.isSelecting = true
-      window.addEventListener('focus', () => {
-        this.isSelecting = false
-      }, { once: true })
-
-      this.$refs.uploader.click()
-    },
-    onFileChanged(e) {
-      this.avatar = e.target.files[0]
-      this.validate();
-    }*/
+    }
   }
 };
 </script>
