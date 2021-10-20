@@ -339,7 +339,7 @@ class BookController extends Controller
 
         if ($imagePath !== null) {
             for($index = 0; $index < count($book); $index++) {
-                $book[$index]->cover = $imagePath;
+                $book[$index]->cover = $imageName;
                 $book[$index]->save();
             }
         }
