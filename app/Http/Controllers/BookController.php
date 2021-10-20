@@ -327,6 +327,14 @@ class BookController extends Controller
             $destinationPath = public_path('images/covers/');
             $uploadedImage->move($destinationPath, $imageName);
             $imagePath = $destinationPath . $imageName;
+
+            $s3 = AWS::createClient('s3');
+            $s3->putObject(array(
+                'Bucket'     => 'library-site',
+                'Key'        => 'covers/'.$imageName,
+                'SourceFile' => $imagePath,
+                'ACL'        => 'public-read',
+            ));
         }
 
         if ($imagePath !== null) {
