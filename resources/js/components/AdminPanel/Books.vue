@@ -312,7 +312,6 @@ export default {
       const formData = new FormData();
       formData.append('cover', blob);
 
-      };
       axios.post(`/api/book/changeImage/${this.editedItem.id}`, formData)
         .then((response) => {
           if (response.data.success === true) {
