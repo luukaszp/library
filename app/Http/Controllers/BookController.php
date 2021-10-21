@@ -27,7 +27,8 @@ class BookController extends Controller
     {
         $getAmount = DB::table('books')
             ->select('books.*', DB::raw('COUNT(books.title) as amount'))
-            ->groupBy('books.title')
+            ->distinct('books.title')
+            ->groupBy('books.id', 'books.title')
             ->orderBy('amount')
             ->get();
 
@@ -142,7 +143,8 @@ class BookController extends Controller
                 'books.id', 'books.title', 'books.description', 'books.publish_year',
                 'categories.name as categoryName', 'publishers.name as publisherName', 'books.cover'
             )
-            ->groupBy('books.description')
+            ->distinct('books.description')
+            ->groupBy('books.id', 'books.description', 'categories.name', 'publishers.name')
             ->get()
             ->toArray();
 
@@ -173,8 +175,7 @@ class BookController extends Controller
             ->join('author_book', 'author_book.book_id', '=', 'books.id')
             ->join('authors', 'authors.id', '=', 'author_book.author_id')
             ->select(
-                'books.id', 'books.title', 'categories.name as categoryName', 'authors.name as authorName',
-                'authors.surname', 'books.cover'
+                'books.id', 'books.title', 'categories.name as categoryName', 'authors.name as authorName', 'authors.surname', 'books.cover'
             )
             ->distinct('books.title')
             ->groupBy('books.title', 'books.id', 'categories.name', 'authors.name', 'authors.surname', 'books.cover')

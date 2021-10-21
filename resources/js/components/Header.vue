@@ -15,33 +15,29 @@
                             </v-app-bar-nav-icon>
                         </router-link>
 
-                        <v-toolbar-title style="padding-left: 15px; font-family: Brush Script MT; font-size: 30px">Biblioteka</v-toolbar-title>
+                        <v-toolbar-title class="d-none d-sm-flex" style="padding-left: 15px; font-family: Brush Script MT; font-size: 30px">Biblioteka</v-toolbar-title>
 
                         <v-spacer></v-spacer>
 
-                        <div class="justify-center align-center">
-                            <v-tabs
-                            v-model="tab"
-                            class="d-none d-sm-flex"
+                        <div class="hidden-sm-and-down justify-center align-center">
+                            <v-menu
+                            v-for="item in items"
+                            :key="item.text"
+                            offset-y
                             >
-                            <v-tabs-slider color="white"></v-tabs-slider>
-                                <v-tab
-                                v-for="item in items"
-                                :key="item"
-                                style="background-color: #913608"
+                            <template v-slot:activator="{ attrs, on }">
+                                <v-btn
+                                outlined
+                                rounded
+                                class="white--text ma-8 font-weight-bold"
+                                v-bind="attrs"
+                                v-on="on"
+                                :to="item.route"
                                 >
-                                    <v-btn
-                                    outlined
-                                    rounded
-                                    class="white--text ma-8 font-weight-bold"
-                                    v-bind="attrs"
-                                    v-on="on"
-                                    :to="item.route"
-                                    >
-                                    {{ item.text }}
-                                    </v-btn>
-                                </v-tab>
-                            </v-tabs>
+                                {{ item.text }}
+                                </v-btn>
+                            </template>
+                            </v-menu>
                         </div>
 
                         <v-spacer></v-spacer>
@@ -138,6 +134,54 @@
                             </v-list>
                         </v-menu>
 
+                        <div class="hidden-sm-and-up justify-center align-center">
+                            <v-dialog
+                            v-model="dialog"
+                            hide-overlay
+                            transition="dialog-bottom-transition"
+                            >
+                            <template v-slot:activator="{ on, attrs }">
+                                <v-btn
+                                color="#913608"
+                                v-bind="attrs"
+                                v-on="on"
+                                >
+                                <v-icon>mdi-hamburger</v-icon>
+                                </v-btn>
+                            </template>
+                            <v-card>
+                                <v-toolbar
+                                dark
+                                color="#913608"
+                                >
+                                <v-btn
+                                    icon
+                                    dark
+                                    @click="dialog = false"
+                                >
+                                    <v-icon>mdi-close</v-icon>
+                                </v-btn>
+                                <v-toolbar-title>MENU</v-toolbar-title>
+                                <v-spacer></v-spacer>
+                                </v-toolbar>
+                                <v-list
+                                v-for="item in items"
+                                :key="item.text"
+                                :prepend-icon="item.action"
+                                >
+                                <v-list-item>
+                                    <v-list-item-content>
+                                        <v-list-item :to="item.route">
+                                            <v-icon>{{ item.action }}</v-icon>
+                                            {{ item.text }}
+                                        </v-list-item>
+                                    </v-list-item-content>
+                                </v-list-item>
+                                </v-list>
+                            </v-card>
+                            </v-dialog>
+                        </div>
+
                     </v-app-bar>
                 </v-card>
         </div>
@@ -153,20 +197,25 @@ export default {
     About
   },
   data: () => ({
+    dialog: false,
     items: [
       {
+        action: 'mdi-calendar-check',
         text: 'KALENDARZ',
         route: '/calendar'
       },
       {
+        action: 'mdi-magnify',
         text: 'PRZEGLĄDAJ',
         route: '/search'
       },
       {
+        action: 'mdi-new-box',
         text: 'NOWOŚCI',
         route: '/new'
       },
       {
+        action: 'mdi-trophy',
         text: 'RANKING',
         route: '/ranking'
       }
@@ -244,5 +293,10 @@ export default {
 
     .v-menu__content {
         max-height: 280px;
+    }
+    @media only screen and (max-width: 600px) {
+        .spacer {
+            display: none;
+        }
     }
 </style>

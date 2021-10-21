@@ -5,7 +5,7 @@
         </v-row>
         <v-row style="justify-content: center; text-align: center" v-if="books.length !=  0">
             <v-col
-                cols="6"
+                md="6"
             >
                 <swiper ref="mySwiper" :options="swiperOptions">
                     <swiper-slide

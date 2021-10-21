@@ -15,7 +15,14 @@
                     <v-toolbar-title class="headline lighten-2 white--text">O aplikacji</v-toolbar-title>
                 </v-toolbar>
                 <v-row style="margin: 0">
-                    <v-col cols=7>
+                    <v-col md=5 style="padding: 0" id="image">
+                        <v-img
+                        :src="require('../assets/about/book_coffee.jpg')"
+                        dark
+                        >
+                        </v-img>
+                    </v-col>
+                    <v-col md=7>
                         <v-card-text class="pt-5 text-center">
                             <span>Aplikacja webowa służy do wspomagania funkcjonowania biblioteki oraz usprawnienia jej
                                 działania. Oferuje ona wiele przydatnych opcji dla pracowników placówki w kwestii zarządzania
@@ -23,13 +30,6 @@
                                 mogą obserwować ulubionych autorów w celu otrzymania powiadomienia o dodaniu nowej książki jednego z nich.
                                 Oprócz tego do dyspozycji mają statystyki konta, ranking miesięczny czytelników czy kalendarz wydarzeń.</span>
                         </v-card-text>
-                    </v-col>
-                    <v-col cols=5 style="padding: 0">
-                        <v-img
-                        :src="require('../assets/about/book_coffee.jpg')"
-                        dark
-                        >
-                        </v-img>
                     </v-col>
                 </v-row>
             </v-card>
@@ -48,6 +48,10 @@ export default {
 };
 </script>
 
-<style scoped>
-
+<style>
+    @media only screen and (max-width: 600px) {
+        .col {
+            max-width: 100%;
+        }
+    }
 </style>

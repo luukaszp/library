@@ -1,8 +1,8 @@
 <template>
     <div class="reset">
         <v-container>
-            <v-row class="justify-center justify-md-center align-center" style="margin-top: 50px">
-                <v-row class="justify-lg-end justify-sm-center pr-5 d-none d-sm-flex">
+            <v-row class="justify-center justify-md-center align-center">
+                <v-row class="justify-lg-end justify-sm-center pr-5 d-none d-sm-flex col-md-5">
                     <v-img
                             alt="App Logo"
                             contain
@@ -25,15 +25,13 @@
                         <v-form
                                 ref="form"
                                 v-model="valid"
-                                md="6"
+                                md="7"
                         >
                             <h1 class="pt-8" style="text-align: center">Biblioteka</h1>
-                            <h2 class="pt-2" style="text-align: center">Resetowanie hasła</h2>
-
-                            <hr>
+                            <h2 class="pt-2 pb-5" style="text-align: center">Resetowanie hasła</h2>
 
                             <v-text-field
-                                    class="pa-5 pb-0 pt-0"
+                                    class="pa-5 pb-0 pt-5"
                                     v-model="email"
                                     :rules="emailRules"
                                     label="E-mail"
@@ -41,7 +39,7 @@
                                     required
                             ></v-text-field>
 
-                            <v-row class="pb-5 justify-center">
+                            <v-row class="pb-5 justify-center" id="buttons">
 
                                 <v-btn
                                         :disabled="!valid"
@@ -121,5 +119,9 @@ export default {
 </script>
 
 <style scoped>
-
+    @media only screen and (max-width: 600px) {
+        #buttons {
+            margin: 0;
+        }
+    }
 </style>

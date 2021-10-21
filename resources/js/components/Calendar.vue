@@ -9,12 +9,12 @@
                         class="d-flex"
                 >
                     <v-toolbar flat color="white">
-                    <v-btn outlined class="mr-4" color="grey darken-2" @click="setToday">
+                    <v-btn outlined class="mr-md-4" color="grey darken-2" @click="setToday" id="today">
                         Today
                     </v-btn>
                     <v-btn
                             icon
-                            class="ma-2"
+                            class="ma-md-2"
                             @click.native="$refs.calendar.prev()"
                     >
                         <v-icon>mdi-chevron-left</v-icon>
@@ -22,16 +22,17 @@
                         <v-toolbar-title>{{title}}</v-toolbar-title>
                     <v-btn
                             icon
-                            class="ma-2"
+                            class="ma-md-2"
                             @click.native="$refs.calendar.next()"
                     >
                         <v-icon>mdi-chevron-right</v-icon>
                     </v-btn>
                     </v-toolbar>
                 </v-sheet>
-                <v-sheet height="600">
+                <v-sheet>
                     <v-calendar
                             ref="calendar"
+                            id="calendar"
                             v-model="focus"
                             :weekdays="weekday"
                             type="month"
@@ -254,5 +255,26 @@ export default {
 <style>
     .v-toolbar__content {
         justify-content: center;
+    }
+    #calendar {
+        height: 600px;
+     }
+    @media only screen and (max-width: 600px) {
+        #buttons {
+            margin: 0;
+        }
+        header {
+            height: auto;
+            display: inline-flex;
+        }
+        .v-toolbar__title {
+            font-size: 1.0rem;
+        }
+        #calendar {
+            height: auto;
+        }
+        #today {
+            padding: 0;
+        }
     }
 </style>

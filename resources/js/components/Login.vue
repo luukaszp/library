@@ -1,8 +1,8 @@
 <template>
     <div id="login" class="login">
         <v-container>
-            <v-row class="logform" style="margin-top: 50px">
-                <v-row class="justify-lg-end justify-sm-center pr-5 d-none d-sm-flex">
+            <v-row class="logform">
+                <v-row class="justify-lg-end justify-sm-center pr-5 d-none d-sm-flex col-md-5">
                     <v-img
                             alt="App Logo"
                             contain
@@ -15,7 +15,7 @@
                 ></v-divider>
                 <v-col
                         cols="12"
-                        md="6"
+                        md="7"
                         class="form"
                 >
 
@@ -52,7 +52,7 @@
                                     required
                             ></v-text-field>
 
-                            <v-row class="pb-5 justify-center">
+                            <v-row class="pb-5 justify-center" id="buttons">
                                 <v-btn
                                         :disabled="!valid"
                                         color=#008D18
@@ -147,9 +147,10 @@ export default {
 </script>
 
 <style scoped>
-    @media only screen and (min-width: 600px) and (max-width: 960px) {
-        .form {
-            margin-left: 10%;
+    @media only screen and (max-width: 600px) {
+        #buttons {
+            max-width: 100%;
+            margin: 0;
         }
     }
 </style>

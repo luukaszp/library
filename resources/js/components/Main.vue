@@ -21,20 +21,6 @@
     </v-container>
 </template>
 
-<style>
-    @media only screen and (max-width: 600px) {
-        .container {
-            display: inline-block;
-        }
-        .row {
-            justify-content: center;
-        }
-        .col {
-            max-width: 100%;
-        }
-    }
-</style>
-
 <script>
 /* eslint-disable */
 export default {
@@ -48,3 +34,17 @@ export default {
   })
 };
 </script>
+
+<style scoped>
+    @media only screen and (max-width: 600px) {
+        .container {
+            display: inline-block;
+        }
+        .row {
+            justify-content: center;
+        }
+        .col {
+            max-width: 100%;
+        }
+    }
+</style>
