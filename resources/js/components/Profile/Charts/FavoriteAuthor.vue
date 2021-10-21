@@ -1,6 +1,6 @@
 <template>
     <div>
-        <apexchart ref="realtimeChart" type="pie" width="600" :options="options" :series="series"></apexchart>
+        <apexchart ref="realtimeChart" type="pie" :options="options" :series="series" id="chart"></apexchart>
     </div>
 </template>
 
@@ -68,3 +68,10 @@ export default {
   }
 };
 </script>
+<style>
+@media only screen and (max-width: 600px) {
+    #chart {
+        max-width: 300px;
+    }
+}
+</style>

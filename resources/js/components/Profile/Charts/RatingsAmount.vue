@@ -1,6 +1,6 @@
 <template>
   <div>
-      <apexchart ref="realtimeChart" width="800" type="bar" :options="options" :series="series"></apexchart>
+      <apexchart ref="realtimeChart" type="bar" :options="options" :series="series" id="chart"></apexchart>
   </div>
 </template>
 
@@ -32,7 +32,7 @@ export default {
         }
       },
       series: [{
-        name: 'ratingsAmount',
+        name: 'Ilość ocen',
         data: []
       }]
     };
@@ -58,3 +58,10 @@ export default {
   }
 };
 </script>
+<style>
+@media only screen and (max-width: 600px) {
+    #chart {
+        max-width: 400px;
+    }
+}
+</style>

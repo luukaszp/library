@@ -1,9 +1,10 @@
 <template>
-  <div>
+  <div style="padding-top: 25px">
     <v-carousel
     style="width: 800px"
     hide-delimiters
     show-arrows-on-hover
+    id="chart"
     >
       <v-carousel-item>
           <BorrowsAmount v-bind:user_id="user_id"/>
@@ -40,3 +41,11 @@ export default {
   }
 };
 </script>
+
+<style>
+@media only screen and (max-width: 600px) {
+    #chart {
+        max-width: 400px;
+    }
+}
+</style>

@@ -22,7 +22,7 @@
                             <v-img
                                 v-bind:src="('https://library-site.s3.eu-north-1.amazonaws.com/covers/' + book.cover)"
                                 width="300px"
-                                style="display: inline-block"
+                                style="display: inline-block; margin-top: 10px"
                             >
                             </v-img>
 

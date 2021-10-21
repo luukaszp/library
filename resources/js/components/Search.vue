@@ -102,7 +102,7 @@
         </template>
 
       <template v-slot:footer>
-        <v-row class="mt-2" align="center" justify="center">
+        <v-row class="mt-2" align="center" justify="center" style="display: inline-block; text-align: center; width: 100%; margin: 0">
           <span class="grey--text">Items per page</span>
           <v-menu offset-y>
             <template v-slot:activator="{ on, attrs }">
@@ -166,7 +166,7 @@
 /*eslint-disable*/
 export default {
   data: () => ({
-    itemsPerPageArray: [4, 8, 12],
+    itemsPerPageArray: [1, 4, 8, 12],
     search: '',
     filter: {},
     sortDesc: false,
