@@ -11,7 +11,7 @@
                     >
                         <router-link to="/">
                             <v-app-bar-nav-icon>
-                                <v-img alt="App logo" :src="require('../assets/app_logo_t.png')" width="90px"/> <!--zmienic logo-->
+                                <v-img alt="App logo" :src="require('../assets/app_logo_t.png')" width="90px"/>
                             </v-app-bar-nav-icon>
                         </router-link>
 
@@ -19,25 +19,29 @@
 
                         <v-spacer></v-spacer>
 
-                        <div class="d-flex justify-center align-center">
-                            <v-menu
-                            v-for="item in items"
-                            :key="item.text"
-                            offset-y
+                        <div class="justify-center align-center">
+                            <v-tabs
+                            v-model="tab"
+                            class="d-none d-sm-flex"
                             >
-                            <template v-slot:activator="{ attrs, on }">
-                                <v-btn
-                                outlined
-                                rounded
-                                class="white--text ma-8 font-weight-bold"
-                                v-bind="attrs"
-                                v-on="on"
-                                :to="item.route"
+                            <v-tabs-slider color="white"></v-tabs-slider>
+                                <v-tab
+                                v-for="item in items"
+                                :key="item"
+                                style="background-color: #913608"
                                 >
-                                {{ item.text }}
-                                </v-btn>
-                            </template>
-                            </v-menu>
+                                    <v-btn
+                                    outlined
+                                    rounded
+                                    class="white--text ma-8 font-weight-bold"
+                                    v-bind="attrs"
+                                    v-on="on"
+                                    :to="item.route"
+                                    >
+                                    {{ item.text }}
+                                    </v-btn>
+                                </v-tab>
+                            </v-tabs>
                         </div>
 
                         <v-spacer></v-spacer>

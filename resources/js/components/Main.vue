@@ -4,7 +4,7 @@
         <v-col
           v-for="card in cards"
           :key="card.title"
-          :cols="card.flex"
+          :md="card.flex"
         >
           <v-card>
             <v-img
@@ -20,6 +20,20 @@
       </v-row>
     </v-container>
 </template>
+
+<style>
+    @media only screen and (max-width: 600px) {
+        .container {
+            display: inline-block;
+        }
+        .row {
+            justify-content: center;
+        }
+        .col {
+            max-width: 100%;
+        }
+    }
+</style>
 
 <script>
 /* eslint-disable */
