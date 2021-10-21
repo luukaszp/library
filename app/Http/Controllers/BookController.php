@@ -53,12 +53,12 @@ class BookController extends Controller
             ->join('author_book', 'author_book.book_id', '=', 'books.id')
             ->join('authors', 'authors.id', '=', 'author_book.author_id')
             ->select(
-                'books.id', 'books.title', 'books.description', 'books.publish_year',
+                'books.title', 'books.description', 'books.publish_year',
                 'categories.name as categoryName', 'authors.name as authorName',
-                DB::raw('COUNT(author_book.book_id) as amount'), 'authors.surname', 'publishers.name as publisherName', 'books.cover'
+                DB::raw('COUNT(books.title) as amount'), 'authors.surname', 'publishers.name as publisherName', 'books.cover'
             )
             ->distinct('books.title')
-            ->groupBy('books.id', 'books.title', 'authors.name', 'authors.surname', 'publishers.name', 'categories.name')
+            ->groupBy('books.title', 'authors.name', 'authors.surname', 'publishers.name')
             ->get()
             ->toArray();
 
@@ -73,15 +73,13 @@ class BookController extends Controller
      */
     public function getBooksISBN()
     {
-         $data = DB::table('books')
+        $data = DB::table('books')
             ->join('author_book', 'author_book.book_id', '=', 'books.id')
             ->join('authors', 'authors.id', '=', 'author_book.author_id')
             ->select(
                 'books.id', 'books.title', 'books.isbn', 'authors.name as authorName',
                 'authors.surname'
             )
-            ->distinct('books.isbn')
-            ->groupBy('books.isbn', 'books.id', 'authors.name', 'authors.surname')
             ->get()
             ->toArray();
 
