@@ -28,7 +28,6 @@ class BookController extends Controller
         $getAmount = DB::table('books')
             ->select('books.*', DB::raw('COUNT(books.title) as amount'))
             ->distinct('amount')
-            ->groupBy('books.id', 'amount')
             ->get();
 
         if(!$id) {
