@@ -2,10 +2,10 @@
     <v-container>
         <v-card>
             <v-row style="justify-content: center">
-                <v-card-title>Ranking oraz statystyki na miesiąc '<strong>{{ new Date().toLocaleString('default', { month: 'long' }) }} </strong>'</v-card-title>
+                <v-card-title style="justify-content: center; text-align: center">Ranking oraz statystyki na miesiąc '<strong>{{ new Date().toLocaleString('default', { month: 'long' }) }} </strong>'</v-card-title>
             </v-row>
             <v-row style="justify-content: center">
-                <v-col cols=4>
+                <v-col md=4>
                     <v-img
                     width="600px"
                     :src="require('../assets/ranking/winners_podium.jpg')"
@@ -19,7 +19,7 @@
         </v-card>
         <v-card>
             <v-row style="justify-content: center">
-            <v-col cols="4">
+            <v-col md="4">
                 <v-list>
                     <v-toolbar-title style="text-align: center"><strong>Wypożyczenia</strong></v-toolbar-title>
                     <v-subheader style="justify-content: space-between"><p>Pozycja</p><p>Ilość wypożyczeń</p></v-subheader>
@@ -64,17 +64,17 @@
                 </v-list>
             </v-col>
             <v-divider vertical></v-divider>
-            <v-col cols="3" style="margin-left: 25px; margin-right: 25px">
+            <v-col md="3" style="margin-left: 25px; margin-right: 25px">
                 <v-toolbar-title style="text-align: center; padding-bottom: 10px">W tym miesiącu dołączyło</v-toolbar-title>
                 <h1 style="text-align: center; color: #008D18"><strong>{{readers}}</strong></h1>
                 <v-toolbar-title style="text-align: center; padding-top: 10px">czytelników</v-toolbar-title>
                 <v-divider></v-divider>
-                <v-toolbar-title style="text-align: center; padding-bottom: 10px">W tym miesiącu dodano</v-toolbar-title>
+                <v-toolbar-title style="text-align: center; padding-top: 10px; padding-bottom: 10px">W tym miesiącu dodano</v-toolbar-title>
                 <h1 style="text-align: center; color: #008D18"><strong>{{books}}</strong></h1>
-                <v-toolbar-title style="text-align: center; padding-top: 10px">nowych książek</v-toolbar-title>
+                <v-toolbar-title style="text-align: center; padding-top: 10px; padding-bottom: 10px">nowych książek</v-toolbar-title>
             </v-col>
             <v-divider vertical></v-divider>
-            <v-col cols="4">
+            <v-col md="4">
                 <v-list>
                     <v-toolbar-title style="text-align: center"><strong>Recenzje</strong></v-toolbar-title>
                     <v-subheader style="justify-content: end"><p>Ilość recenzji</p></v-subheader>

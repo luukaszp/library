@@ -73,7 +73,15 @@ export default {
   },
 
   methods: {
-      
+
   }
 };
 </script>
+
+<style>
+@media only screen and (max-width: 600px) {
+    .v-data-footer__pagination {
+        margin: 0px !important
+    }
+}
+</style>

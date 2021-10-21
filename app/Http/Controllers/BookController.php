@@ -58,7 +58,7 @@ class BookController extends Controller
                 DB::raw('COUNT(distinct author_book.book_id) as amount'), 'authors.surname', 'publishers.name as publisherName', 'books.cover'
             )
             ->distinct('books.title')
-            ->groupBy('books.id', 'books.title', 'authors.name', 'authors.surname', 'publishers.name')
+            ->groupBy('books.id', 'books.title', 'authors.name', 'authors.surname', 'publishers.name', 'categories.name')
             ->get()
             ->toArray();
 

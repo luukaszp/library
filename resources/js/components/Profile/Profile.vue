@@ -11,7 +11,7 @@
                     v-model="valid"
                 >
                 <div class="upload" style="padding-top: 15px" v-if="this.$route.params.user_id.toString() === this.authId.toString()">
-                    <v-form ref="form" v-model="form1" lazy-validation>
+                    <v-form ref="form" v-model="form1" lazy-validation style="padding-bottom: 10px">
                       <v-file-input
                           v-model="avatar"
                           accept="image/png, image/jpeg, image/bmp"
@@ -40,9 +40,9 @@
 
             </v-col>
             <v-col style="text-align: left">
-                <h2>{{readers.name + ' ' + readers.surname}}</h2>
+                <h2 style="padding-bottom: 10px">{{readers.name + ' ' + readers.surname}}</h2>
                 <v-divider></v-divider>
-                <p>Email: <span style="font-weight: bold; color: #008D18">{{readers.email}}</span></p>
+                <p style="padding-top: 10px">Email: <span style="font-weight: bold; color: #008D18">{{readers.email}}</span></p>
                 <p>Członek biblioteki od: <span style="font-weight: bold; color: #008D18">{{readers.created_at.slice(0,10)}}</span></p>
                 <p>Numer karty czytelniczej: <span style="font-weight: bold; color: #008D18">{{readers.readers.card_number}}</span></p>
                 <p v-if="readers.readers.can_extend === '0'">Termin przedłużenia książki: <span style="font-weight: bold; color: red">WYKORZYSTANO</span></p>
@@ -52,9 +52,9 @@
 
         <v-divider></v-divider>
 
-        <v-row style="margin-left: 10px; margin-right: 10px; justify-content: center;" v-if="this.$route.params.user_id.toString() === this.authId.toString()">
+        <v-col style="justify-content: center;" v-if="this.$route.params.user_id.toString() === this.authId.toString()">
             <ProfileTabs v-bind:user_id="user_id"/>
-        </v-row>
+        </v-col>
 
     </v-container>
 </template>

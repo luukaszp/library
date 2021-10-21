@@ -12,7 +12,7 @@
         <v-divider vertical style="margin-left: 10px; margin-right: 10px"></v-divider>
 
         <v-col
-          cols="3"
+          md="3"
           class="text-center pl-0"
         >
           <v-row
@@ -58,7 +58,7 @@
 
         <v-divider></v-divider>
 
-      <v-row style="text-align: center; margin-left: 10px; margin-right: 10px">
+      <v-row style="text-align: center; margin-left: 10px; margin-right: 10px; justify-content: center">
         <v-col cols="auto">
             <v-col style="padding-top: 20px">
                 <span style="font-weight: bold">Opis: </span><span v-text="books.description" class="mr-2"></span>

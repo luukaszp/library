@@ -1,23 +1,31 @@
 <template>
     <v-container>
-        <v-row style="margin-left: 10px; margin-right: 10px; justify-content: center; padding-bottom: 10px">
-            <div class="d-flex justify-center align-center">
-                <v-tabs
-                    color="#008D18"
-                    icons-and-text
-                    centered
+        <v-row style="justify-content: center; padding-bottom: 25px">
+            <div class="justify-center align-center">
+                <v-sheet
+                    id="options"
                 >
-                        <v-tab
-                        color="indigo"
-                        v-for="item in items"
-                        :key="item.title"
-                        :to="item.route"
-                        style="text-decoration: none"
+                    <v-slide-group
+                    show-arrows
+                    center-active
+                    >
+                         <v-tabs
+                        color="#008D18"
+                        icons-and-text
                         >
-                        {{ item.title }}
-                        <v-icon>{{ item.icon }}</v-icon>
-                        </v-tab>
-                </v-tabs>
+                            <v-tab
+                            color="indigo"
+                            v-for="item in items"
+                            :key="item.title"
+                            :to="item.route"
+                            style="text-decoration: none"
+                            >
+                                {{ item.title }}
+                                <v-icon>{{ item.icon }}</v-icon>
+                            </v-tab>
+                        </v-tabs>
+                    </v-slide-group>
+                </v-sheet>
             </div>
         </v-row>
 
@@ -34,7 +42,7 @@
 export default {
   name: 'ProfileTabs',
   props: ['user_id'],
-  
+
   data() {
     return {
         items: [
@@ -77,7 +85,16 @@ export default {
   },
 
   methods: {
-    
+
   }
 };
 </script>
+
+<style scoped>
+    @media only screen and (max-width: 600px) {
+      #options {
+        max-width: 250px;
+        padding-bottom: 20px
+      }
+    }
+</style>

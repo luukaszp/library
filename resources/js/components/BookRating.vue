@@ -1,5 +1,6 @@
 <template>
     <v-container>
+        <h1></h1>
         <v-row v-if="loggedUser.card_number && check === false" style="justify-content: center; margin-left: 10px; margin-right: 10px">
             <h2 style="width: 100%; text-align: center">Oceń książkę: </h2>
         <v-form v-model="valid" ref="form" style="width: 100%; text-align: center">
@@ -33,7 +34,7 @@
             <v-icon x-large>mdi-emoticon-excited</v-icon>
         </v-row>
 
-        <v-row v-if="!loggedUser" style="justify-content: center; margin: 25px 10px">
+        <v-row v-if="loggedUser.id === null" style="justify-content: center; margin: 25px 10px">
             <h2 style="width: 100%; text-align: center">Aby wystawić opinię należy się zalogować!</h2>
         </v-row>
 
@@ -42,13 +43,14 @@
         <v-row style="justify-content: center; margin-left: 10px; margin-right: 10px">
             <h2 style="width: 100%; text-align: center; padding-top: 20px">Oceny i opinie czytelników: {{ratings.length}}</h2>
                 <v-list two-line style="width: 100%">
-                    <v-list-item-group>
+                    <v-list-item-group class="col-md-12" style="display: inline-flex">
                         <template v-for="(item) in ratings">
-                        <v-list-item :key="item.id +- item.rate">
-                            <v-list-item-content>
+                        <v-list-item :key="item.id +- item.rate" class="col-12">
+                            <v-list-item-content class="col-md-12">
                                 <v-col
-                                    :cols=8
+                                    :md=8
                                     style="display: inline-flex"
+                                    id="username"
                                 >
                                 <v-list-item-avatar>
                                      <v-img :src="'https://library-site.s3.eu-north-1.amazonaws.com/avatars/' + item.avatar"></v-img>
@@ -63,27 +65,29 @@
                                     style="padding-top: 15px"
                                 ></v-rating>
                                 </v-col>
+                                <v-col
+                                    :md=4
+                                    style="display: inline-flex; justify-content: flex-end"
+                                >
+                                <v-list-item-action style="display: inline-block">
+                                    <v-list-item-action-text v-text="item.created_at"></v-list-item-action-text>
+                                    <v-icon
+                                        v-if="item.user_id === loggedUser.id"
+                                        class="mr-2"
+                                        @click="editOpinion(item)"
+                                    >
+                                    mdi-pencil
+                                    </v-icon>
+                                    <v-icon
+                                        v-if="(item.user_id === loggedUser.id) || (loggedUser.id_number)"
+                                        @click="deleteOpinion(item)"
+                                    >
+                                    mdi-delete
+                                    </v-icon>
+                                </v-list-item-action>
+                                </v-col>
                                 <v-list-item-subtitle style="padding-top: 10px; margin-left: 10px" class="text--primary" v-text="item.opinion"></v-list-item-subtitle>
                             </v-list-item-content>
-
-                            <v-list-item-action>
-                                <v-list-item-action-text v-text="item.created_at"></v-list-item-action-text>
-                                <div class="action">
-                                  <v-icon
-                                      v-if="item.user_id === loggedUser.id"
-                                      class="mr-2"
-                                      @click="editOpinion(item)"
-                                  >
-                                  mdi-pencil
-                                  </v-icon>
-                                  <v-icon
-                                      v-if="(item.user_id === loggedUser.id) || (loggedUser.id_number)"
-                                      @click="deleteOpinion(item)"
-                                  >
-                                  mdi-delete
-                                  </v-icon>
-                                </div>
-                            </v-list-item-action>
                         </v-list-item>
 
                         <v-divider :key="item.id"></v-divider>
@@ -256,3 +260,16 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+    @media only screen and (max-width: 600px) {
+      #username {
+        display: inline-block !important;
+        justify-content: center;
+        text-align: center;
+      }
+      .v-list-item {
+        border: 1px solid black;
+      }
+    }
+</style>
