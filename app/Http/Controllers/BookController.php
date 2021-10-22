@@ -55,14 +55,15 @@ class BookController extends Controller
             ->select(
                 'books.title', 'books.description', 'books.publish_year',
                 'categories.name as categoryName', 'authors.name as authorName',
-                DB::raw('COUNT(books.title) as amount'), 'authors.surname', 'publishers.name as publisherName', 'books.cover', DB::raw('books.id')
+                DB::raw('COUNT(books.title) as amount'), 'authors.surname', 'publishers.name as publisherName', 'books.cover', DB::raw('CAST(books.id AS CHAR) AS book_id')
             )
             ->distinct('books.title')
-            ->groupBy('books.title', 'books.description', 'books.publish_year', 'books.cover', 'authors.name', 'authors.surname', 'publishers.name', 'categories.name')
+            ->groupBy('books.title', 'authors.name', 'authors.surname', 'publishers.name', 'categories.name')
             ->get()
             ->toArray();
 
         return $data;
+
     }
 
     /**
