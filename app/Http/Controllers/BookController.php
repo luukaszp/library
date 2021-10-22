@@ -58,12 +58,11 @@ class BookController extends Controller
                 DB::raw('COUNT(books.title) as amount'), 'authors.surname', 'publishers.name as publisherName', 'books.cover'
             )
             ->distinct('books.title')
-            ->groupBy('books.title', 'books.description', 'books.publish_year', 'books.cover', 'authors.name', 'authors.surname', 'publishers.name', 'categories.name')
+            ->groupBy('books.title', 'authors.name', 'authors.surname', 'publishers.name')
             ->get()
             ->toArray();
 
         return $data;
-
     }
 
     /**
@@ -204,10 +203,10 @@ class BookController extends Controller
     {
         $isbn = explode("\r", $request->get('isbn'));
         $isbn = preg_replace("/\r|\n/", "", $isbn);
-        $amount = count($isbn);
+        $amount = count($isbn);//2
 
         $authors = explode(",", $request->get('author'));
-        $authorsNumber = count($authors);
+        $authorsNumber = count($authors); //1
         $authorName = [];
 
         if ($request->hasFile('cover')) {
@@ -216,14 +215,6 @@ class BookController extends Controller
             $destinationPath = public_path('images/covers/');
             $uploadedImage->move($destinationPath, $imageName);
             $imagePath = $destinationPath . $imageName;
-
-            $s3 = AWS::createClient('s3');
-            $s3->putObject(array(
-                'Bucket'     => 'library-site',
-                'Key'        => 'covers/'.$imageName,
-                'SourceFile' => $imagePath,
-                'ACL'        => 'public-read',
-            ));
         }
 
         for($index = 0; $index < $amount; $index++) {
@@ -236,12 +227,12 @@ class BookController extends Controller
             $book->publisher_id = $request->get('publisher');
             $book->cover = $imageName;
             $book->save();
-        }
 
             for($i = 0; $i < $authorsNumber; $i++) {
                 $author = Author::find($authors[$i]);
                 $book->authors()->attach($author);
             }
+        }
 
         for($i = 0; $i < $authorsNumber; $i++) {
             $authorName[$i] = Author::where('id', $authors[$i])->select('name', 'surname')->get()->first();
