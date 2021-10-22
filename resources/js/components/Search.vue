@@ -64,7 +64,7 @@
       <template v-slot:default="props">
         <v-row>
             <v-col
-            v-for="item in props.items"
+            v-for="(item, index) in props.items"
             :key="item.name"
             cols="12"
             sm="6"
@@ -92,18 +92,18 @@
                     <p>Kategoria: <span v-text="item.categoryName" class="mr-2"></span></p>
                     <p>Dostępna ilość książek: <v-chip v-text="item.amount" :color="getColor(item.amount)" dark></v-chip></p>
                     <v-divider></v-divider>
-                    <template v-if="item.ID">
-                        <router-link :to="{ name: 'bookview', params: { book_id: item.id } }"><v-btn outlined style="border: 0px; text-decoration: none"><v-card-title style="color: #008D18; font-weight: bold">Zobacz więcej</v-card-title></v-btn></router-link>
-                    </template>
                 </v-card-text>
+                <template>
+                    <router-link :to="{ name: 'bookview', params: { book_id: book_id[getOverallIndex(index)].id} }"><v-btn outlined style="border: 0px; text-decoration: none"><v-card-title style="color: #008D18; font-weight: bold">Zobacz więcej</v-card-title></v-btn></router-link>
+                </template>
             </v-card>
             </v-col>
         </v-row>
         </template>
 
       <template v-slot:footer>
-        <v-row class="mt-2" align="center" justify="center" style="display: inline-block; text-align: center; width: 100%; margin: 0">
-          <span class="grey--text">Items per page</span>
+        <v-row class="mt-2" align="center" justify="center">
+          <span class="grey--text">Książek na stronę</span>
           <v-menu offset-y>
             <template v-slot:activator="{ on, attrs }">
               <v-btn
@@ -166,8 +166,9 @@
 /*eslint-disable*/
 export default {
   data: () => ({
-    itemsPerPageArray: [1, 4, 8, 12],
+    itemsPerPageArray: [4, 8, 12],
     search: '',
+    book_id: [],
     filter: {},
     sortDesc: false,
     page: 1,
@@ -194,6 +195,11 @@ export default {
         amount: '',
         cover: ''
       }
+    ],
+    positions: [
+     {
+        id: '',
+     }
     ]
   }),
 
@@ -215,6 +221,13 @@ export default {
   methods: {
     setData(books) {
       this.books = books;
+      axios.get('/api/book/getBookID')
+        .then(response => {
+            this.book_id = response.data;
+        });
+    },
+    getOverallIndex(index) {
+      return (this.page * this.itemsPerPage) - this.itemsPerPage + index
     },
     nextPage () {
       if (this.page + 1 <= this.numberOfPages) this.page += 1;
@@ -237,7 +250,7 @@ export default {
      .get('/api/book/getBooks')
      .then(response => {
        next(vm => vm.setData(response.data));
-   });
+   })
   },
 };
 </script>
