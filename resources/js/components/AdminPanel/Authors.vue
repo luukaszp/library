@@ -353,7 +353,7 @@ export default {
       axios.post(`/api/author/changePhoto/${this.editedItem.id}`, formData)
         .then((response) => {
           if (response.data.success === true) {
-            this.$swal('Dodano', 'Pomyślnie zmieniono awatar autora!', 'success');
+            this.$swal('Zmieniono', 'Pomyślnie zmieniono awatar autora!', 'success');
             this.editPhotoDialog = false;
           } else {
             this.$swal('Błąd', 'Awatar autora nie mógł zostać zmieniony!', 'error');

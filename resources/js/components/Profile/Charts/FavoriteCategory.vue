@@ -33,13 +33,18 @@ export default {
           breakpoint: 480,
           options: {
             chart: {
-              width: 200
+              width: 350
             },
             legend: {
               position: 'right',
-              offsetY: 0,
+              offsetY: 20,
               height: 230
-            }
+            },
+            plotOptions: {
+                pie: {
+                    offsetY: 20,
+                }
+            },
           }
         }]
       },
@@ -68,10 +73,11 @@ export default {
   }
 };
 </script>
-<style>
-@media only screen and (max-width: 600px) {
+<style scoped>
     #chart {
-        max-width: 300px;
+        width: 600px;
     }
+@media only screen and (max-width: 600px) {
+
 }
 </style>

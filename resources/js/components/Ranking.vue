@@ -65,6 +65,7 @@
             </v-col>
             <v-divider vertical></v-divider>
             <v-col md="3" style="margin-left: 25px; margin-right: 25px">
+                <hr class="d-block d-sm-none">
                 <v-toolbar-title style="text-align: center; padding-bottom: 10px">W tym miesiącu dołączyło</v-toolbar-title>
                 <h1 style="text-align: center; color: #008D18"><strong>{{readers}}</strong></h1>
                 <v-toolbar-title style="text-align: center; padding-top: 10px">czytelników</v-toolbar-title>
@@ -72,6 +73,7 @@
                 <v-toolbar-title style="text-align: center; padding-top: 10px; padding-bottom: 10px">W tym miesiącu dodano</v-toolbar-title>
                 <h1 style="text-align: center; color: #008D18"><strong>{{books}}</strong></h1>
                 <v-toolbar-title style="text-align: center; padding-top: 10px; padding-bottom: 10px">nowych książek</v-toolbar-title>
+                <hr  class="d-block d-sm-none">
             </v-col>
             <v-divider vertical></v-divider>
             <v-col md="4">

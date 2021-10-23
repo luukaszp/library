@@ -52,7 +52,7 @@
                         required
                     ></v-text-field>
 
-                    <v-row class="pb-5 justify-center">
+                    <v-row class="buttons pb-5 justify-center">
                         <v-btn
                             :disabled="!valid"
                             color=#008D18
@@ -140,3 +140,11 @@ export default {
   }
 };
 </script>
+<style scoped>
+    @media only screen and (max-width: 600px) {
+        .buttons {
+            display: grid;
+            padding-left: 15px;
+        }
+    }
+</style>

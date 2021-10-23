@@ -50,15 +50,13 @@ class BookController extends Controller
         $data = DB::table('books')
             ->join('categories', 'categories.id', '=', 'books.category_id')
             ->join('publishers', 'publishers.id', '=', 'books.publisher_id')
-            ->join('author_book', 'author_book.book_id', '=', 'books.id')
-            ->join('authors', 'authors.id', '=', 'author_book.author_id')
+
             ->select(
                 'books.title', 'books.description', 'books.publish_year',
-                'categories.name as categoryName', 'authors.name as authorName',
-                DB::raw('COUNT(books.title) as amount'), 'authors.surname', 'publishers.name as publisherName', 'books.cover'
+                'categories.name as categoryName', DB::raw('COUNT(books.title) as amount'), 'publishers.name as publisherName', 'books.cover'
             )
             ->distinct()
-            ->groupBy('books.title', 'books.description', 'books.publish_year', 'books.cover', 'authors.name', 'authors.surname', 'publishers.name', 'categories.name')
+            ->groupBy('books.title', 'books.description', 'books.publish_year', 'books.cover', 'publishers.name', 'categories.name')
             ->get()
             ->toArray();
 
@@ -135,7 +133,7 @@ class BookController extends Controller
                 'books.title', 'books.description', 'books.publish_year',
                 'categories.name as categoryName', DB::raw('COUNT(books.title) as amount'), 'publishers.name as publisherName', 'books.cover'
             )
-            ->groupBy('books.id', 'books.title', 'books.description', 'books.publish_year', 'books.cover', 'authors.name', 'authors.surname', 'publishers.name', 'categories.name', 'authors.id')
+            ->groupBy('books.title', 'books.description', 'books.publish_year', 'categories.name', 'publishers.name', 'books.cover')
             ->get();
 
             $author = Book::find($id)->authors()->select('id', 'name', 'surname')->get();
@@ -168,11 +166,11 @@ class BookController extends Controller
             ->join('categories', 'categories.id', '=', 'books.category_id')
             ->join('publishers', 'publishers.id', '=', 'books.publisher_id')
             ->select(
-                'books.id', 'books.title', 'books.description', 'books.publish_year',
+                'books.title', 'books.description', 'books.publish_year',
                 'categories.name as categoryName', 'publishers.name as publisherName', 'books.cover'
             )
-            ->distinct('books.description')
-            ->groupBy('books.id', 'books.description', 'categories.name', 'publishers.name')
+            ->groupBy('books.title', 'books.description', 'books.publish_year',
+                'categories.name', 'publishers.name', 'books.cover')
             ->get()
             ->toArray();
 
@@ -200,13 +198,11 @@ class BookController extends Controller
         $data = DB::table('books')
             ->where('books.created_at', '>=', $date)
             ->join('categories', 'categories.id', '=', 'books.category_id')
-            ->join('author_book', 'author_book.book_id', '=', 'books.id')
-            ->join('authors', 'authors.id', '=', 'author_book.author_id')
             ->select(
-                'books.id', 'books.title', 'categories.name as categoryName', 'authors.name as authorName', 'authors.surname', 'books.cover'
+                'books.title', 'categories.name as categoryName', 'books.cover'
             )
-            ->distinct('books.title')
-            ->groupBy('books.title', 'books.id', 'categories.name', 'authors.name', 'authors.surname', 'books.cover')
+            ->groupBy('books.title', 'categories.name', 'books.cover')
+            ->distinct()
             ->get()
             ->toArray();
 

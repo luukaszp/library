@@ -128,7 +128,7 @@
                                         <v-icon>mdi-logout</v-icon>
                                     </v-list-item-icon>
                                     <v-list-item-content>
-                                        <v-list-item-title v-if="isLoggedIn"><a @click="logout">Wyloguj się</a></v-list-item-title>
+                                        <v-list-item-title v-if="isLoggedIn"><a @click="logout" style="color: black">Wyloguj się</a></v-list-item-title>
                                     </v-list-item-content>
                                 </v-list-item>
                             </v-list>

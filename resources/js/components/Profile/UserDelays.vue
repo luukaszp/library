@@ -7,7 +7,6 @@
     class="elevation-1"
     style="width: 100%"
   >
-  <template #[`item.fullName`]="{ item }"> {{ item.name }} {{ item.surname }} </template>
 
     <template v-slot:top>
       <v-toolbar flat color="white">
@@ -44,7 +43,6 @@ export default {
   props: ['user_id'],
 
   data: () => ({
-    delays: [],
     search: '',
     headers: [
       {
@@ -52,7 +50,6 @@ export default {
         align: 'start',
         value: 'title'
       },
-      { text: 'Autor', value: 'fullName' },
       { text: 'Opóźnienie (dni)', value: 'delay' },
       { text: 'Kara pieniężna (zł)', value: 'penalty' }
     ]
@@ -62,7 +59,7 @@ export default {
     readers() {
       return this.$store.getters.getReaders;
     },
-    borrows() {
+    delays() {
       return this.$store.getters.getBorrows;
     }
   },

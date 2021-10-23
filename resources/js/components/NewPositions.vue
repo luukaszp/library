@@ -9,7 +9,7 @@
             >
                 <swiper ref="mySwiper" :options="swiperOptions">
                     <swiper-slide
-                        v-for="book in books"
+                        v-for="(book, index) in books"
                         :key="book.name"
                     >
                         <v-card class="card" style="border: 1px solid black;">
@@ -29,9 +29,10 @@
                             <v-divider></v-divider>
 
                             <v-card-text style="justify-content: center; padding: 0; margin-bottom: 15px">
-                                <p>Autor: <span v-text="book.authorName + ' ' + book.surname" class="mr-2"></span></p>
                                 <p>Kategoria: <span v-text="book.categoryName" class="mr-2"></span></p>
-                                <router-link :to="{ name: 'bookview', params: { book_id: book.id } }"><v-btn outlined style="border: 0px; text-decoration: none"><v-card-title style="color: #008D18; font-weight: bold">Zobacz więcej</v-card-title></v-btn></router-link>
+                                <template>
+                                    <router-link :to="{ name: 'bookview', params: { book_id: book_id[index].id} }"><v-btn outlined style="border: 0px; text-decoration: none"><v-card-title style="color: #008D18; font-weight: bold">Zobacz więcej</v-card-title></v-btn></router-link>
+                                </template>
                             </v-card-text>
                         </v-card>
                     </swiper-slide>
@@ -77,6 +78,7 @@ export default {
   },
   data() {
     return {
+      book_id: [],
       swiperOptions: {
         slidesPerView: 1,
         spaceBetween: 30,
@@ -101,10 +103,15 @@ export default {
 
   created () {
     this.$store.dispatch('fetchNewBooks', {});
+    this.setData();
   },
 
   methods: {
-
+    setData(book_id) {
+    axios.get('/api/book/getBookID').then(response => {
+       this.book_id = response.data;
+    })
+    }
   }
 };
 </script>

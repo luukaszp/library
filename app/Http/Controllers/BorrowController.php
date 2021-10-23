@@ -264,14 +264,16 @@ class BorrowController extends Controller
     public function showBorrow($id)
     {
         $reader = Reader::where('user_id', '=', $id)->pluck('id');
+
         $borrow = DB::table('borrows')
             ->where('borrows.reader_id', '=', $reader[0])
             ->where('borrows.when_returned', '=', null)
             ->join('books', 'books.id', '=', 'borrows.book_id')
             ->select(
                 'borrows.id', 'books.title', 'borrows.borrows_date',
-                'borrows.returns_date', 'authors.name', 'authors.surname'
+                'borrows.returns_date'
             )
+            ->distinct()
             ->get()
             ->toArray();
 
@@ -314,7 +316,7 @@ class BorrowController extends Controller
 
         $reader = Reader::find($borrow->reader_id);
 
-        if ($reader->can_extend === 0) {
+        if ($reader->can_extend === false) {
             return response()->json(
                 [
                 'success' => false,
@@ -500,8 +502,7 @@ class BorrowController extends Controller
     public function getAuthors($id)
     {
         $reader = Reader::where('user_id', '=', $id)->pluck('id');
-        $borrow = DB::table('borrows')
-            ->where('borrows.reader_id', '=', $reader[0])
+        $borrow = Borrow::where('reader_id', '=', $reader[0])
             ->join('books', 'books.id', '=', 'borrows.book_id')
             ->join('author_book', 'author_book.book_id', '=', 'books.id')
             ->join('authors', 'authors.id', '=', 'author_book.author_id')
@@ -510,6 +511,7 @@ class BorrowController extends Controller
             ->orderBy('count')
             ->take(5)
             ->get();
+
 
         if (!$borrow) {
             return response()->json(

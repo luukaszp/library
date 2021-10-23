@@ -17,12 +17,10 @@
                                 md="6"
                         >
                             <h1 class="pt-8" style="text-align: center">Biblioteka</h1>
-                            <h2 class="pt-2" style="text-align: center">Tworzenie nowego hasła</h2>
-
-                            <hr>
+                            <h2 class="pt-2 pb-4" style="text-align: center">Tworzenie nowego hasła</h2>
 
                             <v-text-field
-                                    class="pa-5 pb-0 pt-0"
+                                    class="pa-5 pb-0 pt-4"
                                     :value="password"
                                     label="Hasło"
                                     :type="'password'"
@@ -43,11 +41,11 @@
                                     required
                             ></v-text-field>
 
-                            <v-row class="pb-5 justify-center">
+                            <v-row class="buttons pb-5 justify-center">
 
                                 <v-btn
                                         :disabled="!valid"
-                                        color=brown
+                                        color=#008D18
                                         class="mr-5 mb-6"
                                         @click="validate"
                                 >
@@ -55,7 +53,7 @@
                                 </v-btn>
 
                                 <v-btn
-                                        color=orange
+                                        color=#808080
                                         class="mr-5 mb-6"
                                         @click="reset"
                                 >
@@ -141,5 +139,10 @@ export default {
 </script>
 
 <style scoped>
-
+    @media only screen and (max-width: 600px) {
+        .buttons {
+            display: grid;
+            padding-left: 15px;
+        }
+    }
 </style>

@@ -45,7 +45,7 @@
                 <p style="padding-top: 10px">Email: <span style="font-weight: bold; color: #008D18">{{readers.email}}</span></p>
                 <p>Członek biblioteki od: <span style="font-weight: bold; color: #008D18">{{readers.created_at.slice(0,10)}}</span></p>
                 <p>Numer karty czytelniczej: <span style="font-weight: bold; color: #008D18">{{readers.readers.card_number}}</span></p>
-                <p v-if="readers.readers.can_extend === 0">Termin przedłużenia książki: <span style="font-weight: bold; color: red">WYKORZYSTANO</span></p>
+                <p v-if="readers.readers.can_extend === false">Termin przedłużenia książki: <span style="font-weight: bold; color: red">WYKORZYSTANO</span></p>
                 <p v-else>Termin przedłużenia książki: <span style="font-weight: bold; color: #008D18">MOŻNA PRZEDŁUŻYĆ</span></p>
             </v-col>
         </v-row>

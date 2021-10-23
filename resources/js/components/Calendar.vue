@@ -45,11 +45,15 @@
                             @click:date="viewDay"
                     ></v-calendar>
                 </v-sheet>
-                <div>
+                <div class="footer">
                     <v-toolbar>
-                        <h1 class="headline mr-10">Legenda</h1>
-                        <v-chip class="mr-6" v-for="value in legendInfo()" v-bind:key="value.id" :color="value.color" style="font-weight: bold" @click="showEvent(value)">{{value.type}}</v-chip>
-                        <v-chip class="mr-6" color="#B5651D" style="font-weight: bold" @click="allEvents()">Wszystkie</v-chip>
+                        <v-col md=4 class="d-none d-sm-flex">
+                            <h1 class="headline">Legenda</h1>
+                        </v-col>
+                        <v-col class="flex-wrap" md=8 style="padding: 0">
+                            <v-chip class="mr-1" v-for="value in legendInfo()" v-bind:key="value.id" :color="value.color" style="font-weight: bold" @click="showEvent(value)">{{value.type}}</v-chip>
+                            <v-chip class="mr-1" color="#B5651D" style="font-weight: bold" @click="allEvents()">Wszystkie</v-chip>
+                        </v-col>
                     </v-toolbar>
                 </div>
             </v-col>
@@ -64,7 +68,7 @@
                     cycle
                     hide-delimiters
                     show-arrows-on-hover
-                    style="height: 180px; width: 500px"
+                    style="height: 200px; width: 500px"
                     >
                     <v-carousel-item
                         v-for="value in eventInfo()"
@@ -73,6 +77,7 @@
                         <v-card
                         :color="value.color"
                         class="ma-4"
+                        style="height: 190px"
                         >
                         <v-row
                             align="center"

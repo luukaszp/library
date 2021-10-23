@@ -53,7 +53,6 @@ Route::group(
     ['middleware' => 'auth.jwt'], function () {
         Route::get('logout', 'AuthController@logout');
         Route::post('logout', 'AuthController@logout');
-        //Route::post('refresh', 'AuthController@refresh');
         Route::post('me', 'AuthController@me');
 
         Route::post('rating/add', 'RatingController@addRating');

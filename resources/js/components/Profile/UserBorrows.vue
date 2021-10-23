@@ -7,7 +7,6 @@
     class="elevation-1"
     style="width: 100%"
   >
-  <template #[`item.fullName`]="{ item }"> {{ item.name }} {{ item.surname }} </template>
 
     <template v-slot:top>
       <v-toolbar flat color="white">
@@ -66,7 +65,6 @@ export default {
         align: 'start',
         value: 'title'
       },
-      { text: 'Autor', value: 'fullName' },
       { text: 'Wypożyczenie', value: 'borrows_date' },
       { text: 'Termin zwrotu', value: 'returns_date' },
       { text: 'Akcje', value: 'actions', sortable: false }
@@ -126,8 +124,10 @@ export default {
 };
 </script>
 
-<style scoped>
-@media only screen and (max-width: 600px) {
-
-}
+<style>
+    @media only screen and (max-width: 600px) {
+        .v-data-footer {
+            padding: 0;
+        }
+    }
 </style>

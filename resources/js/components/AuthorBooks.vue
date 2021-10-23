@@ -3,7 +3,7 @@
         <h1 style="text-align: center; padding-bottom: 10px">Książki tego autora:</h1>
         <v-row style="justify-content: space-around; text-align: center">
             <v-col
-                v-for="item in books"
+                v-for="(item, index) in books"
                 :key="item.name"
                 cols="10"
                 sm="6"
@@ -32,7 +32,9 @@
                         <p>Opis: <span v-text="item.description" class="mr-2"></span></p>
                         <p>Rok wydania: <span v-text="item.publish_year" class="mr-2"></span></p>
                         <v-divider></v-divider>
-                        <router-link :to="{ name: 'bookview', params: { book_id: item.id } }"><v-btn outlined style="border: 0px; text-decoration: none"><v-card-title style="color: #008D18; font-weight: bold">Zobacz więcej</v-card-title></v-btn></router-link>
+                        <template>
+                            <router-link :to="{ name: 'bookview', params: { book_id: book_id[index].id} }"><v-btn outlined style="border: 0px; text-decoration: none"><v-card-title style="color: #008D18; font-weight: bold">Zobacz więcej</v-card-title></v-btn></router-link>
+                        </template>
                     </v-card-text>
                 </v-card>
             </v-col>
@@ -47,7 +49,7 @@ export default {
   props: ['author_id'],
 
   data: () => ({
-
+    book_id: [],
   }),
 
   computed: {
@@ -58,10 +60,15 @@ export default {
 
   created () {
     this.$store.dispatch('fetchAuthorBook', this.author_id);
+    this.setData();
   },
 
   methods: {
-
+    setData(book_id) {
+    axios.get('/api/book/getBookID').then(response => {
+       this.book_id = response.data;
+    })
+    }
   }
 };
 </script>

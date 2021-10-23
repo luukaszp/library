@@ -58,10 +58,13 @@ export default {
   }
 };
 </script>
-<style>
+<style scoped>
+    #chart {
+        width: 800px;
+    }
 @media only screen and (max-width: 600px) {
     #chart {
-        max-width: 400px;
+        width: 400px;
     }
 }
 </style>

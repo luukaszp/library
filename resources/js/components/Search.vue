@@ -88,7 +88,6 @@
                 <v-divider></v-divider>
 
                 <v-card-text style="justify-content: center; text-align: center">
-                    <p>Autor: <span v-text="item.authorName + ' ' + item.surname" class="mr-2"></span></p>
                     <p>Kategoria: <span v-text="item.categoryName" class="mr-2"></span></p>
                     <p>Dostępna ilość książek: <v-chip v-text="item.amount" :color="getColor(item.amount)" dark></v-chip></p>
                     <v-divider></v-divider>
@@ -185,7 +184,6 @@ export default {
     sortBy: 'title',
     keys: [
       'Title',
-      'authorName',
       'surname',
       'categoryName',
       'amount'
@@ -193,7 +191,6 @@ export default {
     items: [
       {
         title: '',
-        authorName: '',
         surname: '',
         categoryName: '',
         isbn: '',
