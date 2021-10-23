@@ -138,8 +138,7 @@ class BookController extends Controller
                 'categories.name as categoryName', 'authors.name as authorName', 'authors.id as authorID', DB::raw('COUNT(books.title) as amount'), 'authors.surname', 'publishers.name as publisherName', 'books.cover'
             )
             ->groupBy('books.id', 'books.title', 'books.description', 'books.publish_year', 'books.cover', 'authors.name', 'authors.surname', 'publishers.name', 'categories.name', 'authors.id')
-            ->get()
-            ->toArray();
+            ->get();
 
         if (!$book) {
             return response()->json(

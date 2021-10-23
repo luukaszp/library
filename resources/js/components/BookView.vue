@@ -36,7 +36,7 @@
             </v-col>
 
             <v-col style="text-align: center">
-              <span>Kategoria: </span><span style="font-weight: bold" v-text="books.categories.name" class="mr-2"></span>
+              <span>Kategoria: </span><span style="font-weight: bold" v-text="books.categoryName" class="mr-2"></span>
             </v-col>
 
             <v-col>
