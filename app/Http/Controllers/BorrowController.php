@@ -268,8 +268,6 @@ class BorrowController extends Controller
             ->where('borrows.reader_id', '=', $reader[0])
             ->where('borrows.when_returned', '=', null)
             ->join('books', 'books.id', '=', 'borrows.book_id')
-            ->join('author_book', 'author_book.book_id', '=', 'borrows.book_id')
-            ->join('authors', 'authors.id', '=', 'author_book.author_id')
             ->select(
                 'borrows.id', 'books.title', 'borrows.borrows_date',
                 'borrows.returns_date', 'authors.name', 'authors.surname'
