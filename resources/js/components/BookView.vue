@@ -5,7 +5,7 @@
         <v-col cols="auto">
           <v-img
             style="margin-top: 15px; width: 300px; height: 400px"
-            :src="('https://library-site.s3.eu-north-1.amazonaws.com/covers/' + books.cover)"
+            :src="('https://library-site.s3.eu-north-1.amazonaws.com/covers/' + books[0].cover)"
           ></v-img>
         </v-col>
 
@@ -20,7 +20,7 @@
              style="text-align: left;"
           >
             <v-col>
-              <h1 v-text="books.title" style="font-weight: bold; text-align: center"> </h1>
+              <h1 v-text="books[0].title" style="font-weight: bold; text-align: center"> </h1>
             </v-col>
 
             <v-col style="text-align: center">
@@ -36,7 +36,7 @@
             </v-col>
 
             <v-col style="text-align: center">
-              <span>Kategoria: </span><span style="font-weight: bold" v-text="books.categoryName" class="mr-2"></span>
+              <span>Kategoria: </span><span style="font-weight: bold" v-text="books[0].categoryName" class="mr-2"></span>
             </v-col>
 
             <v-col>
@@ -61,10 +61,10 @@
       <v-row style="text-align: center; margin-left: 10px; margin-right: 10px; justify-content: center">
         <v-col cols="auto">
             <v-col style="padding-top: 20px">
-                <span style="font-weight: bold">Opis: </span><span v-text="books.description" class="mr-2"></span>
+                <span style="font-weight: bold">Opis: </span><span v-text="books[0].description" class="mr-2"></span>
             </v-col>
             <v-col>
-                <h3>Status: <v-chip :color="getColor(books.amount)" dark>{{ status }}</v-chip></h3>
+                <h3>Status: <v-chip :color="getColor(books[0].amount)" dark>{{ status }}</v-chip></h3>
             </v-col>
         </v-col>
       </v-row>
