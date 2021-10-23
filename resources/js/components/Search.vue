@@ -94,7 +94,13 @@
                     <v-divider></v-divider>
                 </v-card-text>
                 <template>
-                    <router-link :to="{ name: 'bookview', params: { book_id: book_id[getOverallIndex(index)].id} }"><v-btn outlined style="border: 0px; text-decoration: none"><v-card-title style="color: #008D18; font-weight: bold">Zobacz więcej</v-card-title></v-btn></router-link>
+                    <div class="show-more" style="text-align: center; padding-bottom: 15px">
+                        <router-link :to="{ name: 'bookview', params: { book_id: book_id[getOverallIndex(index)].id} }">
+                            <v-btn outlined style="border: 0px; text-decoration: none">
+                                <v-card-title style="color: #008D18; font-weight: bold">Zobacz więcej</v-card-title>
+                            </v-btn>
+                        </router-link>
+                    </div>
                 </template>
             </v-card>
             </v-col>
@@ -102,7 +108,7 @@
         </template>
 
       <template v-slot:footer>
-        <v-row class="mt-2" align="center" justify="center">
+        <v-row class="mt-2" align="center" justify="center" style="display: inline-flex; width: 100%; margin: 0">
           <span class="grey--text">Książek na stronę</span>
           <v-menu offset-y>
             <template v-slot:activator="{ on, attrs }">
@@ -137,6 +143,7 @@
           >
             Page {{ page }} of {{ numberOfPages }}
           </span>
+          <div class="buttons" style="padding-left: 20px">
           <v-btn
             fab
             dark
@@ -156,6 +163,7 @@
           >
             <v-icon>mdi-chevron-right</v-icon>
           </v-btn>
+          </div>
         </v-row>
       </template>
     </v-data-iterator>
@@ -227,6 +235,9 @@ export default {
         });
     },
     getOverallIndex(index) {
+        if (!index) {
+            return 0;
+        }
       return (this.page * this.itemsPerPage) - this.itemsPerPage + index
     },
     nextPage () {

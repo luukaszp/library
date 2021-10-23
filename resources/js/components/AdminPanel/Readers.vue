@@ -7,10 +7,10 @@
     class="elevation-1"
   >
     <template v-slot:top>
-      <v-toolbar flat color="white">
+      <v-toolbar flat color="white" style="height: auto" id="toolbar">
         <v-toolbar-title>Czytelnicy</v-toolbar-title>
         <v-divider
-          class="mx-4"
+          class="mx-4 d-none d-sm-flex"
           inset
           vertical
         ></v-divider>
@@ -21,14 +21,14 @@
           label="Szukaj"
           single-line
           hide-details
-          class="mr-3"
+          class="search mr-3"
         ></v-text-field>
         <v-spacer></v-spacer>
           <template>
             <v-btn
               color="#008D18"
               dark
-              class="mb-2"
+              class="button mb-2"
               :to="'/register-reader'"
             >Dodaj czytelnika</v-btn>
           </template>
@@ -223,3 +223,26 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+        #test {
+            border: 10px solid red;
+        }
+    @media only screen and (max-width: 600px) {
+        #toolbar {
+            text-align: center;
+        }
+        .v-input__control {
+            padding-bottom: 20px;
+        }
+        .v-toolbar__content {
+            display: inline;
+        }
+        .search {
+
+        }
+        .button {
+
+        }
+    }
+</style>

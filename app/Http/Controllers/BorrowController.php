@@ -268,9 +268,11 @@ class BorrowController extends Controller
             ->where('borrows.reader_id', '=', $reader[0])
             ->where('borrows.when_returned', '=', null)
             ->join('books', 'books.id', '=', 'borrows.book_id')
+            ->join('author_book', 'author_book.book_id', '=', 'books.id')
+            ->join('authors', 'authors.id', '=', 'author_book.author_id')
             ->select(
                 'borrows.id', 'books.title', 'borrows.borrows_date',
-                'borrows.returns_date'
+                'borrows.returns_date', 'authors.name', 'authors.surname'
             )
             ->get()
             ->toArray();
@@ -314,7 +316,7 @@ class BorrowController extends Controller
 
         $reader = Reader::find($borrow->reader_id);
 
-        if ($reader->can_extend === '0') {
+        if ($reader->can_extend === 0) {
             return response()->json(
                 [
                 'success' => false,

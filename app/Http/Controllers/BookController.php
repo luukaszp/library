@@ -127,14 +127,18 @@ class BookController extends Controller
      */
     public function showBook($id)
     {
-        $amount = $this->getAmount($id);
-
-        $author = Book::find($id)->authors()->select('id', 'name', 'surname')->get();
-
-        $book = Book::with(['publishers:name,id', 'categories:name,id'])->find($id);
-
-        $book['amount'] = $amount;
-        $book['authors'] = $author;
+        $book = DB::table('books')
+            ->where('books.id', $id)
+            ->join('categories', 'categories.id', '=', 'books.category_id')
+            ->join('publishers', 'publishers.id', '=', 'books.publisher_id')
+            ->join('author_book', 'author_book.book_id', '=', 'books.id')
+            ->join('authors', 'authors.id', '=', 'author_book.author_id')
+            ->select(
+                'books.title', 'books.description', 'books.publish_year',
+                'categories.name as categoryName', 'authors.name as authorName', 'authors.id as authorID', DB::raw('COUNT(books.title) as amount'), 'authors.surname', 'publishers.name as publisherName', 'books.cover'
+            )
+            ->get()
+            ->toArray();
 
         if (!$book) {
             return response()->json(

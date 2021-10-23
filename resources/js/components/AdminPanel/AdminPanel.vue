@@ -1,12 +1,12 @@
 <template>
     <v-row fill-height style="height: 100%; margin: 0">
         <v-col md="auto" style="padding: 0; margin-top: -15px; margin-bottom: -15px">
-            <v-card style="height: 100%; border-radius: 0px; max-width: 280px">
+            <v-card style="height: 100%; border-radius: 0px">
                 <v-navigation-drawer
                 permanent
-                width="280px"
                 dark
-                style="padding-top: 20px"
+                style="padding-top: 20px; width: 100%"
+                id="panel"
                 >
                     <template v-slot:prepend>
                         <v-list-item two-line>
@@ -116,5 +116,13 @@ export default {
 <style scoped>
     a {
         text-decoration: none;
+    }
+    #panel {
+        min-width: 360px;
+    }
+    @media only screen and (max-width: 600px) {
+        #panel {
+            padding-bottom: 20px;
+        }
     }
 </style>

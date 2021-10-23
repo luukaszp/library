@@ -7,10 +7,10 @@
     class="elevation-1"
   >
     <template v-slot:top>
-      <v-toolbar flat color="white">
+      <v-toolbar flat color="white" style="height: auto" id="toolbar">
         <v-toolbar-title>Pracownicy</v-toolbar-title>
         <v-divider
-          class="mx-4"
+          class="mx-4 d-none d-sm-flex"
           inset
           vertical
         ></v-divider>
@@ -222,3 +222,18 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+    @media only screen and (max-width: 600px) {
+        #toolbar {
+            text-align: center;
+
+        }
+        .v-toolbar__content {
+            display: inline-block;
+        }
+        .v-input__control {
+            padding-bottom: 20px;
+        }
+    }
+</style>
