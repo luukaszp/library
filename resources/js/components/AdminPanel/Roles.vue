@@ -8,7 +8,7 @@
   >
     <template v-slot:top>
       <v-toolbar flat color="white">
-        <v-toolbar-title>Role użytkowników</v-toolbar-title>
+        <v-toolbar-title style="width: 100%">Role użytkowników</v-toolbar-title>
         <v-divider
           class="mx-4"
           inset
@@ -160,3 +160,4 @@ export default {
   }
 };
 </script>
+

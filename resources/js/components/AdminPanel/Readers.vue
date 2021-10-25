@@ -224,25 +224,22 @@ export default {
 };
 </script>
 
-<style scoped>
-        #test {
-            border: 10px solid red;
-        }
+<style>
     @media only screen and (max-width: 600px) {
         #toolbar {
             text-align: center;
+            display: block;
+            height: auto;
         }
         .v-input__control {
             padding-bottom: 20px;
         }
-        .v-toolbar__content {
-            display: inline;
+        #toolbar .v-toolbar__content {
+            display: block !important;
+            height: auto !important;
         }
-        .search {
-
-        }
-        .button {
-
+        .v-data-footer__pagination {
+            margin: 0 12px 0 12px !important
         }
     }
 </style>

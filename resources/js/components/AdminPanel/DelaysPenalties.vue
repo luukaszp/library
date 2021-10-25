@@ -10,9 +10,9 @@
 
     <template v-slot:top>
       <v-toolbar flat color="white">
-        <v-toolbar-title>Opóźnienia i kary</v-toolbar-title>
+        <v-toolbar-title style="width: 100%">Opóźnienia i kary</v-toolbar-title>
         <v-divider
-          class="mx-4"
+          class="mx-4 d-none d-sm-flex"
           inset
           vertical
         ></v-divider>

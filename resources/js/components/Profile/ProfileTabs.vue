@@ -1,5 +1,5 @@
 <template>
-    <v-container>
+    <v-container id="tabs">
         <v-row style="justify-content: center; padding-bottom: 25px">
             <div class="justify-center align-center">
                 <v-sheet
@@ -95,6 +95,9 @@ export default {
       #options {
         max-width: 250px;
         padding-bottom: 20px
+      }
+      #tabs {
+          padding: 0px
       }
     }
 </style>

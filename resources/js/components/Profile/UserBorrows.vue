@@ -10,7 +10,7 @@
 
     <template v-slot:top>
       <v-toolbar flat color="white">
-        <v-toolbar-title>Wypożyczenia</v-toolbar-title>
+        <v-toolbar-title id="toolbar-title">Wypożyczenia</v-toolbar-title>
         <v-divider
           class="mx-4"
           inset
@@ -124,10 +124,10 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
     @media only screen and (max-width: 600px) {
-        .v-data-footer {
-            padding: 0;
+        #toolbar-title {
+            width: 100%;
         }
     }
 </style>

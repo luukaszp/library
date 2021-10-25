@@ -10,7 +10,7 @@
 
     <template v-slot:top>
       <v-toolbar flat color="white">
-        <v-toolbar-title>Opóźnienia i kary</v-toolbar-title>
+        <v-toolbar-title id="toolbar-title">Opóźnienia i kary</v-toolbar-title>
         <v-divider
           class="mx-4"
           inset
@@ -75,10 +75,10 @@ export default {
 };
 </script>
 
-<style>
-@media only screen and (max-width: 600px) {
-    .v-data-footer__pagination {
-        margin: 0px !important
+<style scoped>
+    @media only screen and (max-width: 600px) {
+        #toolbar-title {
+            width: 100%;
+        }
     }
-}
 </style>

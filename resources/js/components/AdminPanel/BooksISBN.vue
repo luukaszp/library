@@ -10,7 +10,7 @@
   <template #[`item.fullName`]="{ item }"> {{ item.authorName }} {{ item.surname }} </template>
 
     <template v-slot:top>
-      <v-toolbar flat color="white">
+      <v-toolbar flat color="white" id="toolbar">
         <v-toolbar-title>Książki</v-toolbar-title>
         <v-divider
           class="mx-4"
@@ -132,7 +132,7 @@ export default {
   methods: {
     setData(books) {
       this.books = books;
-    }, 
+    },
 
     editBook (item) {
       this.editedIndex = this.books.indexOf(item);
@@ -189,3 +189,19 @@ export default {
   }
 };
 </script>
+<style>
+    @media only screen and (max-width: 600px) {
+        #toolbar {
+            text-align: center;
+            display: block;
+            height: auto !important;
+        }
+        #toolbar .v-toolbar__content {
+            display: block !important;
+            height: auto !important;
+        }
+        .v-data-footer__pagination {
+            margin: 0 12px 0 12px !important
+        }
+    }
+</style>

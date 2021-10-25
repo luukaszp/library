@@ -3,7 +3,7 @@
         <v-row style="text-align: center; justify-content: center; padding-bottom: 10px; padding-top: 20px;">
             <h1>Nowości książkowe</h1>
         </v-row>
-        <v-row style="justify-content: center; text-align: center" v-if="books.length !=  0">
+        <v-row style="justify-content: center; text-align: center" v-if="books.length != 0">
             <v-col
                 md="6"
             >
@@ -42,13 +42,13 @@
             </v-col>
         </v-row>
 
-        <v-row align="center" style="justify-content: center; text-align: center; padding-top: 55px; display: inline-block" v-if="books.length === 0">
+        <v-row id="empty" align="center" style="justify-content: center; text-align: center; padding-top: 55px" v-if="books.length === 0">
             <h2>Brak nowych książek z ostatnich 10 dni!</h2>
-            <v-col style="display: inline-flex;">
+            <v-col id="image">
             <v-img
                 :src="require('../assets/new/owl.png')"
             />
-            <div style="padding: 180px 0">
+            <div id="catalog">
                 <h4 style="padding-bottom: 20px">Zapraszamy do przejrzenia katalogu biblioteki!</h4>
                 <router-link :to="{ name: 'search' }">
                     <v-btn
@@ -98,6 +98,11 @@ export default {
   computed: {
     books() {
       return this.$store.getters.getBooks;
+    },
+    setData() {
+    axios.get('/api/book/getBookID').then(response => {
+       this.book_id = response.data;
+    })
     }
   },
 
@@ -107,11 +112,29 @@ export default {
   },
 
   methods: {
-    setData(book_id) {
-    axios.get('/api/book/getBookID').then(response => {
-       this.book_id = response.data;
-    })
-    }
+
   }
 };
 </script>
+<style scoped>
+        #empty {
+            display: inline-block;
+        }
+        #image {
+            display: inline-flex;
+        }
+        #catalog {
+            padding: 180px 0;
+        }
+    @media only screen and (max-width: 600px) {
+        #empty {
+            display: flex;
+        }
+        #image {
+            display: inline-block;
+        }
+        #catalog {
+            padding: 0;
+        }
+    }
+</style>

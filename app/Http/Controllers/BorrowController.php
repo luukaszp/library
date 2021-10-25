@@ -123,7 +123,6 @@ class BorrowController extends Controller
             ->select(
                 'books.title', 'users.name', 'users.surname', 'borrows.delay', 'borrows.penalty'
             )
-            ->groupBy('books.title')
             ->get()
             ->toArray();
 
