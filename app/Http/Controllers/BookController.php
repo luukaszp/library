@@ -57,6 +57,7 @@ class BookController extends Controller
             )
             ->distinct()
             ->groupBy('books.title', 'books.description', 'books.publish_year', 'books.cover', 'publishers.name', 'categories.name')
+            ->orderBy('books.title')
             ->get()
             ->toArray();
 
@@ -70,13 +71,35 @@ class BookController extends Controller
      */
     public function getBookID()
     {
-        $books = DB::table('books')->select('books.title', DB::raw('CAST(books.id AS CHAR) AS book_id'))->get();
-        $bookUnique = $books->unique('title')->pluck('book_id')->toArray();
-        for($i = 0; $i < count($bookUnique); $i++) {
-            $bookID[$i] = array('id' => $bookUnique[$i]);
+        $books = DB::table('books')->select('books.title', 'books.id')->distinct('books.title')->get()->toArray();
+
+        for($i = 0; $i < count($books); $i++) {
+            $bookID[$i] = array('id' => $books[$i]->id);
         }
 
         return $bookID;
+    }
+
+    /**
+     * Get unique book author
+     *
+     * @return Response
+     */
+    public function getBookAuthor()
+    {
+        $books = DB::table('books')
+            ->join('author_book', 'author_book.book_id', '=', 'books.id')
+            ->join('authors', 'authors.id', '=', 'author_book.author_id')
+            ->select('books.title', 'authors.name', 'authors.surname')
+            ->distinct('books.title')
+            ->get()
+            ->toArray();
+
+        for($i = 0; $i < count($books); $i++) {
+            $bookAuthor[$i] = array('name' => $books[$i]->name, 'surname' => $books[$i]->surname);
+        }
+
+        return $bookAuthor;
     }
 
     /**

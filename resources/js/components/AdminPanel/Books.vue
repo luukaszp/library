@@ -10,7 +10,7 @@
     class="elevation-1"
     style="word-break: initial"
   >
-  <template #[`item.fullName`]="{ item }"> {{ item.authorName }} {{ item.surname }} </template>
+  <template #[`item.fullName`]="{ item }"> {{ item.authorName }} {{ item.authorSurname }} </template>
 
   <template v-slot:expanded-item="{ headers, item }">
     <td :colspan="headers.length">
@@ -175,6 +175,8 @@ export default {
     search: '',
     cover: [],
     books: [],
+    book_id: [],
+    authors: [],
     image: '',
     show: false,
     expanded: [],
@@ -240,6 +242,20 @@ export default {
   methods: {
     setData(books) {
       this.books = books;
+      axios.get('/api/book/getBookID')
+        .then(response => {
+            this.book_id = response.data;
+        });
+        axios.get('/api/book/getBookAuthor')
+        .then(response => {
+            this.authors = response.data;
+            let i = 0;
+            for(i = 0; i < this.books.length; i++)
+            {
+                this.books[i]['authorName'] = this.authors[i].name
+                this.books[i]['authorSurname'] = this.authors[i].surname
+            }
+        });
     },
 
     editBook (item) {
@@ -251,7 +267,7 @@ export default {
     addBook() {
       if (this.editedIndex > -1) {
         Object.assign(this.books[this.editedIndex], this.editedItem);
-        axios.put(`/api/book/edit/${this.editedItem.id}`, {
+        axios.put(`/api/book/edit/${this.book_id[this.editedIndex].id}`, {
           title: this.editedItem.title,
           description: this.editedItem.description,
           publish_year: this.editedItem.publish_year,
@@ -312,7 +328,7 @@ export default {
       const formData = new FormData();
       formData.append('cover', blob);
 
-      axios.post(`/api/book/changeImage/${this.editedItem.id}`, formData)
+      axios.post(`/api/book/changeImage/${this.book_id[this.editedIndex].id}`, formData)
         .then((response) => {
           if (response.data.success === true) {
             this.$swal('Dodano', 'Pomyślnie zmieniono okładkę książki!', 'success');
