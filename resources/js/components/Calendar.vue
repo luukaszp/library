@@ -89,7 +89,7 @@
                             align="center"
                             justify="center"
                         >
-                            <h3 style="font-weight: bold; line-height: 4.8">{{value.name}}</h3>
+                            <h3 style="font-weight: bold; line-height: 3.8">{{value.name}}</h3>
                         </v-row>
                         <v-row
                             align="center"
