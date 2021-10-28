@@ -63,7 +63,7 @@
                                                 <v-file-input
                                                     v-model="photo"
                                                     accept="image/png, image/jpeg, image/bmp"
-                                                    label="Wybierz zdjęcie autora"
+                                                    label="Wybierz okładkę książki"
                                                     :rules="photoRules"
                                                     outlined
                                                     dense
@@ -78,7 +78,7 @@
                                     </v-container>
                                 </v-card-text>
 
-                                <v-card-actions>
+                                <v-card-actions style="text-align: center; display: block">
                                     <v-spacer></v-spacer>
                                     <v-btn color="#008D18" text @click="close">Anuluj</v-btn>
                                     <v-btn color="#008D18" text @click="addAuthor" :disabled="!valid">Zapisz</v-btn>
@@ -91,7 +91,7 @@
                                 <v-card-text>
                                     <v-container>
                                         <v-row align="center" justify="center">
-                                            <v-col cols="6">
+                                            <v-col class="col-md-6">
                                             <v-card>
                                                 <v-img
                                                 v-bind:src="('https://library-site.s3.eu-north-1.amazonaws.com/authors/' + image)"
@@ -105,7 +105,6 @@
                                 <v-divider></v-divider>
 
                                 <v-card-actions style="justify-content: center; display: flex; text-align: center; padding-bottom: 25px">
-                                    <v-spacer></v-spacer>
                                     <v-btn color="#228B22" text @click="closePhoto">Anuluj</v-btn>
                                     <v-file-input
                                         v-model="photo"

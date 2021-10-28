@@ -29,7 +29,7 @@
                                 <v-btn color="#008D18" dark class="mb-2" v-on="on">Nowy typ</v-btn>
                             </template>
                             <v-card>
-                                <v-card-title>
+                                <v-card-title style="justify-content: center">
                                     <span class="headline">{{ formTitle }}</span>
                                 </v-card-title>
 
@@ -45,7 +45,7 @@
                                     </v-container>
                                 </v-card-text>
 
-                                <v-card-actions>
+                                <v-card-actions style="text-align: center; display: block">
                                     <v-spacer></v-spacer>
                                     <v-btn color="#008D18" text @click="close">Anuluj</v-btn>
                                     <v-btn color="#008D18" text @click="addType" :disabled="!valid">Zapisz</v-btn>

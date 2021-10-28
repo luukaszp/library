@@ -67,10 +67,10 @@
                 </v-container>
               </v-card-text>
 
-              <v-card-actions>
+              <v-card-actions style="text-align: center; display: block">
                 <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" text @click="close">Anuluj</v-btn>
-                <v-btn color="blue darken-1" text @click="addBook">Zapisz</v-btn>
+                <v-btn color="#008D18" text @click="close">Anuluj</v-btn>
+                <v-btn color="#008D18" text @click="addBook">Zapisz</v-btn>
                 </v-card-actions>
             </v-card>
           </v-dialog>
@@ -80,12 +80,12 @@
               <v-card-text>
                 <v-container>
                   <v-row align="center" justify="center">
-                    <v-col cols="8">
+                    <v-col class="col-md-8">
                       <v-card>
                         <v-img
                           v-bind:src="('https://library-site.s3.eu-north-1.amazonaws.com/covers/' + image)"
                           aspect-ratio="1"
-                          style="height: 400px;width: 320px;"
+                          style="height: 450px; width: 320px;"
                         ></v-img>
                       </v-card>
                     </v-col>
@@ -96,7 +96,6 @@
               <v-divider></v-divider>
 
               <v-card-actions style="justify-content: center; display: flex; text-align: center; padding-bottom: 25px">
-                <v-spacer></v-spacer>
                 <v-btn color="#008D18" text @click="closeImage">Anuluj</v-btn>
                 <v-file-input
                     v-model="cover"

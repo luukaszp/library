@@ -37,7 +37,7 @@
 
           <v-dialog v-model="editBorrowDialog" max-width="500px">
             <v-card>
-              <v-card-title>
+              <v-card-title style="justify-content: center">
                 <span class="headline">{{ formTitle }}</span>
               </v-card-title>
 
@@ -45,7 +45,7 @@
                 <v-container>
                   <v-form v-model="valid" ref="form">
                     <v-row>
-                      <v-col cols="12" sm="6" md="4">
+                      <v-col cols="12" sm="6" md="6">
                         <v-menu
                         v-model="menu"
                         :close-on-content-click="false"
@@ -73,10 +73,10 @@
                 </v-container>
               </v-card-text>
 
-              <v-card-actions>
+              <v-card-actions style="text-align: center; display: block">
                 <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" text @click="close">Anuluj</v-btn>
-                <v-btn color="blue darken-1" text @click="addBorrow" :disabled="!valid">Zapisz</v-btn>
+                <v-btn color="#008D18" text @click="close">Anuluj</v-btn>
+                <v-btn color="#008D18" text @click="addBorrow" :disabled="!valid">Zapisz</v-btn>
                 </v-card-actions>
             </v-card>
           </v-dialog>

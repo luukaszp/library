@@ -42,7 +42,7 @@
                 </v-container>
               </v-card-text>
 
-              <v-card-actions>
+              <v-card-actions style="text-align: center; display: block">
                 <v-spacer></v-spacer>
                 <v-btn color="#008D18" text @click="close">Anuluj</v-btn>
                 <v-btn color="#008D18" text @click="addRole" :disabled="!valid">Zapisz</v-btn>

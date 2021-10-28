@@ -1,6 +1,6 @@
 <template>
     <v-container>
-        <h1 style="text-align: center; padding-bottom: 10px">Książki tego autora:</h1>
+        <h1 style="text-align: center; padding-bottom: 15px">Książki tego autora:</h1>
         <v-row style="justify-content: space-around; text-align: center">
             <v-col
                 v-for="(item, index) in books"
@@ -12,7 +12,7 @@
                 style="display: flex; justify-content: center"
             >
                 <v-card class="card fill-height">
-                    <v-card-title style="justify-content: center; padding-top: 30px">
+                    <v-card-title style="justify-content: center; height: 120px">
                         <span v-text="item.title"></span>
                     </v-card-title>
 
@@ -27,13 +27,17 @@
                     <v-divider></v-divider>
 
                     <v-card-text style="justify-content: center; padding-top: 5px">
-                        <p>Kategoria: <span v-text="item.categoryName" class="mr-2"></span></p>
-                        <p>Wydawnictwo: <span v-text="item.publisherName" class="mr-2"></span></p>
-                        <p>Opis: <span v-text="item.description" class="mr-2"></span></p>
-                        <p>Rok wydania: <span v-text="item.publish_year" class="mr-2"></span></p>
+                        <p><span style="font-weight: bold">Kategoria: </span><span v-text="item.categoryName" class="mr-2"></span></p>
+                        <p><span style="font-weight: bold">Wydawnictwo: </span><span v-text="item.publisherName" class="mr-2"></span></p>
+                        <p><span style="font-weight: bold">Opis: </span><span v-text="item.description" class="mr-2"></span></p>
+                        <p><span style="font-weight: bold">Rok wydania: </span><span v-text="item.publish_year" class="mr-2"></span></p>
                         <v-divider></v-divider>
                         <template>
-                            <router-link :to="{ name: 'bookview', params: { book_id: book_id[index].id} }"><v-btn outlined style="border: 0px; text-decoration: none"><v-card-title style="color: #008D18; font-weight: bold">Zobacz więcej</v-card-title></v-btn></router-link>
+                            <router-link :to="{ name: 'bookview', params: { book_id: book_id[index].id} }">
+                                <v-btn outlined style="border: 0px; text-decoration: none; padding-top: 15px">
+                                    <v-card-title style="color: #008D18; font-weight: bold">Zobacz więcej</v-card-title>
+                                </v-btn>
+                            </router-link>
                         </template>
                     </v-card-text>
                 </v-card>

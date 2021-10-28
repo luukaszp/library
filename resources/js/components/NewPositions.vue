@@ -29,7 +29,7 @@
                             <v-divider></v-divider>
 
                             <v-card-text style="justify-content: center; padding: 0; margin-bottom: 15px">
-                                <p>Kategoria: <span v-text="book.categoryName" class="mr-2"></span></p>
+                                <p style="padding-top: 10px"><span style="font-weight: bold">Kategoria: </span><span v-text="book.categoryName" class="mr-2"></span></p>
                                 <template>
                                     <router-link :to="{ name: 'bookview', params: { book_id: book_id[index].id} }"><v-btn outlined style="border: 0px; text-decoration: none"><v-card-title style="color: #008D18; font-weight: bold">Zobacz więcej</v-card-title></v-btn></router-link>
                                 </template>

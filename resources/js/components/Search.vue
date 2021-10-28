@@ -73,7 +73,7 @@
             style="display: flex; justify-content: center"
             >
             <v-card>
-                <v-card-title style="justify-content: center">
+                <v-card-title style="justify-content: center; height: 120px; text-align: center">
                     <span v-text="item.title"></span>
                 </v-card-title>
 

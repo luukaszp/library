@@ -2,7 +2,7 @@
     <v-container>
         <h1></h1>
         <v-row v-if="loggedUser.card_number && check === false" style="justify-content: center; margin-left: 10px; margin-right: 10px">
-            <h2 style="width: 100%; text-align: center">Oceń książkę: </h2>
+            <h2 style="width: 100%; text-align: center; padding-top: 10px">Oceń książkę: </h2>
         <v-form v-model="valid" ref="form" style="width: 100%; text-align: center">
             <v-rating
                 v-model="rating"

@@ -38,7 +38,7 @@
 
           <v-dialog v-model="editBookDialog" max-width="500px">
             <v-card>
-              <v-card-title>
+              <v-card-title style="justify-content: center">
                 <span class="headline">{{ formTitle }}</span>
               </v-card-title>
 
@@ -52,10 +52,10 @@
                 </v-container>
               </v-card-text>
 
-              <v-card-actions>
+              <v-card-actions style="text-align: center; display: block">
                 <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" text @click="close">Anuluj</v-btn>
-                <v-btn color="blue darken-1" text @click="addBook">Zapisz</v-btn>
+                <v-btn color="#008D18" text @click="close">Anuluj</v-btn>
+                <v-btn color="#008D18" text @click="addBook">Zapisz</v-btn>
                 </v-card-actions>
             </v-card>
           </v-dialog>

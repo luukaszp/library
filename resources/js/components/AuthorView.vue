@@ -1,16 +1,16 @@
 <template>
     <v-container>
-        <v-row style="margin-left: 10px; margin-right: 10px">
+        <v-row style="padding-bottom: 20px" id="authorInfo">
             <v-col md=3 style="justify-content: center; text-align: center;">
                 <v-avatar size="200">
                     <v-img class="card-img" v-bind:src="('https://library-site.s3.eu-north-1.amazonaws.com/authors/' + authors.photo)"></v-img>
                 </v-avatar>
             </v-col>
 
-            <v-col style="text-align: left">
+            <v-col md=8 style="text-align: left">
                 <h2>{{authors.name + ' ' + authors.surname}}</h2>
                 <v-divider></v-divider>
-                <p>{{authors.description}}</p>
+                <p style="text-align: justify">{{authors.description}}</p>
 
                 <v-btn
                     v-if="loggedUser.card_number"
@@ -26,7 +26,7 @@
 
         <v-divider></v-divider>
 
-        <v-row style="margin-left: 10px; margin-right: 10px; justify-content: center;">
+        <v-row style="justify-content: center; padding-top: 10px">
             <AuthorBooks v-bind:author_id="author_id"/>
         </v-row>
 
@@ -108,3 +108,10 @@ export default {
   }
 };
 </script>
+<style scoped>
+    @media only screen and (max-width: 600px) {
+        #authorInfo {
+            display: inline-block;
+        }
+    }
+</style>

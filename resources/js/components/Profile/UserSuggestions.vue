@@ -2,7 +2,7 @@
     <v-form
         ref="form"
         v-model="valid"
-        style="border: 1px solid black; padding: 25px; text-align: center"
+        style="border: 1px solid black; padding: 25px; text-align: center; margin-top: 12px"
     >
         <v-select
         v-model="select"
