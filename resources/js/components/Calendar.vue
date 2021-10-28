@@ -75,16 +75,17 @@
                         :key="value.id"
                     >
                         <v-card
-                        :color="value.color"
                         class="ma-4"
                         style="height: 190px"
                         >
                         <v-row
+                        :style="{'background-color': value.color}"
                             align="center"
                             justify="center"
                         >
-                            <p style="font-weight: bold; padding-top: 5px;">{{value.type}}</p>
+                            <h1 class="white--text" style="font-weight: bold; padding-top: 5px;">{{value.type}}</h1>
                         </v-row>
+
                         <v-row
                             align="center"
                             justify="center"
@@ -95,7 +96,8 @@
                             align="center"
                             justify="center"
                         >
-                            <span style="font-weight: bold">Serdecznie zapraszamy na godzinę {{value.time}}!</span>
+                            <span>Serdecznie zapraszamy na godzinę: </span>
+                            <span style="font-weight: bold"> {{value.time}}!</span>
                         </v-row>
                         </v-card>
                     </v-carousel-item>
